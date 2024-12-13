@@ -1,0 +1,12 @@
+toys = set(gt, bs, rs, bt, rt)
+g = set(gt)
+r = set(rs, rt)
+b = set(bs, bt)
+t = set(gt, rt, bt)
+s = set(rs, bs)
+
+indices = set(idx1...4)
+f = toys ->| indices  # choose f = ...
+clusters = (b subset f-1)
+# set clusters = (f-1 == g)
+|clusters| = 1

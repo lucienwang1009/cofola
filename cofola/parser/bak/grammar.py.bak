@@ -1,0 +1,35 @@
+from cofola.parser.function_grammar import function_grammar
+from cofola.parser.set_grammar import set_grammar
+from cofola.parser.common import common_grammar
+from cofola.parser.bag_grammar import bag_grammar
+
+
+cofola_grammar = r"""
+    cofola: statement*
+    ?statement: object_declaration | constraint
+
+    object_declaration: set_declaration
+        | bag_declaration
+        | func_declaration
+
+    ?constraint: atomic_constraint | compound_constraint
+    ?atomic_constraint: set_constraint
+        | bag_constraint
+    negation_constraint: not constraint
+    conjunction_constraint: constraint and constraint
+    disjunction_constraint: constraint or constraint
+    implication_constraint: constraint implies constraint
+    equivalence_constraint: constraint iff constraint
+    ?compound_constraint: left_parenthesis constraint right_parenthesis -> parenthesis
+        | negation_constraint
+        | conjunction_constraint
+        | disjunction_constraint
+        | implication_constraint
+        | equivalence_constraint
+"""
+
+grammar = cofola_grammar + \
+    set_grammar + \
+    bag_grammar + \
+    function_grammar + \
+    common_grammar

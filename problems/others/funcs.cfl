@@ -1,0 +1,13 @@
+toys = set(gt, bs, rs, bt, rt)
+G = set(gt)
+R = set(rs, rt)
+B = set(bs, bt)
+T = set(gt, rt, bt)
+S = set(rs, bs)
+
+indices = set(idx1...5)
+f = indices -> toys  # choose f = ...
+|f-1(gt)| <= 3
+|f(indices)| - |indices - f-1(gt)| = 1
+S subset f(indices)
+f(idx2) subset G

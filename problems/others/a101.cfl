@@ -1,0 +1,9 @@
+students = set(1...11)
+sox_fans = set(1...4)
+yankee_fans = set(4...7)
+rangers_fans = set(7...9)
+
+c1 = choose(students, 1)
+c2 = choose(students, 1)
+c = c1 + c2
+|c & yankee_fans| == 0

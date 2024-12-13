@@ -1,0 +1,7 @@
+Ind = set(idx1...7)
+S = set(a, b, n)
+
+f = Ind -> S
+|f-1(a)| = 2
+|f-1(b)| = 1
+|f-1(n)| = 3

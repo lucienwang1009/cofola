@@ -1,0 +1,10 @@
+# declare the sets
+nondefective_tvs = set(nondef1...10)
+defective_tvs = set(def10...13)
+tvs = nondefective_tvs + defective_tvs
+
+# perform choose operation
+purchase = choose(tvs, 5)
+
+# specify the constraints
+|(purchase & defective_tvs)| >= 2

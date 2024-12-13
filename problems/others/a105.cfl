@@ -1,0 +1,5 @@
+set computers = {1:13}
+set def = {1:5}
+
+set purchase = choose(computers, 3)
+|purchase & def| >= 1

@@ -1,0 +1,6 @@
+set hearts = {heart1:14}
+set others = {other1:40}
+set cards = hearts + others
+
+set chosen = choose(cards, 2)
+|chosen & hearts| >= 1

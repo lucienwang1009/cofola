@@ -1,0 +1,96 @@
+
+from lark import Lark
+
+from cofola.objects.base import CombinatoricsConstraint
+from cofola.parser.function_parser import FunctionTransformer
+from cofola.parser.set_parser import SetTransformer
+from cofola.parser.bag_parser import BagTransformer
+from cofola.problem import CofolaProblem
+from cofola.parser.grammar import grammar
+
+
+class CofolaTransfomer(SetTransformer, FunctionTransformer, BagTransformer):
+    def cofola(self, args):
+        # NOTE: use list to keep the defining order of the objects and constraints
+        statements = list(args)
+        constraints: list[CombinatoricsConstraint] = [
+            statement for statement in statements if isinstance(statement, CombinatoricsConstraint)
+        ]
+        # set the name of objs to be the name defined in the problem,
+        # it's just for debugging purpose
+        already_set = set()
+        for name, obj in self.id2obj.items():
+            if obj.name in already_set:
+                continue
+            obj.name = name
+            already_set.add(name)
+        return CofolaProblem(self.objs, constraints)
+
+    def object_declaration(self, args):
+        return args[0]
+
+    def negation_constraint(self, args):
+        return ~args[1]
+
+    def conjunction_constraint(self, args):
+        return args[0] & args[2]
+
+    def disjunction_constraint(self, args):
+        return args[0] | args[2]
+
+    def implication_constraint(self, args):
+        return args[0].implies(args[2])
+
+    def equivalence_constraint(self, args):
+        return args[0].equivalent(args[2])
+
+
+def parse(text):
+    set_parser = Lark(grammar, start='cofola')
+    tree = set_parser.parse(text)
+    return CofolaTransfomer().transform(tree)
+
+
+if __name__ == '__main__':
+    text = r"""
+# declare the sets
+set nondefective_tvs = {nondef1:10}
+set defective_tvs = {def10:13}
+# set tvs = nondefective_tvs + defective_tvs
+
+# perform choose operation
+set purchase = choose(nondefective_tvs+defective_tvs, 5)
+
+# specify the constraints
+|(purchase & {def10:13})| >= 2
+    """
+#     text = r"""
+# set students = {1:100}
+# set male_students = {1:50}
+# set female_students = {51:100}
+#
+# set class_one = choose(students, 20) + male_students
+# set class_two = choose(students, 20) + female_students
+# set class_three = choose(students, 20) - class_one - class_two
+# (1 in class_one) & (|class_one & male_students| >= 10)
+# 1 in class_one <-> ~(1 in class_three)
+# """
+#     text = r"""
+# set indices = {idx1:3}
+# set S = {val1:10}
+#
+# func composition = (S -> indices)
+# |composition-1[val1]| = 2
+# val9 in composition-1(idx1)
+#
+# |(|composition-1| = 3)| = 1
+# """
+    text = """
+bag items = {nickel: 10}
+bag payment = choose(items)
+|payment| > 0
+"""
+    problem = parse(text)
+    print(problem)
+    problem.simplify()
+    print(problem)

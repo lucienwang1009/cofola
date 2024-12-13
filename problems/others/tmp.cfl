@@ -1,0 +1,5 @@
+boys = set(boy0...5)
+girls = set(girl0...4)
+children = boys + girls
+line = choose_sequence(children, 3)
+(boy0, boy1) in line

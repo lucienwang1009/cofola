@@ -1,0 +1,5 @@
+set contacts = {1:26}
+set neighbors = {1:21}
+
+set call = choose(contacts, 1)
+|call & neighbors| = 0

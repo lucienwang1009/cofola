@@ -1,0 +1,8 @@
+set hearts = {h1:14}
+set spades = {s1:14}
+set others = {o1:27}
+set cards = hearts + spades + others
+
+set chosen_card = choose(cards, 3)
+|chosen_card & spades| = 2
+|chosen_card & hearts| = 1

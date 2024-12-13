@@ -1,0 +1,6 @@
+set hearts = {heart1:14}
+set spades = {spade1:14}
+set cards = hearts + spades + {diamond1:13} + {club1:13}
+set hand1 = choose(cards, 4)
+set hand2 = choose(cards, 4)
+hand1 disjoint hand2
