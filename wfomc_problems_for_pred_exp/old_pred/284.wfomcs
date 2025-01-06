@@ -1,0 +1,12 @@
+\forall X: (\forall Y: ((~(PERM(X,X)) & (Pred(X,Y) -> LEQ(X,Y)) & (Pred(X,Y) -> PERM(X,Y)) & (p_seating_NEXT_TO(X,Y) <-> (p_seating_PRED(X,Y) | p_seating_PRED(Y,X))) & (~(First(X)) | ~(Pred(Y,X))) & (~(Last(X)) | ~(Pred(X,Y))) & (p_seating_PRED(X,Y) <-> (Circular_Pred(X,Y) & p_set_people(X) & p_set_people(Y))) & ((p_set_not_next_to(X) & p_set_not_next_to(Y)) -> ~(p_seating_NEXT_TO(X,Y))) & ((p_set_people(X) & ~(p_set_people(Y))) -> LEQ(X,Y)) & (Circular_Pred(X,Y) <-> (Pred(X,Y) | (First(Y) & Last(X)))))))
+& \forall X: (\exists Y: (PERM(X,Y)))
+& \forall X: (\exists Y: (PERM(Y,X)))
+& \forall X: (\exists Y: ((First(X) | Pred(Y,X))))
+& \forall X: (\exists Y: ((Last(X) | Pred(X,Y))))
+
+domain = {c_Bob, c_other0, c_Eve, c_other1, c_other2, c_Alice, c_other3, c_other4}
+
+1 |Pred| = 7
+1 |PERM| = 8
+
+p_set_not_next_to(c_Bob), p_set_people(c_other2), ~p_set_not_next_to(c_other4), p_set_people(c_other3), p_set_not_next_to(c_Alice), p_set_not_next_to(c_Eve), ~p_set_not_next_to(c_other1), p_set_people(c_Alice), p_set_people(c_Bob), p_set_people(c_other4), p_set_people(c_other1), ~p_set_not_next_to(c_other2), ~p_set_not_next_to(c_other0), p_set_people(c_other0), ~p_set_not_next_to(c_other3), p_set_people(c_Eve)

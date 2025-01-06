@@ -1,0 +1,10 @@
+\forall X: (\forall Y: ((~(PERM(X,X)) & (Pred(X,Y) -> LEQ(X,Y)) & (Pred(X,Y) -> PERM(X,Y)) & (p_shelf_NEXT_TO(X,Y) <-> (p_shelf_PRED(X,Y) | p_shelf_PRED(Y,X))) & (p_shelf_PRED(X,Y) <-> (Pred(X,Y) & p_set_books(X) & p_set_books(Y))) & ((p_entity_math1(X) & p_entity_math2(Y)) -> ~(p_shelf_NEXT_TO(X,Y))) & ((p_set_books(X) & ~(p_set_books(Y))) -> LEQ(X,Y)))))
+& \forall X: (\exists Y: (PERM(X,Y)))
+& \forall X: (\exists Y: (PERM(Y,X)))
+
+domain = {c_other0, c_other1, c_other2, c_math1, c_other3, c_math2}
+
+1 |Pred| = 5
+1 |PERM| = 6
+
+p_set_books(c_math1), p_entity_math1(c_math1), ~p_entity_math1(c_other3), ~p_entity_math1(c_other1), p_set_books(c_math2), ~p_entity_math1(c_other0), p_set_books(c_other2), ~p_entity_math1(c_other2), p_set_books(c_other3), ~p_entity_math1(c_math2), ~p_entity_math2(c_other0), ~p_entity_math2(c_math1), p_entity_math2(c_math2), ~p_entity_math2(c_other2), p_set_books(c_other1), ~p_entity_math2(c_other1), ~p_entity_math2(c_other3), p_set_books(c_other0)

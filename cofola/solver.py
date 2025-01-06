@@ -6,7 +6,7 @@ from functools import reduce
 import argparse
 from wfomc import Algo
 from symengine import expand
-from sympy import O, Symbol, satisfiable
+from sympy import O, Symbol, comp, satisfiable
 from copy import deepcopy
 
 from cofola.encoder import encode
@@ -48,6 +48,9 @@ def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
     problem = simplify(problem)
     final = 1
     for p in decompose_problem(problem):
+        print('=====================')
+        print(p)
+        print('=====================')
         p.build()
         logger.info(f'Solving a decomposed problem')
         logger.info(p)
@@ -73,7 +76,7 @@ def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
         logger.info(p)
         sanity_check(p)
         logger.info(f'The problem for encoding: \n{p}')
-        wfomc_problem, decoder = encode(p, lifted)
+        wfomc_problem, decoder, full_circle = encode(p, lifted)
         logger.info(f'Encoded WFOMC problem: \n{wfomc_problem}')
         logger.info(f'Result decoder: \n{decoder}')
         if wfomc_problem.contain_linear_order_axiom() and \
@@ -85,16 +88,17 @@ def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
             )
             wfomc_algo = Algo.INCREMENTAL
             use_partition_constraint = True
-        ret = expand(solve_wfomc(wfomc_problem, wfomc_algo,
-                                 use_partition_constraint))
-        logger.debug(f'WFOMC solver result: {ret}')
-        ret = decoder.decode_result(ret)
+        ret = None
+        # ret = expand(solve_wfomc(wfomc_problem, wfomc_algo,
+        #                          use_partition_constraint))
+        # logger.debug(f'WFOMC solver result: {ret}')
+        # ret = decoder.decode_result(ret)
         if ret is None:
             logger.info('The problem is unsatisfiable')
-            return 0
+            return 0, wfomc_problem, full_circle
         logger.info(f'Answer for the decomposed problem: {ret}')
         final = final * ret
-    return final
+    return final, wfomc_problem, full_circle
 
 
 def decompose_problem(problem: CofolaProblem) -> list[CofolaProblem]:
@@ -168,9 +172,10 @@ def solve(problem: CofolaProblem,
     logger.info("The original problem:")
     logger.info(problem)
     if len(problem.constraints) == 0:
-        return solve_single_problem(
+        answer, wfomc_problem, full_circle = solve_single_problem(
             problem, wfomc_algo, use_partition_constraint, lifted
         )
+        return answer, wfomc_problem, full_circle
     constraints = list()
     constraintidx2atom = dict()
     atom2constraintidx = dict()
@@ -217,12 +222,12 @@ def solve(problem: CofolaProblem,
             if not model[constraintidx2atom[idx]]:
                 constraint.negate()
         logger.info(sub_problem.constraints)
-        sub_answer = solve_single_problem(
+        sub_answer, wfomc_problem, full_circle = solve_single_problem(
             sub_problem, wfomc_algo, use_partition_constraint, lifted
         )
         logger.info(f'Answer for the sub-problem: {sub_answer}')
         answer += sub_answer
-    return answer
+    return answer, wfomc_problem, full_circle
 
 
 def main(args):
@@ -231,13 +236,13 @@ def main(args):
     with open(input_file, 'r') as f:
         problem: CofolaProblem = parse(f.read())
     logger.info(f'Problem: \n{problem}')
-    res: int = solve(
+    res, wfomc_problem, full_circle = solve(
         problem,
         # args.wfomc_algo,
         # args.use_partition_constraint,
         # args.lifted
     )
-    return res
+    return res, wfomc_problem, full_circle
 
 
 if __name__ == '__main__':

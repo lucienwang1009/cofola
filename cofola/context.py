@@ -1,6 +1,6 @@
 
 from typing import Union
-from wfomc import Formula, AtomicFormula, top, Const, Pred, to_sc2, \
+from wfomc import CardinalityConstraint, Formula, AtomicFormula, top, Const, Pred, to_sc2, \
     WFOMCProblem, RingElement, fol_parse as parse
 from symengine import Eq
 from wfomc.utils import Rational
@@ -56,6 +56,9 @@ class Context(object):
         self.pred_pred = Pred('PRED', 2)
         self.circular_pred = Pred('CIRCULAR_PRED', 2)
         self.circle_len: int = len(self.domain)
+        # self.pred_pred = None
+        # self.circular_pred = None
+        self.cardinality_constraint = CardinalityConstraint()
 
     def build(self) -> tuple[WFOMCProblem, Decoder]:
         # do some post encoding work
@@ -71,10 +74,14 @@ class Context(object):
                               (Const(f"c_{atom.args[0].name}"), ),
                               atom.positive)
             )
+        full_circle = True
+        if self.circle_len != len(self.domain):
+            full_circle = False
         problem = WFOMCProblem(
             self.sentence,
             new_domain,
             self.weighting,
+            cardinality_constraint=self.cardinality_constraint,
             unary_evidence=new_unary_evidence,
             circle_len=self.circle_len
         )
@@ -84,7 +91,7 @@ class Context(object):
             self.validator,
             self.indis_vars
         )
-        return problem, decoder
+        return problem, decoder, full_circle
 
     def prune_evidence(self):
         # prune the unused evidence
@@ -207,6 +214,17 @@ class Context(object):
         :param seq: the sequence object
         :return: the predecessor predicate
         """
+        if self.pred_pred is None:
+            self.pred_pred = Pred('Pred', 2)
+            self.sentence = self.sentence & parse(
+                f"\\forall X: (\\exists Y: (PERM(X,Y))) & \\forall X: (\\exists Y: (PERM(Y,X))) & \\forall X: (~PERM(X,X)) & \\forall X: (\\forall Y: ({self.pred_pred}(X,Y) -> PERM(X,Y))) & \\forall X: (\\forall Y: ({self.pred_pred}(X,Y) -> LEQ(X,Y)))"
+            )
+            self.cardinality_constraint.add_simple_constraint(
+                self.pred_pred, "=", len(self.domain) - 1
+            )
+            self.cardinality_constraint.add_simple_constraint(
+                Pred('PERM', 2), "=", len(self.domain)
+            )
         obj_from = seq.obj_from
         if seq.flatten_obj is not None:
             obj_from = seq.flatten_obj
@@ -214,6 +232,11 @@ class Context(object):
         if not seq.circular:
             pred_pred = self.pred_pred
         else:
+            if self.circular_pred is None:
+                self.circular_pred = Pred('Circular_Pred', 2)
+                self.sentence = self.sentence & parse(
+                    f"\\forall X: (First(X) <-> (\\forall Y: (~{self.pred_pred}(Y,X)))) & \\forall X: (Last(X) <-> (\\forall Y: (~{self.pred_pred}(X,Y)))) & \\forall X: (\\forall Y: ({self.circular_pred}(X,Y) <-> ({self.pred_pred}(X,Y) | (Last(X) & First(Y)))))"
+                )
             pred_pred = self.circular_pred
         seq_pred_pred = self.create_pred(f'{seq.name}_PRED', 2)
         self.sentence = self.sentence & parse(

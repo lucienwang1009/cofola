@@ -1,0 +1,12 @@
+\forall X: (\forall Y: ((~(PERM(X,X)) & (Pred(X,Y) -> LEQ(X,Y)) & (Pred(X,Y) -> PERM(X,Y)) & (p_row_PRED(X,Y) <-> (Pred(X,Y) & p_set_people(X) & p_set_people(Y))) & ((p_set_people(X) & ~(p_set_people(Y))) -> LEQ(X,Y)) & (~(p_not_consecutive_first(X)) | (p_set_not_consecutive(X) & (p_set_not_consecutive(Y) -> ~(p_row_PRED(Y,X))))))))
+& \forall X: (\exists Y: (PERM(X,Y)))
+& \forall X: (\exists Y: (PERM(Y,X)))
+& \forall X: (\exists Y: ((p_not_consecutive_first(X) | ~((p_set_not_consecutive(X) & (p_set_not_consecutive(Y) -> ~(p_row_PRED(Y,X))))))))
+
+domain = {c_other0, c_other1, c_other2, c_Paul, c_other3, c_John, c_Wilma, c_other4}
+
+1 |Pred| = 7
+1 |PERM| = 8
+1 |p_not_consecutive_first| > 1
+
+p_set_people(c_John), p_set_people(c_Paul), p_set_people(c_other2), p_set_people(c_other3), p_set_not_consecutive(c_Paul), ~p_set_not_consecutive(c_other4), p_set_not_consecutive(c_John), p_set_people(c_other1), p_set_people(c_other4), ~p_set_not_consecutive(c_other2), ~p_set_not_consecutive(c_other3), p_set_people(c_other0), p_set_people(c_Wilma), ~p_set_not_consecutive(c_other1), p_set_not_consecutive(c_Wilma), ~p_set_not_consecutive(c_other0)

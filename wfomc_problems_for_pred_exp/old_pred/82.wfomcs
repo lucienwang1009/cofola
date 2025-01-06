@@ -1,0 +1,12 @@
+\forall X: (\forall Y: ((~(PERM(X,X)) & (Pred(X,Y) -> LEQ(X,Y)) & (Pred(X,Y) -> PERM(X,Y)) & (p_table_NEXT_TO(X,Y) <-> (p_table_PRED(X,Y) | p_table_PRED(Y,X))) & ((p_entity_John(X) & p_entity_Sam(Y)) -> p_table_NEXT_TO(X,Y)) & (~(First(X)) | ~(Pred(Y,X))) & (~(Last(X)) | ~(Pred(X,Y))) & (p_table_PRED(X,Y) <-> (Circular_Pred(X,Y) & p_set_people(X) & p_set_people(Y))) & ((p_set_people(X) & ~(p_set_people(Y))) -> LEQ(X,Y)) & (Circular_Pred(X,Y) <-> (Pred(X,Y) | (First(Y) & Last(X)))))))
+& \forall X: (\exists Y: (PERM(X,Y)))
+& \forall X: (\exists Y: (PERM(Y,X)))
+& \forall X: (\exists Y: ((First(X) | Pred(Y,X))))
+& \forall X: (\exists Y: ((Last(X) | Pred(X,Y))))
+
+domain = {c_other0, c_other1, c_other2, c_other3, c_Sam, c_John}
+
+1 |Pred| = 5
+1 |PERM| = 6
+
+p_entity_John(c_John), p_set_people(c_John), p_set_people(c_other2), ~p_entity_Sam(c_other3), p_set_people(c_other3), ~p_entity_John(c_other0), ~p_entity_John(c_other2), p_set_people(c_other1), ~p_entity_John(c_other3), ~p_entity_Sam(c_other1), ~p_entity_Sam(c_John), p_set_people(c_other0), ~p_entity_John(c_Sam), p_entity_Sam(c_Sam), ~p_entity_Sam(c_other0), ~p_entity_Sam(c_other2), ~p_entity_John(c_other1), p_set_people(c_Sam)

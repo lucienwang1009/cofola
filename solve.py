@@ -3,6 +3,7 @@ import argparse
 import logging
 import logzero
 import pandas as pd
+import pickle
 
 from wfomc import Algo
 from logzero import logger
@@ -41,6 +42,7 @@ if __name__ == '__main__':
                 ids.extend(str(j) for j in range(int(start), int(end) + 1))
             else:
                 ids.append(i)
+    wfomc_problems = dict()
     for i in ids:
         problem = all_problems[i]
         tags = problem['tags']
@@ -50,8 +52,8 @@ if __name__ == '__main__':
         checked = [
             'circle', 'sequence'
         ]
-        if any(tag in tags for tag in unchecked) : #\
-                # or not any(tag in tags for tag in checked):
+        if any(tag in tags for tag in unchecked) \
+                or not any(tag in tags for tag in checked):
             df.append({
                 'problem_id': i,
                 'gt_result': problem['answer'],
@@ -64,15 +66,17 @@ if __name__ == '__main__':
             with Timer() as t:
                 try:
                     cofola_problem = parse(problem['program'])
-                    res = solve(cofola_problem, Algo.FASTv2,
+                    res, problems, full_circle = solve(cofola_problem, Algo.FASTv2,
                                 use_partition_constraint=True,
                                 lifted=False)
+                    if full_circle:
+                        wfomc_problems[i] = problems
                 except Exception as e:
                     res = 'error'
                     logger.exception(e)
             if res != int(gt_result):
                 logger.error(f'The answer is wrong for problem {i}: {res} != {gt_result}')
-                exit(1)
+                # exit(1)
             df.append({
                 'problem_id': i,
                 'gt_result': gt_result,
@@ -82,4 +86,6 @@ if __name__ == '__main__':
             })
         pd_df = pd.DataFrame(df)
         pd_df.to_csv('results.csv', index=False)
+    with open('wfomc_problems.pkl', 'wb') as f:
+        pickle.dump(wfomc_problems, f)
     print(pd_df)

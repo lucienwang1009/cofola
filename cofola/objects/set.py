@@ -81,8 +81,11 @@ class SetChoose(Set):
             f"\\forall X: ({obj_pred}(X) -> {from_pred}(X))"
         )
         if self.size is not None:
-            var = context.get_obj_var(self)
-            context.validator.append(Eq(var, self.size))
+            context.cardinality_constraint.add_simple_constraint(
+                obj_pred, "==", self.size
+            )
+            # var = context.get_obj_var(self)
+            # context.validator.append(Eq(var, self.size))
         return context
 
 

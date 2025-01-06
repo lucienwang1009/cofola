@@ -1,0 +1,12 @@
+\forall X: (\forall Y: ((~(PERM(X,X)) & (Pred(X,Y) -> LEQ(X,Y)) & (Pred(X,Y) -> PERM(X,Y)) & (p_arrangement_NEXT_TO(X,Y) <-> (p_arrangement_PRED(X,Y) | p_arrangement_PRED(Y,X))) & ((p_entity_car_key(Y) & p_entity_house_key(X)) -> p_arrangement_NEXT_TO(X,Y)) & (~(First(X)) | ~(Pred(Y,X))) & (~(Last(X)) | ~(Pred(X,Y))) & (p_arrangement_PRED(X,Y) <-> (Circular_Pred(X,Y) & p_set_keys(X) & p_set_keys(Y))) & ((p_set_keys(X) & ~(p_set_keys(Y))) -> LEQ(X,Y)) & (Circular_Pred(X,Y) <-> (Pred(X,Y) | (First(Y) & Last(X)))))))
+& \forall X: (\exists Y: (PERM(X,Y)))
+& \forall X: (\exists Y: (PERM(Y,X)))
+& \forall X: (\exists Y: ((First(X) | Pred(Y,X))))
+& \forall X: (\exists Y: ((Last(X) | Pred(X,Y))))
+
+domain = {c_key2, c_key0, c_key1, c_car_key, c_house_key}
+
+1 |Pred| = 4
+1 |PERM| = 5
+
+~p_entity_house_key(c_key1), p_entity_car_key(c_car_key), p_set_keys(c_key2), ~p_entity_car_key(c_key2), p_set_keys(c_house_key), p_entity_house_key(c_house_key), p_set_keys(c_key0), ~p_entity_car_key(c_key1), p_set_keys(c_key1), ~p_entity_house_key(c_key0), ~p_entity_house_key(c_car_key), ~p_entity_house_key(c_key2), ~p_entity_car_key(c_house_key), ~p_entity_car_key(c_key0), p_set_keys(c_car_key)

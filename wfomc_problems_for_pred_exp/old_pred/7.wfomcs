@@ -1,0 +1,14 @@
+\forall X: (\forall Y: ((~(PERM(X,X)) & (Pred(X,Y) -> LEQ(X,Y)) & (Pred(X,Y) -> PERM(X,Y)) & (p_shelf_PRED(X,Y) <-> (Pred(X,Y) & p_set_aux_6(X) & p_set_aux_6(Y))) & ((p_set_aux_6(X) & ~(p_set_aux_6(Y))) -> LEQ(X,Y)) & (~(p_english_books_first(X)) | (p_set_english_books(X) & (p_set_english_books(Y) -> ~(p_shelf_PRED(Y,X))))) & (~(p_math_books_first(X)) | (p_set_math_books(X) & (p_set_math_books(Y) -> ~(p_shelf_PRED(Y,X))))))))
+& \forall X: (\exists Y: (PERM(X,Y)))
+& \forall X: (\exists Y: (PERM(Y,X)))
+& \forall X: (\exists Y: ((p_english_books_first(X) | ~((p_set_english_books(X) & (p_set_english_books(Y) -> ~(p_shelf_PRED(Y,X))))))))
+& \forall X: (\exists Y: ((p_math_books_first(X) | ~((p_set_math_books(X) & (p_set_math_books(Y) -> ~(p_shelf_PRED(Y,X))))))))
+
+domain = {c_math2, c_math1, c_english0, c_english4, c_english3, c_english1, c_math0, c_english2}
+
+1 |Pred| = 7
+1 |PERM| = 8
+1 |p_english_books_first| <= 1
+1 |p_math_books_first| <= 1
+
+p_set_aux_6(c_english1), ~p_set_english_books(c_math0), ~p_set_english_books(c_math2), p_set_aux_6(c_english4), ~p_set_math_books(c_english0), p_set_math_books(c_math1), ~p_set_math_books(c_english3), p_set_aux_6(c_math0), p_set_english_books(c_english2), p_set_aux_6(c_english0), p_set_english_books(c_english1), p_set_aux_6(c_math2), p_set_aux_6(c_english3), p_set_english_books(c_english4), ~p_set_english_books(c_math1), p_set_math_books(c_math0), p_set_english_books(c_english0), ~p_set_math_books(c_english1), ~p_set_math_books(c_english2), p_set_aux_6(c_math1), p_set_english_books(c_english3), p_set_math_books(c_math2), ~p_set_math_books(c_english4), p_set_aux_6(c_english2)

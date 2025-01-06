@@ -137,20 +137,27 @@ class SequenceImpl(Sequence):
             for entity in self.obj_from.dis_entities:
                 entity_pred = context.get_entity_pred(self, entity)
                 entity_preds.append(entity_pred)
-                entity_var = context.get_entity_var(self, entity)
-                context.weighting[entity_pred] = (
-                    entity_var, 1
-                )
+                # entity_var = context.get_entity_var(self, entity)
+                # context.weighting[entity_pred] = (
+                #     entity_var, 1
+                # )
                 if isinstance(self.obj_from, BagInit):
                     multi = self.obj_from.p_entities_multiplicity[entity]
-                    context.validator.append(
-                        Eq(entity_var, multi)
+                    context.cardinality_constraint.add_simple_constraint(
+                        entity_pred, "==", multi
                     )
+                    # context.validator.append(
+                    #     Eq(entity_var, multi)
+                    # )
                 else:
-                    bag_entity_var = context.get_entity_var(self.obj_from, entity)
-                    context.validator.append(
-                        Eq(entity_var, bag_entity_var)
+                    bag_entity_pred = context.get_entity_pred(self.obj_from, entity)
+                    context.cardinality_constraint.add(
+                        {entity_pred: 1, bag_entity_pred: -1}, "==", 0
                     )
+                    # bag_entity_var = context.get_entity_var(self.obj_from, entity)
+                    # context.validator.append(
+                    #     Eq(entity_var, bag_entity_var)
+                    # )
             or_formula = ' | '.join(f'{pred}(X)' for pred in entity_preds)
             context.sentence = context.sentence & parse(
                 f'\\forall X: (({or_formula}) <-> {flatten_obj_pred}(X))'
@@ -202,16 +209,22 @@ f"""
 \\forall X: ({first_pred}(X) <-> ({obj_pred}(X) & \\forall Y: ({obj_pred}(Y) -> ~{pred_pred}(Y,X))))
 """
         )
-        first_var = context.create_var(f"{self.obj.name}_first")
-        context.weighting[first_pred] = (first_var, 1)
+        # first_var = context.create_var(f"{self.obj.name}_first")
+        # context.weighting[first_pred] = (first_var, 1)
         if positive:
-            context.validator.append(
-                first_var <= 1
+            context.cardinality_constraint.add_simple_constraint(
+                first_pred, "<=", 1
             )
+            # context.validator.append(
+            #     first_var <= 1
+            # )
         else:
-            context.validator.append(
-                first_var > 1
+            context.cardinality_constraint.add_simple_constraint(
+                first_pred, ">", 1
             )
+            # context.validator.append(
+            #     first_var > 1
+            # )
         return context
 
 

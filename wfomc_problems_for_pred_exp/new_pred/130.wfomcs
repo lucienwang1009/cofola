@@ -1,0 +1,12 @@
+\forall X: (\forall Y: (((p_arrangement_PRED(X,Y) <-> (PRED(X,Y) & p_set_aux_137(X) & p_set_aux_137(Y))) & ((p_set_aux_137(X) & ~(p_set_aux_137(Y))) -> LEQ(X,Y)) & (~(p_cats_first(X)) | (p_set_cats(X) & (p_set_cats(Y) -> ~(p_arrangement_PRED(Y,X))))) & (~(p_chickens_first(X)) | (p_set_chickens(X) & (p_set_chickens(Y) -> ~(p_arrangement_PRED(Y,X))))) & (~(p_dogs_first(X)) | (p_set_dogs(X) & (p_set_dogs(Y) -> ~(p_arrangement_PRED(Y,X))))))))
+& \forall X: (\exists Y: ((p_dogs_first(X) | ~((p_set_dogs(X) & (p_set_dogs(Y) -> ~(p_arrangement_PRED(Y,X))))))))
+& \forall X: (\exists Y: ((p_cats_first(X) | ~((p_set_cats(X) & (p_set_cats(Y) -> ~(p_arrangement_PRED(Y,X))))))))
+& \forall X: (\exists Y: ((p_chickens_first(X) | ~((p_set_chickens(X) & (p_set_chickens(Y) -> ~(p_arrangement_PRED(Y,X))))))))
+
+domain = {c_cat1, c_dog0, c_chi1, c_chi3, c_cat0, c_dog1, c_cat4, c_cat2, c_chi2, c_cat3, c_chi0}
+
+1 |p_dogs_first| <= 1
+1 |p_cats_first| <= 1
+1 |p_chickens_first| <= 1
+
+p_set_chickens(c_chi2), ~p_set_dogs(c_chi0), ~p_set_cats(c_chi3), ~p_set_dogs(c_chi3), ~p_set_cats(c_dog1), p_set_aux_137(c_cat4), p_set_cats(c_cat4), ~p_set_cats(c_chi0), p_set_chickens(c_chi0), p_set_dogs(c_dog0), ~p_set_chickens(c_cat3), p_set_aux_137(c_dog0), ~p_set_dogs(c_chi2), p_set_chickens(c_chi1), ~p_set_cats(c_chi2), ~p_set_dogs(c_chi1), ~p_set_chickens(c_cat1), ~p_set_cats(c_chi1), p_set_cats(c_cat2), p_set_aux_137(c_cat2), ~p_set_chickens(c_dog1), ~p_set_dogs(c_cat4), ~p_set_dogs(c_cat2), p_set_aux_137(c_cat0), p_set_cats(c_cat0), ~p_set_cats(c_dog0), p_set_aux_137(c_chi3), p_set_cats(c_cat3), ~p_set_chickens(c_cat4), ~p_set_chickens(c_cat2), p_set_aux_137(c_cat1), ~p_set_chickens(c_dog0), p_set_aux_137(c_dog1), p_set_dogs(c_dog1), p_set_aux_137(c_chi0), p_set_aux_137(c_cat3), ~p_set_dogs(c_cat0), p_set_aux_137(c_chi2), p_set_cats(c_cat1), p_set_chickens(c_chi3), ~p_set_dogs(c_cat3), p_set_aux_137(c_chi1), ~p_set_chickens(c_cat0), ~p_set_dogs(c_cat1)

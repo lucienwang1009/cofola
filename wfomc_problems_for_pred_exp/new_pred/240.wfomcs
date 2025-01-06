@@ -1,0 +1,12 @@
+\forall X: (\forall Y: (((p_table_PRED(X,Y) <-> (CIRCULAR_PRED(X,Y) & p_set_aux_197(X) & p_set_aux_197(Y))) & ((p_set_aux_197(X) & ~(p_set_aux_197(Y))) -> LEQ(X,Y)) & (~(p_England_first(X)) | (p_set_England(X) & (p_set_England(Y) -> ~(p_table_PRED(Y,X))))) & (~(p_France_first(X)) | (p_set_France(X) & (p_set_France(Y) -> ~(p_table_PRED(Y,X))))) & (~(p_Germany_first(X)) | (p_set_Germany(X) & (p_set_Germany(Y) -> ~(p_table_PRED(Y,X))))))))
+& \forall X: (\exists Y: ((p_Germany_first(X) | ~((p_set_Germany(X) & (p_set_Germany(Y) -> ~(p_table_PRED(Y,X))))))))
+& \forall X: (\exists Y: ((p_England_first(X) | ~((p_set_England(X) & (p_set_England(Y) -> ~(p_table_PRED(Y,X))))))))
+& \forall X: (\exists Y: ((p_France_first(X) | ~((p_set_France(X) & (p_set_France(Y) -> ~(p_table_PRED(Y,X))))))))
+
+domain = {c_E2, c_E0, c_F1, c_G2, c_G0, c_G1, c_F0, c_E1, c_G3}
+
+1 |p_Germany_first| <= 1
+1 |p_England_first| <= 1
+1 |p_France_first| <= 1
+
+p_set_France(c_F0), ~p_set_Germany(c_E1), p_set_France(c_F1), ~p_set_France(c_G1), p_set_England(c_E0), ~p_set_England(c_G0), ~p_set_England(c_F1), ~p_set_England(c_G3), ~p_set_France(c_E2), ~p_set_Germany(c_E0), p_set_aux_197(c_G1), p_set_Germany(c_G1), ~p_set_France(c_G2), ~p_set_France(c_G0), p_set_aux_197(c_F0), p_set_aux_197(c_E2), ~p_set_France(c_E1), p_set_aux_197(c_G2), ~p_set_France(c_G3), p_set_Germany(c_G2), p_set_Germany(c_G0), p_set_England(c_E2), p_set_aux_197(c_G3), p_set_Germany(c_G3), ~p_set_England(c_G1), p_set_aux_197(c_F1), p_set_aux_197(c_G0), ~p_set_France(c_E0), p_set_aux_197(c_E1), ~p_set_Germany(c_F0), ~p_set_Germany(c_E2), ~p_set_Germany(c_F1), ~p_set_England(c_F0), p_set_England(c_E1), p_set_aux_197(c_E0), ~p_set_England(c_G2)
