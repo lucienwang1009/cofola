@@ -50,8 +50,8 @@ if __name__ == '__main__':
         checked = [
             'circle', 'sequence'
         ]
-        if any(tag in tags for tag in unchecked) : #\
-                # or not any(tag in tags for tag in checked):
+        if any(tag in tags for tag in unchecked) \
+                or not any(tag in tags for tag in checked):
             df.append({
                 'problem_id': i,
                 'gt_result': problem['answer'],

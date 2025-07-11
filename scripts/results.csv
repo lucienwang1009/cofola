@@ -6,8 +6,8 @@ problem_id,gt_result,result,running time,unencodeable_reason
 4,6732,skipped,0.0,"set, choose, not constraint, or constraint"
 5,36,skipped,0.0,"set, choose, tuple, index, in"
 6,200,skipped,0.0,"bag, composition, index, size constraint"
-7,1440,1440,0.3463156250072643,
-8,14400,14400,1.4662206249922747,
+7,1440,1440,0.622158875,
+8,14400,14400,2.567664958,
 9,117,skipped,0.0,"unencodeable, second order logic"
 10,84,skipped,0.0,"unencodeable, not combinatorics"
 11,28,skipped,0.0,"bag, composition"
@@ -22,37 +22,37 @@ problem_id,gt_result,result,running time,unencodeable_reason
 20,10,skipped,0.0,"set, choose"
 21,15,skipped,0.0,"bag, choose_replace"
 22,36,skipped,0.0,"set, choose, multiple choosing, size constraint, intersection"
-23,10080,10080,0.15162504199543037,
+23,10080,10080,0.25159629200000033,
 24,1296540,skipped,0.0,"set, choose, multiple choosing, second order logic"
 25,72,skipped,0.0,"set, choose, multiple choosing"
 26,13,skipped,0.0,"set, choose, or constraint, subset"
 27,15,skipped,0.0,"set, choose"
 28,243,skipped,0.0,"set, composition"
-29,720,720,0.26379908400122076,
+29,720,720,0.4300291669999998,
 30,25200,skipped,0.0,"set, choose, tuple, multiple choosing, difference"
-31,12,12,0.1630689580051694,
+31,12,12,0.29521745799999977,
 32,21,skipped,0.0,"bag, tuple"
-33,960,960,0.36521049999282695,
-34,3,3,0.207794207992265,
+33,960,960,0.6231064169999998,
+34,3,3,0.30512024999999987,
 35,60,skipped,0.0,"bag, tuple, index, in"
 36,240,skipped,0.0,"set, tuple, index, in"
 37,1,skipped,0.0,"unencodeable, not combinatorics"
 38,3,skipped,0.0,"bag, partition"
-39,720,720,0.16033095799502917,
-40,560,560,0.4089254999998957,
+39,720,720,0.2924876249999997,
+40,560,560,0.6740470829999996,
 41,1386,skipped,0.0,"set, choose, size constraint, intersection"
-42,17280,17280,0.16281829099170864,
+42,17280,17280,0.2688849590000002,
 43,15,skipped,0.0,"set, choose, size constraint"
 44,672,skipped,0.0,"set, choose, intersection, size constraint"
-45,2880,2880,0.18176279100589454,
+45,2880,2880,0.2854601250000002,
 46,25,skipped,0.0,"bag, tuple, index, compare element, or constraint"
-47,144,144,0.15708829200593755,
+47,144,144,0.28162116699999995,
 48,35,skipped,0.0,"bag, tuple"
 49,12441600,skipped,0.0,"set, tuple"
 50,34650,skipped,0.0,"bag, tuple"
 51,26,skipped,0.0,"unencodeable, not combinatorics"
 52,110,skipped,0.0,"unencodeable, not combinatorics"
-53,28800,28800,4.392602040999918,
+53,28800,28800,7.449363792,
 54,10,skipped,0.0,"unencodeable, not combinatorics"
 55,18,skipped,0.0,"set, tuple, index, not constraint, compare element"
 56,45045,skipped,0.0,"set, choose, multiple choosing"
@@ -66,7 +66,7 @@ problem_id,gt_result,result,running time,unencodeable_reason
 64,576,skipped,0.0,"unencodeable, grid"
 65,61328,skipped,0.0,"set, choose_replace_permute, tuple, index, compare element, count element, not constraint, or constraint"
 66,750,skipped,0.0,"set, choose, multiple choosing"
-67,840,840,0.08788737498980481,
+67,840,840,0.13946000000000147,
 68,252,skipped,0.0,"set, choose, intersection, size constraint"
 69,840,skipped,0.0,"bag, tuple"
 70,28,skipped,0.0,"set, choose_replace"
@@ -79,9 +79,9 @@ problem_id,gt_result,result,running time,unencodeable_reason
 77,36,skipped,0.0,"unencodeable, not combinatorics"
 78,1414,skipped,0.0,"set, choose, intersection, size constraint"
 79,0,skipped,0.0,"unencodeable, not combinatorics"
-80,24,24,0.18715458300721366,
+80,24,24,0.3061943340000006,
 81,840,skipped,0.0,"set, choose, intersection, size constraint"
-82,48,48,0.16344695800216869,
+82,48,48,0.302447707999999,
 83,195,skipped,0.0,"set, choose, intersection, size constraint"
 84,28,skipped,0.0,"set, choose"
 85,225,skipped,0.0,"set, choose, multiple choosing"
@@ -89,19 +89,19 @@ problem_id,gt_result,result,running time,unencodeable_reason
 87,2838,skipped,0.0,"set, choose, intersection, size constraint"
 88,1680,skipped,0.0,"unencodeable, cube"
 89,16,skipped,0.0,"unencodeable, not combinatorics"
-90,672,672,0.11987312498968095,
+90,672,672,0.129658292000002,
 91,771400,skipped,0.0,"set, choose, multiple choosing"
 92,15600,skipped,0.0,"set, choose, multiple choosing, union, size constraint"
 93,5,skipped,0.0,"bag, choose, size constraint"
 94,56,skipped,0.0,"set, choose, subset"
 95,6,skipped,0.0,"bag, tuple, index, compare element, not constraint"
-96,480,480,0.16371808300027624,
+96,480,480,0.30117291700000237,
 97,16,skipped,0.0,"set, choose, in"
 98,12,skipped,0.0,"set, tuple, index, compare element"
-99,360,360,0.16092658300476614,
+99,360,360,0.2528598750000022,
 100,650,skipped,0.0,"set, choose, tuple"
 101,5,skipped,0.0,"bag, composition"
-102,432,432,1.1450236670061713,
+102,432,432,1.963122792,
 103,495,skipped,0.0,"set, choose"
 104,840,skipped,0.0,"set, choose, intersection, size constraint"
 105,720,skipped,0.0,"set, tuple"
@@ -112,7 +112,7 @@ problem_id,gt_result,result,running time,unencodeable_reason
 110,504,skipped,0.0,"set, choose, multiple choosing"
 111,3,skipped,0.0,"bag, partition"
 112,1940,skipped,0.0,"set, choose, intersection, size constraint"
-113,362880,362880,0.07166391699865926,
+113,362880,362880,0.11134829199999885,
 114,21,skipped,0.0,"set, choose"
 115,255,skipped,0.0,"unencodeable, not combinatorics"
 116,126,skipped,0.0,"set, choose"
@@ -121,7 +121,7 @@ problem_id,gt_result,result,running time,unencodeable_reason
 119,30,skipped,0.0,"set, choose, multiple choosing"
 120,30860,skipped,0.0,"tuple, unknown length"
 121,4,skipped,0.0,"set, choose, or constraint, subset"
-122,12,12,0.0916698329965584,
+122,12,12,0.13264029199999783,
 123,3,skipped,0.0,"unencodeable, cube"
 124,32,skipped,0.0,"set, composition"
 125,100000,skipped,0.0,"set, choose_replace_permute"
@@ -129,14 +129,14 @@ problem_id,gt_result,result,running time,unencodeable_reason
 127,43,skipped,0.0,"bag, tuple, choose_permute"
 128,12500,skipped,0.0,"set, choose_permute, tuple, index, in"
 129,36,skipped,0.0,"bag, composition"
-130,34560,34560,5.490065165999113,
+130,34560,34560,9.293153,
 131,1512,skipped,0.0,"set, choose_permute, tuple, index, in"
 132,72,skipped,0.0,"bag, choose, multiple choosing"
-133,880,880,0.1627111249981681,
+133,880,880,0.3022330829999973,
 134,4320,skipped,0.0,"set, tuple, index, in"
-135,60,60,0.16362987499451265,
+135,60,60,0.22048025000000138,
 136,4320,skipped,0.0,"set, choose, tuple, intersection, size constraint"
-137,3600,3600,0.16357950000383426,
+137,3600,3600,0.306480208,
 138,7000,skipped,0.0,"set, choose, multiple choosing"
 139,165,skipped,0.0,"set, choose, subset"
 140,4,skipped,0.0,"unencodeable, not combinatorics"
@@ -148,13 +148,13 @@ problem_id,gt_result,result,running time,unencodeable_reason
 146,371043400,skipped,0.0,"set, choose, intersection, size constraint"
 147,33800,skipped,0.0,"set, choose_replace_permute, tuple, intersection, size constraint"
 148,29700,skipped,0.0,over partitioned sets
-149,2880,2880,0.2251860830001533,
+149,2880,2880,0.40828683299999824,
 150,2,skipped,0.0,"unencodeable, not combinatorics"
 151,180,skipped,0.0,"set, choose, multiple choosing, subset, or constraint"
 152,36,skipped,0.0,"set, choose, size constraint"
 153,8,skipped,0.0,"set, partition"
-154,12,12,0.09335270799056161,
-155,40320,40320,0.06363966700155288,
+154,12,12,0.1026987919999982,
+155,40320,40320,0.10111245799999935,
 156,62,skipped,0.0,"set, composition, none_empty"
 157,156,skipped,0.0,"set, choose, not constraint, subset"
 158,125,skipped,0.0,"set, choose_replace_permute, tuple"
@@ -174,7 +174,7 @@ problem_id,gt_result,result,running time,unencodeable_reason
 172,12441600,skipped,0.0,"set, sequence, together, timeout"
 173,21,skipped,0.0,"bag, composition"
 174,10800,skipped,0.0,"unencodeable, subsequence"
-175,3600,3600,0.1638175410043914,
+175,3600,3600,0.3094034590000021,
 176,30,skipped,0.0,"tuple, unknown length"
 177,8,skipped,0.0,"unencodeable, arithmetics"
 178,560,skipped,0.0,"bag, tuple"
@@ -192,7 +192,7 @@ problem_id,gt_result,result,running time,unencodeable_reason
 190,16,skipped,0.0,"set, partition"
 191,36,skipped,0.0,"bag, multiplicity constraint, over partitioned sets"
 192,31250,skipped,0.0,"bag, sequence, TAG, timeout, pred, succ"
-193,2880,2880,0.21323004199075513,
+193,2880,2880,0.30453699999999984,
 194,9,skipped,0.0,"set, choose, intersection, in, size constraint"
 195,24,skipped,0.0,"unencodeable, opposite constraint, reflection"
 196,200,skipped,0.0,"set, choose_replace_permute, not constraint, index, compare element, in"
@@ -205,18 +205,18 @@ problem_id,gt_result,result,running time,unencodeable_reason
 203,8788,skipped,0.0,"set, choose, subset, not constraint"
 204,56,skipped,0.0,"set, choose"
 205,13,skipped,0.0,"unencodeable, reverse counting"
-206,588,588,1.8812536670011468,
+206,588,588,3.661993917,
 207,3110400,skipped,0.0,"set, sequence, together, timeout"
 208,520,skipped,0.0,"set, tuple, index, in, counting quantifier"
 209,210,skipped,0.0,"bag, tuple"
-210,24,24,0.06359154199890327,
+210,24,24,0.10365616599999328,
 211,15,skipped,0.0,"set, choose"
 212,2250,skipped,0.0,"set, choose, multiple choosing"
 213,24,skipped,0.0,"unencodeable, circle, opposite constraint"
-214,10,10,0.10974808300670702,
+214,10,10,0.19273495900000626,
 215,12600,skipped,0.0,"set, choose, multiple choosing"
 216,448,skipped,0.0,"set, choose, tuple, not constraint, in"
-217,5040,5040,0.06331066599523183,
+217,5040,5040,0.10616404200000318,
 218,16,skipped,0.0,"unencodeable, not combinatorics"
 219,165,skipped,0.0,"bag, composition"
 220,927,skipped,0.0,"set, choose_replace, unencodeable, arithmetics, supp, multiplicity constraint, tuple, not constraint, size constraint, index, compare element"
@@ -230,19 +230,19 @@ problem_id,gt_result,result,running time,unencodeable_reason
 228,351,skipped,0.0,"set, choose_replace_permute, sequence, TAG, count pred, count next_to, unencodeable, pred_of_pred"
 229,5,skipped,0.0,"set, choose, multiple choosing, in, or constraint"
 230,495,skipped,0.0,"set, choose"
-231,36000,36000,0.18867266600136645,
+231,36000,36000,0.30672008300000186,
 232,864000,skipped,0.0,"set, choose, tuple, multiple choosing, index, in"
 233,360,skipped,0.0,"set, choose, multiple choosing"
 234,65,skipped,0.0,"bag, choose, size constraint"
 235,30,skipped,0.0,"unencodeable, arithmetics"
-236,12,12,0.06396858299558517,
+236,12,12,0.10164966700000377,
 237,48,skipped,0.0,"set, tuple, index, in"
 238,6,skipped,0.0,"bag, tuple"
 239,10,skipped,0.0,"set, choose_replace, multiplicity constraint"
-240,576,576,6.4666187499969965,
+240,576,576,10.90001375,
 241,6,skipped,0.0,"set, tuple"
 242,62,skipped,0.0,"set, choose, multiple choosing, set equality, or constraint"
-243,4896,4896,0.14164354199601803,
+243,4896,4896,0.2292489169999996,
 244,480,skipped,0.0,"set, choose, multiple choosing, subset, not constraint"
 245,35,skipped,0.0,"set, choose"
 246,35,skipped,0.0,"set, choose"
@@ -259,16 +259,16 @@ problem_id,gt_result,result,running time,unencodeable_reason
 257,14,skipped,0.0,"unencodeable, not combinatorics"
 258,105,skipped,0.0,"set, choose"
 259,432,skipped,0.0,counting quantifier
-260,720,720,0.06400679198850412,
+260,720,720,0.10056216699999965,
 261,10,skipped,0.0,"set, choose"
 262,9240,skipped,0.0,"set, composition, size constraint, index, in"
 263,2,skipped,0.0,"unencodeable, arithmetics"
 264,15,skipped,0.0,"set, choose, subset"
-265,384,384,0.3027032079990022,
+265,384,384,0.5073742080000017,
 266,210,skipped,0.0,"set, choose"
 267,20,skipped,0.0,"unencodeable, arithmetics"
 268,4,skipped,0.0,"bag, partition"
-269,240,240,0.2639047910051886,
+269,240,240,0.4874914170000011,
 270,9,skipped,0.0,"unencodeable, arithmetics"
 271,6,skipped,0.0,"bag, tuple"
 272,5416,skipped,0.0,"set, choose_replace_permute, tuple, or constraint, in"
@@ -283,15 +283,15 @@ problem_id,gt_result,result,running time,unencodeable_reason
 281,75,skipped,0.0,"set, bag, choose, multiple choosing"
 282,362880,skipped,0.0,"unencodeable, star, reflection"
 283,20,skipped,0.0,"unencodeable, grid"
-284,1440,1440,0.15807679199497215,
+284,1440,1440,0.3196455419999964,
 285,14,skipped,0.0,"set, partition"
 286,4242,skipped,0.0,"set, choose, intersection, size constraint"
 287,210,skipped,0.0,"set, choose"
 288,210,skipped,0.0,"set, choose, multiple choosing"
 289,88,skipped,0.0,"unencodeable, arithmetics"
 290,60,skipped,0.0,"bag, tuple"
-291,180,180,1.4413937500066822,
-292,720,720,0.15912275000300724,
+291,180,180,2.521511374999996,
+292,720,720,0.2652067910000042,
 293,900,skipped,0.0,"unencodeable, arithmetics"
 294,14,skipped,0.0,"set, partition"
 295,41,skipped,0.0,"set, partition"
@@ -302,13 +302,13 @@ problem_id,gt_result,result,running time,unencodeable_reason
 300,380,skipped,0.0,"set, choose, multiple choosing"
 301,48,skipped,0.0,"set, tuple, composition"
 302,16,skipped,0.0,"set, composition"
-303,60,60,0.0648301250039367,
+303,60,60,0.15035299999999552,
 304,1848,skipped,0.0,"set, choose, intersection, size constraint"
 305,1050,skipped,0.0,"set, choose, intersection, size constraint"
 306,6840,skipped,0.0,"set, choose, multiple choosing, difference"
-307,192,192,0.3295039579970762,
+307,192,192,0.5432421670000025,
 308,33800000,skipped,0.0,"set, sequence, TAG, choose_replace, next_to, timeout"
-309,6,6,0.1650145409948891,
+309,6,6,0.27771962499999603,
 310,,skipped,0.0,"unencodeable, arithmetics"
 311,,skipped,0.0,"unencodeable, arithmetics"
 312,,skipped,0.0,"unencodeable, arithmetics"

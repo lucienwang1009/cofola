@@ -17,19 +17,6 @@ from cofola.parser.parser import parse
 from cofola.problem import CofolaProblem, infer_max_size, optimize, \
     sanity_check, simplify, transform, workaround
 
-def parse_args():
-    parser = argparse.ArgumentParser(description='Solve a combinatorics math problem using weighted first-order model counting')
-    parser.add_argument('--input_file', '-i', required=True, type=str, help='input file')
-    parser.add_argument('--debug', '-d', action='store_true', help='debug mode')
-    # parser.add_argument('--wfomc_algo', '-a', type=Algo,
-    #                     choices=list(Algo), default=Algo.FASTv2)
-    # parser.add_argument('--use_partition_constraint', '-p', action='store_true',
-    #                     help='use partition constraint to speed up the solver, '
-    #                          'it would override the algorithm choice to FASTv2')
-    # parser.add_argument('--lifted', '-l', action='store_true',
-    #                     help='use lifted encoding for bags')
-    return parser.parse_args()
-
 
 def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
                          use_partition_constraint: bool = False,
@@ -223,28 +210,3 @@ def solve(problem: CofolaProblem,
         logger.info(f'Answer for the sub-problem: {sub_answer}')
         answer += sub_answer
     return answer
-
-
-def main(args):
-    input_file = args.input_file
-    logger.info(f'Input file: {input_file}')
-    with open(input_file, 'r') as f:
-        problem: CofolaProblem = parse(f.read())
-    logger.info(f'Problem: \n{problem}')
-    res: int = solve(
-        problem,
-        # args.wfomc_algo,
-        # args.use_partition_constraint,
-        # args.lifted
-    )
-    return res
-
-
-if __name__ == '__main__':
-    args = parse_args()
-    if args.debug:
-        logger.setLevel(logging.DEBUG)
-    else:
-        logger.setLevel(logging.INFO)
-    res = main(args)
-    logger.info(f'Answer: {res}')

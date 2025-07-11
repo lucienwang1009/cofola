@@ -1,0 +1,23 @@
+[project]
+name = "cofola"
+version = "0.1.0"
+description = "A solver for combinatorics math problems using first-order logic"
+readme = "README.md"
+authors = [
+    { name = "lucienwang1009", email = "lucienwang1009@gmail.com" }
+]
+requires-python = ">=3.9"
+dependencies = [
+    "scipy>=1.13.1",
+    "wfomc",
+]
+
+[project.scripts]
+cofola = "cofola:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+wfomc = { path = "../wfomc_for_cofola", editable = true }
