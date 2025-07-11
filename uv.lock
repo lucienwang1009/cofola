@@ -38,7 +38,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "scipy", specifier = ">=1.13.1" },
-    { name = "wfomc", editable = "../wfomc_for_cofola" },
+    { name = "wfomc", git = "https://github.com/yuanhong-wang/WFOMC.git?branch=for_cofola" },
 ]
 
 [[package]]
@@ -820,7 +820,7 @@ wheels = [
 [[package]]
 name = "wfomc"
 version = "0.1.0"
-source = { editable = "../wfomc_for_cofola" }
+source = { git = "https://github.com/yuanhong-wang/WFOMC.git?branch=for_cofola#5d8a4110ead43401033791f4d1a0bb6b2047baaa" }
 dependencies = [
     { name = "contexttimer" },
     { name = "dataclasses" },
@@ -840,23 +840,3 @@ dependencies = [
     { name = "sympy" },
     { name = "tqdm" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "contexttimer", specifier = ">=0.3.3" },
-    { name = "dataclasses", specifier = ">=0.8" },
-    { name = "lark", specifier = ">=1.2.2" },
-    { name = "logzero", specifier = ">=1.7.0" },
-    { name = "networkx", specifier = ">=3.2.1" },
-    { name = "numpy", specifier = ">=2.0.2" },
-    { name = "pandas", specifier = ">=2.3.1" },
-    { name = "prettyprinttree", specifier = ">=2.0.1" },
-    { name = "pynauty", specifier = "==2.8.6" },
-    { name = "python-sat", specifier = ">=1.8.dev17" },
-    { name = "symengine", specifier = ">=0.14.1" },
-    { name = "sympy", specifier = ">=1.14.0" },
-    { name = "tqdm", specifier = ">=4.67.1" },
-]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=8.4.1" }]

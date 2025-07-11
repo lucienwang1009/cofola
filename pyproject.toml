@@ -20,4 +20,4 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.uv.sources]
-wfomc = { path = "../wfomc_for_cofola", editable = true }
+wfomc = { git = "https://github.com/yuanhong-wang/WFOMC.git", branch = "for_cofola" }
