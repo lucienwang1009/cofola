@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
-cofola = "cofola:main"
+cofola = "cofola.solver:main"
 
 [build-system]
 requires = ["hatchling"]
