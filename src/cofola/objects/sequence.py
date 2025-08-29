@@ -175,6 +175,7 @@ class SequencePattern(MockObject):
         raise NotImplementedError
 
 
+# TODO: consider together(set) in a bag sequence
 class TogetherPattern(SequencePattern):
     def __init__(self, obj: Union[Set, Entity]) -> None:
         super().__init__(obj)
@@ -351,6 +352,7 @@ class NextToPattern(SequenceSizedPattern):
         context, obj_pred1, obj_pred2 = self._get_preds(context, seq)
         next_to_pred = context.get_next_to_pred(seq)
         if positive:
+            # TODO: care about semantics here! exists/forall/...?
             context.sentence = context.sentence & parse(
                 f"\\forall X: (\\forall Y: (({obj_pred1}(X) & {obj_pred2}(Y) -> {next_to_pred}(X,Y))))"
             )
