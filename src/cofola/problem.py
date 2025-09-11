@@ -10,7 +10,7 @@ from logzero import logger
 from cofola.objects.bag import BagAdditiveUnion, BagChoose, BagInit, BagMultiplicity, BagSupport, SizeConstraint
 from cofola.objects.base import Bag, CombinatoricsBase, CombinatoricsObject, \
     CombinatoricsConstraint, Entity, Function, Part, Partition, Sequence, Set, Tuple
-from cofola.objects.set import DisjointConstraint, MembershipConstraint, SetChoose, SetEqConstraint, SetInit, \
+from cofola.objects.set import DisjointConstraint, MembershipConstraint, SetChoose, SetDifference, SetEqConstraint, SetInit, \
     SetChooseReplace, SetIntersection, SetUnion, SubsetConstraint
 from cofola.objects.function import FuncImage, FuncInit, FuncInverseImage, FuncPairConstraint
 from cofola.objects.tuple import TupleCount, TupleIndex, \
@@ -278,7 +278,7 @@ class CofolaProblem(object):
             # NOTE: in case the new object already exists in the problem
             ret = self.add_object(new)
             for descendant in old.descendants:
-                descendant.subs_obj(old, new)
+                descendant.subs_obj(old, ret)
         else:
             raise ValueError(f"Object or constraint {old} to replaced not found in the problem")
         return ret
@@ -313,11 +313,13 @@ def fold_constants(problem: CofolaProblem) -> None:
     :param problem: the problem
     """
     # TODO: fold the constant objects
+    ret = False
     for obj in problem.objects:
         if isinstance(obj, BagSupport) and isinstance(obj.obj_from, BagInit):
             new_obj = SetInit(obj.obj_from.keys())
             problem.replace(obj, new_obj)
             logger.info(f"Folded {obj} to {new_obj}")
+            ret = True
         if isinstance(obj, SetUnion) and \
                 all(isinstance(o, SetInit) for o in [obj.first, obj.second]):
             new_obj = SetInit(set.union(
@@ -325,6 +327,23 @@ def fold_constants(problem: CofolaProblem) -> None:
             ))
             problem.replace(obj, new_obj)
             logger.info(f"Folded {obj} to {new_obj}")
+            ret = True
+        if isinstance(obj, SetIntersection) and \
+                all(isinstance(o, SetInit) for o in [obj.first, obj.second]):
+            new_obj = SetInit(set.intersection(
+                *[o.p_entities for o in [obj.first, obj.second]]
+            ))
+            problem.replace(obj, new_obj)
+            logger.info(f"Folded {obj} to {new_obj}")
+            ret = True
+        if isinstance(obj, SetDifference) and \
+                all(isinstance(o, SetInit) for o in [obj.first, obj.second]):
+            new_obj = SetInit(set.difference(
+                obj.first.p_entities, obj.second.p_entities
+            ))
+            problem.replace(obj, new_obj)
+            logger.info(f"Folded {obj} to {new_obj}")
+            ret = True
     # fold constraints
     for constraint in problem.constraints:
         # substitute the constant objects in size constraints
@@ -345,8 +364,10 @@ def fold_constants(problem: CofolaProblem) -> None:
                     SizeConstraint(remaining_expr, constraint.comp, param)
                 )
                 logger.info(f"Folded constant objects in {constraint}")
+                ret = True
     # TODO: remove the constraint if it is always satisfied
     problem.build()
+    return ret
 
 
 def add_disjoint_constraints(problem: CofolaProblem) -> None:
@@ -771,7 +792,9 @@ def optimize(problem: CofolaProblem) -> None:
     :param problem: the original problem
     :return: the optimized problem
     """
-    fold_constants(problem)
+    optimizing = True
+    while optimizing:
+        optimizing = fold_constants(problem)
     # add_disjoint_constraints(problem)
 
 
