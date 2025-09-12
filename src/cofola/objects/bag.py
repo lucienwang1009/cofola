@@ -35,7 +35,8 @@ class BagInit(Bag):
         if len(self.p_entities_multiplicity) != len(o.p_entities_multiplicity):
             return False
         for entity, multiplicity in self.p_entities_multiplicity.items():
-            if entity not in o or o[entity] != multiplicity:
+            if entity not in o.p_entities_multiplicity or \
+                    o.p_entities_multiplicity[entity] != multiplicity:
                 return False
         return True
 
@@ -280,6 +281,7 @@ class BagAdditiveUnion(BagBinaryOp):
 class BagIntersection(BagBinaryOp):
     def __init__(self, first: Bag, second: Bag) -> None:
         super().__init__("∩", first, second)
+        self.inherit()
 
     def inherit(self) -> None:
         p_entities_multiplicity = dict()
@@ -292,7 +294,6 @@ class BagIntersection(BagBinaryOp):
             p_entities_multiplicity,
             min(self.first.max_size, self.second.max_size),
         )
-        # all entities in the BagAdditiveUnion are distinguishable
         self.dis_entities = self.first.dis_entities & self.second.dis_entities
         self.indis_entities = set()
 
@@ -337,29 +338,34 @@ class BagIntersection(BagBinaryOp):
         return context
 
 
-# TODO
 class BagDifference(BagBinaryOp):
     def __init__(self, first: Bag, second: Bag) -> None:
         super().__init__("\\", first, second)
+        self.inherit()
 
     def inherit(self) -> None:
         self.update(
             self.first.p_entities_multiplicity,
             self.first.max_size,
-            self.first.dis_entities,
-            self.first.indis_entities
         )
+        self.dis_entities = self.first.dis_entities & self.second.dis_entities
+        self.indis_entities = set()
 
     def combinatorially_eq(self, o):
-        return type(o) is BagDifference and self.first == o.first and self.second == o.second
+        return type(o) is BagDifference and \
+            ((self.first == o.first and self.second == o.second) or \
+             (self.first == o.second and self.second == o.first))
 
     def encode(self, context: "Context") -> "Context":
         obj_pred = context.get_pred(self, create=True, use=False)
         first_pred = context.get_pred(self.first)
+        second_pred = context.get_pred(self.second)
         context.sentence = context.sentence & parse(
-            f"\\forall X: ({obj_pred}(X) -> {first_pred}(X))"
+            f"\\forall X: ({obj_pred}(X) <-> ({first_pred}(X) & ~{second_pred}(X)))"
         )
         for entity in self.dis_entities:
+            if entity in context.singletons:
+                continue
             multiplicity = self.p_entities_multiplicity[entity]
             _, entity_pred = entity.encode(context)
             bag_entity_pred = context.get_entity_pred(
@@ -381,7 +387,7 @@ class BagDifference(BagBinaryOp):
             else:
                 second_entity_mul = context.get_entity_var(self.second, entity)
             context.validator.append(
-                Eq(entity_var, Max(first_entity_mul - second_entity_mul, 0))
+                Eq(entity_var, first_entity_mul - second_entity_mul)
             )
         return context
 
@@ -400,6 +406,9 @@ class BagMultiplicity(SizedObject, MockObject):
 
     def _assign_args(self) -> None:
         self.obj, self.entity = self.args
+        if type(self.obj) is BagInit:
+            self.size = self.obj.multiplicity(self.entity)
+            self.max_size = self.size
 
     def body_str(self) -> str:
         return f"{self.obj.name}.count({self.entity.name})"

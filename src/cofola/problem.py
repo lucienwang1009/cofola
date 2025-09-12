@@ -7,7 +7,7 @@ from scipy.optimize import linprog
 from functools import reduce
 
 from logzero import logger
-from cofola.objects.bag import BagAdditiveUnion, BagChoose, BagInit, BagMultiplicity, BagSupport, SizeConstraint
+from cofola.objects.bag import BagAdditiveUnion, BagChoose, BagDifference, BagInit, BagIntersection, BagMultiplicity, BagSupport, BagUnion, SizeConstraint
 from cofola.objects.base import Bag, CombinatoricsBase, CombinatoricsObject, \
     CombinatoricsConstraint, Entity, Function, Part, Partition, Sequence, Set, Tuple
 from cofola.objects.set import DisjointConstraint, MembershipConstraint, SetChoose, SetDifference, SetEqConstraint, SetInit, \
@@ -341,6 +341,50 @@ def fold_constants(problem: CofolaProblem) -> None:
             new_obj = SetInit(set.difference(
                 obj.first.p_entities, obj.second.p_entities
             ))
+            problem.replace(obj, new_obj)
+            logger.info(f"Folded {obj} to {new_obj}")
+            ret = True
+        if isinstance(obj, BagAdditiveUnion) and \
+                all(isinstance(o, BagInit) for o in [obj.first, obj.second]):
+            new_obj = BagInit(
+                {
+                    e: obj.first.p_entities_multiplicity.get(e, 0) +
+                       obj.second.p_entities_multiplicity.get(e, 0)
+                    for e in set(obj.first.p_entities_multiplicity.keys()).union(
+                        set(obj.second.p_entities_multiplicity.keys())
+                    )
+                }
+            )
+            problem.replace(obj, new_obj)
+            logger.info(f"Folded {obj} to {new_obj}")
+            ret = True
+        if isinstance(obj, BagIntersection) and \
+                all(isinstance(o, BagInit) for o in [obj.first, obj.second]):
+            new_obj = BagInit(
+                {
+                    e: min(
+                        obj.first.p_entities_multiplicity.get(e, 0),
+                        obj.second.p_entities_multiplicity.get(e, 0)
+                    )
+                    for e in set(obj.first.p_entities_multiplicity.keys()).intersection(
+                        set(obj.second.p_entities_multiplicity.keys())
+                    )
+                }
+            )
+            problem.replace(obj, new_obj)
+            logger.info(f"Folded {obj} to {new_obj}")
+            ret = True
+        if isinstance(obj, BagDifference) and \
+                all(isinstance(o, BagInit) for o in [obj.first, obj.second]):
+            new_obj = BagInit(
+                {
+                    e: obj.first.p_entities_multiplicity.get(e, 0) -
+                        obj.second.p_entities_multiplicity.get(e, 0)
+                    for e in set(obj.first.p_entities_multiplicity.keys())
+                    if obj.first.p_entities_multiplicity.get(e, 0) -
+                       obj.second.p_entities_multiplicity.get(e, 0) > 0
+                }
+            )
             problem.replace(obj, new_obj)
             logger.info(f"Folded {obj} to {new_obj}")
             ret = True
