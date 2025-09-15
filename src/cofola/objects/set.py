@@ -94,6 +94,8 @@ class SetChooseReplace(Bag):
         self.obj_from, self.size = self.args
         if self.size is not None:
             self.max_size = self.size
+
+    def inherit(self) -> None:
         self.p_entities_multiplicity = dict(
             (entity, self.max_size)
             for entity in self.obj_from.p_entities
@@ -101,15 +103,6 @@ class SetChooseReplace(Bag):
         # all entities in the set are indistinguishable
         # as they share the same multiplicity (the size)
         self.dis_entities = set()
-        self.indis_entities = {self.max_size: self.obj_from.p_entities}
-
-    def inherit(self) -> None:
-        # all entities in the set are indistinguishable
-        # as they share the same multiplicity (the size)
-        self.p_entities_multiplicity = dict(
-            (entity, self.max_size)
-            for entity in self.obj_from.p_entities
-        )
         self.indis_entities = {self.max_size: self.obj_from.p_entities}
 
     def body_str(self) -> str:

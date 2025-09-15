@@ -30,6 +30,8 @@ class BagPart(Part, Bag):
             obj_from.p_entities_multiplicity,
             obj_from.max_size
         )
+        self.dis_entities = obj_from.dis_entities.copy()
+        self.indis_entities = obj_from.indis_entities.copy()
 
 
 class SetPartition(Partition):

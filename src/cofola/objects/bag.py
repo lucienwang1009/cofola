@@ -208,7 +208,6 @@ class BagUnion(BagBinaryOp):
 class BagAdditiveUnion(BagBinaryOp):
     def __init__(self, first: Bag, second: Bag) -> None:
         super().__init__("⊎", first, second)
-        self.inherit()
 
     def inherit(self) -> None:
         if self.first.size is not None and self.second.size is not None:
@@ -281,7 +280,6 @@ class BagAdditiveUnion(BagBinaryOp):
 class BagIntersection(BagBinaryOp):
     def __init__(self, first: Bag, second: Bag) -> None:
         super().__init__("∩", first, second)
-        self.inherit()
 
     def inherit(self) -> None:
         p_entities_multiplicity = dict()
@@ -341,7 +339,6 @@ class BagIntersection(BagBinaryOp):
 class BagDifference(BagBinaryOp):
     def __init__(self, first: Bag, second: Bag) -> None:
         super().__init__("\\", first, second)
-        self.inherit()
 
     def inherit(self) -> None:
         self.update(
