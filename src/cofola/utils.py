@@ -37,6 +37,10 @@ def create_pred_for_object(obj: CombinatoricsObject) -> Pred:
     pre, arity = get_prefix_arity(obj)
     return create_cofola_pred(pre + obj.name, arity)
 
+def reset_aux_pred_cnt(start_from: int = 0):
+    global AUX_PRED_CNT
+    AUX_PRED_CNT = start_from
+
 def create_aux_pred(arity: int, aux_pred_prefix: str = AUX_PRED_PREFIX) -> Pred:
     global AUX_PRED_CNT
     cnt = AUX_PRED_CNT

@@ -6,6 +6,10 @@ from enum import Enum
 AUX_COUNTER = 0
 IDX_PREFIX = 'idx_'
 
+def reset_aux_obj_counter(start_from: int = 0):
+    global AUX_COUNTER
+    AUX_COUNTER = start_from
+
 def aux_obj_name() -> str:
     global AUX_COUNTER
     name = 'aux_' + str(AUX_COUNTER)
