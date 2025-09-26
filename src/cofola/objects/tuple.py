@@ -9,27 +9,27 @@ from cofola.objects.set import SetInit
 
 class TupleImpl(Tuple):
     def __init__(self, obj_from: Union[Set, Bag], choose: bool = True,
-                 replace: bool = True, size: int = None) -> None:
+                 replace: bool = True, size: int = None,
+                 indices: SetInit = None, mapping: FuncInit = None) -> None:
         """
-        A tuple formed by permuting a set
+        A tuple formed by permuting a set. Tuples are realized by functions (the mapping arg)
 
         :param obj_from: the set
         :param choose: whether the tuple is formed by choosing elements from the set and permuting them
         :param replace: whether the elements are chosen with replacement
         :param size: the size of the tuple
+        :param indices: the indices for functions
+        :param mapping: the mapping function from indices to obj_from, realizing the tuple
         """
-        super().__init__(obj_from, choose, replace, size)
+        super().__init__(obj_from, choose, replace, size, indices, mapping)
 
     def _assign_args(self) -> None:
-        self.obj_from, self.choose, self.replace, self.size = \
+        self.obj_from, self.choose, self.replace, self.size, self.indices, self.mapping = \
             self.args
         if not self.choose and self.replace:
             raise ValueError(
                 f"A tuple is formed with replacement but not by choosing: {self}"
             )
-        # a tuple is realized by a function
-        self.indices: SetInit = None
-        self.mapping: FuncInit = None
 
     def inherit(self) -> None:
         if not self.choose and self.obj_from.size is not None:
@@ -48,6 +48,9 @@ class TupleImpl(Tuple):
                 return f"choose_tuple({self.obj_from.name}, {self.size})"
         else:
             return f"tuple({self.obj_from.name})"
+
+    def encode(self, context: "Context") -> "Context":
+        return context
 
 
 class TupleIndex(MockObject):

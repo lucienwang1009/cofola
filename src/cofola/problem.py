@@ -13,7 +13,7 @@ from cofola.objects.base import Bag, CombinatoricsBase, CombinatoricsObject, \
 from cofola.objects.set import DisjointConstraint, MembershipConstraint, SetChoose, SetDifference, SetEqConstraint, SetInit, \
     SetChooseReplace, SetIntersection, SetUnion, SubsetConstraint
 from cofola.objects.function import FuncImage, FuncInit, FuncInverseImage, FuncPairConstraint
-from cofola.objects.tuple import TupleCount, TupleIndex, \
+from cofola.objects.tuple import TupleCount, TupleImpl, TupleIndex, \
     TupleIndexEqConstraint, TupleMembershipConstraint
 from cofola.objects.sequence import SequenceImpl, SequenceConstraint, SequencePattern
 from cofola.objects.utils import IDX_PREFIX
@@ -493,21 +493,20 @@ def infer_max_size(problem: CofolaProblem):
 
 def transform_tuples(problem: CofolaProblem) -> bool:
     for obj in problem.objects:
-        if isinstance(obj, Tuple):
+        if isinstance(obj, Tuple) and obj.mapping is None:
+            obj_from = obj.obj_from
             if obj.choose:
-                indices = SetInit(
+                indices = problem.add_object(SetInit(
                     Entity(f"{IDX_PREFIX}{i}") for i in range(obj.size)
-                )
-                obj.indices = problem.add_object(indices)
-                obj_from = obj.obj_from
+                ))
                 if isinstance(obj_from, Set):
                     if obj.replace:
-                        obj.mapping = problem.add_object(
-                            FuncInit(obj.indices, obj_from)
+                        mapping = problem.add_object(
+                            FuncInit(indices, obj_from)
                         )
                     else:
-                        obj.mapping = problem.add_object(
-                            FuncInit(obj.indices, obj_from, injective=True)
+                        mapping = problem.add_object(
+                            FuncInit(indices, obj_from, injective=True)
                         )
                 if isinstance(obj_from, Bag):
                     if obj.replace:
@@ -572,20 +571,18 @@ def transform_tuples(problem: CofolaProblem) -> bool:
                         )
                         problem.add_constraint(injectiveness_constraint)
             else:
-                obj_from = obj.obj_from
-                indices = SetInit(
+                indices = problem.add_object(SetInit(
                     Entity(f"{IDX_PREFIX}{i}") for i in range(obj_from.size)
-                )
-                obj.indices = problem.add_object(indices)
+                ))
                 if isinstance(obj_from, Set):
-                    obj.mapping = problem.add_object(
-                        FuncInit(obj.indices, obj_from, surjective=True)
+                    mapping = problem.add_object(
+                        FuncInit(indices, obj_from, surjective=True)
                     )
 
                 if isinstance(obj_from, Bag):
                     support = problem.add_object(BagSupport(obj_from))
-                    obj.mapping = problem.add_object(
-                        FuncInit(obj.indices, support)
+                    mapping = problem.add_object(
+                        FuncInit(indices, support)
                     )
                     singletons = set()
                     reverse_images = list()
@@ -594,7 +591,7 @@ def transform_tuples(problem: CofolaProblem) -> bool:
                             singletons.add(entity)
                         else:
                             reverse_image = problem.add_object(
-                                FuncInverseImage(obj.mapping, entity)
+                                FuncInverseImage(mapping, entity)
                             )
                             reverse_images.append(reverse_image)
                             if isinstance(obj_from, BagInit):
@@ -623,16 +620,18 @@ def transform_tuples(problem: CofolaProblem) -> bool:
                                 )
                     if len(singletons) > 0:
                         image = problem.add_object(
-                            FuncImage(obj.mapping, obj.indices)
+                            FuncImage(mapping, indices)
                         )
                         injectiveness_constraint = SetEqConstraint(
                             image, support
                         )
                         problem.add_constraint(injectiveness_constraint)
             logger.info(
-                f"Transformed {obj} to {obj.indices} and {obj.mapping}"
+                f"Transformed {obj} to {mapping}"
             )
-            problem.remove(obj)
+            problem.replace(obj, TupleImpl(
+                obj.obj_from, obj.choose, obj.replace, obj.size,
+                indices, mapping))
             return True
         # if isinstance(obj, TupleIndex):
         #     func_img = FuncImage(obj.obj_from.mapping,
