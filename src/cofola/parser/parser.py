@@ -415,8 +415,8 @@ class CofolaTransfomer(CommonTransformer):
     def subset_constraint(self, args):
         objs1, _, objs2 = args
         def single_operation(obj1, obj2):
-            self._check_obj_type(obj1, Set)
-            self._check_obj_type(obj2, Set)
+            self._check_obj_type(obj1, Set, Bag)
+            self._check_obj_type(obj2, Set, Bag)
             return SubsetConstraint(obj1, obj2)
         return self._op_or_constraint_on_list(
             single_operation, objs1, objs2)
@@ -424,8 +424,8 @@ class CofolaTransfomer(CommonTransformer):
     def disjoint_constraint(self, args):
         obj1, _, obj2 = args
         def single_operation(obj1, obj2):
-            self._check_obj_type(obj1, Set)
-            self._check_obj_type(obj2, Set)
+            self._check_obj_type(obj1, Set, Bag)
+            self._check_obj_type(obj2, Set, Bag)
             return DisjointConstraint(obj1, obj2)
         return self._op_or_constraint_on_list(
             single_operation, obj1, obj2)
