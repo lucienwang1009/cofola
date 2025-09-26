@@ -782,6 +782,7 @@ def transform_size_constraint(problem: CofolaProblem) -> bool:
                 else:
                     new_expr.append((obj, coef))
             if transformed:
+                logger.info(f"Transformed size constraint {constraint} to {new_expr}")
                 problem.replace(
                     constraint,
                     SizeConstraint(new_expr, constraint.comp, constraint.param)

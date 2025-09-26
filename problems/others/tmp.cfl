@@ -1,12 +1,12 @@
-aux_8= set(Entity_3, Entity_5, Entity_9, Entity_6, Entity_10, Entity_11, Entity_7, Entity_4)
-aux_9= set(Entity_10, Entity_9, Entity_11)
-aux_4 =aux_8 - aux_9
-aux_5= set(Entity_2, Entity_1)
-aux_2 =aux_4 + aux_5
-aux_6= set(Entity_8, Entity_3, Entity_5, Entity_4, Entity_2, Entity_1)
-aux_7= set(Entity_3, Entity_5, Entity_4, Entity_2, Entity_1)
-aux_3 =aux_6 & aux_7
-aux_0 =aux_2 & aux_3
-aux_1 = choose_replace(aux_0, 2)
-Entity_2 not in aux_1
-aux_1 disjoint  set(Entity_4, Entity_2) 
+aux_8= set(Entity_3, Entity_8, Entity_1)
+aux_9= set(Entity_5, Entity_4, Entity_10, Entity_9, Entity_6, Entity_2, Entity_7)
+aux_4 =aux_8 + aux_9
+aux_5= set(Entity_10, Entity_9, Entity_8)
+aux_2 =aux_4 - aux_5
+aux_6= set(Entity_6)
+aux_7= set(Entity_5, Entity_7)
+aux_3 =aux_6 + aux_7
+aux_0 =aux_2 - aux_3
+aux_1 = choose_tuple(aux_0, 3)
+aux_1.count(Entity_3) == 0
+aux_1[0] != Entity_1

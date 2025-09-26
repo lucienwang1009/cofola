@@ -59,7 +59,8 @@ def preprocess_bags(problem: CofolaProblem,
                     if m == multiplicity and e not in obj.dis_entities
                 )
                 # if there are more than one entities with the same multiplicity, they are indistinguishable
-                if len(entities) > 1:
+                # for entities with multiplicity 1, they are handled by singletons
+                if len(entities) > 1 and multiplicity > 1:
                     obj.indis_entities[multiplicity] = entities
                 else:
                     obj.dis_entities.update(entities)
