@@ -316,7 +316,7 @@ class SubsetConstraint(SetConstraint):
 
 
 class DisjointConstraint(SetConstraint):
-    def __init__(self, first: Union[Set, Bag], second: Union[Set, Bag]) -> None:
+    def __init__(self, first: Set, second: Set) -> None:
         super().__init__(first, second)
 
     def _assign_args(self) -> None:
