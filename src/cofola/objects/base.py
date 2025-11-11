@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Union
-from wfomc import Const, Pred, RingElement, fol_parse as parse
+from wfomc import Const, Pred, fol_parse as parse
 
 from cofola.objects.utils import aux_obj_name
 
@@ -113,7 +113,7 @@ class CombinatoricsBase(object):
 
         :param args: the new args
         """
-        self.args = args
+        self.args = args + self.args[len(args):]
         self._assign_args()
         self._build_dependences()
 
@@ -185,7 +185,7 @@ class SizedObject(CombinatoricsObject):
         super().__init__(*args)
 
     def encode_size_var(self, context: "Context") \
-            -> tuple["Context", RingElement]:
+            -> tuple["Context", Expr]:
         raise NotImplementedError
 
 
@@ -206,7 +206,7 @@ class Set(SizedObject):
             self.max_size = self.size
 
     def encode_size_var(self, context: "Context") \
-            -> tuple["Context", RingElement]:
+            -> tuple["Context", Expr]:
         return context, context.get_obj_var(self)
 
 
@@ -243,7 +243,7 @@ class Bag(SizedObject):
         )
 
     def encode_size_var(self, context: "Context") \
-            -> tuple["Context", RingElement]:
+            -> tuple["Context", Expr]:
         term = 0
         vars = context.get_entity_var(self)
         term = term + sum(var for var in vars.values())

@@ -1,14 +1,12 @@
 from __future__ import annotations
 from decimal import Context
 from functools import reduce
-from symengine import Eq, Min, Max
-from wfomc.fol.sc2 import Pred, Const
-from wfomc import RingElement, fol_parse as parse
+from sympy import Eq, Min
+from wfomc import fol_parse as parse, Const, Expr
 from typing import TYPE_CHECKING, Generator
 
 from cofola.objects.base import AtomicConstraint, \
     CombinatoricsObject, MockObject, Set, Bag, Entity, SizedObject
-from cofola.objects.tuple import TupleCount
 from cofola.objects.utils import invert_comparator, parse_comparator
 
 if TYPE_CHECKING:
@@ -411,7 +409,7 @@ class BagMultiplicity(SizedObject, MockObject):
         return f"{self.obj.name}.count({self.entity.name})"
 
     def encode_size_var(self, context: "Context") \
-            -> tuple["Context", RingElement]:
+            -> tuple["Context", Expr]:
         return context, context.get_entity_var(self.obj, self.entity)
 
 

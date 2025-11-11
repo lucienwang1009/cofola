@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Callable
-from symengine import Eq, Ne
+from sympy import Eq, Ne
 from enum import Enum
 
 AUX_COUNTER = 0

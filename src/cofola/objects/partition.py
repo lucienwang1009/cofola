@@ -1,9 +1,8 @@
 from wfomc import fol_parse as parse
-from wfomc import Pred
-from symengine import Eq
+from sympy import Eq
 
 from cofola.objects.bag import BagInit
-from cofola.objects.base import Bag, CombinatoricsObject, Partition, Set, Part
+from cofola.objects.base import Bag, Partition, Set, Part
 
 from typing import TYPE_CHECKING
 

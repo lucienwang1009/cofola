@@ -1,12 +1,16 @@
+import sympy
 from collections import defaultdict
 from math import factorial, prod
 
-from wfomc import coeff_dict, RingElement
+from wfomc import Expr
+from wfomc.utils import EPoly, RingElement
+
+from cofola.utils import ListLessThan
 
 
 class Decoder(object):
     def __init__(self, overcount: int,
-                 var_gens: list[RingElement],
+                 var_gens: list[Expr],
                  validator: list, indis_vars: list):
         self.overcount: int = overcount
         self.gens = var_gens
@@ -37,15 +41,36 @@ class Decoder(object):
         if len(self.gens) == 0:
             return int(result / self.overcount)
 
+        if not isinstance(result, EPoly):
+            return 0
+
         ret = 0
-        for degrees, coeff in coeff_dict(result, self.gens):
-            sat = True
-            var2degree = dict(zip(self.gens, degrees))
-            for v in self.validator:
-                if not v.subs(var2degree):
-                    sat = False
+        ret_gens = result.context().names()
+        reordered_gens = list()
+        for v_name in ret_gens:
+            for v in self.gens:
+                if str(v) == v_name:
+                    reordered_gens.append(v)
                     break
-            if sat:
+
+        lambdified_validator = [
+            sympy.lambdify(reordered_gens, v, 'math')
+            for v in self.validator if not isinstance(v, ListLessThan)
+        ]
+        list_less_than_validator = [
+            v for v in self.validator if isinstance(v, ListLessThan)
+        ]
+        for degrees, coeff in result.terms():
+            # if all(v.subs(var2degree) for v in self.validator):
+            if all(v(*degrees) for v in lambdified_validator):
+                var2degree = dict(
+                    zip(reordered_gens, list(int(d) for d in degrees))
+                )
+                if len(list_less_than_validator) > 0 and any(
+                    not v.subs(var2degree)
+                    for v in list_less_than_validator
+                ):
+                    continue
                 # handle the overcount for partition
                 overcount = 1
                 for indis_vars in self.indis_vars:

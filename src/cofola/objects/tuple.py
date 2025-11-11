@@ -1,5 +1,3 @@
-from logzero import logger
-
 from cofola.objects.base import AtomicConstraint, Bag, CombinatoricsObject, Entity, MockObject, Set, SizedObject, Tuple
 from typing import Union
 from cofola.objects.function import FuncInit

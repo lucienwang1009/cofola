@@ -5,8 +5,7 @@ from logzero import logger
 from functools import reduce
 import argparse
 from wfomc import Algo
-from symengine import expand
-from sympy import O, Symbol, satisfiable
+from sympy import Symbol, satisfiable
 from copy import deepcopy
 
 from cofola.encoder import encode
@@ -72,8 +71,7 @@ def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
             )
             wfomc_algo = Algo.INCREMENTAL
             use_partition_constraint = True
-        ret = expand(solve_wfomc(wfomc_problem, wfomc_algo,
-                                 use_partition_constraint))
+        ret = solve_wfomc(wfomc_problem, wfomc_algo, use_partition_constraint)
         logger.debug(f'WFOMC solver result: {ret}')
         ret = decoder.decode_result(ret)
         if ret is None:

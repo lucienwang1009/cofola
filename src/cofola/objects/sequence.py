@@ -1,11 +1,10 @@
 import math
 
-from symengine import Eq, Ne
-from wfomc import Const, Pred, RingElement, fol_parse as parse, exclusive
-from logzero import logger
+from sympy import Eq
+from wfomc import Pred, Expr, fol_parse as parse, exclusive
 
 from cofola.objects.bag import BagInit
-from cofola.objects.base import AtomicConstraint, CombinatoricsObject, Entity, MockObject, Sequence, Set, Bag, SizedObject
+from cofola.objects.base import AtomicConstraint, Entity, MockObject, Sequence, Set, Bag, SizedObject
 from typing import TYPE_CHECKING, Union
 
 from cofola.objects.set import SetInit
@@ -272,7 +271,7 @@ class SequenceSizedPattern(SequencePattern):
         return context, obj_pred1, obj_pred2
 
     def encode_size_var(self, context: "Context", seq: Sequence) \
-            -> tuple["Context", RingElement]:
+            -> tuple["Context", Expr]:
         raise NotImplementedError
 
 
@@ -294,7 +293,7 @@ class LessThanPattern(SequenceSizedPattern):
         return context
 
     def encode_size_var(self, context: "Context", seq: Sequence) \
-            -> tuple["Context", RingElement]:
+            -> tuple["Context", Expr]:
         context, obj_pred1, obj_pred2 = self._get_preds(context, seq)
         leq_pred = context.get_leq_pred(seq)
         obj_leq_pred = context.create_pred(
@@ -328,7 +327,7 @@ class PredecessorPattern(SequenceSizedPattern):
         return context
 
     def encode_size_var(self, context: "Context", seq: Sequence) \
-            -> tuple["Context", RingElement]:
+            -> tuple["Context", Expr]:
         context, obj_pred1, obj_pred2 = self._get_preds(context, seq)
         obj_pred_pred = context.create_pred(
             f"{self.entity_or_set1.name}_pred_{self.entity_or_set2.name}", 2
@@ -363,7 +362,7 @@ class NextToPattern(SequenceSizedPattern):
         return context
 
     def encode_size_var(self, context: "Context", seq: Sequence) \
-            -> tuple["Context", RingElement]:
+            -> tuple["Context", Expr]:
         context, obj_pred1, obj_pred2 = self._get_preds(context, seq)
         next_to_pred = context.get_next_to_pred(seq)
         obj_next_to_pred = context.create_pred(
@@ -390,7 +389,7 @@ class SequencePatternCount(SizedObject, MockObject):
         return f"{self.obj.name}.count({self.pattern})"
 
     def encode_size_var(self, context: "Context") \
-            -> tuple["Context", RingElement]:
+            -> tuple["Context", Expr]:
         return self.pattern.encode_size_var(context, self.obj)
 
 

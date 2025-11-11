@@ -1,9 +1,8 @@
 from __future__ import annotations
 from decimal import Context
 from functools import reduce
-from wfomc import fol_parse as parse
-from wfomc import Const, Pred
-from symengine import Eq
+from wfomc import fol_parse as parse, Const
+from sympy import Eq
 
 from cofola.objects.base import AtomicConstraint, Set, Bag, Entity
 from cofola.objects.bag import Bag

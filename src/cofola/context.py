@@ -1,9 +1,7 @@
 
 from typing import Union
 from wfomc import Formula, AtomicFormula, top, Const, Pred, to_sc2, \
-    WFOMCProblem, RingElement, fol_parse as parse
-from symengine import Eq
-from wfomc.utils import Rational
+    WFOMCProblem, fol_parse as parse, Rational, Expr
 
 from cofola.decoder import Decoder
 from cofola.objects.base import Bag, Entity, Sequence
@@ -35,11 +33,11 @@ class Context(object):
         self.used_objs: set[CombinatoricsObject] = set()
 
         # for size constraint
-        self.obj2var: dict[CombinatoricsObject, RingElement] = dict()
+        self.obj2var: dict[CombinatoricsObject, Expr] = dict()
         # for encoding bags
-        self.entity2var: dict[CombinatoricsObject, dict[Entity, RingElement]] = dict()
+        self.entity2var: dict[CombinatoricsObject, dict[Entity, Expr]] = dict()
         # for encoding indistinguishable entities with the same multiplicity
-        self.mul2var: dict[CombinatoricsObject, dict[int, RingElement]] = dict()
+        self.mul2var: dict[CombinatoricsObject, dict[int, Expr]] = dict()
         self.validator = list()
         # for deduplicate the encoding of partition
         self.indis_vars = list()
@@ -140,7 +138,7 @@ class Context(object):
         return obj_entity_preds[entity]
 
     def get_obj_var(self, obj: "CombinatoricsObject",
-                    set_weight: bool = True) -> RingElement:
+                    set_weight: bool = True) -> Expr:
         """
         Get a symbolic variable for the object used to encode size constraint
         :param obj: the object
@@ -154,7 +152,7 @@ class Context(object):
             self.weighting[pred] = (self.obj2var[obj], 1)
         return self.obj2var[obj]
 
-    def get_entity_var(self, obj: Bag, entity: Entity = None) -> RingElement:
+    def get_entity_var(self, obj: Bag, entity: Entity = None) -> Expr:
         """
         Get a symbolic variable for the entity in the bag used to encode the multiplicity constraint or the size constraint
 
@@ -172,7 +170,7 @@ class Context(object):
         return obj_entities[entity]
 
     def get_indis_entity_var(self, obj: Bag, multiplicity: int = None) \
-            -> RingElement:
+            -> Expr:
         """
         Get a symbolic variable for the indistinguishable entities in the bag
 
@@ -237,7 +235,7 @@ class Context(object):
     def create_pred(self, name: str, arity: int) -> Pred:
         return create_cofola_pred(name, arity)
 
-    def create_var(self, name: str, use_gen: bool = True) -> RingElement:
+    def create_var(self, name: str, use_gen: bool = True) -> Expr:
         var = create_cofola_var(name)
         if use_gen:
             self.gen_vars.append(var)

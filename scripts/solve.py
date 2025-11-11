@@ -47,11 +47,13 @@ if __name__ == '__main__':
         unchecked = [
             'timeout', 'unencodeable'
         ]
-        checked = [
-            'circle', 'sequence'
-        ]
+        # checked = [
+        #     'circle', 'sequence'
+        # ]
+        checked = None
         if any(tag in tags for tag in unchecked) \
-                or not any(tag in tags for tag in checked):
+                or (checked is not None and
+                    (not any(tag in tags for tag in checked))):
             df.append({
                 'problem_id': i,
                 'gt_result': problem['answer'],

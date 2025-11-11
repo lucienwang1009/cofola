@@ -1,7 +1,7 @@
 import re
 
-from wfomc import Pred, RingElement
-from symengine import Eq, var
+from wfomc import Pred, Expr
+from sympy import Eq, var
 
 from cofola.objects.base import Bag, CombinatoricsObject, Entity, Partition, Set, Function
 
@@ -23,7 +23,7 @@ def create_cofola_pred(name: str, arity: int) -> Pred:
         name = 'p_' + name
     return Pred(name, arity)
 
-def create_cofola_var(name: str) -> RingElement:
+def create_cofola_var(name: str) -> Expr:
     if not name.startswith('v_'):
         name = 'v_' + name
     return var(name)
@@ -58,10 +58,10 @@ def to_snake_case(name):
 
 
 class ListLessThan(object):
-    def __init__(self, left: list[RingElement], right: list[RingElement]) -> None:
+    def __init__(self, left: list[Expr], right: list[Expr]) -> None:
         super().__init__()
-        self.left: list[RingElement] = left
-        self.right: list[RingElement] = right
+        self.left: list[Expr] = left
+        self.right: list[Expr] = right
         self.less_than_comparators = [left[i] < right[i] for i in range(len(left))]
         self.equal_comparators = [Eq(left[i], right[i]) for i in range(len(left))]
 

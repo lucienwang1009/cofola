@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "lucienwang1009", email = "lucienwang1009@gmail.com" }
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 dependencies = [
     "scipy>=1.13.1",
     "wfomc",
@@ -15,9 +15,13 @@ dependencies = [
 [project.scripts]
 cofola = "cofola.solver:main"
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
 
 [tool.uv.sources]
 wfomc = { git = "https://github.com/yuanhong-wang/WFOMC.git", branch = "for_cofola" }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

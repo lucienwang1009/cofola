@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from symengine import Eq
+from sympy import Eq
 from typing import Union
 from wfomc import fol_parse as parse
 
