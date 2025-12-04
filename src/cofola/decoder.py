@@ -38,7 +38,7 @@ class Decoder(object):
         if result == 0:
             return 0
 
-        if len(self.gens) == 0:
+        if len(self.gens) == 0 and not isinstance(result, EPoly):
             return int(result / self.overcount)
 
         if not isinstance(result, EPoly):
