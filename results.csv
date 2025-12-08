@@ -1,314 +1,314 @@
 problem_id,gt_result,result,running time,unencodeable_reason
-0,3003,3003,0.2016537919989787,
-1,609,609,0.16044337500352412,
-2,23,23,0.24072412500390783,
-3,165,165,0.061540500006231014,
-4,6732,6732,0.426091583998641,
-5,36,36,0.25462195799627807,
-6,200,200,0.5347262080031214,
-7,1440,1440,0.32616179199976614,
-8,14400,14400,1.1033836659989902,
+0,3003,skipped,0.0,"set, choose"
+1,609,skipped,0.0,"set, choose_replace_permute, tuple, size constraint, intersection"
+2,23,skipped,0.0,"bag, choose, size constraint"
+3,165,skipped,0.0,"set, choose"
+4,6732,skipped,0.0,"set, choose, not constraint, or constraint"
+5,36,skipped,0.0,"set, choose, tuple, index, in"
+6,200,skipped,0.0,"bag, composition, index, size constraint"
+7,1440,1440,0.32804083300288767,
+8,14400,14400,1.0710490829660557,
 9,117,skipped,0.0,"unencodeable, second order logic"
 10,84,skipped,0.0,"unencodeable, not combinatorics"
-11,28,28,0.1775799579991144,
-12,540,540,0.12621445900003891,
-13,6,6,0.15527599999768427,
-14,9240,9240,0.09871358400414465,
-15,729,729,0.1155797920000623,
+11,28,skipped,0.0,"bag, composition"
+12,540,skipped,0.0,"set, composition, none_empty"
+13,6,skipped,0.0,"bag, composition"
+14,9240,skipped,0.0,"set, choose, multiple choosing"
+15,729,skipped,0.0,"set, composition"
 16,11,skipped,0.0,"unencodeable, not combinatorics"
 17,13,skipped,0.0,"unencodeable, arithmetics"
-18,12,12,0.2566728750025504,
-19,4,4,0.17752458299946738,
-20,10,10,0.06249545800528722,
-21,15,15,0.17710912500479026,
-22,36,36,0.16943958299816586,
-23,10080,10080,0.15991337499872316,
-24,1296540,1296540,0.24267583299661055,
-25,72,72,0.1393292919965461,
-26,13,13,1.5613107079989277,
-27,15,15,0.0647007920051692,
-28,243,243,0.11649608300649561,
-29,720,720,0.25054899999668123,
-30,25200,25200,0.6371206670009997,
-31,12,12,0.16143054199346807,
-32,21,21,0.241691000002902,
-33,960,960,0.3388017499964917,
-34,3,3,0.23760162500548176,
-35,60,60,0.3178265000024112,
-36,240,240,0.2737522079987684,
+18,12,skipped,0.0,"set, choose, tuple, index, in"
+19,4,skipped,0.0,"bag, partition"
+20,10,skipped,0.0,"set, choose"
+21,15,skipped,0.0,"bag, choose_replace"
+22,36,skipped,0.0,"set, choose, multiple choosing, size constraint, intersection"
+23,10080,10080,0.1471850830130279,
+24,1296540,skipped,0.0,"set, choose, multiple choosing, second order logic"
+25,72,skipped,0.0,"set, choose, multiple choosing"
+26,13,skipped,0.0,"set, choose, or constraint, subset"
+27,15,skipped,0.0,"set, choose"
+28,243,skipped,0.0,"set, composition"
+29,720,720,0.2524208340328187,
+30,25200,skipped,0.0,"set, choose, tuple, multiple choosing, difference"
+31,12,12,0.15863212494878098,
+32,21,skipped,0.0,"bag, tuple"
+33,960,960,0.3265695419977419,
+34,3,3,0.21413541701622307,
+35,60,skipped,0.0,"bag, tuple, index, in"
+36,240,skipped,0.0,"set, tuple, index, in"
 37,1,skipped,0.0,"unencodeable, not combinatorics"
-38,3,3,0.12933024999802,
-39,720,720,0.21489854199899128,
-40,560,560,0.33561824999924283,
-41,1386,1386,0.16174312499788357,
-42,17280,17280,0.16148954199888976,
-43,15,15,0.06547162499919068,
-44,672,672,0.10126029099774314,
-45,2880,2880,0.1542662920037401,
-46,25,25,1.162569041000097,
-47,144,144,0.23084820799704175,
-48,35,35,0.19965412499732338,
-49,12441600,12441600,0.3480208330001915,
-50,34650,34650,1.3063326249975944,
+38,3,skipped,0.0,"bag, partition"
+39,720,720,0.15663816599408165,
+40,560,560,0.33049775002291426,
+41,1386,skipped,0.0,"set, choose, size constraint, intersection"
+42,17280,17280,0.18388470803620294,
+43,15,skipped,0.0,"set, choose, size constraint"
+44,672,skipped,0.0,"set, choose, intersection, size constraint"
+45,2880,2880,0.15252379199955612,
+46,25,skipped,0.0,"bag, tuple, index, compare element, or constraint"
+47,144,144,0.17808762495405972,
+48,35,skipped,0.0,"bag, tuple"
+49,12441600,skipped,0.0,"set, tuple"
+50,34650,skipped,0.0,"bag, tuple"
 51,26,skipped,0.0,"unencodeable, not combinatorics"
 52,110,skipped,0.0,"unencodeable, not combinatorics"
-53,28800,28800,3.20661687500251,
+53,28800,28800,2.952461792039685,
 54,10,skipped,0.0,"unencodeable, not combinatorics"
-55,18,18,0.1783590409977478,
-56,45045,45045,0.08701258299697656,
-57,25972650,25972650,0.10788341599982232,
-58,280,280,0.17436616699706065,
-59,10,10,0.06280237500322983,
-60,36,36,0.06245691700314637,
-61,5120,5120,0.11062166700139642,
-62,1920,1920,0.2939766659983434,
-63,220,220,0.06293695799831767,
+55,18,skipped,0.0,"set, tuple, index, not constraint, compare element"
+56,45045,skipped,0.0,"set, choose, multiple choosing"
+57,25972650,skipped,0.0,"set, choose, multiple choosing"
+58,280,skipped,0.0,"set, choose, multiple choosing"
+59,10,skipped,0.0,"set, choose"
+60,36,skipped,0.0,"set, choose"
+61,5120,skipped,0.0,"set, choose, multiple choosing"
+62,1920,skipped,0.0,"set, choose, multiple choosing, choose_permute, tuple"
+63,220,skipped,0.0,"set, choose"
 64,576,skipped,0.0,"unencodeable, grid"
-65,61328,61328,0.33723320799617795,
-66,750,750,0.16870370800461387,
-67,840,840,0.08957441699749324,
-68,252,252,0.10480991700023878,
-69,840,840,0.2016438749997178,
-70,28,28,0.2382093749984051,
-71,12650,12650,0.06619470800069394,
-72,75075,75075,0.08795937499962747,
-73,48,48,0.3000159579969477,
-74,30951,30951,0.19189316700067138,
-75,6,6,0.2672113750013523,
-76,70,70,0.11081125000055181,
+65,61328,skipped,0.0,"set, choose_replace_permute, tuple, index, compare element, count element, not constraint, or constraint"
+66,750,skipped,0.0,"set, choose, multiple choosing"
+67,840,840,0.08853666699724272,
+68,252,skipped,0.0,"set, choose, intersection, size constraint"
+69,840,skipped,0.0,"bag, tuple"
+70,28,skipped,0.0,"set, choose_replace"
+71,12650,skipped,0.0,"set, choose"
+72,75075,skipped,0.0,"set, choose, multiple choosing"
+73,48,skipped,0.0,"bag, tuple, choose_permute, in"
+74,30951,skipped,0.0,"set, choose_replace_permute, index, compare element, multiplicity constraint, not constraint"
+75,6,skipped,0.0,"bag, tuple"
+76,70,skipped,0.0,"set, partition, not constraint, subset"
 77,36,skipped,0.0,"unencodeable, not combinatorics"
-78,1414,1414,0.159228249998705,
+78,1414,skipped,0.0,"set, choose, intersection, size constraint"
 79,0,skipped,0.0,"unencodeable, not combinatorics"
-80,24,24,0.19301179100148147,
-81,840,840,0.13052008299564477,
-82,48,48,0.23442441700171912,
-83,195,195,0.107235709001543,
-84,28,28,0.06250270800228463,
-85,225,225,0.09732637499837438,
-86,10,10,0.19640929099841742,
-87,2838,2838,0.1038429170002928,
+80,24,24,0.18208654201589525,
+81,840,skipped,0.0,"set, choose, intersection, size constraint"
+82,48,48,0.18612483399920166,
+83,195,skipped,0.0,"set, choose, intersection, size constraint"
+84,28,skipped,0.0,"set, choose"
+85,225,skipped,0.0,"set, choose, multiple choosing"
+86,10,skipped,0.0,"bag, tuple, index, compare element, not constraint"
+87,2838,skipped,0.0,"set, choose, intersection, size constraint"
 88,1680,skipped,0.0,"unencodeable, cube"
 89,16,skipped,0.0,"unencodeable, not combinatorics"
-90,672,672,0.08169979199738009,
-91,771400,771400,0.18118225000216626,
-92,15600,15600,0.15371329200570472,
-93,5,5,0.09648641700187,
-94,56,56,0.08736845800012816,
-95,6,6,0.2648647499954677,
-96,480,480,0.16261949999898206,
-97,16,16,0.0679184999971767,
-98,12,12,0.46510112500254763,
-99,360,360,0.1325952499973937,
-100,650,650,0.19441641699813772,
-101,5,5,0.11908808300358942,
-102,432,432,0.8999389579985291,
-103,495,495,0.06628670899954159,
-104,840,840,0.13337762499577366,
-105,720,720,0.10627800000656862,
-106,15,15,0.6264220830053091,
-107,15,15,0.22872812500281725,
-108,126,126,0.10353225000289967,
-109,140,140,0.2061015409999527,
-110,504,504,0.18952658300258918,
-111,3,3,0.25288533300044946,
-112,1940,1940,0.14348008399974788,
-113,362880,362880,0.08083733400417259,
-114,21,21,0.07114987500244752,
+90,672,672,0.08089358400320634,
+91,771400,skipped,0.0,"set, choose, multiple choosing"
+92,15600,skipped,0.0,"set, choose, multiple choosing, union, size constraint"
+93,5,skipped,0.0,"bag, choose, size constraint"
+94,56,skipped,0.0,"set, choose, subset"
+95,6,skipped,0.0,"bag, tuple, index, compare element, not constraint"
+96,480,480,0.15905241697328165,
+97,16,skipped,0.0,"set, choose, in"
+98,12,skipped,0.0,"set, tuple, index, compare element"
+99,360,360,0.15778166701784357,
+100,650,skipped,0.0,"set, choose, tuple"
+101,5,skipped,0.0,"bag, composition"
+102,432,432,0.8196037500165403,
+103,495,skipped,0.0,"set, choose"
+104,840,skipped,0.0,"set, choose, intersection, size constraint"
+105,720,skipped,0.0,"set, tuple"
+106,15,skipped,0.0,"bag, partition"
+107,15,skipped,0.0,"bag, composition"
+108,126,skipped,0.0,partition
+109,140,skipped,0.0,"set, choose, multiple choosing, not constraint"
+110,504,skipped,0.0,"set, choose, multiple choosing"
+111,3,skipped,0.0,"bag, partition"
+112,1940,skipped,0.0,"set, choose, intersection, size constraint"
+113,362880,362880,0.0993529999977909,
+114,21,skipped,0.0,"set, choose"
 115,255,skipped,0.0,"unencodeable, not combinatorics"
-116,126,126,0.06962249999924097,
-117,5,5,0.20508370799507247,
-118,1024,1024,0.09001045799959684,
-119,30,30,0.10884708400408272,
-120,30860,30860,0.6234700839995639,
-121,4,4,0.1666075000030105,
-122,12,12,0.0727867919995333,
+116,126,skipped,0.0,"set, choose"
+117,5,skipped,0.0,"bag, partition"
+118,1024,skipped,0.0,"set, composition"
+119,30,skipped,0.0,"set, choose, multiple choosing"
+120,30860,skipped,0.0,"tuple, unknown length"
+121,4,skipped,0.0,"set, choose, or constraint, subset"
+122,12,12,0.06421941699227318,
 123,3,skipped,0.0,"unencodeable, cube"
-124,32,32,0.0865065420002793,
-125,100000,100000,0.08553312500589527,
-126,6,6,0.06338474999938626,
-127,43,43,0.6565485000028275,
-128,12500,12500,0.28607204199943226,
-129,36,36,0.2392347500062897,
-130,34560,34560,3.7693854169992846,
-131,1512,1512,0.23083066700201016,
-132,72,72,0.2813568329947884,
-133,880,880,0.18025279200082878,
-134,4320,4320,0.25688520899711875,
-135,60,60,0.1907457500055898,
-136,4320,4320,0.3898592500045197,
-137,3600,3600,0.2885634999984177,
-138,7000,7000,0.13640516599843977,
-139,165,165,0.0982305829966208,
+124,32,skipped,0.0,"set, composition"
+125,100000,skipped,0.0,"set, choose_replace_permute"
+126,6,skipped,0.0,"set, choose"
+127,43,skipped,0.0,"bag, tuple, choose_permute"
+128,12500,skipped,0.0,"set, choose_permute, tuple, index, in"
+129,36,skipped,0.0,"bag, composition"
+130,34560,34560,3.467003541009035,
+131,1512,skipped,0.0,"set, choose_permute, tuple, index, in"
+132,72,skipped,0.0,"bag, choose, multiple choosing"
+133,880,880,0.15509729197947308,
+134,4320,skipped,0.0,"set, tuple, index, in"
+135,60,60,0.13096899999072775,
+136,4320,skipped,0.0,"set, choose, tuple, intersection, size constraint"
+137,3600,3600,0.15987558395136148,
+138,7000,skipped,0.0,"set, choose, multiple choosing"
+139,165,skipped,0.0,"set, choose, subset"
 140,4,skipped,0.0,"unencodeable, not combinatorics"
-141,120,120,0.0950901249962044,
-142,151200,151200,0.2909526659932453,
-143,10,10,0.18529337500513066,
-144,15,15,0.17330912499892293,
-145,59049,59049,0.1158285830024397,
-146,371043400,371043400,0.2631750840009772,
-147,33800,33800,0.41335404200071935,
-148,29700,29700,0.32090962499933084,
-149,2880,2880,0.22431041600066237,
+141,120,skipped,0.0,"set, choose, subset"
+142,151200,skipped,0.0,"set, choose, multiple choosing"
+143,10,skipped,0.0,"bag, composition, none_empty"
+144,15,skipped,0.0,"set, partition"
+145,59049,skipped,0.0,"set, composition"
+146,371043400,skipped,0.0,"set, choose, intersection, size constraint"
+147,33800,skipped,0.0,"set, choose_replace_permute, tuple, intersection, size constraint"
+148,29700,skipped,0.0,over partitioned sets
+149,2880,2880,0.24223566596629098,
 150,2,skipped,0.0,"unencodeable, not combinatorics"
-151,180,180,0.7426048749985057,
-152,36,36,0.07751416599785443,
-153,8,8,0.08430999999836786,
-154,12,12,0.06531220900069457,
-155,40320,40320,0.06411079200188396,
-156,62,62,0.09070899999642279,
-157,156,156,0.1330964589942596,
-158,125,125,0.0831552920062677,
+151,180,skipped,0.0,"set, choose, multiple choosing, subset, or constraint"
+152,36,skipped,0.0,"set, choose, size constraint"
+153,8,skipped,0.0,"set, partition"
+154,12,12,0.06455395801458508,
+155,40320,40320,0.06383883400121704,
+156,62,skipped,0.0,"set, composition, none_empty"
+157,156,skipped,0.0,"set, choose, not constraint, subset"
+158,125,skipped,0.0,"set, choose_replace_permute, tuple"
 159,819,skipped,0.0,"unencodeable, sequence"
-160,49,49,1.6200557920019492,
-161,864,864,0.9940567090015975,
-162,56,56,0.06267491600010544,
-163,3003,3003,0.23836279100214597,
-164,968,968,0.09191520800231956,
-165,7,7,0.11422220899839886,
-166,58500,58500,0.232185250002658,
-167,48048,48048,0.10995770800218452,
-168,12,12,0.2393756250021397,
-169,14,14,0.8097176669980399,
-170,325,325,0.10770012499415316,
-171,60,60,0.10336399999505375,
+160,49,skipped,0.0,"set, choose, multiple choosing, subset, or constraint"
+161,864,skipped,0.0,"set, composition, index, in"
+162,56,skipped,0.0,"set, choose"
+163,3003,skipped,0.0,"set, choose"
+164,968,skipped,0.0,"set, composition, index, size constraint"
+165,7,skipped,0.0,"bag, choose"
+166,58500,skipped,0.0,"set, choose_permute, tuple, multiple choosing"
+167,48048,skipped,0.0,"set, choose, multiple choosing"
+168,12,skipped,0.0,"set, choose, multiple choosing, tuple, difference, subset"
+169,14,skipped,0.0,"bag, composition, partition"
+170,325,skipped,0.0,"set, choose, intersection, size constraint"
+171,60,skipped,0.0,"set, choose, multiple choosing"
 172,12441600,skipped,0.0,"set, sequence, together, timeout"
-173,21,21,0.17855375000362983,
+173,21,skipped,0.0,"bag, composition"
 174,10800,skipped,0.0,"unencodeable, subsequence"
-175,3600,3600,0.16422966700338293,
-176,30,30,0.20631754199712304,
+175,3600,3600,0.15927729196846485,
+176,30,skipped,0.0,"tuple, unknown length"
 177,8,skipped,0.0,"unencodeable, arithmetics"
-178,560,560,0.33823383299750276,
-179,12,12,0.5132502089982154,
-180,37,37,0.1419346670008963,
-181,1295,1295,0.32908345900068525,
-182,90,90,0.3377747080012341,
-183,200,200,0.23789891700289445,
-184,70,70,0.06170179200125858,
-185,56,56,0.06203300000197487,
-186,1008,1008,1.8671668329989188,
-187,990,990,0.10283841699856566,
-188,351,351,0.4299150419974467,
-189,81,81,0.11416433299746132,
-190,16,16,0.08115512500080513,
-191,36,36,0.31556154200370656,
+178,560,skipped,0.0,"bag, tuple"
+179,12,skipped,0.0,"set, choose, tuple, difference, index, in"
+180,37,skipped,0.0,"set, choose_replace_permute, tuple, in"
+181,1295,skipped,0.0,"set, choose_replace_permute, tuple, count element, disjoint"
+182,90,skipped,0.0,"bag, tuple"
+183,200,skipped,0.0,"set, choose, tuple, intersection, difference, size constraint"
+184,70,skipped,0.0,"set, choose"
+185,56,skipped,0.0,"set, choose"
+186,1008,skipped,0.0,"set, choose, permute, tuple, index, in, compare element, or constraint, not constraint"
+187,990,skipped,0.0,"set, choose, intersection, size constraint"
+188,351,skipped,0.0,"set, choose, choose_replace, additive union, size constraint"
+189,81,skipped,0.0,"set, composition"
+190,16,skipped,0.0,"set, partition"
+191,36,skipped,0.0,"bag, multiplicity constraint, over partitioned sets"
 192,31250,skipped,0.0,"bag, sequence, TAG, timeout, pred, succ"
-193,2880,2880,0.34292058299615746,
-194,9,9,0.1136947089980822,
+193,2880,2880,0.20874445897061378,
+194,9,skipped,0.0,"set, choose, intersection, in, size constraint"
 195,24,skipped,0.0,"unencodeable, opposite constraint, reflection"
-196,200,200,0.3044504169956781,
+196,200,skipped,0.0,"set, choose_replace_permute, not constraint, index, compare element, in"
 197,10080,skipped,0.0,"set, choose, multiple choosing, tuple, unencodeable"
 198,5,skipped,0.0,"unencodeable, arithmetics"
-199,180,180,0.35741699999925913,
-200,31,31,0.06897608399594901,
-201,288,288,0.31195504100469407,
-202,5,5,0.3671267089957837,
-203,8788,8788,0.5024074169996311,
-204,56,56,0.06259512500400888,
+199,180,skipped,0.0,"bag, tuple"
+200,31,skipped,0.0,"set, choose, size constraint"
+201,288,skipped,0.0,"set, choose, multiple choosing, intersection, size constraint"
+202,5,skipped,0.0,"bag, partition"
+203,8788,skipped,0.0,"set, choose, subset, not constraint"
+204,56,skipped,0.0,"set, choose"
 205,13,skipped,0.0,"unencodeable, reverse counting"
-206,588,588,1.469300833006855,
+206,588,588,1.409797125030309,
 207,3110400,skipped,0.0,"set, sequence, together, timeout"
-208,520,520,0.5925976670041564,
-209,210,210,0.33868312500271713,
-210,24,24,0.09217145799630089,
-211,15,15,0.07073929099715315,
-212,2250,2250,0.1561804579978343,
+208,520,skipped,0.0,"set, tuple, index, in, counting quantifier"
+209,210,skipped,0.0,"bag, tuple"
+210,24,24,0.09403858397854492,
+211,15,skipped,0.0,"set, choose"
+212,2250,skipped,0.0,"set, choose, multiple choosing"
 213,24,skipped,0.0,"unencodeable, circle, opposite constraint"
-214,10,10,0.11150445899693295,
-215,12600,12600,0.1007516250028857,
-216,448,448,0.260040957997262,
-217,5040,5040,0.06384533399977954,
+214,10,10,0.10718274995451793,
+215,12600,skipped,0.0,"set, choose, multiple choosing"
+216,448,skipped,0.0,"set, choose, tuple, not constraint, in"
+217,5040,5040,0.06316512502962723,
 218,16,skipped,0.0,"unencodeable, not combinatorics"
-219,165,165,0.38375295900186757,
+219,165,skipped,0.0,"bag, composition"
 220,927,skipped,0.0,"set, choose_replace, unencodeable, arithmetics, supp, multiplicity constraint, tuple, not constraint, size constraint, index, compare element"
-221,18,18,0.37149408299592324,
-222,111,111,0.43531412499578437,
-223,120,120,0.21534512499783887,
+221,18,skipped,0.0,"set, tuple, not constraint, index, compare element"
+222,111,skipped,0.0,"set, choose, multiple choosing, subset, not constraint"
+223,120,skipped,0.0,"bag, tuple"
 224,3,skipped,0.0,"unencodeable, not combinatorics"
-225,28,28,0.06585274999815738,
+225,28,skipped,0.0,"set, choose"
 226,100,skipped,0.0,"unencodeable, arithmetics"
-227,544,544,0.20300366699666483,
+227,544,skipped,0.0,"set, choose, tuple, intersection, size constraint"
 228,351,skipped,0.0,"set, choose_replace_permute, sequence, TAG, count pred, count next_to, unencodeable, pred_of_pred"
-229,5,5,2.888626624997414,
-230,495,495,0.062003292005101684,
-231,36000,36000,0.15897479199338704,
-232,864000,864000,0.46354058400174836,
-233,360,360,0.31150625000009313,
-234,65,65,0.15559962499537505,
+229,5,skipped,0.0,"set, choose, multiple choosing, in, or constraint"
+230,495,skipped,0.0,"set, choose"
+231,36000,36000,0.15455833304440603,
+232,864000,skipped,0.0,"set, choose, tuple, multiple choosing, index, in"
+233,360,skipped,0.0,"set, choose, multiple choosing"
+234,65,skipped,0.0,"bag, choose, size constraint"
 235,30,skipped,0.0,"unencodeable, arithmetics"
-236,12,12,0.07794704099796945,
-237,48,48,0.2889160830018227,
-238,6,6,0.21505562500533415,
-239,10,10,0.18548808299965458,
-240,576,576,4.438719750003656,
-241,6,6,0.10698508299537934,
-242,62,62,0.46261187499476364,
-243,4896,4896,0.14140983299876098,
-244,480,480,0.7277600000015809,
-245,35,35,0.06254400000034366,
-246,35,35,0.06248116699862294,
+236,12,12,0.06412250001449138,
+237,48,skipped,0.0,"set, tuple, index, in"
+238,6,skipped,0.0,"bag, tuple"
+239,10,skipped,0.0,"set, choose_replace, multiplicity constraint"
+240,576,576,4.088419083040208,
+241,6,skipped,0.0,"set, tuple"
+242,62,skipped,0.0,"set, choose, multiple choosing, set equality, or constraint"
+243,4896,4896,0.13873112498549744,
+244,480,skipped,0.0,"set, choose, multiple choosing, subset, not constraint"
+245,35,skipped,0.0,"set, choose"
+246,35,skipped,0.0,"set, choose"
 247,20160,skipped,0.0,"unencodeable, grid, reflection"
-248,6960,6960,1.155821249994915,
-249,14,14,0.2162079999980051,
-250,29,29,0.5206162909962586,
+248,6960,skipped,0.0,"set, choose, multiple choosing, subset, difference, not constraint, or constraint"
+249,14,skipped,0.0,"bag, partition"
+250,29,skipped,0.0,"set, choose, multiple choosing, intersection, size constraint"
 251,18,skipped,0.0,"unencodeable, not combinatorics"
-252,48,48,0.33105458300269675,
-253,1120,1120,0.12917087499954505,
-254,36,36,0.27136320900171995,
-255,50,50,0.487822209004662,
-256,28,28,0.27950708299613325,
+252,48,skipped,0.0,"bag, tuple, index, not constraint, compare element"
+253,1120,skipped,0.0,"set, choose, intersection, size constraint"
+254,36,skipped,0.0,"set, choose, multiple choosing, tuple, not constraint, subset, difference, in"
+255,50,skipped,0.0,"bag, tuple, index, not constraint, compare element"
+256,28,skipped,0.0,"set, choose"
 257,14,skipped,0.0,"unencodeable, not combinatorics"
-258,105,105,0.06600908299878938,
-259,432,432,0.2514317500026664,
-260,720,720,0.0649589590029791,
-261,10,10,0.06212962500285357,
-262,9240,9240,0.15450191700074356,
+258,105,skipped,0.0,"set, choose"
+259,432,skipped,0.0,counting quantifier
+260,720,720,0.06372087495401502,
+261,10,skipped,0.0,"set, choose"
+262,9240,skipped,0.0,"set, composition, size constraint, index, in"
 263,2,skipped,0.0,"unencodeable, arithmetics"
-264,15,15,0.09906812500412343,
-265,384,384,0.30270549999841023,
-266,210,210,0.06871745799435303,
+264,15,skipped,0.0,"set, choose, subset"
+265,384,384,0.26363895897520706,
+266,210,skipped,0.0,"set, choose"
 267,20,skipped,0.0,"unencodeable, arithmetics"
-268,4,4,0.17729354199400404,
-269,240,240,0.27899325000180397,
+268,4,skipped,0.0,"bag, partition"
+269,240,240,0.282376250019297,
 270,9,skipped,0.0,"unencodeable, arithmetics"
-271,6,6,0.19514583300042432,
-272,5416,5416,1.0128251669957535,
-273,4,4,0.06415491700317943,
-274,2598960,2598960,0.0660783330022241,
-275,768,768,0.13006524999946123,
+271,6,skipped,0.0,"bag, tuple"
+272,5416,skipped,0.0,"set, choose_replace_permute, tuple, or constraint, in"
+273,4,skipped,0.0,"set, choose, size constraint"
+274,2598960,skipped,0.0,"set, choose"
+275,768,skipped,0.0,"set, choose, multiple choosing"
 276,129,skipped,0.0,"unencodeable, subsequence"
-277,100,100,0.3953132089955034,
-278,1951,1951,0.14685591599845793,
-279,210,210,0.15550941599940415,
-280,12,12,0.5017151669962914,
-281,75,75,0.2943027500004973,
+277,100,skipped,0.0,"set, tuple, choose_replace_permute, index, not constraint, compare element"
+278,1951,skipped,0.0,"set, tuple, choose_replace_permute, in"
+279,210,skipped,0.0,"set, choose, multiple choosing, subset, not constraint"
+280,12,skipped,0.0,"set, choose_replace_permute, tuple, index, in"
+281,75,skipped,0.0,"set, bag, choose, multiple choosing"
 282,362880,skipped,0.0,"unencodeable, star, reflection"
 283,20,skipped,0.0,"unencodeable, grid"
-284,1440,1440,0.15833283399842912,
-285,14,14,0.11737441700097406,
-286,4242,4242,0.10169499999756226,
-287,210,210,0.06253283300611656,
-288,210,210,0.09742583399929572,
+284,1440,1440,0.1539356670109555,
+285,14,skipped,0.0,"set, partition"
+286,4242,skipped,0.0,"set, choose, intersection, size constraint"
+287,210,skipped,0.0,"set, choose"
+288,210,skipped,0.0,"set, choose, multiple choosing"
 289,88,skipped,0.0,"unencodeable, arithmetics"
-290,60,60,0.4422343330006697,
-291,180,180,1.3674674590001814,
-292,720,720,0.15788891600095667,
+290,60,skipped,0.0,"bag, tuple"
+291,180,180,0.7718381250160746,
+292,720,720,0.1548007499659434,
 293,900,skipped,0.0,"unencodeable, arithmetics"
-294,14,14,0.11735016599413939,
-295,41,41,0.11748216600244632,
-296,80,80,0.09786191699822666,
-297,16,16,0.3631894159989315,
-298,45,45,0.06952495899895439,
-299,420,420,0.15508300000510644,
-300,380,380,0.10804433400335256,
-301,48,48,0.16800766699452652,
-302,16,16,0.3285171659954358,
-303,60,60,0.06456158299988601,
-304,1848,1848,0.1036058329991647,
-305,1050,1050,0.1450206250010524,
-306,6840,6840,0.15844687500066357,
-307,192,192,0.2867821250038105,
+294,14,skipped,0.0,"set, partition"
+295,41,skipped,0.0,"set, partition"
+296,80,skipped,0.0,"set, choose, multiple choosing"
+297,16,skipped,0.0,"set, choose, difference, multiple choosing"
+298,45,skipped,0.0,"set, choose"
+299,420,skipped,0.0,"set, composition, index, size constraint, in"
+300,380,skipped,0.0,"set, choose, multiple choosing"
+301,48,skipped,0.0,"set, tuple, composition"
+302,16,skipped,0.0,"set, composition"
+303,60,60,0.0645982910064049,
+304,1848,skipped,0.0,"set, choose, intersection, size constraint"
+305,1050,skipped,0.0,"set, choose, intersection, size constraint"
+306,6840,skipped,0.0,"set, choose, multiple choosing, difference"
+307,192,192,0.2991305000032298,
 308,33800000,skipped,0.0,"set, sequence, TAG, choose_replace, next_to, timeout"
-309,6,6,0.16315508400293766,
+309,6,6,0.15970320900669321,
 310,,skipped,0.0,"unencodeable, arithmetics"
 311,,skipped,0.0,"unencodeable, arithmetics"
 312,,skipped,0.0,"unencodeable, arithmetics"
@@ -324,7 +324,7 @@ problem_id,gt_result,result,running time,unencodeable_reason
 322,,skipped,0.0,"unencodeable, arithmetics"
 323,,skipped,0.0,"unencodeable, arithmetics"
 324,,skipped,0.0,"unencodeable, arithmetics"
-325,452,452,0.8079899999938789,
+325,452,skipped,0.0,"set, choose_replace_permute, tuple, in, not constraint, compare element"
 326,,skipped,0.0,"unencodeable, arithmetics"
 327,,skipped,0.0,"unencodeable, arithmetics"
 328,,skipped,0.0,"unencodeable, arithmetics"
@@ -334,7 +334,7 @@ problem_id,gt_result,result,running time,unencodeable_reason
 332,,skipped,0.0,"unencodeable, arithmetics"
 333,,skipped,0.0,"unencodeable, arithmetics"
 334,,skipped,0.0,"unencodeable, arithmetics"
-335,320,320,0.4497818330055452,
+335,320,skipped,0.0,"set, choose_replace_permute, tuple, index, in, supp"
 336,,skipped,0.0,"unencodeable, arithmetics"
 337,,skipped,0.0,"unencodeable, arithmetics"
 338,,skipped,0.0,"unencodeable, arithmetics"
@@ -370,11 +370,11 @@ problem_id,gt_result,result,running time,unencodeable_reason
 368,,skipped,0.0,"unencodeable, grid, reflection"
 369,,skipped,0.0,"unencodeable, palindrome"
 370,,skipped,0.0,"unencodeable, arithmetics"
-371,26,26,0.5092774170043413,
+371,26,skipped,0.0,"set, choose_replace_permute, tuple, multiplicity constraint, not constraint"
 372,,skipped,0.0,"unencodeable, palindrome"
 373,,skipped,0.0,"unencodeable, arithmetics"
 374,,skipped,0.0,"unencodeable, sequence, arithmetics"
-375,728,728,0.48952250000002095,
+375,728,skipped,0.0,"set, choose_replace_permute, tuple, index, in, supp, size constraint"
 376,,skipped,0.0,"unencodeable, arithmetics"
 377,,skipped,0.0,"unencodeable, arithmetics"
 378,,skipped,0.0,"unencodeable, arithmetics"

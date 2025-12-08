@@ -1,0 +1,2 @@
+keys = set(key0...5)
+keychain = circle(keys, reflection=True)

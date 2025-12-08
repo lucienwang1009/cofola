@@ -1,5 +1,6 @@
 from collections import defaultdict
 import logging
+import time
 
 from logzero import logger
 from functools import reduce
@@ -19,7 +20,8 @@ from cofola.problem import CofolaProblem, infer_max_size, optimize, \
 
 def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
                          use_partition_constraint: bool = False,
-                         lifted: bool = True) -> int:
+                         lifted: bool = True,
+                         old_pred_encoding: bool = False) -> int:
     """
     Solve a single combinatorics problem that contains no compound constraints, i.e.,
     the constraints are all atomic constraints and formed by conjunctions.
@@ -59,21 +61,32 @@ def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
         logger.info(p)
         sanity_check(p)
         logger.info(f'The problem for encoding: \n{p}')
-        wfomc_problem, decoder = encode(p, lifted)
+        wfomc_problem, decoder = encode(p, lifted, old_pred_encoding)
         logger.info(f'Encoded WFOMC problem: \n{wfomc_problem}')
         logger.info(f'Result decoder: \n{decoder}')
-        if wfomc_problem.contain_linear_order_axiom() and \
-                wfomc_algo != Algo.INCREMENTAL and wfomc_algo != Algo.RECURSIVE:
-            logger.warning(
-                'Linear order axiom with the predicate LEQ is found, '
-                'while the algorithm is not INCREMENTAL or RECURSIVE. '
-                'Switching to INCREMENTAL algorithm...'
-            )
-            wfomc_algo = Algo.INCREMENTAL
-            use_partition_constraint = True
+        if wfomc_problem.contain_linear_order_axiom():
+            if wfomc_algo != Algo.INCREMENTAL and wfomc_algo != Algo.RECURSIVE:
+                logger.warning(
+                    'Linear order axiom is found, '
+                    'while the algorithm is not INCREMENTAL or RECURSIVE.'
+                    'Switching to INCREMENTAL algorithm.'
+                )
+                wfomc_algo = Algo.INCREMENTAL
+        if wfomc_problem.contain_predecessor_axiom() or \
+                wfomc_problem.contain_circular_predecessor_axiom():
+            if wfomc_algo != Algo.INCREMENTAL:
+                logger.warning(
+                    'Predecessor/Circular predecessor axiom is found, '
+                    'while the algorithm is not INCREMENTAL.'
+                    'Switching to INCREMENTAL algorithm.'
+                )
+                wfomc_algo = Algo.INCREMENTAL
+        t_start = time.time()
         ret = solve_wfomc(wfomc_problem, wfomc_algo, use_partition_constraint)
         logger.debug(f'WFOMC solver result: {ret}')
         ret = decoder.decode_result(ret)
+        t_end = time.time()
+        logger.info(f'Time for solving the WFOMC problem: {t_end - t_start:.2f} seconds')
         if ret is None:
             logger.info('The problem is unsatisfiable')
             return 0
@@ -119,7 +132,8 @@ def decompose_problem(problem: CofolaProblem) -> list[CofolaProblem]:
 def solve(problem: CofolaProblem,
           wfomc_algo: Algo = Algo.FASTv2,
           use_partition_constraint: bool = False,
-          lifted: bool = True) -> int:
+          lifted: bool = True,
+          old_pred_encoding: bool = False) -> int:
     """
     Solve a combinatorics problem that may contain compound constraints
 
@@ -203,7 +217,8 @@ def solve(problem: CofolaProblem,
                 constraint.negate()
         logger.info(sub_problem.constraints)
         sub_answer = solve_single_problem(
-            sub_problem, wfomc_algo, use_partition_constraint, lifted
+            sub_problem, wfomc_algo, use_partition_constraint,
+            lifted, old_pred_encoding
         )
         logger.info(f'Answer for the sub-problem: {sub_answer}')
         answer += sub_answer
@@ -214,8 +229,10 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Solve a combinatorics math problem using weighted first-order model counting')
     parser.add_argument('--input_file', '-i', required=True, type=str, help='input file')
     parser.add_argument('--debug', '-d', action='store_true', help='debug mode')
-    # parser.add_argument('--wfomc_algo', '-a', type=Algo,
-    #                     choices=list(Algo), default=Algo.FASTv2)
+    parser.add_argument('--wfomc_algo', '-a', type=Algo,
+                        choices=list(Algo), default=Algo.FASTv2)
+    parser.add_argument('--old_pred_encoding', action='store_true',
+                        help='use the old encoding for predecessor/circular predecessor predicates')
     # parser.add_argument('--use_partition_constraint', '-p', action='store_true',
     #                     help='use partition constraint to speed up the solver, '
     #                          'it would override the algorithm choice to FASTv2')
@@ -235,10 +252,18 @@ def main():
     with open(input_file, 'r') as f:
         problem: CofolaProblem = parse(f.read())
     logger.info(f'Problem: \n{problem}')
+    if args.wfomc_algo == Algo.FASTv2 or \
+            args.wfomc_algo == Algo.INCREMENTAL:
+        logger.info('Using partition constraint to speed up the solver')
+        use_partition_constraint = True
+    else:
+        use_partition_constraint = False
     res: int = solve(
         problem,
-        # args.wfomc_algo,
+        args.wfomc_algo,
+        use_partition_constraint,
         # args.use_partition_constraint,
-        # args.lifted
+        # args.lifted,
+        old_pred_encoding=args.old_pred_encoding
     )
     logger.info(f'Answer: {res}')

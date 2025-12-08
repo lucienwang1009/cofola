@@ -173,7 +173,8 @@ def encode_singleton(context: Context) -> Context:
 
 
 def encode(problem: CofolaProblem,
-           lifted: bool = True) -> tuple[WFOMCProblem, Decoder]:
+           lifted: bool = True,
+           old_pred_encoding: bool = False) -> tuple[WFOMCProblem, Decoder]:
     """
     Encode the combinatorics problem to the WFOMC problem
 
@@ -185,7 +186,7 @@ def encode(problem: CofolaProblem,
     constraints = problem.constraints
 
     # setup context
-    context = Context(problem)
+    context = Context(problem, old_pred_encoding=old_pred_encoding)
     # initialize the cache for multinomial coefficients
     MultinomialCoefficients.setup(len(context.domain))
 

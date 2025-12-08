@@ -1,0 +1,3 @@
+lecturers = set(Jones, Smith, other0...4)
+schedule = sequence(lecturers)
+(Jones < Smith) in schedule

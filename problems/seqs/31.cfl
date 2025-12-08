@@ -1,0 +1,3 @@
+students = set(student0...4)
+line = sequence(students)
+next_to(student0, student1) not in line

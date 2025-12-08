@@ -45,12 +45,13 @@ if __name__ == '__main__':
         problem = all_problems[i]
         tags = problem['tags']
         unchecked = [
-            'timeout', 'unencodeable'
+            'timeout',
+            'unencodeable'
         ]
-        # checked = [
-        #     'circle', 'sequence'
-        # ]
-        checked = None
+        checked = [
+            'circle', 'sequence'
+        ]
+        # checked = None
         if any(tag in tags for tag in unchecked) \
                 or (checked is not None and
                     (not any(tag in tags for tag in checked))):

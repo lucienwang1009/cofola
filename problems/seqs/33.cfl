@@ -1,0 +1,5 @@
+people = set(Pierre, Thomas, Rosa, other0...5)
+table = circle(people)
+next_to(Pierre, Thomas) in table
+next_to(Rosa, Pierre) not in table
+next_to(Rosa, Thomas) not in table

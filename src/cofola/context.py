@@ -1,7 +1,7 @@
 
 from typing import Union
-from wfomc import Formula, AtomicFormula, top, Const, Pred, to_sc2, \
-    WFOMCProblem, fol_parse as parse, Rational, Expr
+from wfomc import CardinalityConstraint, Formula, AtomicFormula, top, Const, Pred, to_sc2, \
+    WFOMCProblem, fol_parse as parse, Expr
 
 from cofola.decoder import Decoder
 from cofola.objects.base import Bag, Entity, Sequence
@@ -15,8 +15,10 @@ class Context(object):
     """
     Context for encoding the combinatorics problem to the WFOMC problem
     """
-    def __init__(self, problem: CofolaProblem):
+    def __init__(self, problem: CofolaProblem,
+                 old_pred_encoding: bool = False):
         self.problem: CofolaProblem = problem
+        self.old_pred_encoding: bool = old_pred_encoding
         self.singletons: set[Entity] = problem.singletons
         # components of the WFOMC problem
         self.domain: set[Const] = set(
@@ -29,7 +31,7 @@ class Context(object):
         # auxiliary variables
         self.obj2pred: dict[CombinatoricsObject, Pred] = dict()
         self.obj_entity2pred: dict[CombinatoricsObject, dict[Entity, Pred]] = dict()
-        self.overcount: int = Rational(1, 1)
+        self.overcount: int = 1
         self.used_objs: set[CombinatoricsObject] = set()
 
         # for size constraint
@@ -51,9 +53,11 @@ class Context(object):
                 self.sequence_obj = obj
                 break
         self.leq_pred = Pred('LEQ', 2)
-        self.pred_pred = Pred('PRED', 2)
-        self.circular_pred = Pred('CIRCULAR_PRED', 2)
+        self.pred_pred = None
+        self.circular_pred = None
         self.circle_len: int = len(self.domain)
+
+        self.cardinality_constraint = CardinalityConstraint()
 
     def build(self) -> tuple[WFOMCProblem, Decoder]:
         # do some post encoding work
@@ -74,7 +78,8 @@ class Context(object):
             new_domain,
             self.weighting,
             unary_evidence=new_unary_evidence,
-            circle_len=self.circle_len
+            circle_len=self.circle_len,
+            cardinality_constraint=self.cardinality_constraint
         )
         decoder = Decoder(
             self.overcount,
@@ -205,6 +210,14 @@ class Context(object):
         :param seq: the sequence object
         :return: the predecessor predicate
         """
+        if self.old_pred_encoding:
+            return self.get_predecessor_pred_old(seq)
+
+        if self.pred_pred is None:
+            self.pred_pred = Pred('PRED', 2)
+        if self.circular_pred is None:
+            self.circular_pred = Pred('CIRCULAR_PRED', 2)
+
         obj_from = seq.obj_from
         if seq.flatten_obj is not None:
             obj_from = seq.flatten_obj
@@ -212,6 +225,43 @@ class Context(object):
         if not seq.circular:
             pred_pred = self.pred_pred
         else:
+            pred_pred = self.circular_pred
+        seq_pred_pred = self.create_pred(f'{seq.name}_PRED', 2)
+        self.sentence = self.sentence & parse(
+            f"\\forall X: (\\forall Y: ({seq_pred_pred}(X,Y) <-> ({obj_from_pred}(X) & {obj_from_pred}(Y) & {pred_pred}(X,Y))))"
+        )
+        return seq_pred_pred
+
+    def get_predecessor_pred_old(self, seq: Sequence) -> Pred:
+        """
+        Get the predecessor predicate for encoding the sequence
+
+        :param seq: the sequence object
+        :return: the predecessor predicate
+        """
+        if self.pred_pred is None:
+            self.pred_pred = Pred('Pred', 2)
+            self.sentence = self.sentence & parse(
+                f"\\forall X: (\\exists Y: (PERM(X,Y))) & \\forall X: (\\exists Y: (PERM(Y,X))) & \\forall X: (~PERM(X,X)) & \\forall X: (\\forall Y: ({self.pred_pred}(X,Y) -> PERM(X,Y))) & \\forall X: (\\forall Y: ({self.pred_pred}(X,Y) -> LEQ(X,Y)))"
+            )
+            self.cardinality_constraint.add_simple_constraint(
+                self.pred_pred, "=", len(self.domain) - 1
+            )
+            self.cardinality_constraint.add_simple_constraint(
+                Pred('PERM', 2), "=", len(self.domain)
+            )
+        obj_from = seq.obj_from
+        if seq.flatten_obj is not None:
+            obj_from = seq.flatten_obj
+        obj_from_pred = self.get_pred(obj_from)
+        if not seq.circular:
+            pred_pred = self.pred_pred
+        else:
+            if self.circular_pred is None:
+                self.circular_pred = Pred('Circular_Pred', 2)
+                self.sentence = self.sentence & parse(
+                    f"\\forall X: (First(X) <-> (\\forall Y: (~{self.pred_pred}(Y,X)))) & \\forall X: (Last(X) <-> (\\forall Y: (~{self.pred_pred}(X,Y)))) & \\forall X: (\\forall Y: ({self.circular_pred}(X,Y) <-> ({self.pred_pred}(X,Y) | (Last(X) & First(Y)))))"
+                )
             pred_pred = self.circular_pred
         seq_pred_pred = self.create_pred(f'{seq.name}_PRED', 2)
         self.sentence = self.sentence & parse(

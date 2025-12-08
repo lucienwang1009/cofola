@@ -1,0 +1,5 @@
+Democrats = set(D0...5)
+Republicans = set(R0...5)
+table = circle(Democrats + Republicans)
+together(Democrats) in table
+together(Republicans) in table

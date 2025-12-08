@@ -1,0 +1,3 @@
+people = set(Wilma, Paul, other0...5)
+row = sequence(people)
+next_to(Wilma, Paul) not in row

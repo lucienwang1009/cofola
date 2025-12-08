@@ -1,0 +1,5 @@
+books = set(math, history, physics)
+shelf = choose_replace_sequence(books, 8)
+(math, math) not in shelf
+(history, history) not in shelf
+(physics, physics) not in shelf

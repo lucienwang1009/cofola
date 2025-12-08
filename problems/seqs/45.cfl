@@ -1,0 +1,4 @@
+basil_plants = set(basil0...4)
+tomato_plants = set(tomato0...4)
+row = sequence(basil_plants + tomato_plants)
+together(tomato_plants) in row

@@ -1,0 +1,3 @@
+creatures = bag(crocodile: 4, catfish, squid: 2)
+order = sequence(creatures)
+(crocodile, crocodile) not in order

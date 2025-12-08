@@ -1,0 +1,2 @@
+people = set(p0...5)
+table = circle(people)
