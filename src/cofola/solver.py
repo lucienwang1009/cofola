@@ -12,7 +12,7 @@ from copy import deepcopy
 from cofola.encoder import encode
 from cofola.objects.bag import SizeConstraint
 from cofola.objects.base import AtomicConstraint, CombinatoricsBase, CombinatoricsConstraint, CombinatoricsObject, Negation, And, Or, Tuple
-from cofola.wfomc_solver import solve as solve_wfomc
+from cofola.wfomc_solver import export, solve as solve_wfomc
 from cofola.parser.parser import parse
 from cofola.problem import CofolaProblem, infer_max_size, optimize, \
     sanity_check, simplify, transform, workaround
@@ -21,7 +21,8 @@ from cofola.problem import CofolaProblem, infer_max_size, optimize, \
 def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
                          use_partition_constraint: bool = False,
                          lifted: bool = True,
-                         old_pred_encoding: bool = False) -> int:
+                         old_pred_encoding: bool = False,
+                         export_file: str = None) -> int:
     """
     Solve a single combinatorics problem that contains no compound constraints, i.e.,
     the constraints are all atomic constraints and formed by conjunctions.
@@ -64,6 +65,8 @@ def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
         wfomc_problem, decoder = encode(p, lifted, old_pred_encoding)
         logger.info(f'Encoded WFOMC problem: \n{wfomc_problem}')
         logger.info(f'Result decoder: \n{decoder}')
+        if export_file is not None:
+            export(wfomc_problem, decoder, export_file)
         if wfomc_problem.contain_linear_order_axiom():
             if wfomc_algo != Algo.INCREMENTAL and wfomc_algo != Algo.RECURSIVE:
                 logger.warning(
@@ -72,6 +75,7 @@ def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
                     'Switching to INCREMENTAL algorithm.'
                 )
                 wfomc_algo = Algo.INCREMENTAL
+                use_partition_constraint = True
         if wfomc_problem.contain_predecessor_axiom() or \
                 wfomc_problem.contain_circular_predecessor_axiom():
             if wfomc_algo != Algo.INCREMENTAL:
@@ -81,6 +85,7 @@ def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
                     'Switching to INCREMENTAL algorithm.'
                 )
                 wfomc_algo = Algo.INCREMENTAL
+                use_partition_constraint = True
         t_start = time.time()
         ret = solve_wfomc(wfomc_problem, wfomc_algo, use_partition_constraint)
         logger.debug(f'WFOMC solver result: {ret}')
@@ -133,7 +138,8 @@ def solve(problem: CofolaProblem,
           wfomc_algo: Algo = Algo.FASTv2,
           use_partition_constraint: bool = False,
           lifted: bool = True,
-          old_pred_encoding: bool = False) -> int:
+          old_pred_encoding: bool = False,
+          export_prefix: str = None) -> int:
     """
     Solve a combinatorics problem that may contain compound constraints
 
@@ -167,8 +173,14 @@ def solve(problem: CofolaProblem,
     logger.info("The original problem:")
     logger.info(problem)
     if len(problem.constraints) == 0:
+        if export_prefix is not None:
+            export_file = f'{export_prefix}.wfomcs'
+        else:
+            export_file = None
         return solve_single_problem(
-            problem, wfomc_algo, use_partition_constraint, lifted
+            problem, wfomc_algo,
+            use_partition_constraint, lifted,
+            old_pred_encoding, export_file
         )
     constraints = list()
     constraintidx2atom = dict()
@@ -203,6 +215,7 @@ def solve(problem: CofolaProblem,
         for i, atom in constraintidx2atom.items()
     ))
     answer = 0
+    sub_problem_id = 0
     for model in satisfiable(formula, all_models=True):
         logger.info('Sovling a sub-problem under the constraint:')
         # NOTE: solve the sub-problem with deep copied objects and constraints
@@ -216,12 +229,17 @@ def solve(problem: CofolaProblem,
             if not model[constraintidx2atom[idx]]:
                 constraint.negate()
         logger.info(sub_problem.constraints)
+        if export_prefix is not None:
+            export_file = f'{export_prefix}_{sub_problem_id}.wfomcs'
+        else:
+            export_file = None
         sub_answer = solve_single_problem(
             sub_problem, wfomc_algo, use_partition_constraint,
-            lifted, old_pred_encoding
+            lifted, old_pred_encoding, export_file
         )
         logger.info(f'Answer for the sub-problem: {sub_answer}')
         answer += sub_answer
+        sub_problem_id += 1
     return answer
 
 
@@ -233,11 +251,13 @@ def parse_args():
                         choices=list(Algo), default=Algo.FASTv2)
     parser.add_argument('--old_pred_encoding', action='store_true',
                         help='use the old encoding for predecessor/circular predecessor predicates')
+    parser.add_argument('--export', '-e', type=str,
+                        help='file prefix for exporting the WFOMC problems')
     # parser.add_argument('--use_partition_constraint', '-p', action='store_true',
     #                     help='use partition constraint to speed up the solver, '
     #                          'it would override the algorithm choice to FASTv2')
-    # parser.add_argument('--lifted', '-l', action='store_true',
-    #                     help='use lifted encoding for bags')
+    parser.add_argument('--lifted', '-l', action='store_true',
+                        help='use lifted encoding for bags (DONT USE, WIP!!)')
     return parser.parse_args()
 
 
@@ -263,7 +283,8 @@ def main():
         args.wfomc_algo,
         use_partition_constraint,
         # args.use_partition_constraint,
-        # args.lifted,
-        old_pred_encoding=args.old_pred_encoding
+        lifted=args.lifted,
+        old_pred_encoding=args.old_pred_encoding,
+        export_prefix=args.export
     )
     logger.info(f'Answer: {res}')
