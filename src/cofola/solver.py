@@ -216,9 +216,9 @@ def parse_args():
     parser.add_argument('--debug', '-d', action='store_true', help='debug mode')
     # parser.add_argument('--wfomc_algo', '-a', type=Algo,
     #                     choices=list(Algo), default=Algo.FASTv2)
-    # parser.add_argument('--use_partition_constraint', '-p', action='store_true',
-    #                     help='use partition constraint to speed up the solver, '
-    #                          'it would override the algorithm choice to FASTv2')
+    parser.add_argument('--use_partition_constraint', '-p', action='store_true',
+                        help='use partition constraint to speed up the solver, '
+                             'it would override the algorithm choice to FASTv2')
     # parser.add_argument('--lifted', '-l', action='store_true',
     #                     help='use lifted encoding for bags')
     return parser.parse_args()
@@ -238,7 +238,8 @@ def main():
     res: int = solve(
         problem,
         # args.wfomc_algo,
-        # args.use_partition_constraint,
+        use_partition_constraint=args.use_partition_constraint,
+        lifted=False
         # args.lifted
     )
     logger.info(f'Answer: {res}')

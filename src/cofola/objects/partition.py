@@ -1,4 +1,4 @@
-from wfomc import fol_parse as parse
+from wfomc import exactly_one_qf, fol_parse as parse
 from sympy import Eq
 
 from cofola.objects.bag import BagInit
@@ -102,10 +102,20 @@ class BagPartition(Partition):
                 )
             )
         )
+        if len(context.singletons) > 0:
+            singletons_pred = context.get_pred(context.singletons)
+            exactly_one_formula = exactly_one_qf(partitioned_preds)
+            context.sentence = context.sentence & parse(
+                "\\forall X: (({}(X) & {}(X)) -> ({}))".format(
+                    singletons_pred, obj_from_pred, exactly_one_formula
+                )
+            )
         # TODO: manually construct the weight for partition
         bag = self.obj_from
         ordered_vars = list([] for _ in range(len(self.partitioned_objs)))
         for entity in bag.dis_entities:
+            if entity in context.singletons:
+                continue
             multi = bag.p_entities_multiplicity[entity]
             context, entity_pred = entity.encode(context)
             if isinstance(bag, BagInit):
