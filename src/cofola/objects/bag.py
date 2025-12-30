@@ -498,6 +498,7 @@ class SizeConstraint(BagConstraint):
 # TODO
 class BagSubsetConstraint(BagConstraint):
     def __init__(self, sup: Bag, sub: Bag) -> None:
+        raise NotImplementedError("Bag subset constraint is not implemented yet.")
         super().__init__(sup, sub)
         self.sup = sup
         self.sub = sub
@@ -516,6 +517,7 @@ class BagSubsetConstraint(BagConstraint):
 
 class BagEqConstraint(BagConstraint):
     def __init__(self, first: Bag, second: Bag) -> None:
+        raise NotImplementedError("Bag equality constraint is not implemented yet.")
         super().__init__(first, second)
         self.first = first
         self.second = second

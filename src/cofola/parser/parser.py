@@ -3,7 +3,7 @@ from collections import defaultdict
 from lark import Lark
 from logzero import logger
 from cofola.objects.bag import Bag, BagAdditiveUnion, BagChoose, \
-    BagDifference, BagInit, BagIntersection, BagMultiplicity, \
+    BagDifference, BagEqConstraint, BagInit, BagIntersection, BagMultiplicity, BagSubsetConstraint, \
     SizeConstraint, BagSupport
 
 from cofola.objects.base import CombinatoricsConstraint, CombinatoricsObject, Entity, Partition, Sequence, SizedObject, Tuple
@@ -420,17 +420,21 @@ class CofolaTransfomer(CommonTransformer):
     def subset_constraint(self, args):
         objs1, _, objs2 = args
         def single_operation(obj1, obj2):
-            self._check_obj_type(obj1, Set)
-            self._check_obj_type(obj2, Set)
-            return SubsetConstraint(obj1, obj2)
+            if isinstance(obj1, Set) or isinstance(obj2, Set):
+                self._check_obj_type(obj1, Set, Bag)
+                self._check_obj_type(obj2, Set, Bag)
+                return SubsetConstraint(obj1, obj2)
+            self._check_obj_type(obj1, Bag)
+            self._check_obj_type(obj2, Bag)
+            return BagSubsetConstraint(obj1, obj2)
         return self._op_or_constraint_on_list(
             single_operation, objs1, objs2)
 
     def disjoint_constraint(self, args):
         obj1, _, obj2 = args
         def single_operation(obj1, obj2):
-            self._check_obj_type(obj1, Set)
-            self._check_obj_type(obj2, Set)
+            self._check_obj_type(obj1, Set, Bag)
+            self._check_obj_type(obj2, Set, Bag)
             return DisjointConstraint(obj1, obj2)
         return self._op_or_constraint_on_list(
             single_operation, obj1, obj2)
@@ -444,6 +448,8 @@ class CofolaTransfomer(CommonTransformer):
                 ret = TupleIndexEqConstraint(obj1, obj2)
             elif isinstance(obj1, Set) and isinstance(obj2, Set):
                 ret = SetEqConstraint(obj1, obj2)
+            elif isinstance(obj1, Bag) and isinstance(obj2, Bag):
+                ret = BagEqConstraint(obj1, obj2)
             else:
                 raise CofolaParsingError(f"Equivalence constraint is not supported for the given objects: {obj1}, {obj2}")
             if symbol == '!=':
