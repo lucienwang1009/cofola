@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Union
 
 from cofola.objects.set import SetInit
 from cofola.objects.utils import Quantifier
+from cofola.utils import create_aux_pred
 
 
 if TYPE_CHECKING:
@@ -112,16 +113,15 @@ class SequenceImpl(Sequence):
                         f"choose_sequence should have been transformed to choose and sequence: {self}"
                     )
             else:
-                if isinstance(self.obj_from, Set):
-                    obj_pred = context.get_pred(self.obj_from)
-                    context.sentence = context.sentence & parse(
-                        f'\\forall X: (\\forall Y: (({obj_pred}(X) & ~{obj_pred}(Y)) -> {context.leq_pred}(X,Y)))'
-                    )
-                    # handle overcount (and undercount) introduced by the permutation
-                    context.overcount = (
-                        context.overcount *
-                        math.factorial(domain_size - self.size)
-                    )
+                obj_pred = context.get_pred(self.obj_from)
+                context.sentence = context.sentence & parse(
+                    f'\\forall X: (\\forall Y: (({obj_pred}(X) & ~{obj_pred}(Y)) -> {context.leq_pred}(X,Y)))'
+                )
+                # handle overcount (and undercount) introduced by the permutation
+                context.overcount = (
+                    context.overcount *
+                    math.factorial(domain_size - self.size)
+                )
         else:
             if self.choose:
                 raise RuntimeError(
@@ -282,14 +282,20 @@ class LessThanPattern(SequenceSizedPattern):
     def encode_for_seq(self, context: "Context", seq: Sequence, positive: bool) -> "Context":
         context, obj_pred1, obj_pred2 = self._get_preds(context, seq)
         leq_pred = context.get_leq_pred(seq)
+        obj_leq_pred = create_aux_pred(
+            2, f"{self.entity_or_set1.name}_leq_{self.entity_or_set2.name}"
+        )
+        context.sentence = context.sentence & parse(
+            f"\\forall X: (\\forall Y: (({obj_pred1}(X) & {obj_pred2}(Y) & {leq_pred}(X,Y)) <-> {obj_leq_pred}(X,Y)))"
+        )
+        leq_var = context.create_var(
+            obj_leq_pred.name
+        )
+        context.weighting[obj_leq_pred] = (leq_var, 1)
         if positive:
-            context.sentence = context.sentence & parse(
-                f"\\forall X: (\\forall Y: (({obj_pred1}(X) & {obj_pred2}(Y)) -> {leq_pred}(X,Y)))"
-            )
+            context.validator.append(leq_var > 0)
         else:
-            context.sentence = context.sentence & parse(
-                f"\\forall X: (\\forall Y: (({obj_pred1}(X) & {obj_pred2}(Y)) -> ~{leq_pred}(X,Y)))"
-            )
+            context.validator.append(Eq(leq_var, 0))
         return context
 
     def encode_size_var(self, context: "Context", seq: Sequence) \
@@ -316,14 +322,20 @@ class PredecessorPattern(SequenceSizedPattern):
     def encode_for_seq(self, context: "Context", seq: Sequence, positive: bool) -> "Context":
         context, obj_pred1, obj_pred2 = self._get_preds(context, seq)
         pred_pred = context.get_predecessor_pred(seq)
+        obj_pred_pred = create_aux_pred(
+            2, f"{self.entity_or_set1.name}_pred_{self.entity_or_set2.name}"
+        )
+        context.sentence = context.sentence & parse(
+            f"\\forall X: (\\forall Y: (({obj_pred1}(X) & {obj_pred2}(Y) & {pred_pred}(X,Y)) <-> {obj_pred_pred}(X,Y)))"
+        )
+        pred_var = context.create_var(
+            obj_pred_pred.name
+        )
+        context.weighting[obj_pred_pred] = (pred_var, 1)
         if positive:
-            context.sentence = context.sentence & parse(
-                f"\\forall X: (\\forall Y: (({obj_pred1}(X) & {obj_pred2}(Y)) -> {pred_pred}(X,Y)))"
-            )
+            context.validator.append(pred_var > 0)
         else:
-            context.sentence = context.sentence & parse(
-                f"\\forall X: (\\forall Y: (({obj_pred1}(X) & {obj_pred2}(Y)) -> ~{pred_pred}(X,Y)))"
-            )
+            context.validator.append(Eq(pred_var, 0))
         return context
 
     def encode_size_var(self, context: "Context", seq: Sequence) \
@@ -350,15 +362,21 @@ class NextToPattern(SequenceSizedPattern):
     def encode_for_seq(self, context: "Context", seq: Sequence, positive: bool) -> "Context":
         context, obj_pred1, obj_pred2 = self._get_preds(context, seq)
         next_to_pred = context.get_next_to_pred(seq)
+        obj_next_to_pred = create_aux_pred(
+            2, f"{self.entity_or_set1.name}_next_to_{self.entity_or_set2.name}"
+        )
+        context.sentence = context.sentence & parse(
+            f"\\forall X: (\\forall Y: (({obj_pred1}(X) & {obj_pred2}(Y) & {next_to_pred}(X,Y)) <-> {obj_next_to_pred}(X,Y)))"
+        )
+        next_to_var = context.create_var(
+            obj_next_to_pred.name
+        )
+        context.weighting[obj_next_to_pred] = (next_to_var, 1)
         if positive:
             # TODO: care about semantics here! exists/forall/...?
-            context.sentence = context.sentence & parse(
-                f"\\forall X: (\\forall Y: (({obj_pred1}(X) & {obj_pred2}(Y) -> {next_to_pred}(X,Y))))"
-            )
+            context.validator.append(next_to_var > 0)
         else:
-            context.sentence = context.sentence & parse(
-                f"\\forall X: (\\forall Y: (({obj_pred1}(X) & {obj_pred2}(Y)) -> ~{next_to_pred}(X,Y)))"
-            )
+            context.validator.append(Eq(next_to_var, 0))
         return context
 
     def encode_size_var(self, context: "Context", seq: Sequence) \
