@@ -194,14 +194,30 @@ class TogetherPattern(SequencePattern):
             else:
                 context, obj_pred = self.obj.encode(context)
         else:
+            if isinstance(seq.obj_from, Bag) or (
+                seq.choose and seq.replace
+            ):
+                raise RuntimeError(
+                    "Not supported: together(set) in a bag sequence"
+                )
             obj_pred = context.get_pred(self.obj)
+        seq_obj_from_pred = context.get_pred(seq.obj_from)
         pred_pred = context.get_predecessor_pred(seq)
         first_pred = context.create_pred(f"{self.obj.name}_first", 1)
-        context.sentence = context.sentence & parse(
+        if isinstance(seq.obj_from, Bag) or (
+            seq.choose and seq.replace
+        ):
+            context.sentence = context.sentence & parse(
 f"""
 \\forall X: ({first_pred}(X) <-> ({obj_pred}(X) & \\forall Y: ({obj_pred}(Y) -> ~{pred_pred}(Y,X))))
 """
-        )
+            )
+        else:
+            context.sentence = context.sentence & parse(
+f"""
+\\forall     X: ({first_pred}(X) <-> ({obj_pred}(X) & {seq_obj_from_pred}(X) & \\forall Y: (({obj_pred}(Y) & {seq_obj_from_pred}(Y)) -> ~{pred_pred}(Y,X))))
+"""
+            )
         first_var = context.create_var(f"{self.obj.name}_first")
         context.weighting[first_pred] = (first_var, 1)
         if positive:
