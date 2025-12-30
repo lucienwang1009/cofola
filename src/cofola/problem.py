@@ -57,6 +57,11 @@ class CofolaProblem(object):
                 singletons = singletons.intersection(
                     set(e for e, m in obj.p_entities_multiplicity.items() if m == 1)
                 )
+        for cst in self.constraints:
+            if isinstance(cst, SizeConstraint):
+                for size_obj, _ in cst.expr:
+                    if isinstance(size_obj, BagMultiplicity):
+                        singletons = singletons.difference(set([size_obj.entity]))
         self.singletons = singletons
 
     def contains_entity(self, entity: Entity) -> bool:
