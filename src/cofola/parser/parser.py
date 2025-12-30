@@ -43,6 +43,11 @@ RESERVED_KEYWORDS = [
     'or',
 ]
 
+RESERVED_PREFIXES = [
+    'AUX_',
+    'IDX_'
+]
+
 
 class CofolaParsingError(Exception):
     pass
@@ -534,6 +539,9 @@ class CofolaTransfomer(CommonTransformer):
         """
         if id in RESERVED_KEYWORDS:
             raise CofolaParsingError(f"Identifier {id} is a reserved keyword. Please use another name.")
+        for prefix in RESERVED_PREFIXES:
+            if id.startswith(prefix):
+                raise CofolaParsingError(f"Identifier {id} starts with reserved prefix {prefix}. Please use another name.")
 
     def _check_obj_type(self, obj: object, *expected_types: type):
         """

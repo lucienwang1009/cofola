@@ -4,7 +4,7 @@ from sympy import Eq, Ne
 from enum import Enum
 
 AUX_COUNTER = 0
-IDX_PREFIX = 'idx_'
+IDX_PREFIX = 'IDX_'
 
 def reset_aux_obj_counter(start_from: int = 0):
     global AUX_COUNTER
@@ -12,7 +12,7 @@ def reset_aux_obj_counter(start_from: int = 0):
 
 def aux_obj_name() -> str:
     global AUX_COUNTER
-    name = 'aux_' + str(AUX_COUNTER)
+    name = 'AUX_' + str(AUX_COUNTER)
     AUX_COUNTER += 1
     return name
 
