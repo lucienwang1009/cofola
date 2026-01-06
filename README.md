@@ -1,6 +1,6 @@
 # Cofola
 
-Cofola is a declarative language and solver for modeling and solving combinatorial counting problems using Weighted First-Order Model Counting (WFOMC). It allows you to define problems involving sets, multisets (bags), functions, and constraints in a natural way, and then automatically computes the number of solutions.
+Cofola (COmbinatorial counting with First-Order logic LAnguage) is a declarative language and solver for modeling and solving combinatorial counting problems using Weighted First-Order Model Counting (WFOMC). It allows you to define problems involving sets, multisets (bags), functions, and constraints in a natural way, and then automatically computes the number of solutions.
 
 ## Features
 
@@ -32,7 +32,6 @@ uv run cofola -i <path_to_problem_file>
 
 - `-i`, `--input_file`: Path to the input `.cfl` file (required).
 - `-d`, `--debug`: Enable debug logging.
-- `-p`, `--use_partition_constraint`: Use partition constraints to potentially speed up the solver.
 
 ## Language Examples
 
@@ -53,17 +52,14 @@ payment.count(nickel) == 1
 ### Example 2: Worker Assignment
 
 **Problem:**
-Assign 15 workers to 4 jobs such that Job 1 gets exactly 7 workers and Job 2 gets exactly 5 workers.
+How many distinct three-letter sequences with at least one $T$ can be formed by using three of the six letters of $TARGET$? One such sequence is $TRT$.
 
 **Cofola Code:**
 
 ```plaintext
-workers = set(worker1...15)
-jobs = set(job1...4)
-
-assign = workers -> jobs
-|assign-1(job1)| = 7
-|assign-1(job2)| = 5
+letters = bag(T, A, R, G, E, T)
+S = choose_tuple(letters, 3)
+S.count(T) > 0
 ```
 
 ## Syntax Guide
@@ -84,7 +80,7 @@ s = set(a, b) # Inline comment
 -   **Sets**:
     ```plaintext
     s = set(a, b, c)
-    s2 = set(item1...5)  # Creates item1, item2, ..., item5
+    s2 = set(item1...5)  # Creates item1, item2, ..., item4
     ```
 
 -   **Bags (Multisets)**:
@@ -109,8 +105,8 @@ s = set(a, b) # Inline comment
 
 -   **Permutations and Sequences**:
     ```plaintext
-    t = tuple(s)         # Tuple (ordered, with replacement if from set?) - check implementation
-    seq = sequence(s)    # Sequence (ordered, no replacement if from set)
+    t = tuple(s)         # Tuple (ordered, support indexes)
+    seq = sequence(s)    # Sequence (ordered, support relative positional constraints)
     c = circle(s)        # Circular arrangement
     c_ref = circle(s, reflection=True) # Reflexive circular arrangement
     
@@ -156,8 +152,17 @@ s = set(a, b) # Inline comment
     A == B
     A != B
     ```
+-  **Indexing**:
+    ```plaintext
+    t[0] == a            # First element of tuple t is a
+    ```
 
--   **Sequence Patterns**:
+-   **Relative Positional Constraints**:
+    ```plaintext
+    pattern in seq  # seq matches the given pattern
+    seq.count(pattern) == k  # pattern occurs k times in seq
+    ```
+    where `pattern` can be specified using:
     ```plaintext
     together(x)          # Elements in x are adjacent
     next_to(a, b)        # a is next to b
@@ -178,12 +183,6 @@ s = set(a, b) # Inline comment
     (|part| > 0) for part in p
     ```
 
-## Project Structure
+## References
 
-- `src/cofola`: Source code for the parser, solver, and encoder.
-- `problems/`: Example problem definitions in `.cfl` format.
-- `scripts/`: Utility scripts for batch processing and plotting.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project relies on WFOMC algorithms and techniques. The implementation used is [here](https://github.com/yuanhong-wang/WFOMC). Please find the relevant literature on WFOMC in that repository.

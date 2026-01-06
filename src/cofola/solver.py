@@ -18,7 +18,7 @@ from cofola.problem import CofolaProblem, infer_max_size, optimize, \
 
 
 def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
-                         use_partition_constraint: bool = False,
+                         use_partition_constraint: bool = True,
                          lifted: bool = True) -> int:
     """
     Solve a single combinatorics problem that contains no compound constraints, i.e.,
@@ -118,7 +118,7 @@ def decompose_problem(problem: CofolaProblem) -> list[CofolaProblem]:
 
 def solve(problem: CofolaProblem,
           wfomc_algo: Algo = Algo.FASTv2,
-          use_partition_constraint: bool = False,
+          use_partition_constraint: bool = True,
           lifted: bool = True) -> int:
     """
     Solve a combinatorics problem that may contain compound constraints
@@ -216,9 +216,9 @@ def parse_args():
     parser.add_argument('--debug', '-d', action='store_true', help='debug mode')
     # parser.add_argument('--wfomc_algo', '-a', type=Algo,
     #                     choices=list(Algo), default=Algo.FASTv2)
-    parser.add_argument('--use_partition_constraint', '-p', action='store_true',
-                        help='use partition constraint to speed up the solver, '
-                             'it would override the algorithm choice to FASTv2')
+    # parser.add_argument('--use_partition_constraint', '-p', action='store_true',
+    #                     help='use partition constraint to speed up the solver, '
+    #                          'it would override the algorithm choice to FASTv2')
     # parser.add_argument('--lifted', '-l', action='store_true',
     #                     help='use lifted encoding for bags')
     return parser.parse_args()
@@ -238,7 +238,7 @@ def main():
     res: int = solve(
         problem,
         # args.wfomc_algo,
-        use_partition_constraint=args.use_partition_constraint,
+        # use_partition_constraint=args.use_partition_constraint,
         lifted=False
         # args.lifted
     )
