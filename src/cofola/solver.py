@@ -1,32 +1,24 @@
 from __future__ import annotations
 
-from collections import defaultdict
+import argparse
 import logging
 
 from logzero import logger
-from functools import reduce
-import argparse
 from wfomc import Algo
-from sympy import Symbol, satisfiable
-from copy import deepcopy
 
-from cofola.encoder import encode
-from cofola.objects.bag import SizeConstraint
-from cofola.objects.base import AtomicConstraint, CombinatoricsBase, CombinatoricsConstraint, CombinatoricsObject, Negation, And, Or, Tuple
-from cofola.wfomc_solver import solve as solve_wfomc
 from cofola.parser.parser import parse
+from cofola.pipeline import SolvePipeline
 from cofola.problem import CofolaProblem
-from cofola.passes import decompose_problem, infer_max_size, optimize, \
-    sanity_check, simplify, workaround
-from cofola.transforms import transform
 
 
-def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
-                         use_partition_constraint: bool = True,
-                         lifted: bool = True) -> int:
+def solve(
+    problem: CofolaProblem,
+    wfomc_algo: Algo = Algo.FASTv2,
+    use_partition_constraint: bool = True,
+    lifted: bool = True,
+) -> int:
     """
-    Solve a single combinatorics problem that contains no compound constraints, i.e.,
-    the constraints are all atomic constraints and formed by conjunctions.
+    Solve a combinatorics problem via WFOMC.
 
     :param problem: the combinatorics problem
     :param wfomc_algo: the algorithm to solve the problem
@@ -34,151 +26,8 @@ def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
     :param lifted: whether to use lifted encoding for bags
     :return: the answer
     """
-    problem.build()
-    problem = simplify(problem)
-    final = 1
-    for p in decompose_problem(problem):
-        p.build()
-        logger.info(f'Solving a decomposed problem')
-        logger.info(p)
-        if p.is_unsat():
-            logger.info('The problem is unsatisfiable')
-            return 0
-        logger.info('Simplifying the problem...')
-        p = simplify(p)
-        logger.info(p)
-        logger.info("Optimizing the problem...")
-        p = optimize(p)
-        logger.info("Inferring the maximum size of sized objects...")
-        p = infer_max_size(p)
-        logger.info("Transforming the problem...")
-        sanity_check(p)
-        p = transform(p)
-        logger.info(p)
-        logger.info("Optimizing the problem...")
-        p = optimize(p)
-        p = workaround(p)
-        logger.info('Simplifying the problem...')
-        p = simplify(p)
-        logger.info(p)
-        sanity_check(p)
-        logger.info(f'The problem for encoding: \n{p}')
-        wfomc_problem, decoder = encode(p, lifted)
-        logger.info(f'Encoded WFOMC problem: \n{wfomc_problem}')
-        logger.info(f'Result decoder: \n{decoder}')
-        if wfomc_problem.contain_linear_order_axiom() and \
-                wfomc_algo != Algo.INCREMENTAL and wfomc_algo != Algo.RECURSIVE:
-            logger.warning(
-                'Linear order axiom with the predicate LEQ is found, '
-                'while the algorithm is not INCREMENTAL or RECURSIVE. '
-                'Switching to INCREMENTAL algorithm...'
-            )
-            wfomc_algo = Algo.INCREMENTAL
-            use_partition_constraint = True
-        ret = solve_wfomc(wfomc_problem, wfomc_algo, use_partition_constraint)
-        logger.debug(f'WFOMC solver result: {ret}')
-        ret = decoder.decode_result(ret)
-        if ret is None:
-            logger.info('The problem is unsatisfiable')
-            return 0
-        logger.info(f'Answer for the decomposed problem: {ret}')
-        final = final * ret
-    return final
-
-
-
-def solve(problem: CofolaProblem,
-          wfomc_algo: Algo = Algo.FASTv2,
-          use_partition_constraint: bool = True,
-          lifted: bool = True) -> int:
-    """
-    Solve a combinatorics problem that may contain compound constraints
-
-    :param problem: the combinatorics problem
-    :param wfomc_algo: the algorithm to solve the problem
-    :param use_partition_constraint: whether to use partition constraint
-    :param lifted: whether to use lifted encoding for bags
-    :return: the answer
-    """
-    # ============================================
-    # NOTE: workaround for unknown length tuples
-    for constraint in problem.constraints:
-        if isinstance(constraint, SizeConstraint) and \
-                len(constraint.expr) == 1 and \
-                isinstance(constraint.expr[0][0], Tuple) and \
-                constraint.expr[0][1] == 1 and \
-                constraint.comp in ['<', '<=']:
-            param = constraint.param
-            if constraint.comp == '<':
-                param -= 1
-            problem.remove(constraint)
-            problem.add_constraint(
-                reduce(
-                    lambda x, y: x | y,
-                    (SizeConstraint([(constraint.expr[0][0], 1)], '==', i)
-                     for i in range(2, constraint.param + 1)),
-                    SizeConstraint([(constraint.expr[0][0], 1)], '==', 1)
-                )
-            )
-    # ============================================
-    logger.info("The original problem:")
-    logger.info(problem)
-    if len(problem.constraints) == 0:
-        return solve_single_problem(
-            problem, wfomc_algo, use_partition_constraint, lifted
-        )
-    constraints = list()
-    constraintidx2atom = dict()
-    atom2constraintidx = dict()
-    def build_formula(constraint):
-        if isinstance(constraint, AtomicConstraint):
-            if constraint in constraints:
-                idx = constraints.index(constraint)
-                return constraintidx2atom[idx]
-            else:
-                atom = Symbol(f'c_{len(constraints)}')
-                constraintidx2atom[len(constraints)] = atom
-                atom2constraintidx[atom] = len(constraints)
-                constraints.append(constraint)
-                return atom
-        elif isinstance(constraint, Negation):
-            return ~build_formula(constraint.sub_constraint)
-        elif isinstance(constraint, And):
-            return build_formula(constraint.first_constraint) & \
-                build_formula(constraint.second_constraint)
-        elif isinstance(constraint, Or):
-            return build_formula(constraint.first_constraint) | \
-                build_formula(constraint.second_constraint)
-    formula = True
-    for constraint in problem.constraints:
-        formula = formula & build_formula(constraint)
-    logger.info('Building the formula for constraints:')
-    logger.info(formula)
-    logger.info('Constraint to atom mapping:')
-    logger.info(list(
-        (constraints[i], atom)
-        for i, atom in constraintidx2atom.items()
-    ))
-    answer = 0
-    for model in satisfiable(formula, all_models=True):
-        logger.info('Sovling a sub-problem under the constraint:')
-        # NOTE: solve the sub-problem with deep copied objects and constraints
-        # to avoid the side effect on the original problem
-        sub_problem = deepcopy(
-            CofolaProblem(
-                problem.objects, constraints
-            )
-        )
-        for idx, constraint in enumerate(sub_problem.constraints):
-            if not model[constraintidx2atom[idx]]:
-                constraint.negate()
-        logger.info(sub_problem.constraints)
-        sub_answer = solve_single_problem(
-            sub_problem, wfomc_algo, use_partition_constraint, lifted
-        )
-        logger.info(f'Answer for the sub-problem: {sub_answer}')
-        answer += sub_answer
-    return answer
+    pipeline = SolvePipeline(wfomc_algo, use_partition_constraint, lifted)
+    return pipeline.run(problem)
 
 
 def parse_args():
