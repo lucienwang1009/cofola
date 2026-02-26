@@ -3,13 +3,13 @@ from __future__ import annotations
 from logzero import logger
 
 from cofola.objects.bag import BagChoose, BagInit, BagMultiplicity, BagSupport, SizeConstraint
-from cofola.objects.base import Bag, CombinatoricsObject, Entity, Sequence, Set, Tuple
+from cofola.objects.base import Bag, Entity, Sequence, Set, Tuple
 from cofola.objects.function import FuncImage, FuncInit, FuncInverseImage, FuncPairConstraint
 from cofola.objects.set import (
     DisjointConstraint, MembershipConstraint, SetChoose, SetEqConstraint, SetInit, SetIntersection
 )
 from cofola.objects.tuple import (
-    TupleCount, TupleImpl, TupleIndex,
+    TupleCount, TupleImpl,
     TupleIndexEqConstraint, TupleMembershipConstraint
 )
 from cofola.objects.utils import IDX_PREFIX
@@ -111,12 +111,6 @@ def transform_tuples(problem: CofolaProblem) -> bool:
                 obj.obj_from, obj.choose, obj.replace, obj.size,
                 indices, mapping))
             return True
-        # if isinstance(obj, TupleIndex):
-        #     func_img = FuncImage(obj.obj_from.mapping,
-        #                          Entity(f"{IDX_PREFIX}{obj.index}"))
-        #     problem.replace(obj, func_img)
-        #     logger.info(f"Transformed {obj} to {func_img}")
-        #     return True
 
     for constraint in problem.constraints:
         if isinstance(constraint, TupleIndexEqConstraint):
@@ -128,13 +122,6 @@ def transform_tuples(problem: CofolaProblem) -> bool:
             new_constraint.positive = constraint.positive
             problem.replace(constraint, new_constraint)
             return True
-            # membership_constraint = MembershipConstraint(
-            #     constraint.obj, constraint.entity
-            # )
-            # membership_constraint.positive = constraint.positive
-            # problem.add_constraint(membership_constraint)
-            # problem.remove(constraint)
-            # return True
         if isinstance(constraint, TupleMembershipConstraint):
             # tuple[index] in set/bag/tuple or entity in tuple
             entity_or_tuple_index, obj = constraint.member, constraint.obj
