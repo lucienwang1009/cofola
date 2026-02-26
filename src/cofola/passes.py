@@ -61,6 +61,130 @@ def sanity_check(problem: CofolaProblem) -> None:
             raise ValueError(f"Index out of bound: {obj.index} >= {obj.obj_from.size}")
 
 
+# Dispatch table for constant folding operations
+# Maps (object_type, from_type | None) -> fold_function
+_CONSTANT_FOLDERS: dict[tuple[type, type | None], callable] = {}
+
+
+def _folder(obj_type: type, from_type: type | None = None):
+    """Decorator to register a constant folding function."""
+    def decorator(fn):
+        _CONSTANT_FOLDERS[(obj_type, from_type)] = fn
+        return fn
+    return decorator
+
+
+@_folder(BagSupport, BagInit)
+def _fold_bag_support(obj, problem):
+    """Fold BagSupport of BagInit to SetInit."""
+    from cofola.objects.set import SetInit
+    new_obj = SetInit(obj.obj_from.keys())
+    problem.replace(obj, new_obj)
+    logger.info(f"Folded {obj} to {new_obj}")
+    return True
+
+
+@_folder(SetUnion, None)
+def _fold_set_union(obj, problem):
+    """Fold SetUnion of two SetInits to SetInit."""
+    from cofola.objects.set import SetInit
+    if all(isinstance(o, SetInit) for o in [obj.first, obj.second]):
+        new_obj = SetInit(set.union(
+            *[o.p_entities for o in [obj.first, obj.second]]
+        ))
+        problem.replace(obj, new_obj)
+        logger.info(f"Folded {obj} to {new_obj}")
+        return True
+    return False
+
+
+@_folder(SetIntersection, None)
+def _fold_set_intersection(obj, problem):
+    """Fold SetIntersection of two SetInits to SetInit."""
+    from cofola.objects.set import SetInit
+    if all(isinstance(o, SetInit) for o in [obj.first, obj.second]):
+        new_obj = SetInit(set.intersection(
+            *[o.p_entities for o in [obj.first, obj.second]]
+        ))
+        problem.replace(obj, new_obj)
+        logger.info(f"Folded {obj} to {new_obj}")
+        return True
+    return False
+
+
+@_folder(SetDifference, None)
+def _fold_set_difference(obj, problem):
+    """Fold SetDifference of two SetInits to SetInit."""
+    from cofola.objects.set import SetInit
+    if all(isinstance(o, SetInit) for o in [obj.first, obj.second]):
+        new_obj = SetInit(set.difference(
+            obj.first.p_entities, obj.second.p_entities
+        ))
+        problem.replace(obj, new_obj)
+        logger.info(f"Folded {obj} to {new_obj}")
+        return True
+    return False
+
+
+@_folder(BagAdditiveUnion, None)
+def _fold_bag_additive_union(obj, problem):
+    """Fold BagAdditiveUnion of two BagInits to BagInit."""
+    if all(isinstance(o, BagInit) for o in [obj.first, obj.second]):
+        new_obj = BagInit(
+            {
+                e: obj.first.p_entities_multiplicity.get(e, 0) +
+                   obj.second.p_entities_multiplicity.get(e, 0)
+                for e in set(obj.first.p_entities_multiplicity.keys()).union(
+                    set(obj.second.p_entities_multiplicity.keys())
+                )
+            }
+        )
+        problem.replace(obj, new_obj)
+        logger.info(f"Folded {obj} to {new_obj}")
+        return True
+    return False
+
+
+@_folder(BagIntersection, None)
+def _fold_bag_intersection(obj, problem):
+    """Fold BagIntersection of two BagInits to BagInit."""
+    if all(isinstance(o, BagInit) for o in [obj.first, obj.second]):
+        new_obj = BagInit(
+            {
+                e: min(
+                    obj.first.p_entities_multiplicity.get(e, 0),
+                    obj.second.p_entities_multiplicity.get(e, 0)
+                )
+                for e in set(obj.first.p_entities_multiplicity.keys()).intersection(
+                    set(obj.second.p_entities_multiplicity.keys())
+                )
+            }
+        )
+        problem.replace(obj, new_obj)
+        logger.info(f"Folded {obj} to {new_obj}")
+        return True
+    return False
+
+
+@_folder(BagDifference, None)
+def _fold_bag_difference(obj, problem):
+    """Fold BagDifference of two BagInits to BagInit."""
+    if all(isinstance(o, BagInit) for o in [obj.first, obj.second]):
+        new_obj = BagInit(
+            {
+                e: obj.first.p_entities_multiplicity.get(e, 0) -
+                    obj.second.p_entities_multiplicity.get(e, 0)
+                for e in set(obj.first.p_entities_multiplicity.keys())
+                if obj.first.p_entities_multiplicity.get(e, 0) -
+                   obj.second.p_entities_multiplicity.get(e, 0) > 0
+            }
+        )
+        problem.replace(obj, new_obj)
+        logger.info(f"Folded {obj} to {new_obj}")
+        return True
+    return False
+
+
 def fold_constants(problem: CofolaProblem) -> bool:
     """
     Fold the constant objects
@@ -68,82 +192,21 @@ def fold_constants(problem: CofolaProblem) -> bool:
     :param problem: the problem
     :return: True if any constants were folded, False otherwise
     """
-    # TODO: fold the constant objects
     ret = False
     for obj in problem.objects:
-        if isinstance(obj, BagSupport) and isinstance(obj.obj_from, BagInit):
-            new_obj = SetInit(obj.obj_from.keys())
-            problem.replace(obj, new_obj)
-            logger.info(f"Folded {obj} to {new_obj}")
-            ret = True
-        if isinstance(obj, SetUnion) and \
-                all(isinstance(o, SetInit) for o in [obj.first, obj.second]):
-            new_obj = SetInit(set.union(
-                *[o.p_entities for o in [obj.first, obj.second]]
-            ))
-            problem.replace(obj, new_obj)
-            logger.info(f"Folded {obj} to {new_obj}")
-            ret = True
-        if isinstance(obj, SetIntersection) and \
-                all(isinstance(o, SetInit) for o in [obj.first, obj.second]):
-            new_obj = SetInit(set.intersection(
-                *[o.p_entities for o in [obj.first, obj.second]]
-            ))
-            problem.replace(obj, new_obj)
-            logger.info(f"Folded {obj} to {new_obj}")
-            ret = True
-        if isinstance(obj, SetDifference) and \
-                all(isinstance(o, SetInit) for o in [obj.first, obj.second]):
-            new_obj = SetInit(set.difference(
-                obj.first.p_entities, obj.second.p_entities
-            ))
-            problem.replace(obj, new_obj)
-            logger.info(f"Folded {obj} to {new_obj}")
-            ret = True
-        if isinstance(obj, BagAdditiveUnion) and \
-                all(isinstance(o, BagInit) for o in [obj.first, obj.second]):
-            new_obj = BagInit(
-                {
-                    e: obj.first.p_entities_multiplicity.get(e, 0) +
-                       obj.second.p_entities_multiplicity.get(e, 0)
-                    for e in set(obj.first.p_entities_multiplicity.keys()).union(
-                        set(obj.second.p_entities_multiplicity.keys())
-                    )
-                }
-            )
-            problem.replace(obj, new_obj)
-            logger.info(f"Folded {obj} to {new_obj}")
-            ret = True
-        if isinstance(obj, BagIntersection) and \
-                all(isinstance(o, BagInit) for o in [obj.first, obj.second]):
-            new_obj = BagInit(
-                {
-                    e: min(
-                        obj.first.p_entities_multiplicity.get(e, 0),
-                        obj.second.p_entities_multiplicity.get(e, 0)
-                    )
-                    for e in set(obj.first.p_entities_multiplicity.keys()).intersection(
-                        set(obj.second.p_entities_multiplicity.keys())
-                    )
-                }
-            )
-            problem.replace(obj, new_obj)
-            logger.info(f"Folded {obj} to {new_obj}")
-            ret = True
-        if isinstance(obj, BagDifference) and \
-                all(isinstance(o, BagInit) for o in [obj.first, obj.second]):
-            new_obj = BagInit(
-                {
-                    e: obj.first.p_entities_multiplicity.get(e, 0) -
-                        obj.second.p_entities_multiplicity.get(e, 0)
-                    for e in set(obj.first.p_entities_multiplicity.keys())
-                    if obj.first.p_entities_multiplicity.get(e, 0) -
-                       obj.second.p_entities_multiplicity.get(e, 0) > 0
-                }
-            )
-            problem.replace(obj, new_obj)
-            logger.info(f"Folded {obj} to {new_obj}")
-            ret = True
+        # Try object-specific folders with from_type
+        key_with_from = (type(obj), type(obj.obj_from) if hasattr(obj, 'obj_from') else None)
+        if key_with_from in _CONSTANT_FOLDERS:
+            if _CONSTANT_FOLDERS[key_with_from](obj, problem):
+                ret = True
+                continue
+
+        # Try object-specific folders without from_type
+        key_without_from = (type(obj), None)
+        if key_without_from in _CONSTANT_FOLDERS:
+            if _CONSTANT_FOLDERS[key_without_from](obj, problem):
+                ret = True
+                continue
     # fold constraints
     for constraint in problem.constraints:
         # substitute the constant objects in size constraints
