@@ -15,7 +15,8 @@ from cofola.objects.set import MembershipConstraint, SetChoose, SetDifference, S
     SubsetConstraint, SetUnion, Set
 from cofola.objects.tuple import TupleCount, TupleImpl, TupleIndexEqConstraint, TupleMembershipConstraint, TupleIndex
 from cofola.parser.common import CommonTransformer
-from cofola.problem import CofolaProblem, simplify
+from cofola.problem import CofolaProblem
+from cofola.passes import simplify
 from cofola.parser.grammar import grammar
 
 

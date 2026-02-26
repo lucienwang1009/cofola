@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections import defaultdict
 import logging
 
@@ -13,7 +15,8 @@ from cofola.objects.bag import SizeConstraint
 from cofola.objects.base import AtomicConstraint, CombinatoricsBase, CombinatoricsConstraint, CombinatoricsObject, Negation, And, Or, Tuple
 from cofola.wfomc_solver import solve as solve_wfomc
 from cofola.parser.parser import parse
-from cofola.problem import CofolaProblem, infer_max_size, optimize, \
+from cofola.problem import CofolaProblem
+from cofola.passes import decompose_problem, infer_max_size, optimize, \
     sanity_check, simplify, workaround
 from cofola.transforms import transform
 
@@ -45,16 +48,16 @@ def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
         p = simplify(p)
         logger.info(p)
         logger.info("Optimizing the problem...")
-        optimize(p)
+        p = optimize(p)
         logger.info("Inferring the maximum size of sized objects...")
-        infer_max_size(p)
+        p = infer_max_size(p)
         logger.info("Transforming the problem...")
         sanity_check(p)
         p = transform(p)
         logger.info(p)
         logger.info("Optimizing the problem...")
-        optimize(p)
-        workaround(p)
+        p = optimize(p)
+        p = workaround(p)
         logger.info('Simplifying the problem...')
         p = simplify(p)
         logger.info(p)
@@ -82,39 +85,6 @@ def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
         final = final * ret
     return final
 
-
-def decompose_problem(problem: CofolaProblem) -> list[CofolaProblem]:
-    """
-    Decompose a combinatorics problem into disjoint sub-problems, which is achieve by finding the connected components in the "problem graph".
-
-    :param problem: the combinatorics problem
-    :return: the list of sub-problems
-    """
-    problems = list()
-    visited = set()
-    components = list()
-    items = problem.objects + problem.constraints
-
-    def visit(item: CombinatoricsBase):
-        if item in visited:
-            return []
-        visited.add(item)
-        ret = [item]
-        for i in item.dependences.union(item.descendants):
-            if i in items:
-                ret.extend(visit(i))
-        return ret
-
-    for item in items:
-        component = visit(item)
-        if len(component) > 0:
-            components.append(component)
-    for obj_constraint in components:
-        objs = list(o for o in obj_constraint if isinstance(o, CombinatoricsObject))
-        constraints = list(o for o in obj_constraint if isinstance(o, CombinatoricsConstraint))
-        decomposed_problem = CofolaProblem(objs, constraints)
-        problems.append(decomposed_problem)
-    return problems
 
 
 def solve(problem: CofolaProblem,
