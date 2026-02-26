@@ -244,8 +244,8 @@ def infer_max_size(problem: CofolaProblem) -> CofolaProblem:
             size = int(ret.x[index])
             logger.info(f"Inferred maximum size of {obj.name} = {size}")
             obj.max_size = size
-    # propogate the inferred maximum sizes
-    problem.propogate()
+    # propagate the inferred maximum sizes
+    problem.propagate()
     return problem
 
 

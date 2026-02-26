@@ -141,7 +141,7 @@ class CofolaTransfomer(
                 continue
             obj.name = name
             already_set.add(name)
-        # NOTE: propogate the properties (especially the size) of the objects
+        # NOTE: propagate the properties (especially the size) of the objects
         self.problem.build()
         return self.problem
 

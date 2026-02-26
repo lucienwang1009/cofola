@@ -64,7 +64,7 @@ def preprocess_bags(problem: CofolaProblem,
                     obj.indis_entities[multiplicity] = entities
                 else:
                     obj.dis_entities.update(entities)
-    # 4. propogate the non-liftable entities
+    # 4. propagate the non-liftable entities
     # TODO: Here, for simplicity, we discriminate distinguishable entities and indistinguishable entities in a bag
     # Actually, an entity can be distinguishable and indistinguishable in the same bag for different branchs, e.g.,
     #               Bag(a:2, b:2)
@@ -73,7 +73,7 @@ def preprocess_bags(problem: CofolaProblem,
     #            |                \
     # MultiplicityConstraint(a=1)  BagChoose3
     # when we encode the left branch, the entity a is distinguishable, while in the right branch, a and b are indistinguishable
-    problem.propogate()
+    problem.propagate()
     # 5. now the bag objects forms several trees connected by `choose` operations
     # we need to find the root of each tree for lifting
     root_bags = list()

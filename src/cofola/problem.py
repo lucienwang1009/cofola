@@ -67,7 +67,7 @@ class CofolaProblem(object):
         """
         return entity in self.entities
 
-    def propogate(self):
+    def propagate(self):
         """
         Propogate the properties of the objects
         """
@@ -132,7 +132,7 @@ class CofolaProblem(object):
         """
         self.topological_sort()
         self.update_entities()
-        self.propogate()
+        self.propagate()
         self.update_singletons()
 
     def add_object(self, obj: CombinatoricsObject) -> CombinatoricsObject:

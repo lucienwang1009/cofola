@@ -274,6 +274,6 @@ def transform(problem: CofolaProblem) -> CofolaProblem:
     """
     while transform_once(problem):
         problem.update_entities()
-        problem.propogate()
+        problem.propagate()
         problem.topological_sort()
     return problem
