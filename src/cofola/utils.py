@@ -15,7 +15,23 @@ OBJ_PRE_PREFIX_ARITY = {
 }
 
 AUX_PRED_PREFIX = '$cofola_aux_'
-AUX_PRED_CNT = 0
+
+
+class _AuxPredCounter:
+    """Encapsulated counter for generating unique auxiliary predicate names."""
+    _count: int = 0
+
+    @classmethod
+    def next(cls) -> int:
+        """Get the current counter value and increment it."""
+        cnt = cls._count
+        cls._count += 1
+        return cnt
+
+    @classmethod
+    def reset(cls, start_from: int = 0) -> None:
+        """Reset the counter to a specific starting value."""
+        cls._count = start_from
 
 
 def create_cofola_pred(name: str, arity: int) -> Pred:
@@ -38,13 +54,12 @@ def create_pred_for_object(obj: CombinatoricsObject) -> Pred:
     return create_cofola_pred(pre + obj.name, arity)
 
 def reset_aux_pred_cnt(start_from: int = 0):
-    global AUX_PRED_CNT
-    AUX_PRED_CNT = start_from
+    """Reset the auxiliary predicate counter."""
+    _AuxPredCounter.reset(start_from)
 
 def create_aux_pred(arity: int, aux_pred_prefix: str = AUX_PRED_PREFIX) -> Pred:
-    global AUX_PRED_CNT
-    cnt = AUX_PRED_CNT
-    AUX_PRED_CNT += 1
+    """Create a unique auxiliary predicate."""
+    cnt = _AuxPredCounter.next()
     return create_cofola_pred(f"{aux_pred_prefix}_" + str(cnt), arity)
 
 def get_type_name(obj: object):
