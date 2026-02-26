@@ -1,13 +1,12 @@
 import json
 import argparse
-import logging
-import logzero
 import pandas as pd
 
+from loguru import logger
 from wfomc import Algo
-from logzero import logger
 from contexttimer import Timer
 
+from cofola.log import setup_logging
 from cofola.parser.parser import parse
 from cofola.solver import solve
 
@@ -24,10 +23,7 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    if args.debug:
-        logzero.loglevel(logging.DEBUG)
-    else:
-        logzero.loglevel(logging.INFO)
+    setup_logging(args.debug)
     input_file = args.input
     all_problems = json.load(open(input_file, 'r'))
     ids = []
@@ -65,15 +61,13 @@ if __name__ == '__main__':
             gt_result = problem['answer']
             with Timer() as t:
                 try:
-                    cofola_problem = parse(problem['program'])
-                    res = solve(cofola_problem, Algo.FASTv2,
-                                use_partition_constraint=True,
-                                lifted=False)
+                    cofola_problem = parse(problem['program'], debug=args.debug)
+                    res = solve(cofola_problem, debug=args.debug)
                 except Exception as e:
                     res = 'error'
                     logger.exception(e)
             if res != int(gt_result):
-                logger.error(f'The answer is wrong for problem {i}: {res} != {gt_result}')
+                logger.error('The answer is wrong for problem {}: {} != {}', i, res, gt_result)
                 exit(1)
             df.append({
                 'problem_id': i,
@@ -83,5 +77,5 @@ if __name__ == '__main__':
                 'unencodeable_reason': ''
             })
         pd_df = pd.DataFrame(df)
-        pd_df.to_csv('results.csv', index=False)
+        pd_df.to_csv('exp/results.csv', index=False)
     print(pd_df)
