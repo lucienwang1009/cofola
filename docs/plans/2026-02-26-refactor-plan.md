@@ -918,6 +918,399 @@ git commit -m "chore: final cleanup after refactor"
 
 ---
 
+---
+
+## Task 12: Redesign `CombinatoricsBase` — Eliminate `_assign_args`
+
+Replace the `_assign_args` boilerplate (~35 implementations) with a `_fields` class variable. Make `args` a computed property. Make `combinatorially_eq` abstract on `CombinatoricsObject`.
+
+**Files:**
+- Modify: `src/cofola/objects/base.py`
+- Modify: every concrete subclass in `objects/` (bag.py, set.py, function.py, tuple.py, sequence.py, partition.py, sequence_patterns.py, bag_ops.py)
+
+**Background — the current pattern and why it's ugly:**
+
+Every subclass has this identical boilerplate:
+```python
+class BagChoose(Bag):
+    def __init__(self, obj_from: Bag, size: int = None) -> None:
+        super().__init__(obj_from, size)   # stores in self.args
+
+    def _assign_args(self) -> None:
+        self.obj_from, self.size = self.args  # unpacks back
+```
+
+This exists because `subs_args` mutates `self.args` and calls `_assign_args` to re-sync named attrs. The fix: declare `_fields`, set attrs directly in `__init__`, make `args` a property.
+
+**Step 1: Rewrite `CombinatoricsBase` in `base.py`**
+
+```python
+class CombinatoricsBase(object):
+    _fields: tuple[str, ...] = ()
+
+    def __init__(self) -> None:
+        # Subclasses must set all _fields attributes BEFORE calling super().__init__()
+        super().__init__()
+        self.dependences: set[CombinatoricsObject] = set()
+        self.descendants: set[CombinatoricsBase] = set()
+        self._build_dependences()
+
+    @property
+    def args(self) -> tuple:
+        """Computed from named attributes declared in _fields."""
+        return tuple(getattr(self, f) for f in self._fields)
+
+    def _build_dependences(self) -> None:
+        self.dependences = set(
+            getattr(self, f) for f in self._fields
+            if isinstance(getattr(self, f, None), CombinatoricsObject)
+        )
+        for dep in self.dependences:
+            dep.descendants.add(self)
+
+    def combinatorially_eq(self, o: CombinatoricsBase) -> bool:
+        return False  # safe default for constraints
+
+    def inherit(self) -> None:
+        """Template hook: inherit properties from dependences during propagation."""
+        pass
+
+    def subs_args(self, *new_vals) -> None:
+        for name, val in zip(self._fields, new_vals):
+            setattr(self, name, val)
+        self._build_dependences()
+
+    def subs_obj(self, old_obj: CombinatoricsObject,
+                 new_obj: CombinatoricsObject) -> None:
+        for name in self._fields:
+            if getattr(self, name, None) is old_obj:
+                setattr(self, name, new_obj)
+        self._build_dependences()
+
+    def encode(self, context: "Context") -> "Context":
+        raise NotImplementedError
+
+    def __str__(self) -> str:
+        raise NotImplementedError
+
+    def __repr__(self) -> str:
+        return str(self)
+```
+
+**Step 2: Update `CombinatoricsObject`**
+
+```python
+from abc import abstractmethod
+
+class CombinatoricsObject(CombinatoricsBase):
+    def __init__(self) -> None:
+        self.name = aux_obj_name()
+        super().__init__()
+
+    @abstractmethod
+    def combinatorially_eq(self, o: CombinatoricsBase) -> bool:
+        """Whether this object is combinatorially identical to o."""
+        ...
+
+    def body_str(self) -> str:
+        raise NotImplementedError
+
+    def __str__(self) -> str:
+        return f"{self.name} = {self.body_str()}"
+
+    def is_uncertain(self) -> bool:
+        return False
+```
+
+Note: Make `CombinatoricsBase` inherit from `ABC` or just use `@abstractmethod` without ABC (Python allows this with a metaclass trick, but simpler to just `from abc import ABC, abstractmethod` and add `ABC` to `CombinatoricsBase`'s bases).
+
+**Step 3: Update `SizedObject` — use class-level defaults**
+
+```python
+class SizedObject(CombinatoricsObject):
+    # Class-level defaults; instances override via self.size = x
+    size: int = None
+    max_size: int = float("inf")
+
+    def __init__(self) -> None:
+        super().__init__()
+
+    def encode_size_var(self, context: "Context") -> tuple["Context", Expr]:
+        raise NotImplementedError
+```
+
+This avoids `SizedObject.__init__` overwriting `size` that a subclass already set.
+
+**Step 4: Update intermediate base classes (`Set`, `Bag`, `Function`, `Partition`, etc.)**
+
+Change each to `def __init__(self) -> None` with no `*args`, just:
+
+```python
+class Bag(SizedObject):
+    def __init__(self) -> None:
+        self.p_entities_multiplicity: dict[Entity, int] = None
+        self.dis_entities: set[Entity] = None
+        self.indis_entities: dict[int, set[Entity]] = None
+        super().__init__()
+
+class Set(SizedObject):
+    def __init__(self) -> None:
+        self.p_entities: set[Entity] = None
+        super().__init__()
+```
+
+**Step 5: Update every concrete subclass**
+
+For each class with `_assign_args`, apply this pattern:
+
+Before:
+```python
+class BagChoose(Bag):
+    def __init__(self, obj_from: Bag, size: int = None) -> None:
+        super().__init__(obj_from, size)
+    def _assign_args(self) -> None:
+        self.obj_from, self.size = self.args
+```
+
+After:
+```python
+class BagChoose(Bag):
+    _fields = ('obj_from', 'size')
+    def __init__(self, obj_from: Bag, size: int = None) -> None:
+        self.obj_from = obj_from
+        self.size = size
+        super().__init__()
+    def combinatorially_eq(self, o: CombinatoricsBase) -> bool:
+        return False  # or real logic if applicable
+```
+
+Apply to all ~35 classes. Classes that had meaningful `combinatorially_eq` logic keep it; others return `False` explicitly.
+
+**Key subclasses that need attention:**
+
+- `BagInit`: sets `self.size = sum(self.p_entities_multiplicity.values())` — do this in `__init__` before `super()`
+- `SizeConstraint`: has complex `_assign_args` — carefully migrate
+- `SequenceImpl`: has 7 fields (`obj_from, choose, replace, size, circular, reflection, flatten_obj`) — `_fields = ('obj_from', 'choose', 'replace', 'size', 'circular', 'reflection', 'flatten_obj')`
+- `Partition` in `base.py`: also overrides `subs_obj` to handle `partitioned_objs` — keep that override
+- `BinaryConstraint` in `base.py`: `_fields = ('first_constraint', 'second_constraint')`, op_name is not in fields (not a CombinatoricsBase)
+
+**Step 6: Run regression test**
+
+```bash
+uv run python scripts/solve.py -i problems/all.json
+```
+
+**Step 7: Run type checker**
+
+```bash
+uv run pyright
+```
+
+**Step 8: Commit**
+
+```bash
+git add src/cofola/objects/
+git commit -m "refactor(objects): replace _assign_args pattern with _fields + make combinatorially_eq abstract"
+```
+
+---
+
+## Task 13: Clean Up Passes — Dispatch Tables + Transform Helpers
+
+**Files:**
+- Modify: `src/cofola/passes.py` (fold_constants → dispatch table)
+- Modify: `src/cofola/transforms.py` (transform_tuples → helpers)
+
+**Step 1: Refactor `fold_constants` with a dispatch table**
+
+Replace the chain of `isinstance` checks with a registry of fold functions:
+
+```python
+from typing import Callable
+
+# Each folder: (obj, problem) -> bool (True if folded)
+_CONSTANT_FOLDERS: dict[tuple[type, type | None], Callable] = {}
+
+
+def _folder(obj_type: type, from_type: type | None = None):
+    """Register a constant-folding function for a specific type pair."""
+    def decorator(fn: Callable) -> Callable:
+        _CONSTANT_FOLDERS[(obj_type, from_type)] = fn
+        return fn
+    return decorator
+
+
+def _lookup_folder(obj) -> Callable | None:
+    key = (type(obj), type(getattr(obj, 'obj_from', None)))
+    if key in _CONSTANT_FOLDERS:
+        return _CONSTANT_FOLDERS[key]
+    return _CONSTANT_FOLDERS.get((type(obj), None))
+
+
+@_folder(BagSupport, BagInit)
+def _fold_bag_support(obj: BagSupport, problem: CofolaProblem) -> bool:
+    new_obj = SetInit(obj.obj_from.keys())
+    problem.replace(obj, new_obj)
+    logger.info(f"Folded {obj} to {new_obj}")
+    return True
+
+
+@_folder(SetUnion)
+def _fold_set_union(obj: SetUnion, problem: CofolaProblem) -> bool:
+    if not all(isinstance(o, SetInit) for o in [obj.first, obj.second]):
+        return False
+    new_obj = SetInit(set.union(obj.first.p_entities, obj.second.p_entities))
+    problem.replace(obj, new_obj)
+    logger.info(f"Folded {obj} to {new_obj}")
+    return True
+
+
+@_folder(SetIntersection)
+def _fold_set_intersection(obj, problem): ...
+
+@_folder(SetDifference)
+def _fold_set_difference(obj, problem): ...
+
+@_folder(BagAdditiveUnion)
+def _fold_bag_additive_union(obj, problem): ...
+
+@_folder(BagIntersection)
+def _fold_bag_intersection(obj, problem): ...
+
+@_folder(BagDifference)
+def _fold_bag_difference(obj, problem): ...
+
+
+def fold_constants(problem: CofolaProblem) -> bool:
+    ret = False
+    for obj in list(problem.objects):   # copy — list may change during folding
+        folder = _lookup_folder(obj)
+        if folder and folder(obj, problem):
+            ret = True
+    # fold size constraints (unchanged)
+    for constraint in list(problem.constraints):
+        if isinstance(constraint, SizeConstraint):
+            ...
+    problem.build()
+    return ret
+```
+
+**Step 2: Break `transform_tuples` into helper functions**
+
+The 200-line function has three distinct branches. Extract each:
+
+```python
+def _transform_tuple_choose_from_set(
+    obj: Tuple, problem: CofolaProblem
+) -> bool:
+    """Handle: choose_tuple(Set, size)"""
+    obj_from = obj.obj_from
+    indices = problem.add_object(
+        SetInit(Entity(f"{IDX_PREFIX}{i}") for i in range(obj.size))
+    )
+    mapping = problem.add_object(
+        FuncInit(indices, obj_from, injective=(not obj.replace))
+    )
+    logger.info(f"Transformed {obj} to {mapping}")
+    problem.replace(obj, TupleImpl(
+        obj_from, obj.choose, obj.replace, obj.size, indices, mapping
+    ))
+    return True
+
+
+def _transform_tuple_choose_from_bag(
+    obj: Tuple, problem: CofolaProblem
+) -> bool:
+    """Handle: choose_tuple(Bag, size) — decomposes to BagChoose first."""
+    choosing_obj = problem.add_object(BagChoose(obj.obj_from, obj.size))
+    obj.subs_args(choosing_obj, False, False, None)
+    return True
+
+
+def _transform_tuple_permute(
+    obj: Tuple, problem: CofolaProblem
+) -> bool:
+    """Handle: tuple(Set) or tuple(Bag) — permutation of all elements."""
+    obj_from = obj.obj_from
+    indices = problem.add_object(
+        SetInit(Entity(f"{IDX_PREFIX}{i}") for i in range(obj_from.size))
+    )
+    if isinstance(obj_from, Set):
+        mapping = problem.add_object(
+            FuncInit(indices, obj_from, surjective=True)
+        )
+    else:
+        mapping = _build_bag_permute_mapping(obj, obj_from, indices, problem)
+    logger.info(f"Transformed {obj} to {mapping}")
+    problem.replace(obj, TupleImpl(
+        obj_from, obj.choose, obj.replace, obj.size, indices, mapping
+    ))
+    return True
+
+
+def _build_bag_permute_mapping(obj, obj_from, indices, problem):
+    """Build the mapping + injectiveness constraints for a bag permutation."""
+    support = problem.add_object(BagSupport(obj_from))
+    mapping = problem.add_object(FuncInit(indices, support))
+    singletons = set()
+    reverse_images = []
+    for entity in obj_from.p_entities_multiplicity:
+        if entity in problem.singletons:
+            singletons.add(entity)
+        else:
+            reverse_image = problem.add_object(FuncInverseImage(mapping, entity))
+            reverse_images.append(reverse_image)
+            if isinstance(obj_from, BagInit):
+                problem.add_constraint(SizeConstraint(
+                    [(reverse_image, 1)], "==",
+                    obj_from.p_entities_multiplicity[entity]
+                ))
+            else:
+                entity_mul = problem.add_object(BagMultiplicity(obj_from, entity))
+                problem.add_constraint(SizeConstraint(
+                    [(reverse_image, 1), (entity_mul, -1)], "==", 0
+                ))
+    for i, img1 in enumerate(reverse_images):
+        for j, img2 in enumerate(reverse_images):
+            if i < j:
+                problem.add_constraint(DisjointConstraint(img1, img2))
+    if singletons:
+        image = problem.add_object(FuncImage(mapping, indices))
+        problem.add_constraint(SetEqConstraint(image, support))
+    return mapping
+
+
+def transform_tuples(problem: CofolaProblem) -> bool:
+    for obj in problem.objects:
+        if not isinstance(obj, Tuple) or obj.mapping is not None:
+            continue
+        if obj.choose:
+            if isinstance(obj.obj_from, Set):
+                return _transform_tuple_choose_from_set(obj, problem)
+            else:
+                return _transform_tuple_choose_from_bag(obj, problem)
+        else:
+            return _transform_tuple_permute(obj, problem)
+    # handle TupleIndexEqConstraint and TupleMembershipConstraint (unchanged)
+    ...
+    return False
+```
+
+**Step 3: Run regression test**
+
+```bash
+uv run python scripts/solve.py -i problems/all.json
+```
+
+**Step 4: Commit**
+
+```bash
+git add src/cofola/passes.py src/cofola/transforms.py
+git commit -m "refactor(passes): dispatch table for fold_constants, split transform_tuples into helpers"
+```
+
+---
+
 ## Checklist Before Calling Done
 
 - [ ] All problems in `problems/all.json` pass `scripts/solve.py`
@@ -933,3 +1326,7 @@ git commit -m "chore: final cleanup after refactor"
 - [ ] `transforms.py` exists with all `transform_*` functions
 - [ ] `bag_ops.py` and `sequence_patterns.py` exist
 - [ ] Parser transformer split into mixin files
+- [ ] `_assign_args` eliminated from all ~35 subclasses (replaced by `_fields`)
+- [ ] `combinatorially_eq` is `@abstractmethod` on `CombinatoricsObject`
+- [ ] `fold_constants` uses dispatch table (no long isinstance chain)
+- [ ] `transform_tuples` split into `_transform_tuple_choose_from_set`, `_transform_tuple_choose_from_bag`, `_transform_tuple_permute`, `_build_bag_permute_mapping`
