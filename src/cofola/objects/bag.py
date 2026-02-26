@@ -1,19 +1,43 @@
+"""Bag objects and operations."""
 from __future__ import annotations
-from decimal import Context
+
 from functools import reduce
-from sympy import Eq, Min
-from wfomc import fol_parse as parse, Const, Expr
 from typing import TYPE_CHECKING, Generator
 
-from cofola.objects.base import AtomicConstraint, \
-    CombinatoricsObject, MockObject, Set, Bag, Entity, SizedObject
+from sympy import Eq
+from wfomc import fol_parse as parse, Const
+
+from cofola.objects.base import (
+    AtomicConstraint,
+    Bag,
+    CombinatoricsObject,
+    Entity,
+    MockObject,
+    Set,
+    SizedObject,
+)
 from cofola.objects.utils import invert_comparator, parse_comparator
+
+# Import bag operations for backwards compatibility
+from cofola.objects.bag_ops import (
+    BagAdditiveUnion,
+    BagBinaryOp,
+    BagConstraint,
+    BagDifference,
+    BagEqConstraint,
+    BagIntersection,
+    BagSubsetConstraint,
+    BagSupport,
+    BagUnion,
+)
 
 if TYPE_CHECKING:
     from cofola.context import Context
 
 
 class BagInit(Bag):
+    """Bag initialized with entity-multiplicity pairs."""
+
     def __init__(self, entity_multiplicity: tuple[tuple[Entity, int]]) -> None:
         """
         :param entity_multiplicity: a dictionary of entity and its multiplicity
@@ -75,6 +99,8 @@ class BagInit(Bag):
 
 
 class BagChoose(Bag):
+    """Bag formed by choosing a subset of elements."""
+
     def __init__(self, obj_from: Bag, size: int = None) -> None:
         super().__init__(obj_from, size)
 
@@ -127,268 +153,8 @@ class BagChoose(Bag):
         return context
 
 
-class BagSupport(Set):
-    def __init__(self, obj_from: Bag) -> None:
-        super().__init__(obj_from)
-
-    def _assign_args(self) -> None:
-        self.obj_from = self.args[0]
-
-    def inherit(self) -> None:
-        self.update(
-            set(self.obj_from.p_entities_multiplicity.keys()),
-            self.obj_from.max_size
-        )
-
-    def body_str(self) -> str:
-        return f"support({self.obj_from.name})"
-
-    def combinatorially_eq(self, o: CombinatoricsObject) -> bool:
-        return type(o) is BagSupport and self.obj_from == o.obj_from
-
-    def encode(self, context: Context) -> Context:
-        context.obj2pred[self] = context.get_pred(
-            self.obj_from
-        )
-        context.used_objs.add(self.obj_from)
-        return context
-
-
-class BagBinaryOp(Bag):
-    def __init__(self, op_name: str, first: Bag, second: Bag) -> None:
-        self.op_name: str = op_name
-        super().__init__(first, second)
-
-    def _assign_args(self) -> None:
-        # only support the bags
-        self.first, self.second = self.args
-
-    def body_str(self) -> str:
-        return f"({self.first.name} {self.op_name} {self.second.name})"
-
-
-# TODO
-class BagUnion(BagBinaryOp):
-    def __init__(self, first: Bag, second: Bag) -> None:
-        super().__init__("∪", first, second)
-
-    def inherit(self) -> None:
-        p_entities_multiplicity = dict()
-        for entity, multiplicity in self.first.p_entities_multiplicity.items():
-            if entity in self.second.p_entities_multiplicity:
-                p_entities_multiplicity[entity] = max(
-                    multiplicity, self.second.p_entities_multiplicity[entity]
-                )
-            else:
-                p_entities_multiplicity[entity] = multiplicity
-        self.update(
-            p_entities_multiplicity,
-            sum(p_entities_multiplicity.values()),
-            self.first.dis_entities | self.second.dis_entities,
-            self.first.indis_entities
-        )
-
-    def combinatorially_eq(self, o):
-        return type(o) is BagUnion and \
-            ((self.first == o.first and self.second == o.second) or \
-             (self.first == o.second and self.second == o.first))
-
-    def encode(self, context: "Context") -> "Context":
-        obj_pred = context.get_pred(self, create=True, use=False)
-        first_pred = context.get_pred(self.first)
-        second_pred = context.get_pred(self.second)
-        context.sentence = context.sentence & parse(
-            f"\\forall X: ({obj_pred}(X) <-> ({first_pred}(X) | {second_pred}(X)))"
-        )
-        return context
-
-
-class BagAdditiveUnion(BagBinaryOp):
-    def __init__(self, first: Bag, second: Bag) -> None:
-        super().__init__("⊎", first, second)
-
-    def inherit(self) -> None:
-        if self.first.size is not None and self.second.size is not None:
-            if set(self.first.p_entities_multiplicity.keys()).isdisjoint(
-                    self.second.p_entities_multiplicity.keys()
-            ):
-                self.size = self.first.size + self.second.size
-        if self.size is not None:
-            self.max_size = self.size
-
-        all_entities = (
-            set(self.first.p_entities_multiplicity.keys()) |
-            set(self.second.p_entities_multiplicity.keys())
-        )
-        p_entities_multiplicity = dict()
-        for entity in all_entities:
-            p_entities_multiplicity[entity] = (
-                self.first.p_entities_multiplicity.get(entity, 0) +
-                self.second.p_entities_multiplicity.get(entity, 0)
-            )
-        self.update(
-            p_entities_multiplicity,
-            self.first.max_size + self.second.max_size
-        )
-        # all entities in the BagAdditiveUnion are distinguishable
-        self.dis_entities = self.first.dis_entities | self.second.dis_entities
-        self.indis_entities = set()
-
-    def combinatorially_eq(self, o):
-        return type(o) is BagAdditiveUnion and \
-            ((self.first == o.first and self.second == o.second) or \
-             (self.first == o.second and self.second == o.first))
-
-    def encode(self, context: "Context") -> "Context":
-        obj_pred = context.get_pred(self, create=True, use=False)
-        first_pred = context.get_pred(self.first)
-        second_pred = context.get_pred(self.second)
-        context.sentence = context.sentence & parse(
-            f"\\forall X: ({obj_pred}(X) <-> ({first_pred}(X) | {second_pred}(X)))"
-        )
-        for entity in self.dis_entities:
-            if entity in context.singletons:
-                continue
-            multiplicity = self.p_entities_multiplicity[entity]
-            _, entity_pred = entity.encode(context)
-            bag_entity_pred = context.get_entity_pred(
-                self, entity
-            )
-            context.sentence = context.sentence & parse(
-                f"\\forall X: ({bag_entity_pred}(X) <-> {obj_pred}(X) & {entity_pred}(X))"
-            )
-            entity_var = context.get_entity_var(self, entity)
-            context.weighting[bag_entity_pred] = (
-                reduce(lambda x, y: x + entity_var ** y, range(1, multiplicity + 1), 0), 1
-            )
-            if isinstance(self.first, BagInit):
-                first_entity_mul = self.first.multiplicity(entity)
-            else:
-                first_entity_mul = context.get_entity_var(self.first, entity)
-            if isinstance(self.second, BagInit):
-                second_entity_mul = self.second.multiplicity(entity)
-            else:
-                second_entity_mul = context.get_entity_var(self.second, entity)
-            context.validator.append(
-                Eq(entity_var, first_entity_mul + second_entity_mul)
-            )
-        return context
-
-
-class BagIntersection(BagBinaryOp):
-    def __init__(self, first: Bag, second: Bag) -> None:
-        super().__init__("∩", first, second)
-
-    def inherit(self) -> None:
-        p_entities_multiplicity = dict()
-        for entity, multiplicity in self.first.p_entities_multiplicity.items():
-            if entity in self.second.p_entities_multiplicity:
-                p_entities_multiplicity[entity] = min(
-                    multiplicity, self.second.p_entities_multiplicity[entity]
-                )
-        self.update(
-            p_entities_multiplicity,
-            min(self.first.max_size, self.second.max_size),
-        )
-        self.dis_entities = self.first.dis_entities & self.second.dis_entities
-        self.indis_entities = set()
-
-    def combinatorially_eq(self, o):
-        return type(o) is BagIntersection and \
-            ((self.first == o.first and self.second == o.second) or \
-             (self.first == o.second and self.second == o.first))
-
-    def encode(self, context: "Context") -> "Context":
-        obj_pred = context.get_pred(self, create=True, use=False)
-        first_pred = context.get_pred(self.first)
-        second_pred = context.get_pred(self.second)
-        context.sentence = context.sentence & parse(
-            f"\\forall X: ({obj_pred}(X) <-> ({first_pred}(X) & {second_pred}(X)))"
-        )
-        for entity in self.dis_entities:
-            if entity in context.singletons:
-                continue
-            multiplicity = self.p_entities_multiplicity[entity]
-            _, entity_pred = entity.encode(context)
-            bag_entity_pred = context.get_entity_pred(
-                self, entity
-            )
-            context.sentence = context.sentence & parse(
-                f"\\forall X: ({bag_entity_pred}(X) <-> {obj_pred}(X) & {entity_pred}(X))"
-            )
-            entity_var = context.get_entity_var(self, entity)
-            context.weighting[bag_entity_pred] = (
-                reduce(lambda x, y: x + entity_var ** y, range(1, multiplicity + 1), 0), 1
-            )
-            if isinstance(self.first, BagInit):
-                first_entity_mul = self.first.multiplicity(entity)
-            else:
-                first_entity_mul = context.get_entity_var(self.first, entity)
-            if isinstance(self.second, BagInit):
-                second_entity_mul = self.second.multiplicity(entity)
-            else:
-                second_entity_mul = context.get_entity_var(self.second, entity)
-            context.validator.append(
-                Eq(entity_var, Min(first_entity_mul, second_entity_mul))
-            )
-        return context
-
-
-class BagDifference(BagBinaryOp):
-    def __init__(self, first: Bag, second: Bag) -> None:
-        super().__init__("\\", first, second)
-
-    def inherit(self) -> None:
-        self.update(
-            self.first.p_entities_multiplicity,
-            self.first.max_size,
-        )
-        self.dis_entities = self.first.dis_entities & self.second.dis_entities
-        self.indis_entities = set()
-
-    def combinatorially_eq(self, o):
-        return type(o) is BagDifference and \
-            ((self.first == o.first and self.second == o.second) or \
-             (self.first == o.second and self.second == o.first))
-
-    def encode(self, context: "Context") -> "Context":
-        obj_pred = context.get_pred(self, create=True, use=False)
-        first_pred = context.get_pred(self.first)
-        second_pred = context.get_pred(self.second)
-        context.sentence = context.sentence & parse(
-            f"\\forall X: ({obj_pred}(X) <-> ({first_pred}(X) & ~{second_pred}(X)))"
-        )
-        for entity in self.dis_entities:
-            if entity in context.singletons:
-                continue
-            multiplicity = self.p_entities_multiplicity[entity]
-            _, entity_pred = entity.encode(context)
-            bag_entity_pred = context.get_entity_pred(
-                self, entity
-            )
-            context.sentence = context.sentence & parse(
-                f"\\forall X: ({bag_entity_pred}(X) <-> {obj_pred}(X) & {entity_pred}(X))"
-            )
-            entity_var = context.get_entity_var(self, entity)
-            context.weighting[bag_entity_pred] = (
-                reduce(lambda x, y: x + entity_var ** y, range(1, multiplicity + 1), 0), 1
-            )
-            if isinstance(self.first, BagInit):
-                first_entity_mul = self.first.multiplicity(entity)
-            else:
-                first_entity_mul = context.get_entity_var(self.first, entity)
-            if isinstance(self.second, BagInit):
-                second_entity_mul = self.second.multiplicity(entity)
-            else:
-                second_entity_mul = context.get_entity_var(self.second, entity)
-            context.validator.append(
-                Eq(entity_var, first_entity_mul - second_entity_mul)
-            )
-        return context
-
-
 # =======================================================
-# Bag Constraints
+# Bag Multiplicity
 # =======================================================
 
 
@@ -409,17 +175,18 @@ class BagMultiplicity(SizedObject, MockObject):
         return f"{self.obj.name}.count({self.entity.name})"
 
     def encode_size_var(self, context: "Context") \
-            -> tuple["Context", Expr]:
+            -> tuple["Context", "Expr"]:
         return context, context.get_entity_var(self.obj, self.entity)
 
 
-class BagConstraint(AtomicConstraint):
-    pass
+# =======================================================
+# Size Constraint
+# =======================================================
 
 
 class SizeConstraint(BagConstraint):
     """
-    This constraint is used to constraint the size of bags, sets, the ultiplicity of entities in bags
+    This constraint is used to constraint the size of bags, sets, the multiplicity of entities in bags
     as well as the count of entities in tuples
     """
     def __init__(self, expr: list[tuple[SizedObject, int]],
@@ -474,61 +241,20 @@ class SizeConstraint(BagConstraint):
         return context
 
 
-# class BagMembershipConstraint(BagConstraint):
-#     def __init__(self, obj: Bag, member: Entity) -> None:
-#         super().__init__(obj, member)
-#         self.obj: Bag
-#         self.member: Entity
-#
-#     def build(self) -> None:
-#         super().build()
-#         self.obj, self.member = self.args
-#
-#     def __str__(self) -> str:
-#         return f"{self.member.name} ∈ {self.obj.name}"
-#
-#     def encode(self, context: "Context") -> "Context":
-#         obj_pred = context.get_pred(self.obj)
-#         context.unary_evidence.add(
-#             obj_pred(Const(self.member.name))
-#         )
-#         return context
-
-
-# TODO
-class BagSubsetConstraint(BagConstraint):
-    def __init__(self, sup: Bag, sub: Bag) -> None:
-        raise NotImplementedError("Bag subset constraint is not implemented yet.")
-        super().__init__(sup, sub)
-        self.sup = sup
-        self.sub = sub
-
-    def __str__(self) -> str:
-        return f"{self.sub.name} ⊆ {self.sup.name}"
-
-    def encode(self, context: "Context") -> "Context":
-        sub_pred = context.get_pred(self.sub)
-        sup_pred = context.get_pred(self.sup)
-        context.sentence = context.sentence & parse(
-            f"\\forall X: ({sub_pred}(X) -> {sup_pred}(X))"
-        )
-        return context
-
-
-class BagEqConstraint(BagConstraint):
-    def __init__(self, first: Bag, second: Bag) -> None:
-        raise NotImplementedError("Bag equality constraint is not implemented yet.")
-        super().__init__(first, second)
-        self.first = first
-        self.second = second
-
-    def __str__(self) -> str:
-        return f"{self.first.name} == {self.second.name}"
-
-    def encode(self, context: "Context") -> "Context":
-        first_pred = context.get_pred(self.first)
-        second_pred = context.get_pred(self.second)
-        context.sentence = context.sentence & parse(
-            f"\\forall X: ({first_pred}(X) <-> {second_pred}(X))"
-        )
-        return context
+# Re-export for backwards compatibility
+__all__ = [
+    "BagInit",
+    "BagChoose",
+    "BagMultiplicity",
+    "SizeConstraint",
+    # Re-exported from bag_ops
+    "BagBinaryOp",
+    "BagUnion",
+    "BagAdditiveUnion",
+    "BagIntersection",
+    "BagDifference",
+    "BagSupport",
+    "BagConstraint",
+    "BagSubsetConstraint",
+    "BagEqConstraint",
+]
