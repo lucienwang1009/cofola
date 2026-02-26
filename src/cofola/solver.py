@@ -14,7 +14,8 @@ from cofola.objects.base import AtomicConstraint, CombinatoricsBase, Combinatori
 from cofola.wfomc_solver import solve as solve_wfomc
 from cofola.parser.parser import parse
 from cofola.problem import CofolaProblem, infer_max_size, optimize, \
-    sanity_check, simplify, transform, workaround
+    sanity_check, simplify, workaround
+from cofola.transforms import transform
 
 
 def solve_single_problem(problem: CofolaProblem, wfomc_algo: Algo,
