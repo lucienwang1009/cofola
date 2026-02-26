@@ -37,16 +37,12 @@ IR-native encoder，match-case 分派，直接消费 `ir.Problem + AnalysisResul
 #### 遗留代码 ✅ — 全部删除
 | 已删除 | 说明 |
 |---|---|
+| `src/cofola/frontend/` | 整目录 |
 | `src/cofola/objects/` | 整目录 |
 | `src/cofola/backend/wfomc/encoder.py` | 旧 encoder |
 | `src/cofola/backend/wfomc/context.py` | 旧 context |
 | `src/cofola/pipeline.py` | 顶层旧 pipeline |
 | `src/cofola/ir/parser_adapter.py` | legacy→IR 桥接 |
-| `src/cofola/ir/types.py` | 移至 frontend/ |
-| `src/cofola/ir/objects.py` | 移至 frontend/ |
-| `src/cofola/ir/constraints.py` | 移至 frontend/ |
-| `src/cofola/ir/problem.py` | 移至 frontend/ |
-| `src/cofola/ir/rewriter.py` | 移至 frontend/ |
 
 ---
 

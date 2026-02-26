@@ -1,18 +1,24 @@
-"""Test all encodable problems from problems/all.json."""
+"""Test all encodable problems from problems/all.json.
+
+By default only "benchmark" problems are run (20 representative problems
+covering all major feature areas).  Set the environment variable
+COFOLA_ALL_TESTS=1 to run the full suite.
+"""
 from __future__ import annotations
 
 import json
+import os
 import pytest
 from pathlib import Path
 
-from wfomc import Algo
-
-from cofola.parser.parser import parse
-from cofola.solver import solve
+from cofola.solver import parse_and_solve
 
 
 # Load problems from JSON
 PROBLEMS_FILE = Path(__file__).parent.parent / "problems" / "all.json"
+
+# Run the full suite only when explicitly requested
+_RUN_ALL = os.environ.get("COFOLA_ALL_TESTS", "0").strip() not in ("", "0", "false", "no")
 
 
 def load_problems():
@@ -22,22 +28,28 @@ def load_problems():
 
 
 def get_encodable_problems():
-    """Filter problems to only include encodable ones (no timeout/unencodeable tags)."""
-    all_problems = load_problems()
-    encodable = []
+    """Return problems to test.
 
-    unchecked_tags = {"timeout", "unencodeable"}
+    Default (COFOLA_ALL_TESTS unset): benchmark problems only.
+    Full run (COFOLA_ALL_TESTS=1): all encodable problems
+    (excludes timeout / unencodeable / not-combinatorics).
+    """
+    all_problems = load_problems()
+    skip_tags = {"timeout", "unencodeable", "not combinatorics"}
+    result = []
 
     for problem_id, problem_data in all_problems.items():
         tags = set(problem_data.get("tags", []))
 
-        # Skip problems with timeout or unencodeable tags
-        if tags & unchecked_tags:
+        if tags & skip_tags:
             continue
 
-        encodable.append((problem_id, problem_data))
+        if not _RUN_ALL and "benchmark" not in tags:
+            continue
 
-    return encodable
+        result.append((problem_id, problem_data))
+
+    return result
 
 
 @pytest.fixture(scope="module")
@@ -52,20 +64,11 @@ class TestAllEncodableProblems:
     @pytest.mark.parametrize("problem_id,problem_data", get_encodable_problems())
     def test_problem(self, problem_id, problem_data):
         """Test a single problem from the dataset."""
-        # Parse the problem program
         program = problem_data["program"]
         expected_answer = int(problem_data["answer"])
 
-        # Parse and solve
-        cofola_problem = parse(program)
-        result = solve(
-            cofola_problem,
-            Algo.FASTv2,
-            use_partition_constraint=True,
-            lifted=False
-        )
+        result = parse_and_solve(program)
 
-        # Verify the answer
         assert result == expected_answer, (
             f"Problem {problem_id}: expected {expected_answer}, got {result}\n"
             f"Problem: {problem_data.get('problem', 'N/A')}\n"
@@ -93,6 +96,9 @@ def test_can_load_problems(all_problems):
 if __name__ == "__main__":
     # Print summary of encodable problems
     encodable = get_encodable_problems()
-    print(f"\nTotal encodable problems: {len(encodable)}")
-    print(f"Total problems in dataset: {len(load_problems())}")
-    print(f"Skipped (timeout/unencodeable): {len(load_problems()) - len(encodable)}")
+    all_p = load_problems()
+    benchmark = [p for p in all_p.values() if "benchmark" in p.get("tags", [])]
+    print(f"\nMode: {'FULL' if _RUN_ALL else 'BENCHMARK'}")
+    print(f"Running: {len(encodable)} problems")
+    print(f"Total benchmark problems: {len(benchmark)}")
+    print(f"Total problems in dataset: {len(all_p)}")

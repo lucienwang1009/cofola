@@ -13,10 +13,11 @@ from dataclasses import dataclass, field
 import numpy as np
 from scipy.optimize import linprog
 
+from cofola.ir.pass_manager import AnalysisPass
 from cofola.frontend.types import ObjRef
 from cofola.frontend.constraints import SizeConstraint
 from cofola.frontend.problem import Problem
-from cofola.ir.analysis.entities import AnalysisResult
+from cofola.ir.analysis.entities import EntityAnalysis, AnalysisResult
 from loguru import logger
 
 
@@ -36,7 +37,7 @@ class SizeInferenceResult:
     unsatisfiable: bool = False
 
 
-class MaxSizeInference:
+class MaxSizeInference(AnalysisPass):
     """Infers maximum sizes for objects from size constraints via LP.
 
     This pass examines SizeConstraints in the problem and uses linear
@@ -45,17 +46,21 @@ class MaxSizeInference:
     Ports the legacy infer_max_size function to work with the new IR.
     """
 
-    def run(self, problem: Problem, analysis: AnalysisResult) -> SizeInferenceResult:
+    required_analyses = [EntityAnalysis]
+
+    def run(self, problem: Problem, am=None) -> SizeInferenceResult:
         """Run max size inference on a Problem.
 
         Args:
             problem: The Problem to analyze.
-            analysis: The entity analysis result (provides initial bounds).
+            am: AnalysisManager; used to retrieve EntityAnalysis result.
 
         Returns:
             SizeInferenceResult with inferred max_sizes, exact_sizes, and
             unsatisfiable flag.
         """
+        analysis: AnalysisResult = am.get(EntityAnalysis)
+
         result = SizeInferenceResult()
 
         # Collect constrained objects and constraints

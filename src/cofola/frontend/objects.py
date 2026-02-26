@@ -83,7 +83,7 @@ class SetDifference:
 
 
 # Union type for all set objects
-SetObjDef = SetInit | SetChoose | SetChooseReplace | SetUnion | SetIntersection | SetDifference
+SetObjDef = SetInit | SetChoose | SetUnion | SetIntersection | SetDifference
 
 
 # =============================================================================
@@ -175,6 +175,7 @@ BagObjDef = (
     | BagAdditiveUnion
     | BagIntersection
     | BagDifference
+    | SetChooseReplace
 )
 
 

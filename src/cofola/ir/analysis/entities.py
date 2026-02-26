@@ -8,6 +8,7 @@ Replaces the legacy inherit() + propagate() methods.
 
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass, field
 
 from cofola.frontend.types import Entity, ObjRef
@@ -28,10 +29,13 @@ from cofola.frontend.objects import (
     FuncDef,
     FuncImage,
     FuncInverseImage,
+    TupleDef,
+    SequenceDef,
     ObjDef,
     PartitionDef,
     PartRef,
 )
+from cofola.ir.pass_manager import AnalysisPass
 from cofola.frontend.problem import Problem
 from cofola.frontend.constraints import SizeConstraint, BagCountAtom
 from loguru import logger
@@ -80,15 +84,17 @@ class AnalysisResult:
         bag_info: Analysis results for bag objects.
         all_entities: All entities used in the problem.
         singletons: Entities that appear in exactly one base object.
+        unsatisfiable: True if a size conflict was detected during analysis.
     """
 
     set_info: dict[ObjRef, SetInfo]
     bag_info: dict[ObjRef, BagInfo]
     all_entities: set[Entity]
     singletons: set[Entity]
+    unsatisfiable: bool = False
 
 
-class EntityAnalysis:
+class EntityAnalysis(AnalysisPass):
     """Computes entity-related properties for all objects in a Problem.
 
     This is a bottom-up analysis that processes objects in topological order,
@@ -97,11 +103,14 @@ class EntityAnalysis:
     Replaces the legacy inherit() methods on each object class.
     """
 
-    def run(self, problem: Problem) -> AnalysisResult:
+    required_analyses: list[type] = []
+
+    def run(self, problem: Problem, am=None) -> AnalysisResult:
         """Run the entity analysis on a Problem.
 
         Args:
             problem: The Problem to analyze.
+            am: AnalysisManager (unused; EntityAnalysis has no required_analyses).
 
         Returns:
             AnalysisResult containing all computed information.
@@ -150,9 +159,11 @@ class EntityAnalysis:
                 self._analyze_func_image(ref, defn, set_info, problem)
             elif isinstance(defn, FuncInverseImage):
                 self._analyze_func_inverse_image(ref, defn, set_info, problem)
+            elif isinstance(defn, (TupleDef, SequenceDef)):
+                self._analyze_ordered_collection(ref, defn, set_info, bag_info)
             elif isinstance(defn, PartRef):
                 self._analyze_part_ref(ref, defn, set_info, bag_info, problem)
-            # Note: TupleDef, SequenceDef, FuncDef, FuncInverse, PartitionDef not analyzed
+            # Note: FuncDef, FuncInverse, PartitionDef not analyzed
             logger.debug("  analyzed {} ref={}", type(defn).__name__, ref.id)
 
         # Compute all_entities and singletons
@@ -237,14 +248,16 @@ class EntityAnalysis:
             return
 
         # SetChooseReplace behaves like a bag where each entity can have
-        # multiplicity up to size (if given) or unlimited
-        max_mult = defn.size if defn.size is not None else float('inf')
+        # multiplicity up to size (if given) or unlimited.
+        # Use sys.maxsize as sentinel when size is None so MergedAnalysis.min()
+        # correctly adopts the LP-inferred bound (same pattern as
+        # _analyze_ordered_collection for replace=True).
+        max_mult = defn.size if defn.size is not None else sys.maxsize
+        max_size = defn.size if defn.size is not None else sys.maxsize
 
-        p_entities_multiplicity: dict[Entity, int] = {}
-        for entity in src_info.p_entities:
-            p_entities_multiplicity[entity] = max_mult if max_mult != float('inf') else 0
-
-        max_size = defn.size if defn.size is not None else 0
+        p_entities_multiplicity: dict[Entity, int] = {
+            entity: max_mult for entity in src_info.p_entities
+        }
 
         bag_info[ref] = BagInfo(
             p_entities_multiplicity=p_entities_multiplicity,
@@ -579,6 +592,72 @@ class EntityAnalysis:
             p_entities=domain_info.p_entities.copy(),
             max_size=domain_info.max_size,
         )
+
+    def _analyze_ordered_collection(
+        self,
+        ref: ObjRef,
+        defn: TupleDef | SequenceDef,
+        set_info: dict[ObjRef, SetInfo],
+        bag_info: dict[ObjRef, BagInfo],
+    ) -> None:
+        """Shared analysis for TupleDef and SequenceDef.
+
+        Routes to set_info or bag_info based on replace flag and source type:
+        - replace=False + set source  → SetInfo  (each entity at most once)
+        - replace=False + bag source  → BagInfo  (inherit source multiplicities)
+        - replace=True  + set source  → BagInfo  (each entity up to size times)
+        """
+        src_set = set_info.get(defn.source)
+        src_bag = bag_info.get(defn.source)
+
+        if src_set is None and src_bag is None:
+            raise ValueError(
+                f"{type(defn).__name__} ref={ref.id}: source ref={defn.source.id} "
+                f"has no set_info or bag_info — source must be analyzed before this object"
+            )
+
+        src_max = src_set.max_size if src_set is not None else src_bag.max_size
+        src_exact = src_set.exact_size if src_set is not None else src_bag.exact_size
+
+        # exact_size:
+        #   - defn.size is given → use it
+        #   - choose=False, no size → this is a full permutation of the source;
+        #     exact_size = source's exact_size (may still be None if source is dynamic)
+        #   - choose=True, no size → size is free (determined by constraints)
+        exact_s = defn.size if defn.size is not None else (
+            src_exact if not defn.choose else None
+        )
+
+        if defn.replace:
+            # replace=True: size is unconstrained by source; use sys.maxsize so
+            # MergedAnalysis min() correctly adopts the LP-inferred bound.
+            max_s = defn.size if defn.size is not None else sys.maxsize
+            mult = defn.size if defn.size is not None else sys.maxsize
+            entities = (
+                src_set.p_entities if src_set is not None
+                else set(src_bag.p_entities_multiplicity.keys())
+            )
+            bag_info[ref] = BagInfo(
+                p_entities_multiplicity={e: mult for e in entities},
+                max_size=max_s,
+                exact_size=exact_s,
+            )
+        elif src_bag is not None:
+            # replace=False + bag source: max bounded by source, inherit multiplicities
+            max_s = min(src_max, defn.size) if defn.size is not None else src_max
+            bag_info[ref] = BagInfo(
+                p_entities_multiplicity=dict(src_bag.p_entities_multiplicity),
+                max_size=max_s,
+                exact_size=exact_s,
+            )
+        else:
+            # replace=False + set source: max bounded by source, no repetitions
+            max_s = min(src_max, defn.size) if defn.size is not None else src_max
+            set_info[ref] = SetInfo(
+                p_entities=src_set.p_entities.copy(),
+                max_size=max_s,
+                exact_size=exact_s,
+            )
 
     def _analyze_part_ref(
         self,

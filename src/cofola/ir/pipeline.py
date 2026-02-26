@@ -251,6 +251,7 @@ class IRPipeline:
     LOCAL_PASSES = [
         SizeConstraintFolder,
         LoweringPass,
+        MergeIdenticalObjects,
         SimplifyPass,
     ]
 
