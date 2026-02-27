@@ -1,26 +1,27 @@
 from __future__ import annotations
-from decimal import Context
+
 from functools import reduce
-from wfomc import fol_parse as parse, Const
-from sympy import Eq
-
-from cofola.objects.base import AtomicConstraint, Set, Bag, Entity
-from cofola.objects.bag import Bag
-
 from typing import TYPE_CHECKING, Union
 
+from sympy import Eq
+from wfomc import Const, fol_parse as parse
+
+from cofola.objects.base import AtomicConstraint, Bag, Entity, Set
 
 if TYPE_CHECKING:
     from cofola.context import Context
 
 
 class SetInit(Set):
+    _fields = ("_entities_data",)
+
     def __init__(self, iterable: set[Entity]) -> None:
         super().__init__(iterable)
 
-    def _assign_args(self) -> None:
-        # the potential entities here are exactly the entities in the set
-        self.p_entities = set(self.args[0])
+    def _assign_fields(self) -> None:
+        # Custom initialization: convert iterable to set
+        self._entities_data = self._init_args[0] if self._init_args else set()
+        self.p_entities = set(self._entities_data) if not isinstance(self._entities_data, set) else self._entities_data
         self.size = len(self.p_entities)
         self.max_size = self.size
 
@@ -54,11 +55,7 @@ class SetInit(Set):
 
 
 class SetChoose(Set):
-    def __init__(self, obj_from: Set, size: int = None) -> None:
-        super().__init__(obj_from, size)
-
-    def _assign_args(self) -> None:
-        self.obj_from, self.size = self.args
+    _fields = ("obj_from", "size")
 
     def inherit(self) -> None:
         self.update(self.obj_from.p_entities,
@@ -73,6 +70,10 @@ class SetChoose(Set):
     def is_uncertain(self) -> bool:
         return True
 
+    def combinatorially_eq(self, o):
+        return type(o) is SetChoose and \
+            self.obj_from == o.obj_from and self.size == o.size
+
     def encode(self, context: Context) -> Context:
         obj_pred = context.get_pred(self, create=True, use=False)
         from_pred = context.get_pred(self.obj_from)
@@ -86,11 +87,10 @@ class SetChoose(Set):
 
 
 class SetChooseReplace(Bag):
-    def __init__(self, obj_from: Set, size: int = None) -> None:
-        super().__init__(obj_from, size)
+    _fields = ("obj_from", "size")
 
-    def _assign_args(self) -> None:
-        self.obj_from, self.size = self.args
+    def _assign_fields(self) -> None:
+        super()._assign_fields()
         if self.size is not None:
             self.max_size = self.size
 
@@ -109,6 +109,10 @@ class SetChooseReplace(Bag):
 
     def is_uncertain(self) -> bool:
         return True
+
+    def combinatorially_eq(self, o):
+        return type(o) is SetChooseReplace and \
+            self.obj_from == o.obj_from and self.size == o.size
 
     def encode(self, context: Context) -> Context:
         obj_pred = context.get_pred(self, create=True, use=False)
@@ -137,12 +141,11 @@ class SetChooseReplace(Bag):
 
 
 class SetBinaryOp(Set):
-    def __init__(self, op_name: str, first: Set, second: Set) -> None:
-        self.op_name = op_name
-        super().__init__(first, second)
+    _fields = ("first", "second")
 
-    def _assign_args(self) -> None:
-        self.first, self.second = self.args
+    def __init__(self, op_name: str, first: Set, second: Set) -> None:
+        self.op_name: str = op_name
+        super().__init__(first, second)
 
     def body_str(self) -> str:
         return f"({self.first.name} {self.op_name} {self.second.name})"
@@ -258,12 +261,7 @@ class SetConstraint(AtomicConstraint):
 
 # NOTE: membership constraint is for both set and bag
 class MembershipConstraint(SetConstraint):
-    def __init__(self, obj: Union[Set, Bag],
-                 member: Entity) -> None:
-        super().__init__(obj, member)
-
-    def _assign_args(self) -> None:
-        self.obj, self.member = self.args
+    _fields = ("obj", "member")
 
     def __str__(self) -> str:
         if self.positive:
@@ -289,11 +287,7 @@ class SubsetConstraint(SetConstraint):
     A constraint that the first set or bag is a subset of the second set or bag.
     The multiplicities of the entities in the bags (if any) are not considered.
     """
-    def __init__(self, sub: Union[Set, Bag], sup: Union[Set, Bag]) -> None:
-        super().__init__(sub, sup)
-
-    def _assign_args(self) -> None:
-        self.sub, self.sup = self.args
+    _fields = ("sub", "sup")
 
     def __str__(self) -> str:
         if self.positive:
@@ -316,11 +310,7 @@ class SubsetConstraint(SetConstraint):
 
 
 class DisjointConstraint(SetConstraint):
-    def __init__(self, first: Set, second: Set) -> None:
-        super().__init__(first, second)
-
-    def _assign_args(self) -> None:
-        self.first, self.second = self.args
+    _fields = ("first", "second")
 
     def __str__(self) -> str:
         if self.positive:
@@ -343,11 +333,7 @@ class DisjointConstraint(SetConstraint):
 
 
 class SetEqConstraint(SetConstraint):
-    def __init__(self, first: Set, second: Set) -> None:
-        super().__init__(first, second)
-
-    def _assign_args(self) -> None:
-        self.first, self.second = self.args
+    _fields = ("first", "second")
 
     def __str__(self) -> str:
         if self.positive:

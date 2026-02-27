@@ -13,14 +13,12 @@ if TYPE_CHECKING:
 
 
 class FuncInit(Function):
+    _fields = ("domain", "codomain", "injective", "surjective")
+
     def __init__(self, domain: Set, codomain: Set,
                  injective: bool = False,
                  surjective: bool = False) -> None:
         super().__init__(domain, codomain, injective, surjective)
-
-    def _assign_args(self) -> None:
-        self.domain, self.codomain, self.injective, self.surjective = \
-            self.args
 
     @property
     def bijective(self) -> bool:
@@ -64,11 +62,10 @@ class FuncInit(Function):
 
 
 class FuncInverse(Function):
-    def __init__(self, func: Function) -> None:
-        super().__init__(func)
+    _fields = ("func",)
 
-    def _assign_args(self) -> None:
-        self.func = self.args[0]
+    def _assign_fields(self) -> None:
+        super()._assign_fields()
         if not self.func.bijective:
             raise ValueError(
                 "Only bijective function can have an inverse function!"
@@ -91,11 +88,7 @@ class FuncInverse(Function):
 
 # Set objects obtained from function operations
 class FuncImage(Set):
-    def __init__(self, func: Function, set_or_entity: Union[Set, Entity]) -> None:
-        super().__init__(func, set_or_entity)
-
-    def _assign_args(self) -> None:
-        self.func, self.set_or_entity = self.args
+    _fields = ("func", "set_or_entity")
 
     def inherit(self) -> None:
         self.update(self.func.codomain.p_entities,
@@ -127,11 +120,7 @@ class FuncImage(Set):
 
 
 class FuncInverseImage(Set):
-    def __init__(self, func: Function, set_or_entity: Union[Set, Entity]) -> None:
-        super().__init__(func, set_or_entity)
-
-    def _assign_args(self) -> None:
-        self.func, self.set_or_entity = self.args
+    _fields = ("func", "set_or_entity")
 
     def inherit(self) -> None:
         self.update(self.func.domain.p_entities,
@@ -163,11 +152,7 @@ class FuncInverseImage(Set):
 
 
 class FuncSizeConstrainedImage(Set):
-    def __init__(self, func: Function, comparator: str, size: int) -> None:
-        super().__init__(func, comparator, size)
-
-    def _assign_args(self) -> None:
-        self.func, self.comparator, self.size = self.args
+    _fields = ("func", "comparator", "size")
 
     def body_str(self) -> str:
         return f"{{y | |{self.func.name}⁻¹(y)| {self.comparator} {self.size}}}"
@@ -179,11 +164,7 @@ class FuncSizeConstrainedImage(Set):
 
 
 class FuncMembershipConstraintedImage(Set):
-    def __init__(self, func: Function, member: Entity) -> None:
-        super().__init__(func, member)
-
-    def _assign_args(self) -> None:
-        self.func, self.member = self.args
+    _fields = ("func", "member")
 
     def body_str(self) -> str:
         return f"{{y | {self.member} ∈ {self.func.name}⁻¹(y)}}"
@@ -203,11 +184,7 @@ class FuncMembershipConstraintedImage(Set):
 
 
 class FuncSubsetConstrainedImage(Set):
-    def __init__(self, func: Function, subset: Set, inverse: bool = False) -> None:
-        super().__init__(func, subset, inverse)
-
-    def _assign_args(self) -> None:
-        self.func, self.subset, self.inverse = self.args
+    _fields = ("func", "subset", "inverse")
 
     def body_str(self) -> str:
         if self.inverse:
@@ -237,11 +214,7 @@ class FuncSubsetConstrainedImage(Set):
 
 
 class FuncDisjointConstrainedImage(Set):
-    def __init__(self, func: Function, disjoint_set: Set) -> None:
-        super().__init__(func, disjoint_set)
-
-    def _assign_args(self) -> None:
-        self.func, self.disjoint_set = self.args
+    _fields = ("func", "disjoint_set")
 
     def body_str(self) -> str:
         return f"{{y | {self.func.name}⁻¹(y) ∩ {self.disjoint_set.name} = ∅}}"
@@ -261,11 +234,7 @@ class FuncDisjointConstrainedImage(Set):
 
 
 class FuncEqConstrainedImage(Set):
-    def __init__(self, func: Function, eq_set: Set) -> None:
-        super().__init__(func, eq_set)
-
-    def _assign_args(self) -> None:
-        self.func, self.eq_set = self.args
+    _fields = ("func", "eq_set")
 
     def body_str(self) -> str:
         return f"{{y | {self.func.name}⁻¹(y) = {self.eq_set.name}}}"
@@ -285,24 +254,7 @@ class FuncEqConstrainedImage(Set):
 
 
 class FuncPairConstraint(AtomicConstraint):
-    def __init__(self, func: Function,
-                 entities1: Union[Entity, Set, Bag],
-                 entities2: Union[Entity, Set, Bag]) -> None:
-        """
-        Construct a pair constraint for a function:
-        1. if entities1 and entities2 are both entities, then func(entities1) = entities2
-        2. if entities1 is an entity and entities2 is a set, then func(entities1) ∈ entities2
-        3. if entities1 is a set and entities2 is an entity, then for all x in entities1, func(x) = entities2
-        4. if entities1 and entities2 are both sets, then for all x in entities1, func(x) ∈ entities2
-
-        :param func: the function
-        :param entities1: the first set of entities
-        :param entities2: the second set of entities
-        """
-        super().__init__(func, entities1, entities2)
-
-    def _assign_args(self) -> None:
-        self.func, self.entities1, self.entities2 = self.args
+    _fields = ("func", "entities1", "entities2")
 
     def __str__(self) -> str:
         if isinstance(self.entities2, Entity):

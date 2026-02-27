@@ -23,12 +23,7 @@ class SequencePattern(MockObject):
 
 class TogetherPattern(SequencePattern):
     """Pattern for elements that must appear together."""
-
-    def __init__(self, obj: Union[Set, Entity]) -> None:
-        super().__init__(obj)
-
-    def _assign_args(self) -> None:
-        self.obj = self.args[0]
+    _fields = ("obj",)
 
     def body_str(self) -> str:
         return f"together({self.obj.name})"
@@ -83,19 +78,13 @@ f"""
 
 class SequenceSizedPattern(SequencePattern):
     """Base class for patterns that have a size/count."""
+    _fields = ("entity_or_set1", "entity_or_set2", "quantifier1", "quantifier2")
 
     def __init__(self, entity_or_set1: Union[Entity, Set],
                  entity_or_set2: Union[Entity, Set],
                  quantifier1: Quantifier = Quantifier.FORALL,
                  quantifier2: Quantifier = Quantifier.FORALL) -> None:
-        super().__init__(
-            entity_or_set1, entity_or_set2, quantifier1, quantifier2)
-
-    def _assign_args(self) -> None:
-        (
-            self.entity_or_set1, self.entity_or_set2,
-            self.quantifier1, self.quantifier2
-        ) = self.args
+        super().__init__(entity_or_set1, entity_or_set2, quantifier1, quantifier2)
 
     def _has_size(self, seq: Sequence) -> bool:
         from cofola.objects.bag import Bag
@@ -276,12 +265,7 @@ class NextToPattern(SequenceSizedPattern):
 
 class SequencePatternCount(SizedObject, MockObject):
     """Count of a pattern in a sequence (used as SizedObject)."""
-
-    def __init__(self, obj: Sequence, pattern: SequencePattern) -> None:
-        super().__init__(obj, pattern)
-
-    def _assign_args(self) -> None:
-        self.obj, self.pattern = self.args
+    _fields = ("obj", "pattern")
 
     def body_str(self) -> str:
         return f"{self.obj.name}.count({self.pattern})"

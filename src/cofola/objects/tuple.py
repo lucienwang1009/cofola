@@ -1,29 +1,23 @@
 from cofola.objects.base import AtomicConstraint, Bag, CombinatoricsObject, Entity, MockObject, Set, SizedObject, Tuple
-from typing import Union
+from typing import Union, TYPE_CHECKING
 from cofola.objects.function import FuncInit
 
 from cofola.objects.set import SetInit
 
+if TYPE_CHECKING:
+    from cofola.context import Context
+
 
 class TupleImpl(Tuple):
+    _fields = ("obj_from", "choose", "replace", "size", "indices", "mapping")
+
     def __init__(self, obj_from: Union[Set, Bag], choose: bool = True,
                  replace: bool = True, size: int = None,
                  indices: SetInit = None, mapping: FuncInit = None) -> None:
-        """
-        A tuple formed by permuting a set. Tuples are realized by functions (the mapping arg)
-
-        :param obj_from: the set
-        :param choose: whether the tuple is formed by choosing elements from the set and permuting them
-        :param replace: whether the elements are chosen with replacement
-        :param size: the size of the tuple
-        :param indices: the indices for functions
-        :param mapping: the mapping function from indices to obj_from, realizing the tuple
-        """
         super().__init__(obj_from, choose, replace, size, indices, mapping)
 
-    def _assign_args(self) -> None:
-        self.obj_from, self.choose, self.replace, self.size, self.indices, self.mapping = \
-            self.args
+    def _assign_fields(self) -> None:
+        super()._assign_fields()
         if not self.choose and self.replace:
             raise ValueError(
                 f"A tuple is formed with replacement but not by choosing: {self}"
@@ -52,11 +46,7 @@ class TupleImpl(Tuple):
 
 
 class TupleIndex(MockObject):
-    def __init__(self, obj_from: Tuple, index: int) -> None:
-        super().__init__(obj_from, index)
-
-    def _assign_args(self) -> None:
-        self.obj_from, self.index = self.args
+    _fields = ("obj_from", "index")
 
     def combinatorially_eq(self, o: CombinatoricsObject) -> bool:
         if isinstance(o, TupleIndex):
@@ -68,13 +58,7 @@ class TupleIndex(MockObject):
 
 
 class TupleCount(SizedObject, MockObject):
-    def __init__(self, tuple_obj: Tuple,
-                 count_obj: Union[Set, Entity],
-                 deduplicate: bool = False) -> None:
-        super().__init__(tuple_obj, count_obj, deduplicate)
-
-    def _assign_args(self) -> None:
-        self.tuple_obj, self.count_obj, self.deduplicate = self.args
+    _fields = ("tuple_obj", "count_obj", "deduplicate")
 
     def body_str(self) -> str:
         if self.deduplicate:
@@ -91,12 +75,7 @@ class TupleConstraint(AtomicConstraint):
 
 
 class TupleIndexEqConstraint(TupleConstraint):
-    def __init__(self, obj: TupleIndex,
-                 entity: Entity) -> None:
-        super().__init__(obj, entity)
-
-    def _assign_args(self) -> None:
-        self.obj, self.entity = self.args
+    _fields = ("obj", "entity")
 
     def __str__(self) -> str:
         if self.positive:
@@ -106,12 +85,7 @@ class TupleIndexEqConstraint(TupleConstraint):
 
 
 class TupleMembershipConstraint(TupleConstraint):
-    def __init__(self, obj: Union[Tuple, Set, Bag],
-                 member: Union[Entity, TupleIndex]) -> None:
-        super().__init__(obj, member)
-
-    def _assign_args(self) -> None:
-        self.obj, self.member = self.args
+    _fields = ("obj", "member")
 
     def __str__(self) -> str:
         if self.positive:

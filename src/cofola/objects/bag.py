@@ -37,15 +37,11 @@ if TYPE_CHECKING:
 
 class BagInit(Bag):
     """Bag initialized with entity-multiplicity pairs."""
+    _fields = ("_entities_multiplicity_data",)
 
-    def __init__(self, entity_multiplicity: tuple[tuple[Entity, int]]) -> None:
-        """
-        :param entity_multiplicity: a dictionary of entity and its multiplicity
-        """
-        super().__init__(entity_multiplicity)
-
-    def _assign_args(self) -> None:
-        self.p_entities_multiplicity = self.args[0]
+    def _assign_fields(self) -> None:
+        self._entities_multiplicity_data = self._init_args[0] if self._init_args else {}
+        self.p_entities_multiplicity = self._entities_multiplicity_data
         self.size = sum(self.p_entities_multiplicity.values())
         self.max_size = self.size
         self.dis_entities = set()
@@ -100,12 +96,10 @@ class BagInit(Bag):
 
 class BagChoose(Bag):
     """Bag formed by choosing a subset of elements."""
+    _fields = ("obj_from", "size")
 
-    def __init__(self, obj_from: Bag, size: int = None) -> None:
-        super().__init__(obj_from, size)
-
-    def _assign_args(self) -> None:
-        self.obj_from, self.size = self.args
+    def _assign_fields(self) -> None:
+        super()._assign_fields()
         if self.size is not None:
             self.max_size = self.size
 
@@ -162,17 +156,20 @@ class BagMultiplicity(SizedObject, MockObject):
     """
     Used for unifying the size constraint and multiplicity constraint
     """
-    def __init__(self, obj: Bag, entity: Entity) -> None:
-        super().__init__(obj, entity)
+    _fields = ("obj", "entity")
 
-    def _assign_args(self) -> None:
-        self.obj, self.entity = self.args
+    def _assign_fields(self) -> None:
+        super()._assign_fields()
         if type(self.obj) is BagInit:
             self.size = self.obj.multiplicity(self.entity)
             self.max_size = self.size
 
     def body_str(self) -> str:
         return f"{self.obj.name}.count({self.entity.name})"
+
+    def combinatorially_eq(self, o):
+        return type(o) is BagMultiplicity and \
+            self.obj == o.obj and self.entity == o.entity
 
     def encode_size_var(self, context: "Context") \
             -> tuple["Context", "Expr"]:
@@ -189,16 +186,11 @@ class SizeConstraint(BagConstraint):
     This constraint is used to constraint the size of bags, sets, the multiplicity of entities in bags
     as well as the count of entities in tuples
     """
-    def __init__(self, expr: list[tuple[SizedObject, int]],
-                 comp: str, param: int) -> None:
-        super().__init__(expr, comp, param)
-
-    def _assign_args(self) -> None:
-        self.expr, self.comp, self.param = self.args
+    _fields = ("expr", "comp", "param")
 
     def _build_dependences(self) -> None:
         # NOTE: the dependences of a size constraint are the objects that are involved in the expression
-        expr = self.args[0]
+        expr = self.expr
         self.dependences = set(item[0] for item in expr)
         for dep in self.dependences:
             dep.descendants.add(self)

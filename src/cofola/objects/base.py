@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Union
 from wfomc import Const, Pred, fol_parse as parse
 
@@ -55,6 +56,9 @@ For example, if we have the above problem, we should only encode S and S1 once, 
 We use the `combinatorially_eq` method to determine if two objects are the same in terms of combinatorics.
 """
 class CombinatoricsBase(object):
+    # Subclasses should define their fields as a tuple of attribute names
+    _fields: tuple[str, ...] = ()
+
     def __init__(self, *args) -> None:
         """
         Base class for all combinatorics objects and constraints
@@ -62,17 +66,27 @@ class CombinatoricsBase(object):
         :param args: the args of the object or constraint
         """
         super().__init__()
-        self.args: tuple = args
+        # Store args temporarily, will be used to set field attributes
+        self._init_args = args
         self.dependences: set[CombinatoricsObject] = set()
         self.descendants: set[CombinatoricsBase] = set()
-        self._assign_args()
+        self._assign_fields()
         self._build_dependences()
 
-    def _assign_args(self) -> None:
+    @property
+    def args(self) -> tuple:
+        """Compute args from _fields."""
+        return tuple(getattr(self, f) for f in self._fields)
+
+    def _assign_fields(self) -> None:
         """
-        Assign the object or constraint to its dependences
+        Assign initialization args to fields defined in _fields.
+        Subclasses can override for custom initialization logic.
         """
-        pass
+        if self._fields:
+            for i, field in enumerate(self._fields):
+                if i < len(self._init_args):
+                    setattr(self, field, self._init_args[i])
 
     def _build_dependences(self) -> None:
         # NOTE: all args that are CombinatoricsObject are dependences
@@ -81,18 +95,6 @@ class CombinatoricsBase(object):
         )
         for dep in self.dependences:
             dep.descendants.add(self)
-
-    # def __hash__(self) -> int:
-    #     """
-    #     The hash value of the object or constraint
-    #     """
-    #     return id(self)
-
-    # def __eq__(self, o: object) -> bool:
-    #     if isinstance(o, CombinatoricsBase):
-    #         # return self.name == o.name
-    #         return id(self) == id(o)
-    #     return False
 
     def combinatorially_eq(self, o: CombinatoricsBase) -> bool:
         """
@@ -113,8 +115,10 @@ class CombinatoricsBase(object):
 
         :param args: the new args
         """
-        self.args = args + self.args[len(args):]
-        self._assign_args()
+        # Set each provided arg to its corresponding field
+        for i, arg in enumerate(args):
+            if i < len(self._fields):
+                setattr(self, self._fields[i], arg)
         self._build_dependences()
 
     def subs_obj(self, old_obj: CombinatoricsObject,
@@ -125,11 +129,12 @@ class CombinatoricsBase(object):
         :param old_obj: the old object
         :param new_obj: the new object
         """
-        args = (
-            new_obj if arg == old_obj else arg
-            for arg in self.args
-        )
-        self.subs_args(*args)
+        # Substitute in all fields
+        for field in self._fields:
+            val = getattr(self, field)
+            if val == old_obj:
+                setattr(self, field, new_obj)
+        self._build_dependences()
 
     def encode(self, context: "Context") -> "Context":
         raise NotImplementedError
@@ -162,12 +167,23 @@ class CombinatoricsObject(CombinatoricsBase):
         """
         return False
 
+    @abstractmethod
+    def combinatorially_eq(self, o: CombinatoricsBase) -> bool:
+        """
+        Check if two objects are combinatorially equivalent.
+        Must be implemented by all subclasses.
+        """
+        pass
+
 
 class MockObject(CombinatoricsObject):
     """
     A mock object. This object is used to represent the object that is in the problem but not combinatorial.
     Thus, we don't need to encode it.
     """
+    def combinatorially_eq(self, o: CombinatoricsBase) -> bool:
+        return False
+
     def encode(self, context: "Context") -> "Context":
         return context
 
@@ -190,6 +206,8 @@ class SizedObject(CombinatoricsObject):
 
 
 class Set(SizedObject):
+    _fields = ("p_entities",)
+
     def __init__(self, *args) -> None:
         self.p_entities: set[Entity] = None
         super().__init__(*args)
@@ -211,6 +229,8 @@ class Set(SizedObject):
 
 
 class Bag(SizedObject):
+    _fields = ("p_entities_multiplicity",)
+
     def __init__(self, *args) -> None:
         self.p_entities_multiplicity: dict[Entity, int] = None
         # distinguishable entities are those entities that cannot be lifted
@@ -268,12 +288,11 @@ class Function(CombinatoricsObject):
 
 
 class Partition(CombinatoricsObject):
+    _fields = ("obj_from", "size", "ordered")
+
     def __init__(self, obj_from: Union[Set, Bag], size: int, ordered: bool) -> None:
         super().__init__(obj_from, size, ordered)
         self.partitioned_objs: list
-
-    def _assign_args(self) -> None:
-        self.obj_from, self.size, self.ordered = self.args
 
     def body_str(self) -> str:
         if self.ordered:
@@ -284,6 +303,10 @@ class Partition(CombinatoricsObject):
     def is_uncertain(self) -> bool:
         return True
 
+    def combinatorially_eq(self, o: CombinatoricsBase) -> bool:
+        return isinstance(o, Partition) and self.obj_from == o.obj_from \
+            and self.size == o.size and self.ordered == o.ordered
+
     def subs_obj(self, old_obj: CombinatoricsObject,
                  new_obj: CombinatoricsObject):
         super().subs_obj(old_obj, new_obj)
@@ -292,11 +315,7 @@ class Partition(CombinatoricsObject):
 
 
 class Part(SizedObject):
-    def __init__(self, obj_from: Partition, index: int) -> None:
-        super().__init__(obj_from, index)
-
-    def _assign_args(self) -> None:
-        self.obj_from, self.index = self.args
+    _fields = ("obj_from", "index")
 
     def combinatorially_eq(self, o: CombinatoricsBase) -> bool:
         return isinstance(o, Part) and self.obj_from == o.obj_from \
@@ -343,6 +362,8 @@ class CombinatoricsConstraint(CombinatoricsBase):
 
 
 class AtomicConstraint(CombinatoricsConstraint):
+    _fields = ("expr", "comp", "param")  # Default for SizeConstraint
+
     def __init__(self, *args) -> None:
         # whether the constraint is positive, only used for encoding
         # not used for constructing the constraint, the negation of
@@ -359,25 +380,20 @@ class ComplexConstraint(CombinatoricsConstraint):
 
 
 class Negation(ComplexConstraint):
-    def __init__(self, constraint: CombinatoricsConstraint):
-        super().__init__(constraint)
-
-    def _assign_args(self) -> None:
-        self.sub_constraint = self.args[0]
+    _fields = ("sub_constraint",)
 
     def __str__(self):
         return f"~({self.sub_constraint})"
 
 
 class BinaryConstraint(ComplexConstraint):
+    _fields = ("first_constraint", "second_constraint")
+
     def __init__(self, op_name: str,
                  first_constraint: CombinatoricsConstraint,
                  second_constraint: CombinatoricsConstraint):
         self.op_name: str = op_name
         super().__init__(first_constraint, second_constraint)
-
-    def _assign_args(self) -> None:
-        self.first_constraint, self.second_constraint = self.args
 
     def __str__(self):
         return f"({self.first_constraint} {self.op_name} {self.second_constraint})"

@@ -28,31 +28,17 @@ if TYPE_CHECKING:
 
 class SequenceImpl(Sequence):
     """A sequence formed by permuting a set or bag."""
+    _fields = ("obj_from", "choose", "replace", "size", "circular", "reflection", "flatten_obj")
 
     def __init__(self, obj_from: Union[Set, Bag], choose: bool = True,
                  replace: bool = True, size: int = None,
                  circular: bool = False, reflection: bool = False,
                  flatten_obj: Set = None) -> None:
-        """
-        A sequence formed by permuting a set.
-        It is distinguished from a tuple by the ability to support constraints on relative positions.
-
-        :param obj_from: the set
-        :param choose: whether the tuple is formed by choosing elements from the set and permuting them
-        :param replace: whether the elements are chosen with replacement
-        :param size: the size of the tuple
-        :param flatten_obj: the flatten set of the input bag (if any) to be used for forming the sequence; if the input is a set, this should be None
-        """
         super().__init__(obj_from, choose, replace, size,
                          circular, reflection, flatten_obj)
 
-    def _assign_args(self) -> None:
-        (
-            self.obj_from, self.choose,
-            self.replace, self.size,
-            self.circular, self.reflection,
-            self.flatten_obj
-        ) = self.args
+    def _assign_fields(self) -> None:
+        super()._assign_fields()
         if not self.choose and self.replace:
             raise ValueError(
                 f"A sequence is formed with replacement but not by choosing: {self}"
@@ -183,12 +169,7 @@ class SequenceImpl(Sequence):
 
 class SequenceConstraint(AtomicConstraint):
     """Constraint on a sequence pattern."""
-
-    def __init__(self, seq: Sequence, pattern: SequencePattern) -> None:
-        super().__init__(seq, pattern)
-
-    def _assign_args(self) -> None:
-        self.seq, self.pattern = self.args
+    _fields = ("seq", "pattern")
 
     def __str__(self) -> str:
         if self.positive:

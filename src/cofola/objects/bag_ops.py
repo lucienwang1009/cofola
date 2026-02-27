@@ -16,14 +16,11 @@ if TYPE_CHECKING:
 
 class BagBinaryOp(Bag):
     """Base class for bag binary operations."""
+    _fields = ("first", "second")
 
     def __init__(self, op_name: str, first: Bag, second: Bag) -> None:
         self.op_name: str = op_name
         super().__init__(first, second)
-
-    def _assign_args(self) -> None:
-        # only support the bags
-        self.first, self.second = self.args
 
     def body_str(self) -> str:
         return f"({self.first.name} {self.op_name} {self.second.name})"
@@ -258,12 +255,7 @@ class BagDifference(BagBinaryOp):
 
 class BagSupport(Set):
     """Support set of a bag (set of distinct elements)."""
-
-    def __init__(self, obj_from: Bag) -> None:
-        super().__init__(obj_from)
-
-    def _assign_args(self) -> None:
-        self.obj_from = self.args[0]
+    _fields = ("obj_from",)
 
     def inherit(self) -> None:
         self.update(
