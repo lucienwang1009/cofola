@@ -160,3 +160,5 @@ cython_debug/
 #.idea/
 exp/
 .serena/
+.claude/
+.worktrees/
