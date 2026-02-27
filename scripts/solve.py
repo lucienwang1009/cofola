@@ -83,5 +83,5 @@ if __name__ == '__main__':
                 'unencodeable_reason': ''
             })
         pd_df = pd.DataFrame(df)
-        pd_df.to_csv('results.csv', index=False)
+        pd_df.to_csv('exp/results.csv', index=False)
     print(pd_df)

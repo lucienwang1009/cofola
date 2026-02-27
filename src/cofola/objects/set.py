@@ -70,10 +70,6 @@ class SetChoose(Set):
     def is_uncertain(self) -> bool:
         return True
 
-    def combinatorially_eq(self, o):
-        return type(o) is SetChoose and \
-            self.obj_from == o.obj_from and self.size == o.size
-
     def encode(self, context: Context) -> Context:
         obj_pred = context.get_pred(self, create=True, use=False)
         from_pred = context.get_pred(self.obj_from)
@@ -109,10 +105,6 @@ class SetChooseReplace(Bag):
 
     def is_uncertain(self) -> bool:
         return True
-
-    def combinatorially_eq(self, o):
-        return type(o) is SetChooseReplace and \
-            self.obj_from == o.obj_from and self.size == o.size
 
     def encode(self, context: Context) -> Context:
         obj_pred = context.get_pred(self, create=True, use=False)

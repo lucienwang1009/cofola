@@ -167,14 +167,6 @@ class CombinatoricsObject(CombinatoricsBase):
         """
         return False
 
-    @abstractmethod
-    def combinatorially_eq(self, o: CombinatoricsBase) -> bool:
-        """
-        Check if two objects are combinatorially equivalent.
-        Must be implemented by all subclasses.
-        """
-        pass
-
 
 class MockObject(CombinatoricsObject):
     """
