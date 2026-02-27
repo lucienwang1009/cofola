@@ -4,6 +4,7 @@ from logzero import logger
 from cofola.objects.bag import BagAdditiveUnion, BagChoose, BagDifference, BagInit, BagIntersection, BagMultiplicity, BagSupport, BagUnion, SizeConstraint
 from cofola.objects.base import Bag, CombinatoricsBase, CombinatoricsObject, \
     CombinatoricsConstraint, Entity, Function, Part, Partition, Sequence, Set, Tuple
+from cofola.objects.partition import BagPartition
 from cofola.objects.set import DisjointConstraint, MembershipConstraint, SetChoose, SetDifference, SetEqConstraint, SetInit, \
     SetChooseReplace, SetIntersection, SetUnion, SubsetConstraint
 from cofola.objects.function import FuncImage, FuncInit, FuncInverseImage, FuncPairConstraint
@@ -51,6 +52,9 @@ class CofolaProblem(object):
                 singletons = singletons.intersection(
                     set(e for e, m in obj.p_entities_multiplicity.items() if m == 1)
                 )
+        for obj in self.objects:
+            if isinstance(obj, BagPartition):
+                singletons = set()
         for cst in self.constraints:
             if isinstance(cst, SizeConstraint):
                 for size_obj, _ in cst.expr:
