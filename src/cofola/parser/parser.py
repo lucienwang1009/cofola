@@ -1,11 +1,16 @@
 """Cofola parser - main entry point for parsing .cfl files."""
 from __future__ import annotations
 
+import logging
+
 from lark import Lark
 
 from cofola.parser.grammar import grammar
 from cofola.parser.transformer import CofolaTransfomer
 from cofola.problem import CofolaProblem
+
+
+logger = logging.getLogger(__name__)
 
 
 RESERVED_KEYWORDS = [
@@ -81,7 +86,7 @@ purchase = choose(nondefective_tvs+defective_tvs, 5)
 # |(purchase & defective_tvs)| >= 2
     """
     problem = parse(text)
-    print(problem)
+    logger.info(problem)
     from cofola.passes import simplify
     problem = simplify(problem)
-    print(problem)
+    logger.info(problem)

@@ -1,13 +1,13 @@
-from wfomc import exactly_one_qf, fol_parse as parse
-from sympy import Eq
-
-from cofola.objects.bag import BagInit
-from cofola.objects.base import Bag, Partition, Set, Part
+from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from cofola.utils import ListLessThan
+from sympy import Eq
+from wfomc import exactly_one_qf, fol_parse as parse
 
+from cofola.objects.bag import BagInit
+from cofola.objects.base import Bag, Partition, Set, Part
+from cofola.utils import ListLessThan
 
 if TYPE_CHECKING:
     from cofola.context import Context

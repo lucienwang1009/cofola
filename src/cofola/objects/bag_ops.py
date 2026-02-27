@@ -2,13 +2,13 @@
 from __future__ import annotations
 
 from functools import reduce
+from typing import TYPE_CHECKING
 
 from sympy import Eq, Min
 from wfomc import fol_parse as parse, Const
 
 from cofola.objects.base import AtomicConstraint, Bag, CombinatoricsObject, Entity, Set
 from cofola.objects.utils import invert_comparator, parse_comparator
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from cofola.context import Context

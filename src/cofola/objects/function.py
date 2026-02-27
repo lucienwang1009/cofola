@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 from sympy import Eq
-from typing import Union
+from typing import TYPE_CHECKING, Union
 from wfomc import fol_parse as parse
 
 from cofola.objects.base import AtomicConstraint, Bag, Entity, Set, Function
-
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from cofola.context import Context

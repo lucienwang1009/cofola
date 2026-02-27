@@ -1,4 +1,6 @@
 
+from __future__ import annotations
+
 from typing import Union
 from wfomc import Formula, AtomicFormula, top, Const, Pred, to_sc2, \
     WFOMCProblem, fol_parse as parse, Rational, Expr
