@@ -5,7 +5,10 @@ import json
 import pytest
 from pathlib import Path
 
-from cofola.solver import parse_and_solve
+from wfomc import Algo
+
+from cofola.parser.parser import parse
+from cofola.solver import solve
 
 
 # Load problems from JSON
@@ -49,11 +52,20 @@ class TestAllEncodableProblems:
     @pytest.mark.parametrize("problem_id,problem_data", get_encodable_problems())
     def test_problem(self, problem_id, problem_data):
         """Test a single problem from the dataset."""
+        # Parse the problem program
         program = problem_data["program"]
         expected_answer = int(problem_data["answer"])
 
-        result = parse_and_solve(program)
+        # Parse and solve
+        cofola_problem = parse(program)
+        result = solve(
+            cofola_problem,
+            Algo.FASTv2,
+            use_partition_constraint=True,
+            lifted=False
+        )
 
+        # Verify the answer
         assert result == expected_answer, (
             f"Problem {problem_id}: expected {expected_answer}, got {result}\n"
             f"Problem: {problem_data.get('problem', 'N/A')}\n"
