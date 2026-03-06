@@ -6,7 +6,7 @@ ProblemBuilder is the mutable builder used to construct a Problem.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, fields
+from dataclasses import dataclass, fields, is_dataclass
 from typing import Iterator
 
 from cofola.frontend.types import ObjRef, Entity
@@ -141,6 +141,36 @@ class Problem:
 
         return result
 
+    @staticmethod
+    def _sub_field(val: object, old_ref: ObjRef, new_ref: ObjRef) -> object:
+        """Substitute old_ref with new_ref in a single field value.
+
+        Handles ObjRef directly and tuples that may contain ObjRefs or
+        (ObjRef, int) pairs (e.g. SizeConstraint.terms).
+        """
+        if isinstance(val, ObjRef):
+            return new_ref if val == old_ref else val
+        elif isinstance(val, tuple):
+            new_items = []
+            for item in val:
+                if isinstance(item, ObjRef):
+                    new_items.append(new_ref if item == old_ref else item)
+                elif isinstance(item, tuple) and len(item) == 2 and isinstance(item[0], ObjRef):
+                    new_items.append((new_ref if item[0] == old_ref else item[0], item[1]))
+                elif isinstance(item, tuple) and len(item) == 2 and is_dataclass(item[0]) and not isinstance(item[0], type):
+                    # Recurse into size atoms (TupleCountAtom, BagCountAtom, SeqPatternCountAtom)
+                    # that contain ObjRef fields
+                    atom, coef = item
+                    new_atom_fields = {
+                        f.name: Problem._sub_field(getattr(atom, f.name), old_ref, new_ref)
+                        for f in fields(atom)
+                    }
+                    new_items.append((type(atom)(**new_atom_fields), coef))
+                else:
+                    new_items.append(item)
+            return tuple(new_items)
+        return val
+
     def substitute(self, old_ref: ObjRef, new_ref: ObjRef) -> Problem:
         """Replace all uses of old_ref with new_ref.
 
@@ -151,36 +181,14 @@ class Problem:
         Returns:
             A new Problem with the substitution applied.
         """
-
-        def sub_field(val: ObjRef | tuple | frozenset | object) -> ObjRef | tuple | frozenset | object:
-            """Substitute old_ref with new_ref in a field value."""
-            if isinstance(val, ObjRef):
-                return new_ref if val == old_ref else val
-            elif isinstance(val, tuple):
-                # Handle tuples, including (ObjRef, int) pairs
-                new_items = []
-                for item in val:
-                    if isinstance(item, ObjRef):
-                        new_items.append(new_ref if item == old_ref else item)
-                    elif isinstance(item, tuple) and len(item) == 2:
-                        if isinstance(item[0], ObjRef):
-                            new_first = new_ref if item[0] == old_ref else item[0]
-                            new_items.append((new_first, item[1]))
-                        else:
-                            new_items.append(item)
-                    else:
-                        new_items.append(item)
-                return tuple(new_items)
-            else:
-                return val
+        sub = self._sub_field
 
         # Substitute in definitions
         new_defs = []
         for ref, defn in self.defs:
             if ref == old_ref:
-                # Skip the old definition
                 continue
-            new_fields = {f.name: sub_field(getattr(defn, f.name)) for f in fields(defn)}
+            new_fields = {f.name: sub(getattr(defn, f.name), old_ref, new_ref) for f in fields(defn)}
             new_defs.append((ref, type(defn)(**new_fields)))
 
         # If new_ref is a new definition, add it
@@ -203,7 +211,6 @@ class Problem:
 
     def _sub_constraint(self, c: Constraint, old_ref: ObjRef, new_ref: ObjRef) -> Constraint:
         """Substitute old_ref with new_ref in a constraint."""
-        # This is a simplified version; full implementation would handle all constraint types
         if isinstance(c, NotConstraint):
             return NotConstraint(self._sub_constraint(c.sub, old_ref, new_ref))
         elif isinstance(c, AndConstraint):
@@ -222,11 +229,8 @@ class Problem:
                 self._sub_constraint(c.constraint_template, old_ref, new_ref),
             )
         else:
-            # For simple constraints, substitute refs in fields
-            c_fields = {f.name: getattr(c, f.name) for f in fields(c)}
-            for fname, fval in c_fields.items():
-                if isinstance(fval, ObjRef) and fval == old_ref:
-                    c_fields[fname] = new_ref
+            sub = self._sub_field
+            c_fields = {f.name: sub(getattr(c, f.name), old_ref, new_ref) for f in fields(c)}
             return type(c)(**c_fields)
 
     def __repr__(self) -> str:

@@ -24,14 +24,16 @@ from cofola.frontend.objects import (
     SetChooseReplace,
     TupleDef,
 )
+from cofola.ir.pass_manager import AnalysisPass
 from cofola.frontend.problem import Problem
 from cofola.frontend.constraints import SizeConstraint, BagCountAtom
 from loguru import logger
 
 from cofola.ir.analysis.entities import AnalysisResult, BagInfo
+from cofola.ir.analysis.merged import MergedAnalysis
 
 
-class BagClassification:
+class BagClassification(AnalysisPass):
     """Classifies bag entities as distinguishable or indistinguishable.
 
     This analysis determines which entities can be "lifted" (treated as
@@ -41,16 +43,22 @@ class BagClassification:
     Ports the legacy preprocess_bags function to work with the new IR.
     """
 
-    def run(self, problem: Problem, analysis: AnalysisResult) -> AnalysisResult:
+    required_analyses = [MergedAnalysis]
+
+    def run(self, problem: Problem, am=None) -> AnalysisResult:
         """Run bag classification on a Problem.
 
         Args:
             problem: The Problem to analyze.
-            analysis: The entity analysis result (will be mutated).
+            am: AnalysisManager for accessing MergedAnalysis result.
 
         Returns:
-            Updated AnalysisResult with dis_entities and indis_entities filled.
+            New AnalysisResult (deep-copied) with dis_entities and indis_entities filled.
         """
+        from copy import deepcopy
+
+        analysis = deepcopy(am.get(MergedAnalysis))
+
         logger.info("BagClassification.run: {} refs", len(list(problem.refs())))
 
         # Step 1: Find non-liftable bags

@@ -1,124 +1,105 @@
-"""Pass for merging identical SetInit and BagInit objects.
+"""Pass for merging identical object definitions (CSE).
 
 This module provides MergeIdenticalObjects, which finds and merges
-objects that are semantically identical (same type and same content).
+structurally identical derived/constant objects. Only types whose identity
+is fully determined by their field values are eligible; "random variable"
+types such as SetChoose, BagChoose, FuncDef, TupleDef, SequenceDef, and
+PartitionDef are excluded because two refs with the same definition represent
+independent random draws and must not be conflated.
 """
 
 from __future__ import annotations
 
-from collections import defaultdict
-from dataclasses import dataclass
 from loguru import logger
 
 from cofola.frontend.objects import (
-    BagInit,
     ObjDef,
     ObjRef,
     SetInit,
+    BagInit,
+    SetUnion,
+    SetIntersection,
+    SetDifference,
+    BagUnion,
+    BagAdditiveUnion,
+    BagIntersection,
+    BagDifference,
+    BagSupport,
+    FuncImage,
+    FuncInverseImage,
+    FuncInverse,
+    PartRef,
 )
+from cofola.ir.pass_manager import TransformPass
 from cofola.frontend.problem import Problem
 
 
-@dataclass
-class _SetInitKey:
-    """Hash key for SetInit objects."""
-    entities: frozenset  # frozenset[Entity]
-
-    def __hash__(self) -> int:
-        return hash(("SetInit", self.entities))
-
-    def __eq__(self, other: object) -> bool:
-        return isinstance(other, _SetInitKey) and self.entities == other.entities
-
-
-@dataclass
-class _BagInitKey:
-    """Hash key for BagInit objects."""
-    entity_multiplicity: tuple  # tuple[tuple[Entity, int], ...]
-
-    def __hash__(self) -> int:
-        return hash(("BagInit", self.entity_multiplicity))
-
-    def __eq__(self, other: object) -> bool:
-        return isinstance(other, _BagInitKey) and self.entity_multiplicity == other.entity_multiplicity
+# ObjDef types for which structural equality implies semantic equality.
+# Excluded: SetChoose, SetChooseReplace, BagChoose, FuncDef, TupleDef,
+#           SequenceDef, PartitionDef — each occurrence is an independent
+#           random variable even when the definition fields are identical.
+MERGEABLE_TYPES = (
+    SetInit,
+    BagInit,
+    SetUnion,
+    SetIntersection,
+    SetDifference,
+    BagUnion,
+    BagAdditiveUnion,
+    BagIntersection,
+    BagDifference,
+    BagSupport,
+    FuncImage,
+    FuncInverseImage,
+    FuncInverse,
+    PartRef,
+)
 
 
-class MergeIdenticalObjects:
-    """Merge semantically identical SetInit and BagInit objects.
+class MergeIdenticalObjects(TransformPass):
+    """Merge structurally identical object definitions (CSE).
 
-    This pass finds objects that are semantically identical:
-    - Two SetInit objects with the same entities
-    - Two BagInit objects with the same entity_multiplicity
+    Scans problem.defs for objects whose type is in MERGEABLE_TYPES and
+    whose field values are equal. For each group of duplicates, keeps the
+    ref with the smallest id (for determinism) and substitutes all others
+    throughout the problem.
 
-    For each group of identical objects, it keeps one (the one with
-    the smallest ObjRef.id for determinism) and substitutes all
-    references to the others.
-
-    This is a form of common subexpression elimination that can
-    reduce the problem size and improve solver efficiency.
+    This handles both leaf constants (SetInit, BagInit) and derived objects
+    produced by LoweringPass (FuncImage, FuncInverseImage, BagSupport, etc.).
     """
 
-    def run(self, problem: Problem) -> Problem:
-        """Merge identical objects in a Problem.
+    required_analyses: list[type] = []
 
-        Args:
-            problem: The Problem to optimize.
-
-        Returns:
-            A new Problem with identical objects merged.
-        """
-        # Step 1: Find all SetInit and BagInit objects and group by content
-        set_groups: dict[_SetInitKey, list[ObjRef]] = defaultdict(list)
-        bag_groups: dict[_BagInitKey, list[ObjRef]] = defaultdict(list)
-
-        for ref, defn in problem.iter_objects():
-            if isinstance(defn, SetInit):
-                key = _SetInitKey(entities=defn.entities)
-                set_groups[key].append(ref)
-            elif isinstance(defn, BagInit):
-                key = _BagInitKey(entity_multiplicity=defn.entity_multiplicity)
-                bag_groups[key].append(ref)
-
-        # Step 2: Find duplicates and create substitution map
-        # Map: old_ref -> new_ref (canonical ref to keep)
+    def run(self, problem: Problem, am=None) -> Problem:
+        # Map ObjDef value → canonical ObjRef (smallest id seen so far)
+        canonical: dict[ObjDef, ObjRef] = {}
         substitutions: dict[ObjRef, ObjRef] = {}
 
-        for key, refs in set_groups.items():
-            if len(refs) > 1:
-                # Sort by ObjRef.id for determinism, keep the smallest
-                refs_sorted = sorted(refs, key=lambda r: r.id)
-                canonical = refs_sorted[0]
-                for ref in refs_sorted[1:]:
-                    substitutions[ref] = canonical
-                    logger.info(
-                        "MergeIdenticalObjects: Merging SetInit %s -> %s (entities: %s)",
-                        ref, canonical, key.entities
-                    )
-
-        for key, refs in bag_groups.items():
-            if len(refs) > 1:
-                refs_sorted = sorted(refs, key=lambda r: r.id)
-                canonical = refs_sorted[0]
-                for ref in refs_sorted[1:]:
-                    substitutions[ref] = canonical
-                    logger.info(
-                        "MergeIdenticalObjects: Merging BagInit %s -> %s",
-                        ref, canonical
-                    )
+        for ref, defn in problem.iter_objects():
+            if not isinstance(defn, MERGEABLE_TYPES):
+                continue
+            if defn in canonical:
+                existing = canonical[defn]
+                if ref.id < existing.id:
+                    substitutions[existing] = ref
+                    canonical[defn] = ref
+                else:
+                    substitutions[ref] = existing
+            else:
+                canonical[defn] = ref
 
         if not substitutions:
-            logger.debug("MergeIdenticalObjects: No identical objects found")
+            logger.debug("MergeIdenticalObjects: nothing to merge")
             return problem
 
         logger.info(
-            "MergeIdenticalObjects: Merging %d duplicate objects",
-            len(substitutions)
+            "MergeIdenticalObjects: merging {} duplicate defs",
+            len(substitutions),
         )
+        for old, new in substitutions.items():
+            logger.debug("  #{} -> #{}", old.id, new.id)
 
-        # Step 3: Apply substitutions iteratively
-        # We need to do this one at a time since Problem.substitute returns a new Problem
         current = problem
         for old_ref, new_ref in substitutions.items():
             current = current.substitute(old_ref, new_ref)
-
         return current

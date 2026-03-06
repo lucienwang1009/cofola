@@ -10,6 +10,7 @@ from a Problem without mutating it:
 
 from .entities import EntityAnalysis, AnalysisResult, SetInfo, BagInfo
 from .max_size import MaxSizeInference
+from .merged import MergedAnalysis
 from .bag_classify import BagClassification
 
 __all__ = [
@@ -18,5 +19,6 @@ __all__ = [
     "SetInfo",
     "BagInfo",
     "MaxSizeInference",
+    "MergedAnalysis",
     "BagClassification",
 ]

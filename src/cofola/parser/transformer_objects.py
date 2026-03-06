@@ -10,7 +10,7 @@ from cofola.frontend.objects import (
     SetUnion, SetIntersection, SetDifference,
     BagInit, BagChoose, BagUnion, BagAdditiveUnion,
     BagIntersection, BagDifference, BagSupport,
-    FuncDef, FuncImage, FuncInverseImage,
+    FuncImage,
     TupleDef, SequenceDef, PartitionDef, PartRef,
 )
 
@@ -253,6 +253,8 @@ class ObjectTransformerMixin:
             else:  # bag
                 if op == "+":
                     return self.builder.add(BagAdditiveUnion(left=obj1, right=obj2))
+                elif op == "++":
+                    return self.builder.add(BagUnion(left=obj1, right=obj2))
                 elif op == "&":
                     return self.builder.add(BagIntersection(left=obj1, right=obj2))
                 elif op == "-":

@@ -70,6 +70,8 @@ from cofola.frontend import (
     SeqPattern,
     SequencePatternConstraint,
     FuncPairConstraint,
+    BagSubsetConstraint,
+    BagEqConstraint,
     TupleCountAtom,
     SeqPatternCountAtom,
     BagCountAtom,
@@ -79,15 +81,13 @@ from cofola.frontend import (
     OrConstraint,
     ForAllParts,
     Constraint,
-    # Rewriter
-    Rewriter,
-    RewriterWithSubstitution,
 )
 
 # Analysis and passes (local to ir/)
-from .analysis import EntityAnalysis, MaxSizeInference, BagClassification, AnalysisResult, SetInfo, BagInfo
-from .passes import ConstantFolder, SimplifyPass, LoweringPass
-from .pipeline import IRPipeline
+from .analysis import EntityAnalysis, MaxSizeInference, MergedAnalysis, BagClassification, AnalysisResult, SetInfo, BagInfo
+from .passes import ConstantFolder, SimplifyPass, LoweringPass, MergeIdenticalObjects
+from .pass_manager import AnalysisManager, AnalysisPass, TransformPass
+from .pipeline import IRPipeline, SolveBranch, SolveSchedule
 
 __all__ = [
     # Core types
@@ -147,6 +147,9 @@ __all__ = [
     "SequencePatternConstraint",
     # Function constraints
     "FuncPairConstraint",
+    # Bag constraints
+    "BagSubsetConstraint",
+    "BagEqConstraint",
     # Size atoms
     "TupleCountAtom",
     "SeqPatternCountAtom",
@@ -160,20 +163,25 @@ __all__ = [
     "ForAllParts",
     # Constraint union type
     "Constraint",
-    # Rewriter
-    "Rewriter",
-    "RewriterWithSubstitution",
     # Pipeline
     "IRPipeline",
+    "SolveBranch",
+    "SolveSchedule",
+    # Pass infrastructure
+    "AnalysisPass",
+    "TransformPass",
+    "AnalysisManager",
     # Analysis
     "EntityAnalysis",
     "MaxSizeInference",
+    "MergedAnalysis",
     "BagClassification",
     "AnalysisResult",
     "SetInfo",
     "BagInfo",
     # Passes
     "ConstantFolder",
+    "MergeIdenticalObjects",
     "SimplifyPass",
     "LoweringPass",
 ]

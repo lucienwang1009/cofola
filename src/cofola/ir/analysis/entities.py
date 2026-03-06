@@ -28,6 +28,7 @@ from cofola.frontend.objects import (
     ObjDef,
     PartitionDef,
 )
+from cofola.ir.pass_manager import AnalysisPass
 from cofola.frontend.problem import Problem
 from cofola.frontend.constraints import SizeConstraint, BagCountAtom
 from loguru import logger
@@ -72,15 +73,17 @@ class AnalysisResult:
         bag_info: Analysis results for bag objects.
         all_entities: All entities used in the problem.
         singletons: Entities that appear in exactly one base object.
+        unsatisfiable: True if a size conflict was detected during analysis.
     """
 
     set_info: dict[ObjRef, SetInfo]
     bag_info: dict[ObjRef, BagInfo]
     all_entities: set[Entity]
     singletons: set[Entity]
+    unsatisfiable: bool = False
 
 
-class EntityAnalysis:
+class EntityAnalysis(AnalysisPass):
     """Computes entity-related properties for all objects in a Problem.
 
     This is a bottom-up analysis that processes objects in topological order,
@@ -89,11 +92,14 @@ class EntityAnalysis:
     Replaces the legacy inherit() methods on each object class.
     """
 
-    def run(self, problem: Problem) -> AnalysisResult:
+    required_analyses: list[type] = []
+
+    def run(self, problem: Problem, am=None) -> AnalysisResult:
         """Run the entity analysis on a Problem.
 
         Args:
             problem: The Problem to analyze.
+            am: AnalysisManager (unused; EntityAnalysis has no required_analyses).
 
         Returns:
             AnalysisResult containing all computed information.
@@ -220,14 +226,16 @@ class EntityAnalysis:
             return
 
         # SetChooseReplace behaves like a bag where each entity can have
-        # multiplicity up to size (if given) or unlimited
-        max_mult = defn.size if defn.size is not None else float('inf')
+        # multiplicity up to size (if given) or unlimited.
+        # Use sys.maxsize as sentinel when size is None so MergedAnalysis.min()
+        # correctly adopts the LP-inferred bound (same pattern as
+        # _analyze_ordered_collection for replace=True).
+        max_mult = defn.size if defn.size is not None else sys.maxsize
+        max_size = defn.size if defn.size is not None else sys.maxsize
 
-        p_entities_multiplicity: dict[Entity, int] = {}
-        for entity in src_info.p_entities:
-            p_entities_multiplicity[entity] = max_mult if max_mult != float('inf') else 0
-
-        max_size = defn.size if defn.size is not None else 0
+        p_entities_multiplicity: dict[Entity, int] = {
+            entity: max_mult for entity in src_info.p_entities
+        }
 
         bag_info[ref] = BagInfo(
             p_entities_multiplicity=p_entities_multiplicity,

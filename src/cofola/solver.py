@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import argparse
+import math
 
 from loguru import logger
 
 from cofola.log import setup_logging
 from cofola.ir.pipeline import IRPipeline
+from cofola.backend.wfomc.backend import WFOMCBackend
 from cofola.parser.parser import parse
 
 
@@ -19,7 +21,12 @@ def solve(problem: "Problem", debug: bool = False) -> int:
     setup_logging(debug)
     logger.info("Solving problem with {} objects, {} constraints",
                 len(problem.defs), len(problem.constraints))
-    return IRPipeline().solve(problem)
+    schedule = IRPipeline().process(problem)
+    backend = WFOMCBackend(lifted=False)
+    return sum(
+        math.prod(backend.solve(p, a) for p, a in branch.components)
+        for branch in schedule.branches
+    )
 
 
 def parse_and_solve(text: str, debug: bool = False) -> int:

@@ -8,17 +8,36 @@ Ports the legacy InferMaxSizePass to work with the new IR.
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+
 import numpy as np
 from scipy.optimize import linprog
 
+from cofola.ir.pass_manager import AnalysisPass
 from cofola.frontend.types import ObjRef
 from cofola.frontend.constraints import SizeConstraint
 from cofola.frontend.problem import Problem
-from cofola.ir.analysis.entities import AnalysisResult
+from cofola.ir.analysis.entities import EntityAnalysis, AnalysisResult
 from loguru import logger
 
 
-class MaxSizeInference:
+@dataclass
+class SizeInferenceResult:
+    """Result of MaxSizeInference.
+
+    Attributes:
+        max_sizes: Tighter upper bounds inferred by LP (existing behaviour).
+        exact_sizes: Exact sizes where LP min == LP max (newly inferred).
+        unsatisfiable: True if size constraints are contradictory or conflict
+                       with EntityAnalysis exact_size values.
+    """
+
+    max_sizes: dict[ObjRef, int] = field(default_factory=dict)
+    exact_sizes: dict[ObjRef, int] = field(default_factory=dict)
+    unsatisfiable: bool = False
+
+
+class MaxSizeInference(AnalysisPass):
     """Infers maximum sizes for objects from size constraints via LP.
 
     This pass examines SizeConstraints in the problem and uses linear
@@ -27,16 +46,23 @@ class MaxSizeInference:
     Ports the legacy infer_max_size function to work with the new IR.
     """
 
-    def run(self, problem: Problem, analysis: AnalysisResult) -> dict[ObjRef, int]:
+    required_analyses = [EntityAnalysis]
+
+    def run(self, problem: Problem, am=None) -> SizeInferenceResult:
         """Run max size inference on a Problem.
 
         Args:
             problem: The Problem to analyze.
-            analysis: The entity analysis result (provides initial bounds).
+            am: AnalysisManager; used to retrieve EntityAnalysis result.
 
         Returns:
-            Dictionary mapping ObjRef to inferred max_size.
+            SizeInferenceResult with inferred max_sizes, exact_sizes, and
+            unsatisfiable flag.
         """
+        analysis: AnalysisResult = am.get(EntityAnalysis)
+
+        result = SizeInferenceResult()
+
         # Collect constrained objects and constraints
         constrained_refs: list[ObjRef] = []
         size_constraints: list[SizeConstraint] = []
@@ -53,7 +79,7 @@ class MaxSizeInference:
 
         if not size_constraints:
             logger.debug("MaxSizeInference: no size constraints, skipping LP")
-            return {}
+            return result
 
         # Build LP matrices
         n_constraints = len(size_constraints)
@@ -91,30 +117,66 @@ class MaxSizeInference:
                 else:  # >=, >
                     A_u[i, index] = -coef
 
-        # Solve LP for each object to find max size
-        inferred_sizes: dict[ObjRef, int] = {}
-
+        # Solve LP for each object to find max and min size
         for ref in constrained_refs:
             index = constrained_refs.index(ref)
-            c = np.zeros(n_vars)
-            c[index] = -1  # Maximize this variable
-
-            ret = linprog(c, A_ub=A_u, b_ub=b_u, A_eq=A_e, b_eq=b_e)
-
             ref_id = getattr(ref, 'id', repr(ref))
-            if ret.success:
-                size = int(ret.x[index])
-                # Only update if this is tighter than the initial bound
-                initial_max = self._get_initial_max(ref, analysis)
-                if initial_max is None or size < initial_max:
-                    inferred_sizes[ref] = size
-                    logger.debug("  LP ref={}: max_size={} (initial_max={})",
-                                 ref_id, size, initial_max)
-            else:
-                logger.debug("  LP ref={}: infeasible or unbounded", ref_id)
 
-        logger.info("MaxSizeInference: inferred sizes for {} refs", len(inferred_sizes))
-        return inferred_sizes
+            # Maximise
+            c_max = np.zeros(n_vars)
+            c_max[index] = -1
+            ret_max = linprog(c_max, A_ub=A_u, b_ub=b_u, A_eq=A_e, b_eq=b_e)
+
+            if not ret_max.success:
+                logger.debug("  LP ref={}: infeasible or unbounded (max)", ref_id)
+                # Infeasible LP means the constraints are contradictory
+                if ret_max.status == 2:  # infeasible
+                    result.unsatisfiable = True
+                continue
+
+            max_val = int(ret_max.x[index])
+
+            # Minimise
+            c_min = np.zeros(n_vars)
+            c_min[index] = 1
+            ret_min = linprog(c_min, A_ub=A_u, b_ub=b_u, A_eq=A_e, b_eq=b_e)
+
+            if not ret_min.success:
+                logger.debug("  LP ref={}: infeasible or unbounded (min)", ref_id)
+                if ret_min.status == 2:
+                    result.unsatisfiable = True
+                continue
+
+            min_val = int(ret_min.x[index])
+
+            logger.debug("  LP ref={}: min={} max={}", ref_id, min_val, max_val)
+
+            # Update max_sizes if tighter than initial bound
+            initial_max = self._get_initial_max(ref, analysis)
+            if initial_max is None or max_val < initial_max:
+                result.max_sizes[ref] = max_val
+
+            # If min == max, we have an exact size
+            if min_val == max_val:
+                result.exact_sizes[ref] = max_val
+
+        # Conflict detection: LP exact_size vs EntityAnalysis exact_size
+        for ref, lp_exact in result.exact_sizes.items():
+            info = analysis.set_info.get(ref) or analysis.bag_info.get(ref)
+            if info is not None and info.exact_size is not None:
+                if info.exact_size != lp_exact:
+                    logger.info(
+                        "MaxSizeInference: conflict on ref={}: "
+                        "EntityAnalysis.exact_size={} vs LP exact_size={}",
+                        getattr(ref, 'id', repr(ref)), info.exact_size, lp_exact,
+                    )
+                    result.unsatisfiable = True
+
+        logger.info(
+            "MaxSizeInference: max_sizes={}, exact_sizes={}, unsatisfiable={}",
+            len(result.max_sizes), len(result.exact_sizes), result.unsatisfiable,
+        )
+        return result
 
     def _get_initial_max(self, ref: ObjRef, analysis: AnalysisResult) -> int | None:
         """Get the initial max_size for a reference from analysis results."""

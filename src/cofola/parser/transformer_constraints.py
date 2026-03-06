@@ -13,6 +13,7 @@ from cofola.frontend.constraints import (
     BagSubsetConstraint, BagEqConstraint,
     NotConstraint, AndConstraint, OrConstraint,
     TogetherPattern, LessThanPattern, PredecessorPattern, NextToPattern,
+    ForAllParts,
 )
 
 if TYPE_CHECKING:
@@ -205,4 +206,5 @@ class ConstraintTransformerMixin:
         raise CofolaParsingError(f"Unknown binary constraint operator: {op}")
 
     def part_constraint(self: "CofolaTransfomer", args):
-        return args[0]
+        constraint_template, _, part_name_token, _, partition_ref = args
+        return ForAllParts(partition=partition_ref, constraint_template=constraint_template)

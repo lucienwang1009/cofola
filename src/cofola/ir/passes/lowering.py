@@ -28,6 +28,10 @@ from cofola.frontend.objects import (
     FuncInverseImage,
     SetChoose,
     SetIntersection,
+    BagObjDef,
+    AnySetObjDef,
+    PartRef,
+    PartitionDef,
 )
 from cofola.frontend.constraints import (
     SizeConstraint,
@@ -38,16 +42,31 @@ from cofola.frontend.constraints import (
     MembershipConstraint,
     FuncPairConstraint,
     TupleCountAtom,
+    BagCountAtom,
+    ForAllParts,
 )
+from cofola.ir.pass_manager import TransformPass
 from cofola.frontend.problem import Problem
 from cofola.ir.analysis.entities import AnalysisResult
+from cofola.ir.analysis.merged import MergedAnalysis
 
 
 # Prefix for generated index entities
 IDX_PREFIX = "idx_"
 
 
-class LoweringPass:
+from dataclasses import dataclass as _dataclass
+
+
+@_dataclass
+class _TupleInfo:
+    """Lowering metadata for a single TupleDef."""
+    mapping_ref: ObjRef
+    indices_ref: ObjRef
+    choose: bool
+
+
+class LoweringPass(TransformPass):
     """Lowers high-level constructs to primitive objects.
 
     This pass transforms:
@@ -57,26 +76,26 @@ class LoweringPass:
 
     The lowering process creates new objects and constraints, and updates
     existing constraints to reference the new objects.
-
-    Ports the legacy transform function to work with the new IR.
     """
+
+    required_analyses = [MergedAnalysis]
 
     def __init__(self) -> None:
         self._next_id: int = 10000  # Start high to avoid collision
-        self._tuple_to_indices: dict[ObjRef, ObjRef] = {}  # tuple ref -> indices ref
-        self._tuple_to_mapping: dict[ObjRef, ObjRef] = {}  # tuple ref -> mapping ref
-        self._tuple_choose: dict[ObjRef, bool] = {}  # tuple ref -> choose flag
+        self._tuple_info: dict[ObjRef, _TupleInfo] = {}  # tuple ref -> choose flag
 
-    def run(self, problem: Problem, analysis: AnalysisResult) -> Problem:
+    def run(self, problem: Problem, am=None) -> Problem:
         """Run lowering on a Problem.
 
         Args:
             problem: The Problem to lower.
-            analysis: Entity analysis result.
+            am: AnalysisManager for accessing MergedAnalysis result.
 
         Returns:
             A new Problem with high-level constructs lowered.
         """
+        analysis: AnalysisResult = am.get(MergedAnalysis)
+
         logger.info("LoweringPass.run: {} objects before", len(problem.defs))
         current = problem
         changed = True
@@ -103,7 +122,11 @@ class LoweringPass:
         Returns:
             Tuple of (new Problem, whether any changes were made).
         """
-        # Try lowering in order: tuples, sequences, functions
+        # Try lowering in order: ForAllParts, tuples, sequences, functions
+        result, changed = self._try_lower_for_all_parts(problem)
+        if changed:
+            return result, True
+
         result, changed = self._try_lower_tuples(problem, analysis)
         if changed:
             return result, True
@@ -128,159 +151,253 @@ class LoweringPass:
         self._next_id += 1
         return ref
 
+    def _try_lower_for_all_parts(
+        self, problem: Problem
+    ) -> tuple[Problem, bool]:
+        """Expand ForAllParts constraints into concrete per-part constraints.
+
+        For each ForAllParts(partition=P, constraint_template=C[sentinel]):
+          1. Find the sentinel PartRef (index == -1) for partition P.
+          2. Find all real PartRef ObjRefs (index >= 0) for partition P.
+          3. For each real part, substitute sentinel → part in C to get a concrete constraint.
+          4. Remove the ForAllParts constraint and the sentinel from defs.
+
+        Returns:
+            Tuple of (new Problem, whether any changes were made).
+        """
+        for i, c in enumerate(problem.constraints):
+            if not isinstance(c, ForAllParts):
+                continue
+
+            partition_ref = c.partition
+
+            # Find sentinel (index == -1) and real parts (index >= 0)
+            sentinel_ref = None
+            real_parts: list[ObjRef] = []
+            for ref, defn in problem.defs:
+                if isinstance(defn, PartRef) and defn.partition == partition_ref:
+                    if defn.index == -1:
+                        sentinel_ref = ref
+                    else:
+                        real_parts.append((ref, defn.index))
+
+            if sentinel_ref is None:
+                raise ValueError(
+                    f"ForAllParts: no sentinel PartRef (index=-1) found for partition {partition_ref}"
+                )
+            if not real_parts:
+                raise ValueError(
+                    f"ForAllParts: no real parts found for partition {partition_ref}"
+                )
+
+            real_parts.sort(key=lambda x: x[1])
+
+            # Expand: one concrete constraint per real part
+            new_constraints = list(problem.constraints)
+            new_constraints.pop(i)
+            for part_ref, _ in real_parts:
+                concrete = problem._sub_constraint(c.constraint_template, sentinel_ref, part_ref)
+                new_constraints.append(concrete)
+
+            # Remove sentinel from defs
+            new_defs = [(r, d) for r, d in problem.defs if r != sentinel_ref]
+
+            logger.info(
+                "LoweringPass: ForAllParts on partition {} → {} concrete constraints",
+                partition_ref.id, len(real_parts),
+            )
+            return Problem(
+                defs=tuple(new_defs),
+                constraints=tuple(new_constraints),
+                names=problem.names,
+            ), True
+
+        return problem, False
+
+    def _is_bag_like(self, source_defn: ObjDef | None, problem: Problem) -> bool:
+        """Return True if source_defn is a bag-like object.
+
+        A BagObjDef is directly bag-like.
+        A PartRef is bag-like iff its partition's source is a BagObjDef.
+        """
+        if isinstance(source_defn, BagObjDef):
+            return True
+        if isinstance(source_defn, PartRef):
+            partition_defn = problem.get_object(source_defn.partition)
+            if partition_defn is not None:
+                partition_source_defn = problem.get_object(partition_defn.source)
+                return isinstance(partition_source_defn, BagObjDef)
+        return False
+
     def _try_lower_tuples(
         self, problem: Problem, analysis: AnalysisResult
     ) -> tuple[Problem, bool]:
         """Try to lower one TupleDef.
 
-        TupleDef is lowered to:
-        1. A SetInit of index entities (idx_0, idx_1, ...)
-        2. A FuncDef mapping indices to the source
-
-        Args:
-            problem: The Problem to lower.
-            analysis: Entity analysis result.
+        Lowering strategy:
+        - choose=True  + Bag source → split into BagChoose + TupleDef(choose=False)
+          (Bug 1 fix: explicit decomposition so next iteration handles choose=False)
+        - choose=False + Bag source → FuncDef(surjective=True) + FuncInverseImage per entity
+          with exact multiplicity constraints (== not <=) and no singleton special-casing
+          (Bug 2 fix)
+          - BagInit source: fixed integer RHS
+          - any other Bag source (e.g. BagChoose): BagCountAtom RHS for dynamic multiplicity
+          (Bug 3 fix)
+        - Set source (choose or not) → FuncDef(injective/surjective per choose/replace flags)
 
         Returns:
             Tuple of (new Problem, whether any changes were made).
         """
-        # Find an unlowered TupleDef
         for ref in problem.refs():
             defn = problem.get_object(ref)
             if not isinstance(defn, TupleDef):
                 continue
-
-            # Check if already lowered (would have mapping info)
-            if ref in self._tuple_to_mapping:
+            if ref in self._tuple_info:
                 continue
 
-            # Lower this tuple
             source = defn.source
             source_defn = problem.get_object(source)
             size = defn.size
 
-            # Get size from analysis if not specified
+            # Resolve size: EntityAnalysis propagates source.exact_size into
+            # set_info/bag_info[ref], and MaxSizeInference may refine it further
+            # via |T| == k constraints.
             if size is None:
-                # Try to get from source
-                if source in analysis.set_info:
-                    size = analysis.set_info[source].max_size
-                elif source in analysis.bag_info:
-                    size = analysis.bag_info[source].max_size
+                own_info = analysis.set_info.get(ref) or analysis.bag_info.get(ref)
+                if own_info is not None and own_info.exact_size is not None:
+                    size = own_info.exact_size
                 else:
-                    # Can't determine size, skip
-                    continue
+                    raise ValueError(
+                        f"TupleDef {ref.id}: tuple size must be specified explicitly "
+                        f"or implied by its source (or a size constraint on the tuple itself)"
+                    )
 
-            # Create index entities
-            idx_entities = frozenset(
-                Entity(f"{IDX_PREFIX}{i}") for i in range(size)
-            )
-            indices_ref = self._new_ref()
-            indices_defn = SetInit(entities=idx_entities)
-
-            # Create mapping function
-            mapping_ref = self._new_ref()
-
-            # Determine if injective/surjective based on tuple properties.
-            # For bag sources: never injective — multiple indices can map to the same
-            # entity (e.g., B×2 means idx_0 and idx_1 both map to B). Injectivity would
-            # require |image| == |domain|, but |support| < |domain| when any mult > 1.
-            # Multiplicity is already enforced via FuncInverseImage constraints below.
-            is_bag_source = isinstance(source_defn, (BagInit, BagChoose))
-            injective = not defn.replace and not is_bag_source
-            surjective = not defn.choose  # If not choosing, must cover all elements
-
-            # For bags, need to go through support
-            codomain = source
+            # is_bag_source: must check the SOURCE type, not the tuple itself — a tuple with
+            # replace=True from a set source has bag_info[ref] but must still take the set path.
+            is_bag_source = self._is_bag_like(source_defn, problem)
+            new_defs = list(problem.defs)
             new_constraints = list(problem.constraints)
 
-            if source_defn is not None and isinstance(source_defn, (BagInit, BagChoose)):
-                # Need to create BagSupport first
-                support_ref = self._new_ref()
-                support_defn = BagSupport(source=source)
-                codomain = support_ref
-
-                # Add support to definitions
-                new_defs = list(problem.defs)
-                new_defs.append((support_ref, support_defn))
-
-                # For bags, we need to create inverse images with multiplicity constraints
-                # to ensure each entity appears the correct number of times
-                if source in analysis.bag_info:
-                    bag_info = analysis.bag_info[source]
-                    singletons_in_bag = set()
-                    inverse_image_refs = []
-
-                    for entity, multiplicity in bag_info.p_entities_multiplicity.items():
-                        if entity in analysis.singletons:
-                            singletons_in_bag.add(entity)
-                        else:
-                            # Create FuncInverseImage for this entity
-                            inv_img_ref = self._new_ref()
-                            inv_img_defn = FuncInverseImage(func=mapping_ref, argument=entity)
-                            new_defs.append((inv_img_ref, inv_img_defn))
-                            inverse_image_refs.append(inv_img_ref)
-
-                            # Add multiplicity constraint: |inverse_image| == multiplicity
-                            mult_constraint = SizeConstraint(
-                                terms=((inv_img_ref, 1),),
-                                comparator="==",
-                                rhs=multiplicity,
-                            )
-                            new_constraints.append(mult_constraint)
-
-                    # Add disjoint constraints between all pairs of inverse images
-                    for i, ref_i in enumerate(inverse_image_refs):
-                        for j, ref_j in enumerate(inverse_image_refs):
-                            if i < j:
-                                disj_constraint = DisjointConstraint(
-                                    left=ref_i,
-                                    right=ref_j,
-                                    positive=True,
-                                )
-                                new_constraints.append(disj_constraint)
-
-                    # For singletons, create FuncImage with SetEqConstraint
-                    if singletons_in_bag:
-                        # For now, we'll handle singletons by adding them to the constraints
-                        # Create FuncImage and add SetEqConstraint
-                        pass  # Singletons are handled separately in the encoder
-
-                problem = Problem(
+            # ── choose=True + Bag → BagChoose + TupleDef(choose=False) ──────
+            if defn.choose and is_bag_source:
+                chosen_ref = self._new_ref()
+                new_defs.append((chosen_ref, BagChoose(source=source, size=size)))
+                new_tuple_defn = TupleDef(
+                    source=chosen_ref, choose=False, replace=False, size=size
+                )
+                new_defs = [
+                    (r, d) if r != ref else (ref, new_tuple_defn)
+                    for r, d in new_defs
+                ]
+                logger.info(
+                    "LoweringPass: TupleDef {} choose+bag → BagChoose {} + non-choose tuple",
+                    ref.id, chosen_ref.id,
+                )
+                return Problem(
                     defs=tuple(new_defs),
                     constraints=tuple(new_constraints),
                     names=problem.names,
-                )
-                new_defs = list(problem.defs)
-                new_constraints = list(problem.constraints)
+                ), True
 
-            mapping_defn = FuncDef(
-                domain=indices_ref,
-                codomain=codomain,
-                injective=injective,
-                surjective=surjective if defn.choose else False,
+            # ── Create shared index set ────────────────────────────────────────────
+            idx_entities = frozenset(Entity(f"{IDX_PREFIX}{i}") for i in range(size))
+            indices_ref = self._new_ref()
+            indices_defn = SetInit(entities=idx_entities)
+            mapping_ref = self._new_ref()
+
+            if is_bag_source:
+                # ── choose=False + Bag ──────────────────────────────────────
+                support_ref = self._new_ref()
+                new_defs.append((support_ref, BagSupport(source=source)))
+
+                # surjective=True: every element of the support must be hit
+                mapping_defn = FuncDef(
+                    domain=indices_ref,
+                    codomain=support_ref,
+                    injective=False,
+                    surjective=True,
+                )
+
+                # Use the tuple's own bag_info (populated from the original source at
+                # analysis time), which remains valid even when source was replaced by
+                # a freshly-created BagChoose in a prior lowering iteration.
+                bag_info = analysis.bag_info.get(ref)
+                if bag_info is None:
+                    raise ValueError(
+                        f"TupleDef {ref.id}: no bag_info for tuple ref {ref.id}; "
+                        f"entity analysis must run before lowering"
+                    )
+                inv_img_refs: list[ObjRef] = []
+                for entity, max_mult in bag_info.p_entities_multiplicity.items():
+                    if entity in analysis.singletons:
+                        continue
+                    inv_img_ref = self._new_ref()
+                    new_defs.append(
+                        (inv_img_ref, FuncInverseImage(func=mapping_ref, argument=entity))
+                    )
+                    inv_img_refs.append(inv_img_ref)
+
+                    # BagInit → fixed int; derived bags → BagCountAtom
+                    if isinstance(source_defn, BagInit):
+                        mult_constraint = SizeConstraint(
+                            terms=((inv_img_ref, 1),),
+                            comparator="==",
+                            rhs=max_mult,
+                        )
+                    else:
+                        mult_constraint = SizeConstraint(
+                            terms=(
+                                (inv_img_ref, 1),
+                                (BagCountAtom(bag=source, entity=entity), -1),
+                            ),
+                            comparator="==",
+                            rhs=0,
+                        )
+                    new_constraints.append(mult_constraint)
+
+                # Disjoint constraints between every pair of inverse images
+                for i, ref_i in enumerate(inv_img_refs):
+                    for j, ref_j in enumerate(inv_img_refs):
+                        if i < j:
+                            new_constraints.append(
+                                DisjointConstraint(left=ref_i, right=ref_j, positive=True)
+                            )
+
+            else:
+                # ── Set source (AnySetObjDef) ──────────────────────────────────────
+                injective = not defn.replace
+                surjective = not defn.choose
+                if surjective:
+                    injective = False  # surjective + full coverage → can't be injective
+                mapping_defn = FuncDef(
+                    domain=indices_ref,
+                    codomain=source,
+                    injective=injective,
+                    surjective=surjective,
+                )
+
+            # Store lowering metadata
+            self._tuple_info[ref] = _TupleInfo(
+                mapping_ref=mapping_ref,
+                indices_ref=indices_ref,
+                choose=defn.choose,
             )
 
-            # Store mappings
-            self._tuple_to_indices[ref] = indices_ref
-            self._tuple_to_mapping[ref] = mapping_ref
-            self._tuple_choose[ref] = defn.choose
-
-            # Add new objects
-            new_defs = list(problem.defs)
+            # Add index set and mapping; remove the TupleDef
             new_defs.append((indices_ref, indices_defn))
             new_defs.append((mapping_ref, mapping_defn))
-
-            # Remove the TupleDef
             new_defs = [(r, d) for r, d in new_defs if r != ref]
 
-            logger.info(f"Lowered TupleDef {ref} to indices {indices_ref} and mapping {mapping_ref}")
-
-            # Lower constraints that reference this TupleDef
+            # Rewrite constraints referencing this TupleDef
             new_constraints, extra_defs = self._lower_tuple_constraints(
                 tuple(new_constraints), ref, mapping_ref, indices_ref
             )
             new_defs.extend(extra_defs)
 
+            logger.info(
+                "LoweringPass: TupleDef {} → indices {} + mapping {}",
+                ref.id, indices_ref.id, mapping_ref.id,
+            )
             return Problem(
                 defs=tuple(new_defs),
                 constraints=new_constraints,
@@ -289,6 +406,46 @@ class LoweringPass:
 
         return problem, False
 
+    def _lower_one_constraint(
+        self,
+        c: object,
+        tuple_ref: ObjRef,
+        mapping_ref: ObjRef,
+        indices_ref: ObjRef,
+        extra_defs: list,
+    ) -> object:
+        """Lower a single atomic constraint that may reference tuple_ref.
+
+        Handles TupleIndexEq, MembershipConstraint, TupleIndexMembership.
+        Compound constraints (Or/And/Not) never reach LoweringPass — they are
+        Shannon-expanded before LOCAL_PASSES run.
+        """
+        if isinstance(c, TupleIndexEq) and c.tuple_ref == tuple_ref:
+            idx_entity = Entity(f"{IDX_PREFIX}{c.index}")
+            return FuncPairConstraint(
+                func=mapping_ref,
+                arg_entity=idx_entity,
+                result=c.entity,
+                positive=c.positive,
+            )
+        elif isinstance(c, MembershipConstraint) and c.container == tuple_ref:
+            new_image_ref = self._new_ref()
+            extra_defs.append((new_image_ref, FuncImage(func=mapping_ref, argument=indices_ref)))
+            return MembershipConstraint(
+                entity=c.entity,
+                container=new_image_ref,
+                positive=c.positive,
+            )
+        elif isinstance(c, TupleIndexMembership) and c.tuple_ref == tuple_ref:
+            idx_entity = Entity(f"{IDX_PREFIX}{c.index}")
+            return FuncPairConstraint(
+                func=mapping_ref,
+                arg_entity=idx_entity,
+                result=c.container,
+                positive=c.positive,
+            )
+        return c
+
     def _lower_tuple_constraints(
         self,
         constraints: tuple,
@@ -296,7 +453,7 @@ class LoweringPass:
         mapping_ref: ObjRef,
         indices_ref: ObjRef,
     ) -> tuple[tuple, list]:
-        """Lower constraints that reference a just-lowered TupleDef.
+        """Lower atomic constraints that reference a just-lowered TupleDef.
 
         Replaces:
         - TupleIndexEq(tuple_ref=T, index=i, entity=e) →
@@ -306,41 +463,23 @@ class LoweringPass:
         - TupleIndexMembership(tuple_ref=T, index=i, container=C) →
             FuncPairConstraint(mapping, Entity("idx_i"), C)
 
+        Compound constraints (Or/And/Not) are never present here: LoweringPass
+        runs inside LOCAL_PASSES, after Shannon expansion has flattened all
+        compound constraints to atomic form.
+
+        Duplicate FuncImage defs created here are later merged by
+        MergeIdenticalObjects, which runs after LoweringPass in LOCAL_PASSES.
+
         Returns:
             (new_constraints, extra_defs_to_add)
         """
-        new_constraints = list(constraints)
         extra_defs: list = []
-        image_ref = None  # lazily created FuncImage ref
 
-        for i, c in enumerate(new_constraints):
-            if isinstance(c, TupleIndexEq) and c.tuple_ref == tuple_ref:
-                idx_entity = Entity(f"{IDX_PREFIX}{c.index}")
-                new_constraints[i] = FuncPairConstraint(
-                    func=mapping_ref,
-                    arg_entity=idx_entity,
-                    result=c.entity,
-                    positive=c.positive,
-                )
-            elif isinstance(c, MembershipConstraint) and c.container == tuple_ref:
-                if image_ref is None:
-                    image_ref = self._new_ref()
-                    extra_defs.append((image_ref, FuncImage(func=mapping_ref, argument=indices_ref)))
-                new_constraints[i] = MembershipConstraint(
-                    entity=c.entity,
-                    container=image_ref,
-                    positive=c.positive,
-                )
-            elif isinstance(c, TupleIndexMembership) and c.tuple_ref == tuple_ref:
-                idx_entity = Entity(f"{IDX_PREFIX}{c.index}")
-                new_constraints[i] = FuncPairConstraint(
-                    func=mapping_ref,
-                    arg_entity=idx_entity,
-                    result=c.container,
-                    positive=c.positive,
-                )
-
-        return tuple(new_constraints), extra_defs
+        new_constraints = tuple(
+            self._lower_one_constraint(c, tuple_ref, mapping_ref, indices_ref, extra_defs)
+            for c in constraints
+        )
+        return new_constraints, extra_defs
 
     def _try_lower_sequences(
         self, problem: Problem, analysis: AnalysisResult
@@ -366,16 +505,24 @@ class LoweringPass:
 
             source_defn = problem.get_object(defn.source)
 
+            # Reject choose-with-replacement from a bag source.
+            # Check the SOURCE's bag_info (not the sequence's own, which would be BagInfo
+            # even for set sources when replace=True).
+            if defn.choose and defn.replace and analysis.bag_info.get(defn.source) is not None:
+                raise ValueError(
+                    f"SequenceDef {ref.id}: choose-with-replacement from a bag source is not supported."
+                )
+
             # Case 1: choose without replace → convert to choose first
             if defn.choose and not defn.replace:
-                if isinstance(source_defn, (SetInit, SetChoose)):
+                if analysis.bag_info.get(ref) is None:
                     chosen_ref = self._new_ref()
                     chosen_defn = SetChoose(
                         source=defn.source,
                         size=defn.size,
                     )
                 else:
-                    # Bag source
+                    # Bag source (or PartRef backed by a bag)
                     chosen_ref = self._new_ref()
                     chosen_defn = BagChoose(
                         source=defn.source,
@@ -398,6 +545,48 @@ class LoweringPass:
 
                 logger.info(f"Lowered SequenceDef {ref}: added choose object {chosen_ref}")
 
+                return Problem(
+                    defs=tuple(new_defs),
+                    constraints=problem.constraints,
+                    names=problem.names,
+                ), True
+
+            # Case 2: bag-like sequence OR choose-with-replace → create position-index flatten domain.
+            # A sequence is bag-like iff its own bag_info was populated by EntityAnalysis
+            # (replace=True, or replace=False with bag source).
+            seq_is_bag = analysis.bag_info.get(ref) is not None
+            choose_replace = defn.choose and defn.replace
+            if (seq_is_bag or choose_replace) and defn.flatten is None:
+                size = defn.size
+                if size is None:
+                    own_info = analysis.set_info.get(ref) or analysis.bag_info.get(ref)
+                    if own_info is not None and own_info.exact_size is not None:
+                        size = own_info.exact_size
+                    else:
+                        raise ValueError(
+                            f"SequenceDef {ref.id}: sequence size must be specified explicitly. "
+                            "Use 'choose k sequence from <source>' with an explicit k, "
+                            "or add a size constraint '|<seq>| == k' or '|<source>| == k'."
+                        )
+                idx_entities = frozenset(Entity(f"{IDX_PREFIX}{i}") for i in range(size))
+                flatten_ref = self._new_ref()
+                flatten_defn = SetInit(entities=idx_entities)
+                new_seq_defn = SequenceDef(
+                    source=defn.source,
+                    choose=defn.choose,
+                    replace=defn.replace,
+                    size=size,
+                    circular=defn.circular,
+                    reflection=defn.reflection,
+                    flatten=flatten_ref,
+                )
+                new_defs = list(problem.defs)
+                new_defs.append((flatten_ref, flatten_defn))
+                new_defs = [(r, d) if r != ref else (ref, new_seq_defn) for r, d in new_defs]
+                logger.info(
+                    f"Lowered SequenceDef {ref}: added flatten object {flatten_ref} "
+                    f"with {size} position entities"
+                )
                 return Problem(
                     defs=tuple(new_defs),
                     constraints=problem.constraints,
@@ -439,8 +628,8 @@ class LoweringPass:
             )
 
             # Create FuncImage for the domain
-            img_ref = self._new_ref()
             img_defn = FuncImage(func=ref, argument=defn.domain)
+            img_ref = self._new_ref()
 
             # Create SizeConstraint for injectivity
             # |f(domain)| == |domain|
@@ -512,21 +701,24 @@ class LoweringPass:
                     continue
 
                 tuple_ref = atom.tuple_ref
-                if tuple_ref not in self._tuple_to_mapping:
+                if tuple_ref not in self._tuple_info:
                     # Tuple not yet lowered — keep as-is for next round
                     new_terms.append((atom, coef))
                     continue
 
-                mapping_ref = self._tuple_to_mapping[tuple_ref]
-                indices_ref = self._tuple_to_indices[tuple_ref]
-                choose = self._tuple_choose.get(tuple_ref, True)
+                info = self._tuple_info[tuple_ref]
+                mapping_ref = info.mapping_ref
+                indices_ref = info.indices_ref
+                choose = info.choose
 
                 if not choose and atom.deduplicate:
                     # SetIntersection(mapping.codomain, count_obj)
                     mapping_defn = problem.get_object(mapping_ref)
                     codomain_ref = mapping_defn.codomain
                     new_ref = self._new_ref()
-                    extra_defs.append((new_ref, SetIntersection(left=codomain_ref, right=atom.count_obj)))
+                    extra_defs.append(
+                        (new_ref, SetIntersection(left=codomain_ref, right=atom.count_obj))
+                    )
                 elif not atom.deduplicate:
                     # FuncInverseImage(mapping, count_obj)
                     new_ref = self._new_ref()
@@ -534,9 +726,13 @@ class LoweringPass:
                 else:
                     # SetIntersection(FuncImage(mapping, indices), count_obj)
                     img_ref = self._new_ref()
-                    extra_defs.append((img_ref, FuncImage(func=mapping_ref, argument=indices_ref)))
+                    extra_defs.append(
+                        (img_ref, FuncImage(func=mapping_ref, argument=indices_ref))
+                    )
                     new_ref = self._new_ref()
-                    extra_defs.append((new_ref, SetIntersection(left=img_ref, right=atom.count_obj)))
+                    extra_defs.append(
+                        (new_ref, SetIntersection(left=img_ref, right=atom.count_obj))
+                    )
 
                 new_terms.append((new_ref, coef))
                 constraint_changed = True

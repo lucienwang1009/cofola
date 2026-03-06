@@ -83,7 +83,7 @@ class SetDifference:
 
 
 # Union type for all set objects
-SetObjDef = SetInit | SetChoose | SetChooseReplace | SetUnion | SetIntersection | SetDifference
+SetObjDef = SetInit | SetChoose | SetUnion | SetIntersection | SetDifference
 
 
 # =============================================================================
@@ -167,7 +167,7 @@ class BagSupport:
     source: ObjRef
 
 
-# Union type for all bag objects
+# Union type for pure bag objects (BagSupport is set-like, see DerivedSetObjDef below)
 BagObjDef = (
     BagInit
     | BagChoose
@@ -175,7 +175,7 @@ BagObjDef = (
     | BagAdditiveUnion
     | BagIntersection
     | BagDifference
-    | BagSupport
+    | SetChooseReplace
 )
 
 
@@ -232,8 +232,8 @@ class FuncInverse:
     func: ObjRef
 
 
-# Union type for all function objects
-FuncObjDef = FuncDef | FuncInverse | FuncImage | FuncInverseImage
+# Union type for function mappings only (FuncImage/FuncInverseImage are set-like, see DerivedSetObjDef)
+FuncObjDef = FuncDef | FuncInverse
 
 
 # =============================================================================
@@ -276,6 +276,7 @@ class SequenceDef:
     size: int | None = None
     circular: bool = False
     reflection: bool = False
+    flatten: ObjRef | None = None  # SetInit of position-index entities for Bag sources
 
 
 # =============================================================================
@@ -311,12 +312,20 @@ class PartRef:
 # Union Types
 # =============================================================================
 
+# Objects that always produce a set, derived from bags or functions:
+#   BagSupport(bag)          → support set of a bag
+#   FuncImage(f, A)          → image f(A), always a set
+#   FuncInverseImage(f, B)   → preimage f⁻¹(B), always a set
+DerivedSetObjDef = BagSupport | FuncImage | FuncInverseImage
+
+# All objects that unconditionally produce a set (primary + derived)
+AnySetObjDef = SetObjDef | DerivedSetObjDef
+
+# PartRef is polymorphic: set-like when partition.source is a set,
+# bag-like when partition.source is a bag.  Neither alias includes it.
+
 # All object definition types
-ObjDef = SetObjDef | BagObjDef | FuncObjDef | TupleDef | SequenceDef | PartitionDef | PartRef
-
-
-# All set-like objects (can be used in set operations)
-SetLikeObjDef = SetObjDef | BagSupport
+ObjDef = AnySetObjDef | BagObjDef | FuncObjDef | TupleDef | SequenceDef | PartitionDef | PartRef
 
 # All container objects (can contain entities)
-ContainerObjDef = SetLikeObjDef | BagObjDef | TupleDef | SequenceDef
+ContainerObjDef = AnySetObjDef | BagObjDef | PartRef | TupleDef | SequenceDef

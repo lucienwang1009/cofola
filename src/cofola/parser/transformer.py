@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from loguru import logger
 
+from cofola.frontend.objects import PartRef as IRPartRef
 from cofola.frontend.problem import ProblemBuilder
 from cofola.frontend.types import Entity, ObjRef
 from cofola.parser.common import CommonTransformer
@@ -43,8 +44,6 @@ class CofolaTransfomer(
         self.builder = ProblemBuilder()
         self.id2ref: dict[str, ObjRef] = {}
         self.entities: set[str] = set()  # known entity names
-        self._processing_partition_ref: ObjRef | None = None
-        self._processing_part_name: str | None = None
 
     def contains_entity(self, name: str) -> bool:
         return name in self.entities
@@ -65,15 +64,6 @@ class CofolaTransfomer(
 
     def identity(self, args):
         obj_id = str(args[0].value)
-        # If processing a part_constraint, expand partition part name to list of PartRef ObjRefs
-        if self._processing_part_name is not None and obj_id == self._processing_part_name:
-            from cofola.frontend.objects import PartRef as IRPartRef
-            part_refs = [
-                r for r, defn in self.builder._defs
-                if isinstance(defn, IRPartRef) and defn.partition == self._processing_partition_ref
-            ]
-            part_refs.sort(key=lambda r: self.builder.get_object(r).index)
-            return part_refs
         if obj_id in self.entities:
             return Entity(obj_id)
         return self._get_ref_by_id(obj_id)
@@ -199,12 +189,14 @@ class CofolaTransfomer(
             EqualityConstraint, TupleIndexEq, TupleIndexMembership, SequencePatternConstraint,
             FuncPairConstraint, BagSubsetConstraint, BagEqConstraint,
             NotConstraint, AndConstraint, OrConstraint,
+            ForAllParts,
         )
         _CONSTRAINT_TYPES = (
             SizeConstraint, MembershipConstraint, SubsetConstraint, DisjointConstraint,
             EqualityConstraint, TupleIndexEq, TupleIndexMembership, SequencePatternConstraint,
             FuncPairConstraint, BagSubsetConstraint, BagEqConstraint,
             NotConstraint, AndConstraint, OrConstraint,
+            ForAllParts,
         )
         for statement in args:
             if isinstance(statement, _CONSTRAINT_TYPES):
@@ -218,10 +210,13 @@ class CofolaTransfomer(
     def _transform_tree(self, tree):
         if tree.data == 'part_constraint':
             partition_id = tree.children[-1].children[0].value
-            self._processing_partition_ref = self._get_ref_by_id(partition_id)
-            self._processing_part_name = tree.children[-3].value
-            logger.info(
-                f"Processing partition {partition_id} "
-                f"with the part name {self._processing_part_name}"
-            )
+            partition_ref = self._get_ref_by_id(partition_id)
+            part_name = tree.children[-3].value
+            sentinel_ref = self.builder.add(IRPartRef(partition=partition_ref, index=-1))
+            self.id2ref[part_name] = sentinel_ref
+            logger.info(f"Processing part_constraint: part={part_name}, partition={partition_id}")
+            result = super()._transform_tree(tree)
+            del self.id2ref[part_name]
+            # sentinel_ref stays in builder._defs so LoweringPass can find it
+            return result
         return super()._transform_tree(tree)

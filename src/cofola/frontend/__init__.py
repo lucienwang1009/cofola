@@ -69,6 +69,9 @@ from .constraints import (
     SequencePatternConstraint,
     # Function constraints
     FuncPairConstraint,
+    # Bag constraints
+    BagSubsetConstraint,
+    BagEqConstraint,
     # Size atoms
     TupleCountAtom,
     SeqPatternCountAtom,
@@ -84,7 +87,6 @@ from .constraints import (
     Constraint,
 )
 from .problem import Problem, ProblemBuilder
-from .rewriter import Rewriter, RewriterWithSubstitution
 from .pretty import fmt_problem, fmt_analysis
 
 __all__ = [
@@ -145,6 +147,9 @@ __all__ = [
     "SequencePatternConstraint",
     # Function constraints
     "FuncPairConstraint",
+    # Bag constraints
+    "BagSubsetConstraint",
+    "BagEqConstraint",
     # Size atoms
     "TupleCountAtom",
     "SeqPatternCountAtom",
@@ -158,9 +163,6 @@ __all__ = [
     "ForAllParts",
     # Constraint union type
     "Constraint",
-    # Rewriter
-    "Rewriter",
-    "RewriterWithSubstitution",
     # Pretty-printing
     "fmt_problem",
     "fmt_analysis",

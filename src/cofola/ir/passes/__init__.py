@@ -10,9 +10,11 @@ This module provides the rewriter framework for IR-to-IR transformations:
 from .optimize import ConstantFolder
 from .simplify import SimplifyPass
 from .lowering import LoweringPass
+from .merge_identical import MergeIdenticalObjects
 
 __all__ = [
     "ConstantFolder",
     "SimplifyPass",
     "LoweringPass",
+    "MergeIdenticalObjects",
 ]

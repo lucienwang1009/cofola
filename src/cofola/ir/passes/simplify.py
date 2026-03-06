@@ -26,18 +26,21 @@ from cofola.frontend.constraints import (
     PredecessorPattern,
     NextToPattern,
 )
+from cofola.ir.pass_manager import TransformPass
 from cofola.frontend.problem import Problem
 from loguru import logger
 
 
-class SimplifyPass:
+class SimplifyPass(TransformPass):
     """Removes unused objects from the IR.
 
     This pass identifies objects that are not referenced by any constraint
     or other used object, and removes them.
     """
 
-    def run(self, problem: Problem) -> Problem:
+    required_analyses: list[type] = []
+
+    def run(self, problem: Problem, am=None) -> Problem:
         """Simplify a Problem by removing unused objects.
 
         Args:
