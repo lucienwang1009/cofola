@@ -279,6 +279,16 @@ class ObjectTransformerMixin:
             raise CofolaParsingError(f"Partition part index {idx} not found.")
 
         elif cat == 'tuple':
+            # If the tuple's source is a PartRef, return that PartRef directly.
+            # This allows `t[k]` to be used as the source partition part in
+            # constraints like `|t[0]| == 2` or `t[0] == e1`.
+            for r, defn in self.builder._defs:
+                if r == obj and isinstance(defn, TupleDef):
+                    src_ref = defn.source
+                    for r2, defn2 in self.builder._defs:
+                        if r2 == src_ref and isinstance(defn2, PartRef):
+                            return src_ref
+                    break
             return TupleIndexSentinel(tuple_ref=obj, index=int(index))
 
         else:
@@ -296,13 +306,13 @@ class ObjectTransformerMixin:
         _SEQ_PATTERNS = (TogetherPattern, LessThanPattern, PredecessorPattern, NextToPattern)
 
         def _effective_cat(obj: ObjRef) -> str:
-            """Get effective category, resolving PartRef to its source type."""
+            """Get effective category, resolving PartRef chains to their base type."""
             cat = self._ref_category(obj)
             if cat == 'part':
-                # PartRef — look at the partition's source to determine bag vs set
+                # PartRef — recurse through the chain until we reach a non-part
                 defn = self.builder.get_object(obj)  # PartRef
                 partition_defn = self.builder.get_object(defn.partition)  # PartitionDef
-                return self._ref_category(partition_defn.source)
+                return _effective_cat(partition_defn.source)
             return cat
 
         def single_operation(obj):

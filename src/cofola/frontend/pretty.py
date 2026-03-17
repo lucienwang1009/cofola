@@ -98,7 +98,7 @@ def _fmt_size_atom(atom: object, problem: Problem) -> str:
             return f"|{_name(atom, problem)}|"
         case TupleCountAtom(tuple_ref=tr, count_obj=co, deduplicate=dedup):
             dedup_s = " (dedup)" if dedup else ""
-            return f"{_name(tr, problem)}.count({_name(co, problem)}){dedup_s}"
+            return f"{_name(tr, problem)}.count({_ref_or_entity(co, problem)}){dedup_s}"
         case SeqPatternCountAtom(seq=s, pattern=p):
             return f"{_name(s, problem)}.count({_fmt_pattern(p, problem)})"
         case BagCountAtom(bag=b, entity=e):

@@ -55,7 +55,7 @@ from __future__ import annotations
 
 import math
 from functools import reduce
-from sympy import Eq, Ge, Gt, Le, Lt, Min
+from sympy import Eq, Ge, Gt, Le, Lt, Min, Ne
 from wfomc import (
     Algo,
     Const,
@@ -117,6 +117,16 @@ def encode_ir(
         5. return context.build()
     """
     logger.debug("encode_ir: {} objects to encode", len(list(problem.iter_objects())))
+
+    # When not using lifted inference, all indistinguishable entities must be
+    # treated as distinguishable. Merge indis_entities into dis_entities here,
+    # mirroring the reference preprocess_bags(lifted=False) logic.
+    if not lifted:
+        for info in analysis.bag_info.values():
+            for entities in info.indis_entities.values():
+                info.dis_entities.update(entities)
+            info.indis_entities = {}
+
     context = ContextIR(problem, analysis)
     MultinomialCoefficients.setup(len(context.domain))
 
@@ -309,7 +319,7 @@ def _encode_object(
             _encode_partition(ref, defn, problem, analysis, context)
 
         case ir_obj.PartRef():
-            pass  # Handled inside _encode_partition
+            _encode_part_ref(ref, defn, context)
 
         case _:
             logger.warning(f"encode_ir: unhandled IR node type {type(defn)} for ref {ref}")
@@ -413,12 +423,6 @@ def _encode_set_choose_replace(
     )
     bag_info = analysis.bag_info[ref]
 
-    # Use a single shared variable for all entity polynomial weights.
-    # This enables the multiset cardinality constraint to work correctly:
-    # the WFOMC polynomial becomes (1 + x + x^2 + ... + x^mult)^n, and
-    # Eq(x, size) extracts the coefficient of x^size = C(n+size-1, size).
-    shared_var = context.get_obj_var(ref, set_weight=False)
-
     for entity in bag_info.dis_entities:
         if entity in context.singletons:
             continue
@@ -430,13 +434,15 @@ def _encode_set_choose_replace(
         context.sentence = context.sentence & parse(
             f"\\forall X: ({bag_entity_pred}(X) <-> {obj_pred}(X) & {entity_pred}(X))"
         )
+        entity_var = context.get_entity_var(ref, entity)
         context.weighting[bag_entity_pred] = (
-            reduce(lambda x, y: x + shared_var**y, range(1, multiplicity + 1), 0),
+            reduce(lambda x, y: x + entity_var**y, range(1, multiplicity + 1), 0),
             1,
         )
 
     if defn.size is not None:
-        context.validator.append(Eq(shared_var, defn.size))
+        size_expr = _get_bag_size_expr(ref, analysis, context)
+        context.validator.append(Eq(size_expr, defn.size))
 
 
 def _encode_set_union(
@@ -574,6 +580,13 @@ def _encode_bag_choose(
             source_entity_var = context.get_entity_var(defn.source, entity)
             source_mul = source_entity_var
         context.validator.append(entity_var <= source_mul)
+
+    # Enforce the exact bag size when choose(bag, k) was written.
+    # Uses the full size expression (entity vars + singletons + indis) so
+    # that singletons are counted correctly via bag_singletons_pred.
+    if defn.size is not None:
+        size_expr = _get_bag_size_expr(ref, analysis, context)
+        context.validator.append(Eq(size_expr, defn.size))
 
 
 def _encode_bag_union(
@@ -767,9 +780,15 @@ def _encode_func_def(
         f"\\forall X: (\\exists Y: ({domain_pred}(X) -> {obj_pred}(X, Y)))"
         f" & \\forall X: (\\forall Y: ({obj_pred}(X, Y) -> ({domain_pred}(X) & {codomain_pred}(Y))))"
     )
-    # Set up size variable for the function
+    # Set up size variable for the function.
+    # domain_size: use get_size_expr so that when the domain has a known
+    # exact_size (e.g. SetInit, or SetChoose with explicit size) we get a plain
+    # integer instead of creating an extra symbolic variable.  The constraint
+    # Eq(obj_var, k) is then a simple constant comparison rather than a
+    # symbolic equality, which reduces the number of polynomial variables the
+    # WFOMC solver needs to track.
     obj_var = context.get_obj_var(ref)
-    domain_size = context.get_obj_var(defn.domain)
+    domain_size = context.get_size_expr(defn.domain)
     context.validator.append(Eq(obj_var, domain_size))
     # If surjective, add surjectivity sentence
     if defn.surjective:
@@ -890,9 +909,39 @@ def _encode_sequence(
     set_info = analysis.set_info.get(defn.source)
     bag_info = analysis.bag_info.get(defn.source)
 
-    if set_info is not None:
+    if set_info is not None and defn.flatten is not None:
+        logger.debug(
+            "_encode_sequence: source is a Set with flatten, p_entities={}, flatten={}",
+            len(set_info.p_entities),
+            defn.flatten.id,
+        )
+        # Set source with flatten (choose-with-replacement): use position-index entities
+        # as domain. Entity predicates label positions; no multiplicity constraints.
+        flatten_pred = context.get_pred(defn.flatten)
+        context.sentence = context.sentence & parse(
+            f"\\forall X: (\\forall Y: (({flatten_pred}(X) & ~{flatten_pred}(Y)) -> {context.leq_pred}(X,Y)))"
+        )
+        entity_preds = []
+        for entity in sorted(set_info.p_entities, key=lambda e: e.name):
+            entity_pred = context.get_entity_pred(ref, entity)
+            entity_preds.append(entity_pred)
+        if entity_preds:
+            or_formula = " | ".join(f"{pred}(X)" for pred in entity_preds)
+            context.sentence = context.sentence & parse(
+                f"\\forall X: (({or_formula}) <-> {flatten_pred}(X))"
+            )
+            context.sentence = context.sentence & exclusive(entity_preds)
+        # Overcount correction: idx positions can be permuted freely (factorial(size))
+        # plus non-flatten elements have factorial(domain_size - size) orderings
+        if defn.size is not None:
+            context.overcount = (
+                context.overcount
+                * math.factorial(domain_size - defn.size)
+                * math.factorial(defn.size)
+            )
+    elif set_info is not None:
         logger.debug("_encode_sequence: source is a Set")
-        # Sequence from a Set
+        # Sequence from a Set (no flatten)
         source_pred = context.get_pred(defn.source)
         context.sentence = context.sentence & parse(
             f"\\forall X: (\\forall Y: (({source_pred}(X) & ~{source_pred}(Y)) -> {context.leq_pred}(X,Y)))"
@@ -902,38 +951,75 @@ def _encode_sequence(
             context.overcount = context.overcount * math.factorial(domain_size - defn.size)
     elif bag_info is not None:
         logger.debug(
-            "_encode_sequence: source is a Bag, dis_entities={}",
+            "_encode_sequence: source is a Bag, dis_entities={}, flatten={}",
             len(bag_info.dis_entities),
+            defn.flatten.id if defn.flatten is not None else None,
         )
-        # Sequence from a Bag - need entity predicates
-        source_pred = context.get_pred(defn.source)
-        context.sentence = context.sentence & parse(
-            f"\\forall X: (\\forall Y: (({source_pred}(X) & ~{source_pred}(Y)) -> {context.leq_pred}(X,Y)))"
-        )
-        # Create entity predicates for each distinguishable entity
-        entity_preds = []
-        for entity in bag_info.dis_entities:
-            if entity in context.singletons:
-                continue
-            entity_pred = context.get_entity_pred(ref, entity)
-            entity_preds.append(entity_pred)
-            entity_var = context.get_entity_var(ref, entity)
-            context.weighting[entity_pred] = (entity_var, 1)
-            # Get multiplicity from source
-            if isinstance(source_defn, ir_obj.BagInit):
-                multi = bag_info.p_entities_multiplicity.get(entity, 0)
-                context.validator.append(Eq(entity_var, multi))
-            else:
-                # Source is derived bag - use its entity var
-                source_entity_var = context.get_entity_var(defn.source, entity)
-                context.validator.append(Eq(entity_var, source_entity_var))
-        # Exclusive covering
-        if entity_preds:
-            or_formula = " | ".join(f"{pred}(X)" for pred in entity_preds)
+        if defn.flatten is not None:
+            # Bag sequence with flatten: use position-index entities as domain.
+            # All dis_entities get entity predicates (no singleton bypass) and
+            # cover the flatten domain instead of the source bag predicate.
+            flatten_pred = context.get_pred(defn.flatten)
             context.sentence = context.sentence & parse(
-                f"\\forall X: (({or_formula}) <-> {source_pred}(X))"
+                f"\\forall X: (\\forall Y: (({flatten_pred}(X) & ~{flatten_pred}(Y)) -> {context.leq_pred}(X,Y)))"
             )
-            context.sentence = context.sentence & exclusive(entity_preds)
+            entity_preds = []
+            for entity in bag_info.dis_entities:
+                entity_pred = context.get_entity_pred(ref, entity)
+                entity_preds.append(entity_pred)
+                entity_var = context.get_entity_var(ref, entity)
+                context.weighting[entity_pred] = (entity_var, 1)
+                if isinstance(source_defn, ir_obj.BagInit):
+                    multi = bag_info.p_entities_multiplicity.get(entity, 0)
+                    context.validator.append(Eq(entity_var, multi))
+                else:
+                    source_entity_var = context.get_entity_var(defn.source, entity)
+                    context.validator.append(Eq(entity_var, source_entity_var))
+            if entity_preds:
+                or_formula = " | ".join(f"{pred}(X)" for pred in entity_preds)
+                context.sentence = context.sentence & parse(
+                    f"\\forall X: (({or_formula}) <-> {flatten_pred}(X))"
+                )
+                context.sentence = context.sentence & exclusive(entity_preds)
+        else:
+            # Bag sequence without flatten: use source bag predicate as domain.
+            source_pred = context.get_pred(defn.source)
+            context.sentence = context.sentence & parse(
+                f"\\forall X: (\\forall Y: (({source_pred}(X) & ~{source_pred}(Y)) -> {context.leq_pred}(X,Y)))"
+            )
+            # Create entity predicates for each distinguishable entity
+            entity_preds = []
+            singleton_entity_preds = []
+            for entity in bag_info.dis_entities:
+                if entity in context.singletons:
+                    # Singletons are in the source bag but handled via unary evidence.
+                    # Include their entity predicate in the covering formula so the
+                    # equivalence holds for singleton domain elements too.
+                    singleton_pred = _encode_entity_in_ctx(entity, context)
+                    singleton_entity_preds.append(singleton_pred)
+                    continue
+                entity_pred = context.get_entity_pred(ref, entity)
+                entity_preds.append(entity_pred)
+                entity_var = context.get_entity_var(ref, entity)
+                context.weighting[entity_pred] = (entity_var, 1)
+                # Get multiplicity from source
+                if isinstance(source_defn, ir_obj.BagInit):
+                    multi = bag_info.p_entities_multiplicity.get(entity, 0)
+                    context.validator.append(Eq(entity_var, multi))
+                else:
+                    # Source is derived bag - use its entity var
+                    source_entity_var = context.get_entity_var(defn.source, entity)
+                    context.validator.append(Eq(entity_var, source_entity_var))
+            # Exclusive covering: all non-singleton entity preds + singleton entity preds
+            # cover source_pred exactly (no overlap allowed between non-singleton preds).
+            all_covering_preds = entity_preds + singleton_entity_preds
+            if all_covering_preds:
+                or_formula = " | ".join(f"{pred}(X)" for pred in all_covering_preds)
+                context.sentence = context.sentence & parse(
+                    f"\\forall X: (({or_formula}) <-> {source_pred}(X))"
+                )
+            if entity_preds:
+                context.sentence = context.sentence & exclusive(entity_preds)
         # Overcount correction for bag sequences
         if defn.size is not None:
             context.overcount = (
@@ -946,8 +1032,14 @@ def _encode_sequence(
 
     # Handle circular and reflection
     if defn.circular:
-        context.circle_len = defn.size or domain_size
-        context.overcount = context.overcount * (defn.size or domain_size)
+        source_exact: int | None = None
+        if set_info is not None and set_info.exact_size is not None:
+            source_exact = set_info.exact_size
+        elif bag_info is not None and bag_info.exact_size is not None:
+            source_exact = bag_info.exact_size
+        circle_size = defn.size or source_exact or domain_size
+        context.circle_len = circle_size
+        context.overcount = context.overcount * circle_size
         if defn.reflection:
             context.overcount = context.overcount * 2
 
@@ -955,6 +1047,22 @@ def _encode_sequence(
 # =============================================================================
 # Partition encoder
 # =============================================================================
+
+
+def _encode_part_ref(
+    ref: ObjRef,
+    defn: ir_obj.PartRef,
+    context: ContextIR,
+) -> None:
+    """PartRef: predicate and entity vars already registered by _encode_partition.
+
+    _encode_partition runs for defn.partition before this node is reached
+    (PartitionDef precedes PartRef in topological order) and has already called:
+      context.get_pred(ref, create=True)       # main predicate
+      context.get_entity_var(ref, entity)      # per-entity vars (bag partitions)
+    Nothing additional is needed here.
+    """
+    context.get_pred(ref, use=False)  # defensive: verify predicate was created
 
 
 def _encode_partition(
@@ -1023,11 +1131,9 @@ def _encode_partition(
                 f"\\forall X: (({context.singletons_pred}(X) & {source_pred}(X)) -> ({exactly_one_formula}))"
             )
 
-        # Entity multiplicity partitioning
+        # Entity multiplicity partitioning (singletons included: multi=1 → weighting=(var,1))
         ordered_vars = [[] for _ in range(len(parts))]
         for entity in bag_info.dis_entities:
-            if entity in context.singletons:
-                continue
             multi = bag_info.p_entities_multiplicity[entity]
             entity_pred = _encode_entity_in_ctx(entity, context)
 
@@ -1137,7 +1243,13 @@ def _encode_size_constraint(
     left = 0
     for term, coef in c.terms:
         if isinstance(term, ObjRef):
-            var = context.get_obj_var(term)
+            # Bags need a multi-variable size expression (sum of per-entity vars +
+            # singleton contribution); sets/partitions use a single obj_var that
+            # counts membership in the predicate.
+            if term in analysis.bag_info:
+                var = _get_bag_size_expr(term, analysis, context)
+            else:
+                var = context.get_obj_var(term)
         elif isinstance(term, ir_cst.BagCountAtom):
             var = _get_bag_count_var(term, context)
         elif isinstance(term, ir_cst.SeqPatternCountAtom):
@@ -1153,6 +1265,7 @@ def _encode_size_constraint(
         "<=": Le,
         ">": Gt,
         ">=": Ge,
+        "!=": Ne,
     }
     comparator_fn = comparator_map.get(c.comparator)
     if comparator_fn is None:
@@ -1246,6 +1359,26 @@ def _encode_func_pair_constraint(
         context.sentence = context.sentence & parse(
             f"\\forall X: (\\forall Y: ({func_pred}(X, Y) & {arg_pred}(X) -> ~{result_pred}(Y)))"
         )
+
+
+def _get_seq_entity_pred(
+    entity_or_ref: Entity | ObjRef,
+    seq_ref: ObjRef,
+    context: ContextIR,
+) -> object:
+    """Return the predicate for an entity/ref in the context of a sequence.
+
+    For sequences with a flatten object (Bag sources), entity type predicates
+    live on the flatten domain (position indices), so use get_entity_pred.
+    For plain Set sequences, entity type constants are domain elements themselves,
+    so use _encode_entity_in_ctx (unary evidence pinning).
+    """
+    if isinstance(entity_or_ref, Entity):
+        seq_defn = context.problem.get_object(seq_ref)
+        if seq_defn is not None and seq_defn.flatten is not None:
+            return context.get_entity_pred(seq_ref, entity_or_ref)
+        return _encode_entity_in_ctx(entity_or_ref, context)
+    return context.get_pred(entity_or_ref)
 
 
 def _encode_sequence_pattern_constraint(
@@ -1369,16 +1502,7 @@ def _encode_together_pattern(
     # Get predicate for the group
     group_defn = context.problem.get_object(group_ref)
     if isinstance(group_defn, Entity):
-        # Check if sequence source is a bag
-        seq_defn = context.problem.get_object(seq_ref)
-        if seq_defn is not None and hasattr(seq_defn, 'source'):
-            source_defn = context.problem.get_object(seq_defn.source)
-            if source_defn is not None and isinstance(source_defn, ir_obj.BagInit):
-                obj_pred = context.get_entity_pred(seq_ref, group_defn)
-            else:
-                obj_pred = _encode_entity_in_ctx(group_defn, context)
-        else:
-            obj_pred = _encode_entity_in_ctx(group_defn, context)
+        obj_pred = _get_seq_entity_pred(group_defn, seq_ref, context)
     else:
         obj_pred = context.get_pred(group_ref)
 
@@ -1415,15 +1539,8 @@ def _encode_less_than_pattern(
     """Encode a LessThanPattern: left appears before right in seq."""
 
     # Get predicates for left and right
-    if isinstance(pattern.left, Entity):
-        left_pred = _encode_entity_in_ctx(pattern.left, context)
-    else:
-        left_pred = context.get_pred(pattern.left)
-
-    if isinstance(pattern.right, Entity):
-        right_pred = _encode_entity_in_ctx(pattern.right, context)
-    else:
-        right_pred = context.get_pred(pattern.right)
+    left_pred = _get_seq_entity_pred(pattern.left, seq_ref, context)
+    right_pred = _get_seq_entity_pred(pattern.right, seq_ref, context)
 
     # Get LEQ predicate for the sequence
     leq_pred = context.get_leq_pred(seq_ref)
@@ -1455,15 +1572,8 @@ def _encode_predecessor_pattern(
     """Encode a PredecessorPattern: first immediately precedes second in seq."""
 
     # Get predicates for first and second
-    if isinstance(pattern.first, Entity):
-        first_pred = _encode_entity_in_ctx(pattern.first, context)
-    else:
-        first_pred = context.get_pred(pattern.first)
-
-    if isinstance(pattern.second, Entity):
-        second_pred = _encode_entity_in_ctx(pattern.second, context)
-    else:
-        second_pred = context.get_pred(pattern.second)
+    first_pred = _get_seq_entity_pred(pattern.first, seq_ref, context)
+    second_pred = _get_seq_entity_pred(pattern.second, seq_ref, context)
 
     # Get predecessor predicate for the sequence
     pred_pred = context.get_predecessor_pred(seq_ref)
@@ -1495,15 +1605,8 @@ def _encode_next_to_pattern(
     """Encode a NextToPattern: first and second are adjacent in seq."""
 
     # Get predicates for first and second
-    if isinstance(pattern.first, Entity):
-        first_pred = _encode_entity_in_ctx(pattern.first, context)
-    else:
-        first_pred = context.get_pred(pattern.first)
-
-    if isinstance(pattern.second, Entity):
-        second_pred = _encode_entity_in_ctx(pattern.second, context)
-    else:
-        second_pred = context.get_pred(pattern.second)
+    first_pred = _get_seq_entity_pred(pattern.first, seq_ref, context)
+    second_pred = _get_seq_entity_pred(pattern.second, seq_ref, context)
 
     # Get next-to predicate for the sequence
     next_to_pred = context.get_next_to_pred(seq_ref)
@@ -1529,6 +1632,66 @@ def _encode_next_to_pattern(
 # =============================================================================
 # Size-atom variable helpers
 # =============================================================================
+
+
+def _get_bag_size_expr(
+    ref: ObjRef,
+    analysis: AnalysisResult,
+    context: ContextIR,
+) -> object:
+    """Compute the total size expression for a bag.
+
+    Mirrors Bag.encode_size_var from the reference implementation.
+
+    The total size of a bag is:
+      - Sum of entity vars for non-singleton distinguishable entities
+      - A singleton contribution counted via bag_singletons_pred (if singletons exist)
+      - Sum of indistinguishable entity vars (usually empty for lifted=False)
+
+    This must be called AFTER the bag object has been encoded so that entity
+    vars for dis_entities already exist in context.ref_entity2var.
+
+    Args:
+        ref: ObjRef of the bag.
+        analysis: AnalysisResult.
+        context: ContextIR.
+
+    Returns:
+        Sympy expression (or int 0) for the total bag multiplicity.
+    """
+    # Sum entity vars for non-singleton distinguishable entities.
+    # These vars are created by _encode_bag_choose / _encode_bag_additive_union etc.
+    entity_vars = context.get_entity_var(ref)  # dict[IREntity, Expr]
+    term = sum(
+        (var for e, var in entity_vars.items() if e not in context.singletons),
+        0,
+    )
+
+    # Singleton contribution: count how many singleton entities are in this bag.
+    if context.singletons and context.singletons_pred is not None:
+        if ref not in context.ref2bag_singletons_pred:
+            obj_pred = context.get_pred(ref)
+            singletons_pred = context.singletons_pred
+            bag_singletons_pred = context.create_pred(
+                f"{context._get_name(ref)}_singletons", 1
+            )
+            context.sentence = context.sentence & parse(
+                f"\\forall X: ({bag_singletons_pred}(X) <-> {obj_pred}(X) & {singletons_pred}(X))"
+            )
+            # set_weight=False: do NOT put a weight on the main obj_pred
+            singleton_var = context.get_obj_var(ref, set_weight=False)
+            context.weighting[bag_singletons_pred] = (singleton_var, 1)
+            context.ref2bag_singletons_pred[ref] = bag_singletons_pred
+        else:
+            singleton_var = context.get_obj_var(ref, set_weight=False)
+        term = term + singleton_var
+
+    # Indistinguishable entity vars (always empty when lifted=False).
+    indis_vars = context.get_indis_entity_var(ref)  # dict[int, Expr]
+    if indis_vars:
+        term = term + sum(indis_vars.values())
+
+    return term
 
 
 def _get_bag_count_var(
@@ -1567,16 +1730,8 @@ def _get_seq_pattern_count_var(
 
     match pattern:
         case ir_cst.LessThanPattern():
-            # Get predicates for left and right
-            if isinstance(pattern.left, Entity):
-                left_pred = _encode_entity_in_ctx(pattern.left, context)
-            else:
-                left_pred = context.get_pred(pattern.left)
-
-            if isinstance(pattern.right, Entity):
-                right_pred = _encode_entity_in_ctx(pattern.right, context)
-            else:
-                right_pred = context.get_pred(pattern.right)
+            left_pred = _get_seq_entity_pred(pattern.left, seq_ref, context)
+            right_pred = _get_seq_entity_pred(pattern.right, seq_ref, context)
 
             # Get LEQ predicate for the sequence
             leq_pred = context.get_leq_pred(seq_ref)
@@ -1595,16 +1750,8 @@ def _get_seq_pattern_count_var(
             return leq_var
 
         case ir_cst.PredecessorPattern():
-            # Get predicates for first and second
-            if isinstance(pattern.first, Entity):
-                first_pred = _encode_entity_in_ctx(pattern.first, context)
-            else:
-                first_pred = context.get_pred(pattern.first)
-
-            if isinstance(pattern.second, Entity):
-                second_pred = _encode_entity_in_ctx(pattern.second, context)
-            else:
-                second_pred = context.get_pred(pattern.second)
+            first_pred = _get_seq_entity_pred(pattern.first, seq_ref, context)
+            second_pred = _get_seq_entity_pred(pattern.second, seq_ref, context)
 
             # Get predecessor predicate for the sequence
             pred_pred = context.get_predecessor_pred(seq_ref)
@@ -1623,16 +1770,8 @@ def _get_seq_pattern_count_var(
             return pred_var
 
         case ir_cst.NextToPattern():
-            # Get predicates for first and second
-            if isinstance(pattern.first, Entity):
-                first_pred = _encode_entity_in_ctx(pattern.first, context)
-            else:
-                first_pred = context.get_pred(pattern.first)
-
-            if isinstance(pattern.second, Entity):
-                second_pred = _encode_entity_in_ctx(pattern.second, context)
-            else:
-                second_pred = context.get_pred(pattern.second)
+            first_pred = _get_seq_entity_pred(pattern.first, seq_ref, context)
+            second_pred = _get_seq_entity_pred(pattern.second, seq_ref, context)
 
             # Get next-to predicate for the sequence
             next_to_pred = context.get_next_to_pred(seq_ref)

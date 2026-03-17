@@ -25,10 +25,13 @@ from cofola.frontend.objects import (
     BagIntersection,
     BagDifference,
     BagSupport,
+    FuncDef,
+    FuncImage,
+    FuncInverseImage,
     ObjDef,
     PartitionDef,
+    PartRef,
 )
-from cofola.ir.pass_manager import AnalysisPass
 from cofola.frontend.problem import Problem
 from cofola.frontend.constraints import SizeConstraint, BagCountAtom
 from loguru import logger
@@ -41,10 +44,12 @@ class SetInfo:
     Attributes:
         p_entities: Potential entities that could be in this set.
         max_size: Maximum possible size of this set.
+        exact_size: Known exact size if fixed at analysis time, else None.
     """
 
     p_entities: set[Entity]
     max_size: int
+    exact_size: int | None = None
 
 
 @dataclass
@@ -56,12 +61,14 @@ class BagInfo:
         max_size: Maximum possible size (sum of multiplicities).
         dis_entities: Distinguishable entities (non-liftable).
         indis_entities: Indistinguishable entities grouped by multiplicity.
+        exact_size: Known exact size if fixed at analysis time, else None.
     """
 
     p_entities_multiplicity: dict[Entity, int]
     max_size: int
     dis_entities: set[Entity] = field(default_factory=set)
     indis_entities: dict[int, set[Entity]] = field(default_factory=dict)
+    exact_size: int | None = None
 
 
 @dataclass
@@ -73,17 +80,15 @@ class AnalysisResult:
         bag_info: Analysis results for bag objects.
         all_entities: All entities used in the problem.
         singletons: Entities that appear in exactly one base object.
-        unsatisfiable: True if a size conflict was detected during analysis.
     """
 
     set_info: dict[ObjRef, SetInfo]
     bag_info: dict[ObjRef, BagInfo]
     all_entities: set[Entity]
     singletons: set[Entity]
-    unsatisfiable: bool = False
 
 
-class EntityAnalysis(AnalysisPass):
+class EntityAnalysis:
     """Computes entity-related properties for all objects in a Problem.
 
     This is a bottom-up analysis that processes objects in topological order,
@@ -92,14 +97,11 @@ class EntityAnalysis(AnalysisPass):
     Replaces the legacy inherit() methods on each object class.
     """
 
-    required_analyses: list[type] = []
-
-    def run(self, problem: Problem, am=None) -> AnalysisResult:
+    def run(self, problem: Problem) -> AnalysisResult:
         """Run the entity analysis on a Problem.
 
         Args:
             problem: The Problem to analyze.
-            am: AnalysisManager (unused; EntityAnalysis has no required_analyses).
 
         Returns:
             AnalysisResult containing all computed information.
@@ -144,7 +146,13 @@ class EntityAnalysis(AnalysisPass):
                 self._analyze_bag_difference(ref, defn, bag_info, problem)
             elif isinstance(defn, BagSupport):
                 self._analyze_bag_support(ref, defn, set_info, bag_info, problem)
-            # Note: TupleDef, SequenceDef, FuncDef, PartitionDef handled separately
+            elif isinstance(defn, FuncImage):
+                self._analyze_func_image(ref, defn, set_info, problem)
+            elif isinstance(defn, FuncInverseImage):
+                self._analyze_func_inverse_image(ref, defn, set_info, problem)
+            elif isinstance(defn, PartRef):
+                self._analyze_part_ref(ref, defn, set_info, bag_info, problem)
+            # Note: TupleDef, SequenceDef, FuncDef, FuncInverse, PartitionDef not analyzed
             logger.debug("  analyzed {} ref={}", type(defn).__name__, ref.id)
 
         # Compute all_entities and singletons
@@ -161,13 +169,13 @@ class EntityAnalysis(AnalysisPass):
                      {e.name for e in singletons})
 
         for ref, info in set_info.items():
-            logger.debug("  SetInfo ref={}: p_entities={}, max_size={}",
-                         ref.id, {e.name for e in info.p_entities}, info.max_size)
+            logger.debug("  SetInfo ref={}: p_entities={}, max_size={}, exact_size={}",
+                         ref.id, {e.name for e in info.p_entities}, info.max_size, info.exact_size)
         for ref, info in bag_info.items():
-            logger.debug("  BagInfo ref={}: p_entities={}, max_size={}",
+            logger.debug("  BagInfo ref={}: p_entities={}, max_size={}, exact_size={}",
                          ref.id,
                          {e.name: m for e, m in info.p_entities_multiplicity.items()},
-                         info.max_size)
+                         info.max_size, info.exact_size)
 
         return AnalysisResult(
             set_info=set_info,
@@ -181,9 +189,11 @@ class EntityAnalysis(AnalysisPass):
     ) -> None:
         """SetInit: entities are directly given, max_size = len(entities)."""
         entities = set(defn.entities)
+        n = len(entities)
         set_info[ref] = SetInfo(
             p_entities=entities,
-            max_size=len(entities),
+            max_size=n,
+            exact_size=n,
         )
 
     def _analyze_set_choose(
@@ -206,6 +216,7 @@ class EntityAnalysis(AnalysisPass):
         set_info[ref] = SetInfo(
             p_entities=src_info.p_entities.copy(),
             max_size=max_s,
+            exact_size=defn.size,  # None if no explicit size given
         )
 
     def _analyze_set_choose_replace(
@@ -226,22 +237,21 @@ class EntityAnalysis(AnalysisPass):
             return
 
         # SetChooseReplace behaves like a bag where each entity can have
-        # multiplicity up to size (if given) or unlimited.
-        # Use sys.maxsize as sentinel when size is None so MergedAnalysis.min()
-        # correctly adopts the LP-inferred bound (same pattern as
-        # _analyze_ordered_collection for replace=True).
-        max_mult = defn.size if defn.size is not None else sys.maxsize
-        max_size = defn.size if defn.size is not None else sys.maxsize
+        # multiplicity up to size (if given) or unlimited
+        max_mult = defn.size if defn.size is not None else float('inf')
 
-        p_entities_multiplicity: dict[Entity, int] = {
-            entity: max_mult for entity in src_info.p_entities
-        }
+        p_entities_multiplicity: dict[Entity, int] = {}
+        for entity in src_info.p_entities:
+            p_entities_multiplicity[entity] = max_mult if max_mult != float('inf') else 0
+
+        max_size = defn.size if defn.size is not None else 0
 
         bag_info[ref] = BagInfo(
             p_entities_multiplicity=p_entities_multiplicity,
             max_size=max_size,
             dis_entities=set(),
             indis_entities={},
+            exact_size=defn.size,  # None if no explicit size given
         )
 
     def _analyze_set_union(
@@ -261,6 +271,7 @@ class EntityAnalysis(AnalysisPass):
         set_info[ref] = SetInfo(
             p_entities=left_info.p_entities | right_info.p_entities,
             max_size=left_info.max_size + right_info.max_size,
+            exact_size=None,
         )
 
     def _analyze_set_intersection(
@@ -280,6 +291,7 @@ class EntityAnalysis(AnalysisPass):
         set_info[ref] = SetInfo(
             p_entities=left_info.p_entities & right_info.p_entities,
             max_size=min(left_info.max_size, right_info.max_size),
+            exact_size=None,
         )
 
     def _analyze_set_difference(
@@ -297,10 +309,30 @@ class EntityAnalysis(AnalysisPass):
             return
 
         # p_entities are those from left (conservative approximation)
-        # max_size is bounded by left's max_size
+        # max_size: tighten using right's exact_size if known
+        if right_info.exact_size is not None:
+            max_s = max(0, left_info.max_size - right_info.exact_size)
+        else:
+            max_s = left_info.max_size
+
+        # exact_size: known iff right is structurally a subset of left
+        # (e.g. SetChoose/SetChooseReplace with source == left), so |left - right| = |left| - |right|
+        right_defn = problem.get_object(defn.right)
+        right_is_subset_of_left = (
+            isinstance(right_defn, (SetChoose, SetChooseReplace))
+            and right_defn.source == defn.left
+        )
+        if (right_is_subset_of_left
+                and left_info.exact_size is not None
+                and right_info.exact_size is not None):
+            exact_s: int | None = left_info.exact_size - right_info.exact_size
+        else:
+            exact_s = None
+
         set_info[ref] = SetInfo(
             p_entities=left_info.p_entities.copy(),
-            max_size=left_info.max_size,
+            max_size=max_s,
+            exact_size=exact_s,
         )
 
     def _analyze_bag_init(
@@ -315,6 +347,7 @@ class EntityAnalysis(AnalysisPass):
             max_size=max_size,
             dis_entities=set(),
             indis_entities={},
+            exact_size=max_size,
         )
 
     def _analyze_bag_choose(
@@ -338,6 +371,7 @@ class EntityAnalysis(AnalysisPass):
             max_size=max_s,
             dis_entities=src_info.dis_entities.copy(),
             indis_entities={k: v.copy() for k, v in src_info.indis_entities.items()},
+            exact_size=defn.size,  # None if no explicit size given
         )
 
     def _analyze_bag_union(
@@ -399,11 +433,24 @@ class EntityAnalysis(AnalysisPass):
                 + right_info.p_entities_multiplicity.get(entity, 0)
             )
 
+        # exact_size: only valid if entity sets are disjoint and both operands have exact_size
+        left_keys = set(left_info.p_entities_multiplicity.keys())
+        right_keys = set(right_info.p_entities_multiplicity.keys())
+        if (
+            left_keys.isdisjoint(right_keys)
+            and left_info.exact_size is not None
+            and right_info.exact_size is not None
+        ):
+            exact_s: int | None = left_info.exact_size + right_info.exact_size
+        else:
+            exact_s = None
+
         bag_info[ref] = BagInfo(
             p_entities_multiplicity=p_entities_multiplicity,
             max_size=left_info.max_size + right_info.max_size,
             dis_entities=left_info.dis_entities | right_info.dis_entities,
             indis_entities={},  # All entities are distinguishable in additive union
+            exact_size=exact_s,
         )
 
     def _analyze_bag_intersection(
@@ -474,59 +521,132 @@ class EntityAnalysis(AnalysisPass):
             max_size=src_info.max_size,
         )
 
+    def _analyze_func_image(
+        self,
+        ref: ObjRef,
+        defn: FuncImage,
+        set_info: dict[ObjRef, SetInfo],
+        problem: Problem,
+    ) -> None:
+        """FuncImage: image f(A), always a set, subset of codomain.
+
+        p_entities = codomain's p_entities (conservative).
+        max_size   = min(|argument|, |codomain|).
+        """
+        func_defn = problem.get_object(defn.func)
+        if not isinstance(func_defn, FuncDef):
+            return
+        codomain_info = set_info.get(func_defn.codomain)
+        if codomain_info is None:
+            return
+
+        argument = defn.argument
+        if isinstance(argument, Entity):
+            # f(a) for a single entity: at most 1 result element
+            max_size = 1
+        else:
+            arg_info = set_info.get(argument)
+            if arg_info is not None:
+                max_size = min(arg_info.max_size, codomain_info.max_size)
+            else:
+                max_size = codomain_info.max_size
+
+        set_info[ref] = SetInfo(
+            p_entities=codomain_info.p_entities.copy(),
+            max_size=max_size,
+        )
+
+    def _analyze_func_inverse_image(
+        self,
+        ref: ObjRef,
+        defn: FuncInverseImage,
+        set_info: dict[ObjRef, SetInfo],
+        problem: Problem,
+    ) -> None:
+        """FuncInverseImage: preimage f⁻¹(B), always a set, subset of domain.
+
+        p_entities = domain's p_entities (conservative).
+        max_size   = |domain|.
+        """
+        func_defn = problem.get_object(defn.func)
+        if not isinstance(func_defn, FuncDef):
+            return
+        domain_info = set_info.get(func_defn.domain)
+        if domain_info is None:
+            return
+
+        set_info[ref] = SetInfo(
+            p_entities=domain_info.p_entities.copy(),
+            max_size=domain_info.max_size,
+        )
+
+    def _analyze_part_ref(
+        self,
+        ref: ObjRef,
+        defn: PartRef,
+        set_info: dict[ObjRef, SetInfo],
+        bag_info: dict[ObjRef, BagInfo],
+        problem: Problem,
+    ) -> None:
+        """PartRef: inherit entity information from the partition's source.
+
+        Each part has the same *potential* entities as the source (any entity
+        could end up in any part).  max_size is conservatively the source's
+        max_size — MaxSizeInference can tighten this later via SizeConstraints.
+
+        Set partition  → SetInfo
+        Bag partition  → BagInfo
+        """
+        partition_defn = problem.get_object(defn.partition)
+        source = partition_defn.source
+
+        if source in set_info:
+            src = set_info[source]
+            set_info[ref] = SetInfo(
+                p_entities=set(src.p_entities),
+                max_size=src.max_size,
+            )
+        elif source in bag_info:
+            src = bag_info[source]
+            bag_info[ref] = BagInfo(
+                p_entities_multiplicity=dict(src.p_entities_multiplicity),
+                max_size=src.max_size,
+            )
+
     def _compute_singletons(
         self,
         set_info: dict[ObjRef, SetInfo],
         bag_info: dict[ObjRef, BagInfo],
         problem,
     ) -> set[Entity]:
-        """Compute singleton entities following legacy preprocess_bags logic.
+        """Compute singleton entities.
 
-        An entity is a singleton if:
-        - It appears exactly once across all SetInit/BagInit objects, AND
-        - Its multiplicity in BagInit is 1 (not a repeated bag element), AND
-        - The problem has no PartitionDef (partitions require full encoding), AND
-        - It does not appear in any BagCountAtom constraint (multiplicities must be tracked).
+        An entity is a singleton if its multiplicity is at most 1 in every
+        bag object in the problem — i.e., it cannot be a repeated element
+        (multiplicity > 1) in any bag.
 
-        Ports the legacy CofolaProblem.update_singletons() logic.
+        SetInit entities always satisfy this (sets have no repeated elements).
         """
-        # If any PartitionDef exists, no singletons (partitions need entity tracking)
-        for ref in problem.refs():
-            defn = problem.get_object(ref)
-            if isinstance(defn, PartitionDef):
-                return set()
+        # All entities in the problem are candidates
+        all_entities: set[Entity] = set()
+        for info in set_info.values():
+            all_entities.update(info.p_entities)
+        for info in bag_info.values():
+            all_entities.update(info.p_entities_multiplicity.keys())
 
-        singletons: set[Entity] = set()
-
-        # From BagInit: only entities with multiplicity == 1
-        for ref, info in bag_info.items():
-            defn = problem.get_object(ref)
-            if isinstance(defn, BagInit):
-                for entity, mult in info.p_entities_multiplicity.items():
-                    if mult == 1:
-                        singletons.add(entity)
-
-        # From SetInit: all entities (count = 1 by definition)
-        entity_count: dict[Entity, int] = {}
-        for ref, info in set_info.items():
-            for entity in info.p_entities:
-                entity_count[entity] = entity_count.get(entity, 0) + 1
-        # Only keep entities that appear in exactly one set
-        set_singletons = {e for e, c in entity_count.items() if c == 1}
-        singletons.update(set_singletons)
-
-        # Remove entities that appear in any bag (including SetChooseReplace) with mult > 1
-        # This mirrors the legacy update_singletons which discarded entities with mult != 1
-        for ref, info in bag_info.items():
+        # Disqualify entities whose max multiplicity exceeds 1 in any bag object
+        non_singletons: set[Entity] = set()
+        for info in bag_info.values():
             for entity, mult in info.p_entities_multiplicity.items():
-                if mult != 1:
-                    singletons.discard(entity)
+                if mult > 1:
+                    non_singletons.add(entity)
 
-        # Remove entities that appear in BagCountAtom constraints
+        # Disqualify entities referenced by BagCountAtom constraints
+        # (their multiplicities must be tracked per-instance, not fixed)
         for constraint in problem.constraints:
             if isinstance(constraint, SizeConstraint):
                 for term, _ in constraint.terms:
                     if isinstance(term, BagCountAtom):
-                        singletons.discard(term.entity)
+                        non_singletons.add(term.entity)
 
-        return singletons
+        return all_entities - non_singletons

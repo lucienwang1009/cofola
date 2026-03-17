@@ -1593,7 +1593,8 @@
     "answer": "30860",
     "tags": [
       "tuple",
-      "unknown length"
+      "unknown length",
+      "unencodeable"
     ],
     "program": "alphabet = set(A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T)\nword = choose_replace_tuple(alphabet)\n|word| <= 4\nA in word"
   },

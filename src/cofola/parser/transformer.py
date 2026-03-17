@@ -152,26 +152,17 @@ class CofolaTransfomer(
     def _ref_category(self, ref: ObjRef) -> str:
         """Get the category of an ObjRef."""
         from cofola.frontend.objects import (
-            SetInit, SetChoose, SetChooseReplace, SetUnion, SetIntersection, SetDifference,
-            BagSupport,
-            BagInit, BagChoose, BagUnion, BagAdditiveUnion, BagIntersection, BagDifference,
-            FuncDef, FuncInverse, FuncImage, FuncInverseImage,
+            AnySetObjDef, BagObjDef, FuncObjDef,
             TupleDef, SequenceDef, PartitionDef, PartRef,
         )
         defn = self.builder.get_object(ref)
         if defn is None:
             return 'unknown'
-        if isinstance(defn, (
-            SetInit, SetChoose, SetChooseReplace,
-            SetUnion, SetIntersection, SetDifference, BagSupport
-        )):
+        if isinstance(defn, AnySetObjDef):
             return 'set'
-        if isinstance(defn, (
-            BagInit, BagChoose, BagUnion, BagAdditiveUnion,
-            BagIntersection, BagDifference
-        )):
+        if isinstance(defn, BagObjDef):
             return 'bag'
-        if isinstance(defn, (FuncDef, FuncInverse, FuncImage, FuncInverseImage)):
+        if isinstance(defn, FuncObjDef):
             return 'func'
         if isinstance(defn, TupleDef):
             return 'tuple'

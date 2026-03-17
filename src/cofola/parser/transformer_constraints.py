@@ -80,11 +80,9 @@ class ConstraintTransformerMixin:
                     container=obj,
                     positive=in_or_not,
                 )
-            elif cat == 'tuple' and isinstance(entity_or_index, Entity):
-                # e in T → MembershipConstraint(entity, tuple_ref)
-                c = MembershipConstraint(
-                    entity=entity_or_index, container=obj, positive=in_or_not
-                )
+            elif isinstance(entity_or_index, ObjRef):
+                # P[0] in S (tuple from PartRef → resolves to PartRef) → SubsetConstraint
+                c = SubsetConstraint(sub=entity_or_index, sup=obj, positive=in_or_not)
             elif isinstance(entity_or_index, Entity):
                 c = MembershipConstraint(
                     entity=entity_or_index, container=obj, positive=in_or_not
@@ -132,6 +130,11 @@ class ConstraintTransformerMixin:
                     index=o1.index,
                     entity=o2,
                     positive=(symbol == '=='),
+                )
+            elif isinstance(o1, ObjRef) and isinstance(o2, Entity):
+                # e.g. P[0] == e1 (tuple from PartRef source): membership constraint
+                c = MembershipConstraint(
+                    entity=o2, container=o1, positive=(symbol == '==')
                 )
             elif isinstance(o1, ObjRef) and isinstance(o2, ObjRef):
                 cat1 = self._ref_category(o1)

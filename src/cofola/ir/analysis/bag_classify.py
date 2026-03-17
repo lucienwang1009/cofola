@@ -21,6 +21,7 @@ from cofola.frontend.objects import (
     BagSupport,
     ObjDef,
     PartitionDef,
+    PartRef,
     SetChooseReplace,
     TupleDef,
 )
@@ -86,6 +87,11 @@ class BagClassification(AnalysisPass):
 
             # PartitionDef (compose) is also non-liftable, and its source bag must be dis
             elif isinstance(defn, PartitionDef):
+                non_lifted_refs.add(ref)
+                self._mark_dependencies_non_lifted(ref, problem, non_lifted_refs)
+
+            # PartRef inherits the non-liftability of its partition
+            elif isinstance(defn, PartRef):
                 non_lifted_refs.add(ref)
                 self._mark_dependencies_non_lifted(ref, problem, non_lifted_refs)
 
@@ -175,12 +181,16 @@ class BagClassification(AnalysisPass):
 
             if current in analysis.bag_info:
                 info = analysis.bag_info[current]
-                info.dis_entities.add(entity)
-                # Remove from indis_entities if present
-                for mult, entities in list(info.indis_entities.items()):
-                    entities.discard(entity)
-                    if not entities:
-                        del info.indis_entities[mult]
+                if entity in info.p_entities_multiplicity:
+                    # Only mark if entity exists in this bag; e.g. the right-hand
+                    # side of a BagDifference may not contain every entity from
+                    # the result, so we must not add it to dis_entities there.
+                    info.dis_entities.add(entity)
+                    # Remove from indis_entities if present
+                    for mult, entities in list(info.indis_entities.items()):
+                        entities.discard(entity)
+                        if not entities:
+                            del info.indis_entities[mult]
 
             for dep in dep_graph.get(current, []):
                 if dep not in visited:
@@ -268,7 +278,7 @@ class BagClassification(AnalysisPass):
         """Propagate dis_entities from source bags to a derived bag."""
         info = analysis.bag_info[ref]
 
-        if isinstance(defn, (BagChoose, BagSupport)):
+        if isinstance(defn, BagChoose):
             src_info = analysis.bag_info.get(defn.source)
             if src_info is not None:
                 info.dis_entities = src_info.dis_entities.copy()
@@ -281,13 +291,32 @@ class BagClassification(AnalysisPass):
                 info.dis_entities = left_info.dis_entities | right_info.dis_entities
                 info.indis_entities = {}
 
-        elif isinstance(defn, (BagAdditiveUnion, BagIntersection, BagDifference)):
+        elif isinstance(defn, BagAdditiveUnion):
             # These are non-liftable, already handled by step 2
             left_info = analysis.bag_info.get(defn.left)
             right_info = analysis.bag_info.get(defn.right)
             if left_info is not None and right_info is not None:
                 info.dis_entities = left_info.dis_entities | right_info.dis_entities
                 info.indis_entities = {}
+
+        elif isinstance(defn, (BagIntersection, BagDifference)):
+            # These are non-liftable, already handled by step 2.
+            # dis_entities must be restricted to entities that actually appear
+            # in the result: intersection result drops entities not in both bags,
+            # difference result drops entities from the right bag.
+            left_info = analysis.bag_info.get(defn.left)
+            right_info = analysis.bag_info.get(defn.right)
+            if left_info is not None and right_info is not None:
+                combined = left_info.dis_entities | right_info.dis_entities
+                info.dis_entities = combined & info.p_entities_multiplicity.keys()
+                info.indis_entities = {}
+
+        elif isinstance(defn, PartRef):
+            partition_defn = problem.get_object(defn.partition)
+            src_info = analysis.bag_info.get(partition_defn.source)
+            if src_info is not None:
+                info.dis_entities = src_info.dis_entities.copy()
+                info.indis_entities = {k: v.copy() for k, v in src_info.indis_entities.items()}
 
     def _propagate_dis_entities(
         self,

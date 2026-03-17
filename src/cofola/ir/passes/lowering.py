@@ -55,7 +55,7 @@ from cofola.ir.analysis.merged import MergedAnalysis
 IDX_PREFIX = "idx_"
 
 
-from dataclasses import dataclass as _dataclass
+from dataclasses import dataclass as _dataclass, fields
 
 
 @_dataclass
@@ -151,68 +151,144 @@ class LoweringPass(TransformPass):
         self._next_id += 1
         return ref
 
+    @staticmethod
+    def _sentinel_dep_defs(
+        problem: Problem, sentinel_ref: ObjRef
+    ) -> list[tuple[ObjRef, object]]:
+        """Return all defs (in topological order) that transitively reference sentinel_ref.
+
+        The sentinel itself is NOT included.  Defs are ordered so that
+        dependencies come before dependents — safe for sequential cloning.
+        """
+        sentinel_dep_set: set[ObjRef] = {sentinel_ref}
+        ordered: list[tuple[ObjRef, object]] = []
+        for ref, defn in problem.defs:
+            if ref == sentinel_ref:
+                continue
+            dep_refs = set(problem.get_refs(defn))
+            if dep_refs & sentinel_dep_set:
+                sentinel_dep_set.add(ref)
+                ordered.append((ref, defn))
+        return ordered
+
+    @staticmethod
+    def _apply_ref_map_to_field(val: object, ref_map: dict) -> object:
+        """Recursively replace ObjRefs in a field value using ref_map."""
+        if isinstance(val, ObjRef):
+            return ref_map.get(val, val)
+        if isinstance(val, tuple):
+            return tuple(LoweringPass._apply_ref_map_to_field(v, ref_map) for v in val)
+        return val
+
+    def _clone_sentinel_graph(
+        self,
+        problem: Problem,
+        sentinel_dep_defs: list[tuple[ObjRef, object]],
+        sentinel_ref: ObjRef,
+        part_ref: ObjRef,
+    ) -> tuple[list[tuple[ObjRef, object]], dict[ObjRef, ObjRef]]:
+        """Clone sentinel-dependent defs for one real part.
+
+        Returns:
+            (new_defs_to_add, ref_map)  where ref_map maps sentinel and all
+            cloned old refs to their per-part replacements.
+        """
+        ref_map: dict[ObjRef, ObjRef] = {sentinel_ref: part_ref}
+        new_defs: list[tuple[ObjRef, object]] = []
+        for old_ref, old_defn in sentinel_dep_defs:
+            new_ref = self._new_ref()
+            ref_map[old_ref] = new_ref
+            new_fields = {
+                f.name: self._apply_ref_map_to_field(getattr(old_defn, f.name), ref_map)
+                for f in fields(old_defn)
+            }
+            new_defs.append((new_ref, type(old_defn)(**new_fields)))
+        return new_defs, ref_map
+
     def _try_lower_for_all_parts(
         self, problem: Problem
     ) -> tuple[Problem, bool]:
-        """Expand ForAllParts constraints into concrete per-part constraints.
+        """Expand all ForAllParts constraints into concrete per-part constraints.
 
-        For each ForAllParts(partition=P, constraint_template=C[sentinel]):
-          1. Find the sentinel PartRef (index == -1) for partition P.
-          2. Find all real PartRef ObjRefs (index >= 0) for partition P.
-          3. For each real part, substitute sentinel → part in C to get a concrete constraint.
-          4. Remove the ForAllParts constraint and the sentinel from defs.
+        Sentinel-dependent defs (e.g. SetIntersection(sentinel, S)) are cloned
+        once per real part so each concrete constraint references its own
+        independent copy.  Multiple ForAllParts sharing the same sentinel are all
+        expanded in one pass before the sentinel and its deps are removed.
 
         Returns:
             Tuple of (new Problem, whether any changes were made).
         """
-        for i, c in enumerate(problem.constraints):
+        for_all = [(i, c) for i, c in enumerate(problem.constraints) if isinstance(c, ForAllParts)]
+        if not for_all:
+            return problem, False
+
+        # Build per-partition lookup tables from defs (done once).
+        sentinels: dict[ObjRef, ObjRef] = {}
+        real_parts: dict[ObjRef, list[tuple[ObjRef, int]]] = {}
+        for ref, defn in problem.defs:
+            if not isinstance(defn, PartRef):
+                continue
+            p = defn.partition
+            if defn.index == -1:
+                sentinels[p] = ref
+            else:
+                real_parts.setdefault(p, []).append((ref, defn.index))
+
+        # Precompute sentinel-dependent def lists per partition (topological order).
+        sentinel_dep_cache: dict[ObjRef, list] = {}
+        for p, sentinel_ref in sentinels.items():
+            sentinel_dep_cache[p] = self._sentinel_dep_defs(problem, sentinel_ref)
+
+        kept_constraints: list = []
+        new_constraints: list = []
+        extra_defs: list[tuple[ObjRef, object]] = []
+        refs_to_remove: set[ObjRef] = set()  # sentinels + their deps
+
+        for c in problem.constraints:
             if not isinstance(c, ForAllParts):
+                kept_constraints.append(c)
                 continue
 
-            partition_ref = c.partition
-
-            # Find sentinel (index == -1) and real parts (index >= 0)
-            sentinel_ref = None
-            real_parts: list[ObjRef] = []
-            for ref, defn in problem.defs:
-                if isinstance(defn, PartRef) and defn.partition == partition_ref:
-                    if defn.index == -1:
-                        sentinel_ref = ref
-                    else:
-                        real_parts.append((ref, defn.index))
+            p = c.partition
+            sentinel_ref = sentinels.get(p)
+            parts = real_parts.get(p, [])
 
             if sentinel_ref is None:
                 raise ValueError(
-                    f"ForAllParts: no sentinel PartRef (index=-1) found for partition {partition_ref}"
+                    f"ForAllParts: no sentinel PartRef (index=-1) found for partition {p}"
                 )
-            if not real_parts:
+            if not parts:
                 raise ValueError(
-                    f"ForAllParts: no real parts found for partition {partition_ref}"
+                    f"ForAllParts: no real parts found for partition {p}"
                 )
 
-            real_parts.sort(key=lambda x: x[1])
+            dep_defs = sentinel_dep_cache[p]
+            refs_to_remove.add(sentinel_ref)
+            refs_to_remove.update(old_ref for old_ref, _ in dep_defs)
 
-            # Expand: one concrete constraint per real part
-            new_constraints = list(problem.constraints)
-            new_constraints.pop(i)
-            for part_ref, _ in real_parts:
-                concrete = problem._sub_constraint(c.constraint_template, sentinel_ref, part_ref)
+            parts_sorted = sorted(parts, key=lambda x: x[1])
+            for part_ref, _ in parts_sorted:
+                cloned_defs, ref_map = self._clone_sentinel_graph(
+                    problem, dep_defs, sentinel_ref, part_ref
+                )
+                extra_defs.extend(cloned_defs)
+                # Apply ref_map to the constraint template
+                concrete = c.constraint_template
+                for old_r, new_r in ref_map.items():
+                    concrete = problem._sub_constraint(concrete, old_r, new_r)
                 new_constraints.append(concrete)
 
-            # Remove sentinel from defs
-            new_defs = [(r, d) for r, d in problem.defs if r != sentinel_ref]
+        logger.info(
+            "LoweringPass: expanded {} ForAllParts → {} concrete constraints",
+            len(for_all), len(new_constraints),
+        )
 
-            logger.info(
-                "LoweringPass: ForAllParts on partition {} → {} concrete constraints",
-                partition_ref.id, len(real_parts),
-            )
-            return Problem(
-                defs=tuple(new_defs),
-                constraints=tuple(new_constraints),
-                names=problem.names,
-            ), True
-
-        return problem, False
+        base_defs = [(r, d) for r, d in problem.defs if r not in refs_to_remove]
+        return Problem(
+            defs=tuple(base_defs) + tuple(extra_defs),
+            constraints=tuple(kept_constraints + new_constraints),
+            names=problem.names,
+        ), True
 
     def _is_bag_like(self, source_defn: ObjDef | None, problem: Problem) -> bool:
         """Return True if source_defn is a bag-like object.

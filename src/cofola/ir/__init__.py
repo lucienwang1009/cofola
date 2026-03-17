@@ -22,7 +22,7 @@ from cofola.frontend import (
     RefOrEntity,
     Problem,
     ProblemBuilder,
-    # Set objects
+    # Primary set objects
     SetInit,
     SetChoose,
     SetChooseReplace,
@@ -30,7 +30,12 @@ from cofola.frontend import (
     SetIntersection,
     SetDifference,
     SetObjDef,
-    SetLikeObjDef,
+    # Derived set objects (always produce a set)
+    BagSupport,
+    FuncImage,
+    FuncInverseImage,
+    DerivedSetObjDef,
+    AnySetObjDef,
     # Bag objects
     BagInit,
     BagChoose,
@@ -38,18 +43,15 @@ from cofola.frontend import (
     BagAdditiveUnion,
     BagIntersection,
     BagDifference,
-    BagSupport,
     BagObjDef,
-    # Function objects
+    # Function mapping objects
     FuncDef,
-    FuncImage,
-    FuncInverseImage,
     FuncObjDef,
     # Tuple objects
     TupleDef,
     # Sequence objects
     SequenceDef,
-    # Partition objects
+    # Partition objects (PartRef is polymorphic)
     PartitionDef,
     PartRef,
     # Union types
@@ -97,7 +99,7 @@ __all__ = [
     # Problem
     "Problem",
     "ProblemBuilder",
-    # Set objects
+    # Primary set objects
     "SetInit",
     "SetChoose",
     "SetChooseReplace",
@@ -105,7 +107,12 @@ __all__ = [
     "SetIntersection",
     "SetDifference",
     "SetObjDef",
-    "SetLikeObjDef",
+    # Derived set objects (always produce a set)
+    "BagSupport",
+    "FuncImage",
+    "FuncInverseImage",
+    "DerivedSetObjDef",
+    "AnySetObjDef",
     # Bag objects
     "BagInit",
     "BagChoose",
@@ -113,18 +120,15 @@ __all__ = [
     "BagAdditiveUnion",
     "BagIntersection",
     "BagDifference",
-    "BagSupport",
     "BagObjDef",
-    # Function objects
+    # Function mapping objects
     "FuncDef",
-    "FuncImage",
-    "FuncInverseImage",
     "FuncObjDef",
     # Tuple objects
     "TupleDef",
     # Sequence objects
     "SequenceDef",
-    # Partition objects
+    # Partition objects (PartRef is polymorphic)
     "PartitionDef",
     "PartRef",
     # Union types

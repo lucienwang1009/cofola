@@ -15,7 +15,7 @@ Example usage::
 
 from .types import Entity, ObjRef, RefOrEntity
 from .objects import (
-    # Sets
+    # Primary sets
     SetInit,
     SetChoose,
     SetChooseReplace,
@@ -23,7 +23,12 @@ from .objects import (
     SetIntersection,
     SetDifference,
     SetObjDef,
-    SetLikeObjDef,
+    # Derived sets (always produce a set, but derived from bags/functions)
+    BagSupport,
+    FuncImage,
+    FuncInverseImage,
+    DerivedSetObjDef,
+    AnySetObjDef,
     # Bags
     BagInit,
     BagChoose,
@@ -31,18 +36,15 @@ from .objects import (
     BagAdditiveUnion,
     BagIntersection,
     BagDifference,
-    BagSupport,
     BagObjDef,
-    # Functions
+    # Function mappings
     FuncDef,
-    FuncImage,
-    FuncInverseImage,
     FuncObjDef,
     # Tuples
     TupleDef,
     # Sequences
     SequenceDef,
-    # Partitions
+    # Partitions (PartRef is polymorphic: set or bag)
     PartitionDef,
     PartRef,
     # Union types
@@ -97,7 +99,7 @@ __all__ = [
     # Problem
     "Problem",
     "ProblemBuilder",
-    # Set objects
+    # Primary set objects
     "SetInit",
     "SetChoose",
     "SetChooseReplace",
@@ -105,7 +107,12 @@ __all__ = [
     "SetIntersection",
     "SetDifference",
     "SetObjDef",
-    "SetLikeObjDef",
+    # Derived set objects (always produce a set)
+    "BagSupport",
+    "FuncImage",
+    "FuncInverseImage",
+    "DerivedSetObjDef",
+    "AnySetObjDef",
     # Bag objects
     "BagInit",
     "BagChoose",
@@ -113,18 +120,15 @@ __all__ = [
     "BagAdditiveUnion",
     "BagIntersection",
     "BagDifference",
-    "BagSupport",
     "BagObjDef",
-    # Function objects
+    # Function mapping objects
     "FuncDef",
-    "FuncImage",
-    "FuncInverseImage",
     "FuncObjDef",
     # Tuple objects
     "TupleDef",
     # Sequence objects
     "SequenceDef",
-    # Partition objects
+    # Partition objects (PartRef is polymorphic)
     "PartitionDef",
     "PartRef",
     # Union types

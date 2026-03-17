@@ -54,12 +54,13 @@ from cofola.frontend.constraints import (
     TupleIndexEq,
     TupleIndexMembership,
 )
-from cofola.frontend.objects import BagInit, SetInit
+from cofola.frontend.objects import BagInit, SetInit, TupleDef, SequenceDef
 from cofola.frontend.pretty import fmt_analysis, fmt_problem
 from cofola.frontend.problem import Problem
 from cofola.frontend.types import ObjRef
 from cofola.ir.analysis.bag_classify import BagClassification
 from cofola.ir.analysis.entities import AnalysisResult
+from cofola.ir.analysis.merged import MergedAnalysis
 from cofola.ir.pass_manager import AnalysisManager
 from cofola.ir.passes.lowering import LoweringPass
 from cofola.ir.passes.merge_identical import MergeIdenticalObjects
@@ -250,7 +251,6 @@ class IRPipeline:
     LOCAL_PASSES = [
         SizeConstraintFolder,
         LoweringPass,
-        MergeIdenticalObjects,
         SimplifyPass,
     ]
 
@@ -340,6 +340,13 @@ class IRPipeline:
         produces a new OrConstraint.
         """
         if not any(isinstance(c, _COMPOUND) for c in problem.constraints):
+            # Size-range decomposition: if a TupleDef/SequenceDef has no fixed
+            # exact_size, enumerate k=0..max_size, add SizeConstraint(|T|==k),
+            # and recurse per branch.  Each sub-problem has an atomic equality,
+            # so LP resolves exact_size=k immediately and terminates recursion.
+            size_branches = self._decompose_ordered_sizes(problem)
+            if size_branches is not None:
+                return size_branches
             return self._make_branch(problem)
 
         # Build propositional formula over atomic constraint symbols
@@ -395,51 +402,111 @@ class IRPipeline:
         return branches
 
     # ------------------------------------------------------------------
+    # Internal: size-range decomposition for variable-size ordered collections
+    # ------------------------------------------------------------------
+
+    def _decompose_ordered_sizes(self, problem: Problem) -> list[SolveBranch] | None:
+        """Enumerate valid sizes for the first variable-size TupleDef/SequenceDef.
+
+        Returns a list of branches (possibly empty if all unsatisfiable) if
+        decomposition was performed, or None if all ordered collections already
+        have a fixed exact_size.
+
+        Each sub-problem directly receives SizeConstraint(|T|==k) as an atomic
+        constraint, so MaxSizeInference immediately resolves exact_size=k,
+        avoiding the exponential blowup that an OrConstraint + Shannon would cause.
+        Multiple variable-size collections are handled one-at-a-time through the
+        recursion in _collect_branches.
+        """
+        am = AnalysisManager(problem)
+        analysis = am.get(MergedAnalysis)
+
+        if analysis.unsatisfiable:
+            return []
+
+        for ref, defn in problem.defs:
+            if not isinstance(defn, (TupleDef, SequenceDef)):
+                continue
+            info = analysis.set_info.get(ref) or analysis.bag_info.get(ref)
+            if info is None:
+                raise ValueError(
+                    f"{type(defn).__name__} ref={ref.id}: no analysis info — "
+                    f"EntityAnalysis must populate set_info or bag_info for all ordered collections"
+                )
+            logger.debug(
+                "  {}: ref={} exact_size={} max_size={}",
+                type(defn).__name__, ref.id, info.exact_size, info.max_size,
+            )
+            if info.exact_size is not None:
+                continue
+
+            max_s = info.max_size
+            logger.info(
+                "[Decompose] {}: ref={} has variable size 0..{} — enumerating branches",
+                type(defn).__name__, ref.id, max_s,
+            )
+            branches: list[SolveBranch] = []
+            for k in range(0, max_s + 1):
+                size_eq = SizeConstraint(terms=((ref, 1),), comparator="==", rhs=k)
+                sub_prob = dc_replace(problem, constraints=problem.constraints + (size_eq,))
+                branches.extend(self._collect_branches(sub_prob))
+            return branches
+
+        return None
+
+    # ------------------------------------------------------------------
     # Internal: local passes + component decomposition
     # ------------------------------------------------------------------
 
     def _make_branch(self, problem: Problem) -> list[SolveBranch]:
-        """Run LOCAL_PASSES and component decomposition for one atomic problem.
+        """Run connected-component decomposition then LOCAL_PASSES per component.
+
+        Decomposition runs BEFORE LOCAL_PASSES so that LoweringPass-generated
+        helper objects (e.g. shared index SetInit for same-size tuples) cannot
+        create spurious cross-component connections via MergeIdenticalObjects.
+        Pre-lowering connectivity is sufficient: independent sub-problems share
+        no objects or constraints at the TupleDef/SequenceDef level either.
 
         Returns a list with one SolveBranch on success, or an empty list if
         the problem is unsatisfiable (so the branch contributes 0 to the sum).
         """
-        # Local passes: SizeConstraintFolder (LP is most accurate here, since
-        # all constraints are atomic), LoweringPass, SimplifyPass
-        try:
-            am = self.run_passes(problem, self.LOCAL_PASSES)
-        except UnsatisfiableConstraint as exc:
-            logger.info("IRPipeline: unsatisfiable after local passes → 0 ({})", exc)
+        # Early unsatisfiability check: LP-contradictory size constraints (e.g.
+        # |T|==0 AND |T|==1 from Shannon enumeration) make MergedAnalysis return
+        # unsatisfiable=True before we even run LOCAL_PASSES.
+        pre_analysis = AnalysisManager(problem).get(MergedAnalysis)
+        if pre_analysis.unsatisfiable:
+            logger.info("IRPipeline: unsatisfiable size constraints (pre-local-passes) → 0")
             return []
 
-        final_analysis = am.get(BagClassification)
-        logger.debug(
-            "\n{}",
-            fmt_analysis(final_analysis, am.problem, stage="[Final] BagClassification"),
-        )
-
-        if final_analysis.unsatisfiable:
-            logger.info("IRPipeline: unsatisfiable constraints → 0")
-            return []
-
-        logger.info(
-            "[Decompose] {} objects, {} constraints",
-            len(am.problem.defs), len(am.problem.constraints),
-        )
-
-        # Connected-component decomposition
-        components = _decompose_into_components(am.problem)
+        # Decompose into independent sub-problems BEFORE lowering.
+        components = _decompose_into_components(problem)
         if len(components) > 1:
-            logger.info("IRPipeline: decomposed into {} independent components", len(components))
+            logger.info(
+                "IRPipeline: decomposed into {} independent components (pre-lowering)",
+                len(components),
+            )
 
         branch_components: list[tuple[Problem, BagClassification]] = []
         for comp in components:
-            sub_am = AnalysisManager(comp)
-            sub_analysis = sub_am.get(BagClassification)
+            # Local passes per component: SizeConstraintFolder (LP is most
+            # accurate here, since all constraints are atomic), LoweringPass,
+            # MergeIdenticalObjects, SimplifyPass.
+            try:
+                comp_am = self.run_passes(comp, self.LOCAL_PASSES)
+            except UnsatisfiableConstraint as exc:
+                logger.info("IRPipeline: unsatisfiable after local passes → 0 ({})", exc)
+                return []
+
+            sub_analysis = comp_am.get(BagClassification)
+            logger.debug(
+                "\n{}",
+                fmt_analysis(sub_analysis, comp_am.problem, stage="[Final] BagClassification"),
+            )
             if sub_analysis.unsatisfiable:
                 logger.info("IRPipeline: component is unsatisfiable → branch contributes 0")
                 return []
-            branch_components.append((comp, sub_analysis))
-            logger.debug("  component: {} objects", len(comp.defs))
+
+            branch_components.append((comp_am.problem, sub_analysis))
+            logger.debug("  component: {} objects", len(comp_am.problem.defs))
 
         return [SolveBranch(components=branch_components)]

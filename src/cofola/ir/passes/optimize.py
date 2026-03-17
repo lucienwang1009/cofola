@@ -28,6 +28,8 @@ from cofola.frontend.objects import (
     SetChoose,
     BagChoose,
     SetChooseReplace,
+    TupleDef,
+    SequenceDef,
 )
 from cofola.ir.pass_manager import TransformPass
 from cofola.frontend.problem import Problem
@@ -365,7 +367,7 @@ class SizeConstraintFolder(TransformPass):
                     # the encoder can still constrain the WFOMC weight via defn.size
                     # without needing a SizeConstraint.
                     embeddable = all(
-                        isinstance(problem.get_object(ref), (SetChoose, BagChoose, SetChooseReplace))
+                        isinstance(problem.get_object(ref), (SetChoose, BagChoose, SetChooseReplace, TupleDef, SequenceDef))
                         and problem.get_object(ref).size is None
                         for ref, _ in folded_obj_refs
                     )

@@ -133,6 +133,9 @@ class ContextIR:
         # Singletons predicate (set during _encode_singleton if singletons exist)
         self.singletons_pred: Pred | None = None
 
+        # Cache: ObjRef → bag_singletons_pred (created lazily in _get_bag_size_expr)
+        self.ref2bag_singletons_pred: dict[ObjRef, Pred] = {}
+
     # =========================================================================
     # Setup helpers
     # =========================================================================
@@ -283,6 +286,24 @@ class ContextIR:
             self.ref_entity2var[key] = self.create_var(self._entity_var_name(ref, entity))
         return self.ref_entity2var[key]
 
+    def get_size_expr(self, ref: ObjRef) -> "Expr | int":
+        """Return the size expression for an object.
+
+        If the object has a known exact_size in the analysis, returns the integer
+        directly (no WFOMC variable created).  Otherwise falls back to get_obj_var()
+        to create/reuse a polynomial variable.
+
+        Args:
+            ref: The object reference.
+
+        Returns:
+            A plain Python int if exact_size is known, else a symbolic Expr.
+        """
+        info = self.analysis.set_info.get(ref) or self.analysis.bag_info.get(ref)
+        if info is not None and info.exact_size is not None:
+            return info.exact_size
+        return self.get_obj_var(ref)
+
     def get_indis_entity_var(
         self,
         ref: ObjRef,
@@ -339,12 +360,12 @@ class ContextIR:
             Return leq_pred
         """
         defn = self.problem.get_object(seq_ref)
-        source_pred = self.get_pred(defn.source)
+        domain_pred = self.get_pred(defn.flatten if defn.flatten is not None else defn.source)
         leq_name = f"{self._get_name(seq_ref)}_LEQ"
         leq_pred = self.create_pred(leq_name, 2)
         self.sentence = self.sentence & parse(
             f"\\forall X: (\\forall Y: ({leq_pred}(X,Y) <-> "
-            f"({source_pred}(X) & {source_pred}(Y) & {self.leq_pred}(X,Y))))"
+            f"({domain_pred}(X) & {domain_pred}(Y) & {self.leq_pred}(X,Y))))"
         )
         return leq_pred
 
@@ -370,13 +391,13 @@ class ContextIR:
             Create pred and add sentence as with get_leq_pred but using pred_pred.
         """
         defn = self.problem.get_object(seq_ref)
-        source_pred = self.get_pred(defn.source)
+        domain_pred = self.get_pred(defn.flatten if defn.flatten is not None else defn.source)
         pred_pred = self.circular_pred if defn.circular else self.pred_pred
         seq_pred_name = f"{self._get_name(seq_ref)}_PRED"
         seq_pred = self.create_pred(seq_pred_name, 2)
         self.sentence = self.sentence & parse(
             f"\\forall X: (\\forall Y: ({seq_pred}(X,Y) <-> "
-            f"({source_pred}(X) & {source_pred}(Y) & {pred_pred}(X,Y))))"
+            f"({domain_pred}(X) & {domain_pred}(Y) & {pred_pred}(X,Y))))"
         )
         return seq_pred
 

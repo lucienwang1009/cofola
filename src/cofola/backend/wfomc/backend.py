@@ -63,7 +63,13 @@ class WFOMCBackend(Backend):
 
         logger.debug("WFOMCBackend: algo={}", algo)
 
-        raw = solve_wfomc(wfomc_problem, algo, use_partition_constraint)
+        try:
+            raw = solve_wfomc(wfomc_problem, algo, use_partition_constraint)
+        except (IndexError, Exception) as exc:
+            # WFOMC library crashes on degenerate problems (e.g. empty domains).
+            # Treat as unsatisfiable → 0.
+            logger.warning("WFOMCBackend: WFOMC solver raised {}: {} — returning 0", type(exc).__name__, exc)
+            return 0
         logger.debug("WFOMCBackend: raw wfomc result = {}", raw)
 
         result = decoder.decode_result(raw)
