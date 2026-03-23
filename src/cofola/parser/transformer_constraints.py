@@ -1,53 +1,54 @@
-"""Constraint transformer mixin for Cofola parser."""
+"""Constraint transformer mixin for Cofola parser - IR-native version."""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from cofola.objects.bag import SizeConstraint
-from cofola.objects.base import CombinatoricsConstraint, Entity, SizedObject, Tuple
-from cofola.objects.sequence import SequenceImpl, SequenceSizedPattern
-from cofola.objects.set import MembershipConstraint, SubsetConstraint, DisjointConstraint, SetEqConstraint, Set
-from cofola.objects.tuple import TupleIndexEqConstraint, TupleMembershipConstraint, TupleIndex
-from cofola.objects.bag import Bag, BagSubsetConstraint, BagEqConstraint
+from cofola.frontend.types import Entity, ObjRef
+from cofola.frontend.constraints import (
+    SizeConstraint,
+    MembershipConstraint, SubsetConstraint, DisjointConstraint, EqualityConstraint,
+    TupleIndexEq, TupleIndexMembership,
+    SequencePatternConstraint,
+    FuncPairConstraint,
+    BagSubsetConstraint, BagEqConstraint,
+    NotConstraint, AndConstraint, OrConstraint,
+    TogetherPattern, LessThanPattern, PredecessorPattern, NextToPattern,
+    ForAllParts,
+)
 
 if TYPE_CHECKING:
     from cofola.parser.transformer import CofolaTransfomer
 
 
 class ConstraintTransformerMixin:
-    """Mixin providing constraint transformation methods for CofolaTransformer."""
+    """Mixin providing constraint transformation methods for CofolaTransformer (IR-native)."""
 
     def size_constraint(self: "CofolaTransfomer", args):
         expr, comparator, param = args
         expr = tuple(expr)
         param = int(param)
-        if any(
-            isinstance(obj, list) for obj, _ in expr
-        ):
+        if any(isinstance(obj, list) for obj, _ in expr):
             if len(expr) > 1:
                 from cofola.parser.parser import CofolaParsingError
                 raise CofolaParsingError(
                     "Only support simple size constraints on parts of partitions"
                 )
-            self._check_obj_type(expr[0][0][0], SizedObject)
             return list(
-                SizeConstraint([(part, expr[0][1])], comparator, param)
+                SizeConstraint(terms=((part, expr[0][1]),), comparator=comparator, rhs=param)
                 for part in expr[0][0]
             )
-        return SizeConstraint(expr, comparator, param)
+        return SizeConstraint(terms=expr, comparator=comparator, rhs=param)
 
     def size_atom(self: "CofolaTransfomer", args):
         if len(args) == 1:
             coef, obj = 1, args[0]
         else:
-            coef, obj = args[0][0], args[1]
-        self._check_obj_type(obj, SizedObject, list)
+            coef, obj = int(args[0]), args[1]
         return coef, obj
 
     def size_atomic_expr(self: "CofolaTransfomer", args):
         coef, obj = args[0]
-        expr = [(obj, int(coef))]
-        return expr
+        return [(obj, int(coef))]
 
     def size_add(self: "CofolaTransfomer", args):
         expr, atom = args
@@ -65,140 +66,148 @@ class ConstraintTransformerMixin:
         return True if len(args) == 1 else False
 
     def membership_constraint(self: "CofolaTransfomer", args):
-        entity_or_tuple_index, in_or_not, objs = args
+        from cofola.parser.transformer import TupleIndexSentinel
+
+        entity_or_index, in_or_not, objs = args
+
         def single_operation(obj):
-            self._check_obj_type(obj, Set, Bag, Tuple)
-            if not isinstance(entity_or_tuple_index, TupleIndex) and \
-                    not self.problem.contains_entity(entity_or_tuple_index):
+            cat = self._ref_category(obj) if isinstance(obj, ObjRef) else 'unknown'
+            if isinstance(entity_or_index, TupleIndexSentinel):
+                # T[i] in S → TupleIndexMembership
+                c = TupleIndexMembership(
+                    tuple_ref=entity_or_index.tuple_ref,
+                    index=entity_or_index.index,
+                    container=obj,
+                    positive=in_or_not,
+                )
+            elif isinstance(entity_or_index, ObjRef):
+                # P[0] in S (tuple from PartRef → resolves to PartRef) → SubsetConstraint
+                c = SubsetConstraint(sub=entity_or_index, sup=obj, positive=in_or_not)
+            elif isinstance(entity_or_index, Entity):
+                c = MembershipConstraint(
+                    entity=entity_or_index, container=obj, positive=in_or_not
+                )
+            else:
                 from cofola.parser.parser import CofolaParsingError
                 raise CofolaParsingError(
-                    f"Entity {entity_or_tuple_index} not found."
+                    f"membership_constraint: unsupported types "
+                    f"({type(entity_or_index).__name__} in {cat})"
                 )
-            if isinstance(obj, Tuple) or \
-                    isinstance(entity_or_tuple_index, TupleIndex):
-                ret = TupleMembershipConstraint(obj, entity_or_tuple_index)
-            else:
-                ret = MembershipConstraint(obj, entity_or_tuple_index)
-            if not in_or_not:
-                ret.negate()
-            return ret
-        return self._op_or_constraint_on_list(
-            single_operation, objs)
+            return c
+
+        return self._op_or_constraint_on_list(single_operation, objs)
 
     def subset_constraint(self: "CofolaTransfomer", args):
         objs1, _, objs2 = args
+
         def single_operation(obj1, obj2):
-            if isinstance(obj1, Set) or isinstance(obj2, Set):
-                self._check_obj_type(obj1, Set, Bag)
-                self._check_obj_type(obj2, Set, Bag)
-                return SubsetConstraint(obj1, obj2)
-            self._check_obj_type(obj1, Bag)
-            self._check_obj_type(obj2, Bag)
-            return BagSubsetConstraint(obj1, obj2)
-        return self._op_or_constraint_on_list(
-            single_operation, objs1, objs2)
+            cat1 = self._ref_category(obj1) if isinstance(obj1, ObjRef) else 'unknown'
+            cat2 = self._ref_category(obj2) if isinstance(obj2, ObjRef) else 'unknown'
+            if cat1 == 'bag' and cat2 == 'bag':
+                return BagSubsetConstraint(sub=obj1, sup=obj2)
+            return SubsetConstraint(sub=obj1, sup=obj2)
+
+        return self._op_or_constraint_on_list(single_operation, objs1, objs2)
 
     def disjoint_constraint(self: "CofolaTransfomer", args):
         obj1, _, obj2 = args
-        def single_operation(obj1, obj2):
-            self._check_obj_type(obj1, Set, Bag)
-            self._check_obj_type(obj2, Set, Bag)
-            return DisjointConstraint(obj1, obj2)
-        return self._op_or_constraint_on_list(
-            single_operation, obj1, obj2)
+
+        def single_operation(o1, o2):
+            return DisjointConstraint(left=o1, right=o2)
+
+        return self._op_or_constraint_on_list(single_operation, obj1, obj2)
 
     def equivalence_constraint(self: "CofolaTransfomer", args):
+        from cofola.parser.transformer import TupleIndexSentinel
+
         obj1, symbol, obj2 = args
-        def single_operation(obj1, obj2):
-            self._check_obj_type(obj1, Set, TupleIndex)
-            self._check_obj_type(obj2, Set, Entity)
-            if isinstance(obj1, TupleIndex) and isinstance(obj2, Entity):
-                ret = TupleIndexEqConstraint(obj1, obj2)
-            elif isinstance(obj1, Set) and isinstance(obj2, Set):
-                ret = SetEqConstraint(obj1, obj2)
-            elif isinstance(obj1, Bag) and isinstance(obj2, Bag):
-                ret = BagEqConstraint(obj1, obj2)
+        symbol = str(symbol)
+
+        def single_operation(o1, o2):
+            if isinstance(o1, TupleIndexSentinel) and isinstance(o2, Entity):
+                c = TupleIndexEq(
+                    tuple_ref=o1.tuple_ref,
+                    index=o1.index,
+                    entity=o2,
+                    positive=(symbol == '=='),
+                )
+            elif isinstance(o1, ObjRef) and isinstance(o2, Entity):
+                # e.g. P[0] == e1 (tuple from PartRef source): membership constraint
+                c = MembershipConstraint(
+                    entity=o2, container=o1, positive=(symbol == '==')
+                )
+            elif isinstance(o1, ObjRef) and isinstance(o2, ObjRef):
+                cat1 = self._ref_category(o1)
+                cat2 = self._ref_category(o2)
+                if cat1 == 'bag' and cat2 == 'bag':
+                    c = BagEqConstraint(
+                        left=o1, right=o2, positive=(symbol == '==')
+                    )
+                else:
+                    c = EqualityConstraint(
+                        left=o1, right=o2, positive=(symbol == '==')
+                    )
             else:
                 from cofola.parser.parser import CofolaParsingError
-                raise CofolaParsingError(f"Equivalence constraint is not supported for the given objects: {obj1}, {obj2}")
-            if symbol == '!=':
-                ret.negate()
-            return ret
-        return self._op_or_constraint_on_list(
-            single_operation, obj1, obj2)
+                raise CofolaParsingError(
+                    f"equivalence_constraint: unsupported types "
+                    f"({type(o1).__name__} {symbol} {type(o2).__name__})"
+                )
+            return c
+
+        return self._op_or_constraint_on_list(single_operation, obj1, obj2)
 
     def count_parameter(self: "CofolaTransfomer", args):
         count = int(args[0])
         if count < 0:
             from cofola.parser.parser import CofolaParsingError
-            raise CofolaParsingError(f"Count parameter must be non-negative.")
+            raise CofolaParsingError("Count parameter must be non-negative.")
         return count
 
     def seq_constraint(self: "CofolaTransfomer", args):
-        from cofola.objects.sequence import SequenceConstraint
-
         pattern, is_in, obj = args
-        self._check_obj_type(obj, SequenceImpl)
-        constraint = SequenceConstraint(
-            obj, pattern
-        )
-        if not is_in:
-            constraint.negate()
-        return constraint
+        cat = self._ref_category(obj) if isinstance(obj, ObjRef) else 'unknown'
+        if cat != 'sequence':
+            from cofola.parser.parser import CofolaParsingError
+            raise CofolaParsingError(
+                f"seq_constraint requires a Sequence, got {cat}"
+            )
+        return SequencePatternConstraint(seq=obj, pattern=pattern, positive=is_in)
 
     def seq_pattern(self: "CofolaTransfomer", args):
-        pattern = args[0]
-        return self.problem.add_object(pattern)
+        # Pattern objects are IR dataclasses — return directly, not added to builder
+        return args[0]
 
     def together(self: "CofolaTransfomer", args):
-        from cofola.objects.sequence import TogetherPattern
-
         obj = args[2]
-        return TogetherPattern(obj)
+        return TogetherPattern(group=obj)
 
     def less_than(self: "CofolaTransfomer", args):
-        from cofola.objects.sequence import LessThanPattern
-
         entity_or_obj1, _, entity_or_obj2 = args
-        self._check_obj_type(entity_or_obj1, Entity, Set)
-        self._check_obj_type(entity_or_obj2, Entity, Set)
-        return LessThanPattern(entity_or_obj1, entity_or_obj2)
+        return LessThanPattern(left=entity_or_obj1, right=entity_or_obj2)
 
     def next_to(self: "CofolaTransfomer", args):
-        from cofola.objects.sequence import NextToPattern
-
         _, _, entity_or_obj1, entity_or_obj2, _ = args
-        self._check_obj_type(entity_or_obj1, Entity, Set)
-        self._check_obj_type(entity_or_obj2, Entity, Set)
-        return NextToPattern(entity_or_obj1, entity_or_obj2)
+        return NextToPattern(first=entity_or_obj1, second=entity_or_obj2)
 
     def predecessor(self: "CofolaTransfomer", args):
-        from cofola.objects.sequence import PredecessorPattern
-
         _, entity_or_obj1, entity_or_obj2, _ = args
-        self._check_obj_type(entity_or_obj1, Entity, Set)
-        self._check_obj_type(entity_or_obj2, Entity, Set)
-        return PredecessorPattern(entity_or_obj1, entity_or_obj2)
+        return PredecessorPattern(first=entity_or_obj1, second=entity_or_obj2)
 
     def negation_constraint(self: "CofolaTransfomer", args):
         constraint = args[1]
-        self._check_obj_type(
-            constraint, CombinatoricsConstraint
-        )
-        return ~args[1]
+        return NotConstraint(sub=constraint)
 
     def binary_constraint(self: "CofolaTransfomer", args):
         arg1, op, arg2 = args
-        self._check_obj_type(
-            arg1, CombinatoricsConstraint
-        )
-        self._check_obj_type(
-            arg2, CombinatoricsConstraint
-        )
+        op = str(op)
         if op == 'and':
-            return arg1 & arg2
+            return AndConstraint(left=arg1, right=arg2)
         if op == 'or':
-            return arg1 | arg2
+            return OrConstraint(left=arg1, right=arg2)
+        from cofola.parser.parser import CofolaParsingError
+        raise CofolaParsingError(f"Unknown binary constraint operator: {op}")
 
     def part_constraint(self: "CofolaTransfomer", args):
-        return args[0]
+        constraint_template, _, part_name_token, _, partition_ref = args
+        return ForAllParts(partition=partition_ref, constraint_template=constraint_template)

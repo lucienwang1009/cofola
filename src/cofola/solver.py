@@ -1,65 +1,61 @@
 from __future__ import annotations
 
 import argparse
-import logging
+import math
 
-from logzero import logger
-from wfomc import Algo
+from loguru import logger
 
+from cofola.log import setup_logging
+from cofola.ir.pipeline import IRPipeline
+from cofola.backend.wfomc.backend import WFOMCBackend
 from cofola.parser.parser import parse
-from cofola.pipeline import SolvePipeline
-from cofola.problem import CofolaProblem
 
 
-def solve(
-    problem: CofolaProblem,
-    wfomc_algo: Algo = Algo.FASTv2,
-    use_partition_constraint: bool = True,
-    lifted: bool = True,
-) -> int:
-    """
-    Solve a combinatorics problem via WFOMC.
+def solve(problem: "Problem", debug: bool = False) -> int:
+    """Solve a combinatorics problem.
 
-    :param problem: the combinatorics problem
-    :param wfomc_algo: the algorithm to solve the problem
-    :param use_partition_constraint: whether to use partition constraint
-    :param lifted: whether to use lifted encoding for bags
+    :param problem: A cofola.frontend.Problem instance.
+    :param debug: Enable debug logging.
     :return: the answer
     """
-    pipeline = SolvePipeline(wfomc_algo, use_partition_constraint, lifted)
-    return pipeline.run(problem)
+    setup_logging(debug)
+    logger.info("Solving problem with {} objects, {} constraints",
+                len(problem.defs), len(problem.constraints))
+    schedule = IRPipeline().process(problem)
+    backend = WFOMCBackend(lifted=False)
+    return sum(
+        math.prod(backend.solve(p, a) for p, a in branch.components)
+        for branch in schedule.branches
+    )
+
+
+def parse_and_solve(text: str, debug: bool = False) -> int:
+    """Parse .cfl source text and solve the combinatorics problem.
+
+    :param text: the .cofola source text
+    :param debug: Enable debug logging.
+    :return: the answer
+    """
+    setup_logging(debug)
+    logger.debug("Parsing input text ({} chars)", len(text))
+    return solve(parse(text, debug=debug), debug=debug)
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Solve a combinatorics math problem using weighted first-order model counting')
+    parser = argparse.ArgumentParser(
+        description='Solve a combinatorics math problem using weighted first-order model counting'
+    )
     parser.add_argument('--input_file', '-i', required=True, type=str, help='input file')
     parser.add_argument('--debug', '-d', action='store_true', help='debug mode')
-    # parser.add_argument('--wfomc_algo', '-a', type=Algo,
-    #                     choices=list(Algo), default=Algo.FASTv2)
-    # parser.add_argument('--use_partition_constraint', '-p', action='store_true',
-    #                     help='use partition constraint to speed up the solver, '
-    #                          'it would override the algorithm choice to FASTv2')
-    # parser.add_argument('--lifted', '-l', action='store_true',
-    #                     help='use lifted encoding for bags')
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
-    if args.debug:
-        logger.setLevel(logging.DEBUG)
-    else:
-        logger.setLevel(logging.INFO)
+    setup_logging(args.debug)
     input_file = args.input_file
-    logger.info(f'Input file: {input_file}')
+    logger.info('Input file: {}', input_file)
     with open(input_file, 'r') as f:
-        problem: CofolaProblem = parse(f.read())
-    logger.info(f'Problem: \n{problem}')
-    res: int = solve(
-        problem,
-        # args.wfomc_algo,
-        # use_partition_constraint=args.use_partition_constraint,
-        lifted=False
-        # args.lifted
-    )
-    logger.info(f'Answer: {res}')
+        text = f.read()
+    res: int = parse_and_solve(text, debug=args.debug)
+    logger.info('Answer: {}', res)

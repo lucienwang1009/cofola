@@ -3,16 +3,6 @@ import re
 from wfomc import Pred, Expr
 from sympy import Eq, var
 
-from cofola.objects.base import Bag, CombinatoricsObject, Entity, Partition, Set, Function
-
-
-OBJ_PRE_PREFIX_ARITY = {
-    Entity: ('p_entity_', 1),
-    Set: ('p_set_', 1),
-    Bag: ('p_bag_', 1),
-    Function: ('p_func_', 2),
-    Partition: ('p_partition_', 1),
-}
 
 AUX_PRED_PREFIX = '$cofola_aux_'
 
@@ -43,15 +33,6 @@ def create_cofola_var(name: str) -> Expr:
     if not name.startswith('v_'):
         name = 'v_' + name
     return var(name)
-
-def get_prefix_arity(obj: CombinatoricsObject) -> str:
-    for t in OBJ_PRE_PREFIX_ARITY:
-        if isinstance(obj, t):
-            return OBJ_PRE_PREFIX_ARITY[t]
-
-def create_pred_for_object(obj: CombinatoricsObject) -> Pred:
-    pre, arity = get_prefix_arity(obj)
-    return create_cofola_pred(pre + obj.name, arity)
 
 def reset_aux_pred_cnt(start_from: int = 0):
     """Reset the auxiliary predicate counter."""
