@@ -14,7 +14,6 @@ from cofola.frontend.constraints import (
     TupleCountAtom,
 )
 from cofola.frontend.objects import (
-    AnySetObjDef,
     BagAdditiveUnion,
     BagChoose,
     BagDifference,
@@ -32,6 +31,7 @@ from cofola.frontend.objects import (
     SetDifference,
     SetInit,
     SetIntersection,
+    SetObjDef,
     SetPartRef,
     SetUnion,
     TupleDef,
@@ -143,7 +143,7 @@ class ObjectTransformerMixin:
             op_arg = args[4]
 
         defn = self._defn_of(obj)
-        is_set = isinstance(defn, AnySetObjDef)
+        is_set = isinstance(defn, SetObjDef)
         is_bag = isinstance(defn, BagObjDef)
         kind = type(defn).__name__ if defn is not None else "unknown"
 
@@ -253,7 +253,7 @@ class ObjectTransformerMixin:
         op = str(op)
         d1 = self._defn_of(obj1)
         d2 = self._defn_of(obj2)
-        is_set1, is_set2 = isinstance(d1, AnySetObjDef), isinstance(d2, AnySetObjDef)
+        is_set1, is_set2 = isinstance(d1, SetObjDef), isinstance(d2, SetObjDef)
         is_bag1, is_bag2 = isinstance(d1, BagObjDef), isinstance(d2, BagObjDef)
         if (is_set1 and is_bag2) or (is_bag1 and is_set2):
             raise CofolaParsingError("Set and Bag objects cannot be operated together")

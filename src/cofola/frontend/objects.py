@@ -82,10 +82,6 @@ class SetDifference:
     right: ObjRef
 
 
-# Union type for all set objects
-SetObjDef = SetInit | SetChoose | SetUnion | SetIntersection | SetDifference
-
-
 # =============================================================================
 # Bags
 # =============================================================================
@@ -167,16 +163,7 @@ class BagSupport:
     source: ObjRef
 
 
-# Union type for pure bag objects (BagSupport is set-like, see DerivedSetObjDef below)
-BagObjDef = (
-    BagInit
-    | BagChoose
-    | BagUnion
-    | BagAdditiveUnion
-    | BagIntersection
-    | BagDifference
-    | SetChooseReplace
-)
+# BagObjDef defined at the bottom of this file (depends on BagPartRef).
 
 
 # =============================================================================
@@ -232,7 +219,7 @@ class FuncInverse:
     func: ObjRef
 
 
-# Union type for function mappings only (FuncImage/FuncInverseImage are set-like, see DerivedSetObjDef)
+# Union type for function mappings only (FuncImage/FuncInverseImage are set-like, see SetObjDef)
 FuncObjDef = FuncDef | FuncInverse
 
 
@@ -329,26 +316,26 @@ PartRef = SetPartRef | BagPartRef
 # Union Types
 # =============================================================================
 
-# Objects that always produce a set, derived from bags or functions:
-#   BagSupport(bag)          → support set of a bag
-#   FuncImage(f, A)          → image f(A), always a set
-#   FuncInverseImage(f, B)   → preimage f⁻¹(B), always a set
-DerivedSetObjDef = BagSupport | FuncImage | FuncInverseImage
+# All objects that produce a set: primary sets, set-derived-from-bag/func, and
+# set partition refs.
+SetObjDef = (
+    SetInit | SetChoose | SetUnion | SetIntersection | SetDifference   # primary
+    | BagSupport | FuncImage | FuncInverseImage                        # derived from bag/func
+    | SetPartRef                                                       # set partition ref
+)
 
-# All objects that unconditionally produce a set (primary + derived)
-AnySetObjDef = SetObjDef | DerivedSetObjDef
-
-# Note: SetPartRef / BagPartRef are intentionally NOT folded into AnySetObjDef /
-# BagObjDef. The aliases describe primary set/bag definitions; PartRefs are
-# references to a piece of one and are handled separately by analysis passes.
+# All objects that produce a bag: primary bags, SetChooseReplace (multiset
+# result), and bag partition refs.
+BagObjDef = (
+    BagInit | BagChoose | BagUnion | BagAdditiveUnion
+    | BagIntersection | BagDifference | SetChooseReplace
+    | BagPartRef
+)
 
 # All object definition types
 ObjDef = (
-    AnySetObjDef | BagObjDef | FuncObjDef | TupleDef | SequenceDef
-    | PartitionDef | SetPartRef | BagPartRef
+    SetObjDef | BagObjDef | FuncObjDef | TupleDef | SequenceDef | PartitionDef
 )
 
 # All container objects (can contain entities)
-ContainerObjDef = (
-    AnySetObjDef | BagObjDef | SetPartRef | BagPartRef | TupleDef | SequenceDef
-)
+ContainerObjDef = SetObjDef | BagObjDef | TupleDef | SequenceDef

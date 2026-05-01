@@ -438,7 +438,7 @@ class LoweringPass(TransformPass):
                             )
 
             else:
-                # ── Set source (AnySetObjDef) ──────────────────────────────────────
+                # ── Set source (SetObjDef) ─────────────────────────────────────────
                 injective = not defn.replace
                 surjective = not defn.choose
                 if surjective:

@@ -21,11 +21,11 @@ from cofola.frontend.constraints import (
     TupleIndexMembership,
 )
 from cofola.frontend.objects import (
-    AnySetObjDef,
     BagObjDef,
     BagPartRef,
     ObjDef,
     PartitionDef,
+    SetObjDef,
     SetPartRef,
 )
 from cofola.frontend.objects import PartRef as IRPartRef
@@ -123,7 +123,7 @@ class CofolaTransfomer(
         """Return the defn for `obj`, resolving PartRef to its source's defn.
 
         Returns None for non-ObjRef inputs or undefined refs. Callers use
-        `isinstance(defn, AnySetObjDef | BagObjDef | ...)` to dispatch.
+        `isinstance(defn, SetObjDef | BagObjDef | ...)` to dispatch.
         """
         if not isinstance(obj, ObjRef):
             return None
@@ -155,7 +155,7 @@ class CofolaTransfomer(
             source_defn = self.builder.get_object(partition_defn.source)
             if isinstance(source_defn, BagObjDef):
                 sentinel_cls: type = BagPartRef
-            elif isinstance(source_defn, AnySetObjDef):
+            elif isinstance(source_defn, SetObjDef):
                 sentinel_cls = SetPartRef
             else:
                 raise CofolaParsingError(

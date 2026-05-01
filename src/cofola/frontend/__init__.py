@@ -22,13 +22,10 @@ from .objects import (
     SetUnion,
     SetIntersection,
     SetDifference,
-    SetObjDef,
     # Derived sets (always produce a set, but derived from bags/functions)
     BagSupport,
     FuncImage,
     FuncInverseImage,
-    DerivedSetObjDef,
-    AnySetObjDef,
     # Bags
     BagInit,
     BagChoose,
@@ -36,6 +33,8 @@ from .objects import (
     BagAdditiveUnion,
     BagIntersection,
     BagDifference,
+    # Object kind aliases
+    SetObjDef,
     BagObjDef,
     # Function mappings
     FuncDef,
@@ -108,13 +107,10 @@ __all__ = [
     "SetUnion",
     "SetIntersection",
     "SetDifference",
-    "SetObjDef",
     # Derived set objects (always produce a set)
     "BagSupport",
     "FuncImage",
     "FuncInverseImage",
-    "DerivedSetObjDef",
-    "AnySetObjDef",
     # Bag objects
     "BagInit",
     "BagChoose",
@@ -122,6 +118,8 @@ __all__ = [
     "BagAdditiveUnion",
     "BagIntersection",
     "BagDifference",
+    # Object kind aliases
+    "SetObjDef",
     "BagObjDef",
     # Function mapping objects
     "FuncDef",

@@ -29,13 +29,10 @@ from cofola.frontend import (
     SetUnion,
     SetIntersection,
     SetDifference,
-    SetObjDef,
     # Derived set objects (always produce a set)
     BagSupport,
     FuncImage,
     FuncInverseImage,
-    DerivedSetObjDef,
-    AnySetObjDef,
     # Bag objects
     BagInit,
     BagChoose,
@@ -43,6 +40,8 @@ from cofola.frontend import (
     BagAdditiveUnion,
     BagIntersection,
     BagDifference,
+    # Object kind aliases
+    SetObjDef,
     BagObjDef,
     # Function mapping objects
     FuncDef,
@@ -108,13 +107,10 @@ __all__ = [
     "SetUnion",
     "SetIntersection",
     "SetDifference",
-    "SetObjDef",
     # Derived set objects (always produce a set)
     "BagSupport",
     "FuncImage",
     "FuncInverseImage",
-    "DerivedSetObjDef",
-    "AnySetObjDef",
     # Bag objects
     "BagInit",
     "BagChoose",
@@ -122,6 +118,8 @@ __all__ = [
     "BagAdditiveUnion",
     "BagIntersection",
     "BagDifference",
+    # Object kind aliases
+    "SetObjDef",
     "BagObjDef",
     # Function mapping objects
     "FuncDef",

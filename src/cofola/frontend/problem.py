@@ -145,8 +145,8 @@ class Problem:
     def _sub_field(val: object, old_ref: ObjRef, new_ref: ObjRef) -> object:
         """Substitute old_ref with new_ref in a single field value.
 
-        Handles ObjRef directly and tuples that may contain ObjRefs or
-        (ObjRef, int) pairs (e.g. SizeConstraint.terms).
+        Handles ObjRef directly, tuples (SizeConstraint.terms, etc.), and
+        nested frozen dataclasses (SeqPattern variants such as TogetherPattern).
         """
         if isinstance(val, ObjRef):
             return new_ref if val == old_ref else val
@@ -159,7 +159,6 @@ class Problem:
                     new_items.append((new_ref if item[0] == old_ref else item[0], item[1]))
                 elif isinstance(item, tuple) and len(item) == 2 and is_dataclass(item[0]) and not isinstance(item[0], type):
                     # Recurse into size atoms (TupleCountAtom, BagCountAtom, SeqPatternCountAtom)
-                    # that contain ObjRef fields
                     atom, coef = item
                     new_atom_fields = {
                         f.name: Problem._sub_field(getattr(atom, f.name), old_ref, new_ref)
@@ -169,6 +168,15 @@ class Problem:
                 else:
                     new_items.append(item)
             return tuple(new_items)
+        elif is_dataclass(val) and not isinstance(val, type):
+            # Recurse into nested frozen dataclasses, e.g. TogetherPattern(group=ObjRef),
+            # LessThanPattern, PredecessorPattern, NextToPattern.
+            # ObjRef itself is a dataclass but is caught by the first branch above.
+            new_fields = {
+                f.name: Problem._sub_field(getattr(val, f.name), old_ref, new_ref)
+                for f in fields(val)
+            }
+            return type(val)(**new_fields)
         return val
 
     def substitute(self, old_ref: ObjRef, new_ref: ObjRef) -> Problem:
