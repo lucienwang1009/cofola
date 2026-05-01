@@ -20,11 +20,19 @@ from cofola.frontend.constraints import (
     TupleIndexEq,
     TupleIndexMembership,
 )
-from cofola.frontend.objects import ObjDef
+from cofola.frontend.objects import (
+    AnySetObjDef,
+    BagObjDef,
+    BagPartRef,
+    ObjDef,
+    PartitionDef,
+    SetPartRef,
+)
 from cofola.frontend.objects import PartRef as IRPartRef
 from cofola.frontend.problem import ProblemBuilder
 from cofola.frontend.types import Entity, ObjRef
 from cofola.parser.common import CommonTransformer
+from cofola.parser.constants import RESERVED_KEYWORDS, RESERVED_PREFIXES
 from cofola.parser.errors import CofolaParsingError
 from cofola.parser.transformer_constraints import ConstraintTransformerMixin
 from cofola.parser.transformer_objects import ObjectTransformerMixin
@@ -49,23 +57,6 @@ _CONSTRAINT_TYPES: tuple[type, ...] = (
 )
 
 
-class TupleIndexSentinel:
-    """Sentinel for tuple index expressions (T[i]) used in constraints.
-
-    Not a real IR object — only lives during parsing to carry tuple_ref and index
-    until a constraint is built.
-    """
-
-    __slots__ = ("tuple_ref", "index")
-
-    def __init__(self, tuple_ref: ObjRef, index: int) -> None:
-        self.tuple_ref = tuple_ref
-        self.index = index
-
-    def __repr__(self) -> str:
-        return f"TupleIndexSentinel({self.tuple_ref}, {self.index})"
-
-
 class CofolaTransfomer(
     CommonTransformer,
     ObjectTransformerMixin,
@@ -83,8 +74,6 @@ class CofolaTransfomer(
         return name in self.entities
 
     def left_identity(self, args):
-        from cofola.parser.parser import RESERVED_KEYWORDS, RESERVED_PREFIXES
-
         obj_id = str(args[0].value)
         self._check_id(obj_id, RESERVED_KEYWORDS, RESERVED_PREFIXES)
         return obj_id
@@ -157,7 +146,24 @@ class CofolaTransfomer(
             partition_id = tree.children[-1].children[0].value
             partition_ref = self._get_ref_by_id(partition_id)
             part_name = tree.children[-3].value
-            sentinel_ref = self.builder.add(IRPartRef(partition=partition_ref, index=-1))
+            partition_defn = self.builder.get_object(partition_ref)
+            if not isinstance(partition_defn, PartitionDef):
+                raise CofolaParsingError(
+                    f"`for {part_name} in {partition_id}`: "
+                    f"{partition_id} is not a partition."
+                )
+            source_defn = self.builder.get_object(partition_defn.source)
+            if isinstance(source_defn, BagObjDef):
+                sentinel_cls: type = BagPartRef
+            elif isinstance(source_defn, AnySetObjDef):
+                sentinel_cls = SetPartRef
+            else:
+                raise CofolaParsingError(
+                    f"`for {part_name} in {partition_id}`: "
+                    f"partition source is neither set nor bag "
+                    f"(got {type(source_defn).__name__})."
+                )
+            sentinel_ref = self.builder.add(sentinel_cls(partition=partition_ref, index=-1))
             self.id2ref[part_name] = sentinel_ref
             logger.info(f"Processing part_constraint: part={part_name}, partition={partition_id}")
             result = super()._transform_tree(tree)

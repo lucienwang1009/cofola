@@ -5,6 +5,7 @@ from lark import Lark
 from loguru import logger
 
 from cofola.frontend.pretty import fmt_problem
+from cofola.parser.constants import RESERVED_KEYWORDS, RESERVED_PREFIXES
 from cofola.parser.errors import CofolaParsingError, CofolaTypeMismatchError
 from cofola.parser.grammar import grammar
 from cofola.parser.transformer import CofolaTransfomer
@@ -15,36 +16,6 @@ __all__ = [
     "RESERVED_KEYWORDS",
     "RESERVED_PREFIXES",
     "parse",
-]
-
-
-RESERVED_KEYWORDS = [
-    "set",
-    "bag",
-    "choose",
-    "choose_replace",
-    "count",
-    "in",
-    "subset",
-    "disjoint",
-    "supp",
-    "compose",
-    "partition",
-    "tuple",
-    "choose_tuple",
-    "choose_replace_tuple",
-    "sequence",
-    "choose_sequence",
-    "choose_replace_sequence",
-    "together",
-    "not",
-    "and",
-    "or",
-]
-
-RESERVED_PREFIXES = [
-    "AUX_",
-    "IDX_",
 ]
 
 

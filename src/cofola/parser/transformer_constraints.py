@@ -25,6 +25,7 @@ from cofola.frontend.constraints import (
 )
 from cofola.frontend.objects import BagObjDef, SequenceDef
 from cofola.frontend.types import Entity, ObjRef
+from cofola.parser.constants import TupleIndexSentinel
 from cofola.parser.errors import CofolaParsingError
 
 if TYPE_CHECKING:
@@ -65,8 +66,6 @@ class ConstraintTransformerMixin:
         return True if len(args) == 1 else False
 
     def membership_constraint(self: "CofolaTransfomer", args):
-        from cofola.parser.transformer import TupleIndexSentinel
-
         entity_or_index, in_or_not, obj = args
         if isinstance(entity_or_index, TupleIndexSentinel):
             # T[i] in S → TupleIndexMembership
@@ -101,8 +100,6 @@ class ConstraintTransformerMixin:
         return DisjointConstraint(left=obj1, right=obj2)
 
     def equivalence_constraint(self: "CofolaTransfomer", args):
-        from cofola.parser.transformer import TupleIndexSentinel
-
         o1, symbol, o2 = args
         symbol = str(symbol)
         positive = symbol == "=="

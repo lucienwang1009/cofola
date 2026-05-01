@@ -44,8 +44,10 @@ from .objects import (
     TupleDef,
     # Sequences
     SequenceDef,
-    # Partitions (PartRef is polymorphic: set or bag)
+    # Partitions (set vs bag PartRefs are split for precise dispatch)
     PartitionDef,
+    SetPartRef,
+    BagPartRef,
     PartRef,
     # Union types
     ObjDef,
@@ -128,8 +130,10 @@ __all__ = [
     "TupleDef",
     # Sequence objects
     "SequenceDef",
-    # Partition objects (PartRef is polymorphic)
+    # Partition objects (set vs bag PartRefs are split)
     "PartitionDef",
+    "SetPartRef",
+    "BagPartRef",
     "PartRef",
     # Union types
     "ObjDef",

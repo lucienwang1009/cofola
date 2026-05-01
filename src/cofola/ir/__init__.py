@@ -51,8 +51,10 @@ from cofola.frontend import (
     TupleDef,
     # Sequence objects
     SequenceDef,
-    # Partition objects (PartRef is polymorphic)
+    # Partition objects (set vs bag PartRefs are split)
     PartitionDef,
+    SetPartRef,
+    BagPartRef,
     PartRef,
     # Union types
     ObjDef,
@@ -128,8 +130,10 @@ __all__ = [
     "TupleDef",
     # Sequence objects
     "SequenceDef",
-    # Partition objects (PartRef is polymorphic)
+    # Partition objects (set vs bag PartRefs are split)
     "PartitionDef",
+    "SetPartRef",
+    "BagPartRef",
     "PartRef",
     # Union types
     "ObjDef",

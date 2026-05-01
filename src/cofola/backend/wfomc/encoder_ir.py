@@ -312,7 +312,7 @@ def _encode_object(
         case ir_obj.PartitionDef():
             _encode_partition(ref, defn, problem, analysis, context)
 
-        case ir_obj.PartRef():
+        case ir_obj.SetPartRef() | ir_obj.BagPartRef():
             _encode_part_ref(ref, defn, context)
 
         case _:

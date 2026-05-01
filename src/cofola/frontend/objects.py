@@ -298,14 +298,31 @@ class PartitionDef:
 
 
 @dataclass(frozen=True, slots=True)
-class PartRef:
-    """Reference to the i-th part of a partition/composition.
+class SetPartRef:
+    """Reference to the i-th part of a set partition/composition.
 
+    Created when the partition's source is a set-like object.
     Example: P[0], C[1]
     """
 
     partition: ObjRef
     index: int
+
+
+@dataclass(frozen=True, slots=True)
+class BagPartRef:
+    """Reference to the i-th part of a bag partition/composition.
+
+    Created when the partition's source is a bag-like object.
+    Example: P[0], C[1]
+    """
+
+    partition: ObjRef
+    index: int
+
+
+# Backwards-compatible union: any code doing `isinstance(x, PartRef)` keeps working.
+PartRef = SetPartRef | BagPartRef
 
 
 # =============================================================================
@@ -321,11 +338,17 @@ DerivedSetObjDef = BagSupport | FuncImage | FuncInverseImage
 # All objects that unconditionally produce a set (primary + derived)
 AnySetObjDef = SetObjDef | DerivedSetObjDef
 
-# PartRef is polymorphic: set-like when partition.source is a set,
-# bag-like when partition.source is a bag.  Neither alias includes it.
+# Note: SetPartRef / BagPartRef are intentionally NOT folded into AnySetObjDef /
+# BagObjDef. The aliases describe primary set/bag definitions; PartRefs are
+# references to a piece of one and are handled separately by analysis passes.
 
 # All object definition types
-ObjDef = AnySetObjDef | BagObjDef | FuncObjDef | TupleDef | SequenceDef | PartitionDef | PartRef
+ObjDef = (
+    AnySetObjDef | BagObjDef | FuncObjDef | TupleDef | SequenceDef
+    | PartitionDef | SetPartRef | BagPartRef
+)
 
 # All container objects (can contain entities)
-ContainerObjDef = AnySetObjDef | BagObjDef | PartRef | TupleDef | SequenceDef
+ContainerObjDef = (
+    AnySetObjDef | BagObjDef | SetPartRef | BagPartRef | TupleDef | SequenceDef
+)

@@ -4,6 +4,15 @@ from __future__ import annotations
 from collections import defaultdict
 from typing import TYPE_CHECKING
 
+from cofola.frontend.constraints import (
+    BagCountAtom,
+    LessThanPattern,
+    NextToPattern,
+    PredecessorPattern,
+    SeqPatternCountAtom,
+    TogetherPattern,
+    TupleCountAtom,
+)
 from cofola.frontend.objects import (
     AnySetObjDef,
     BagAdditiveUnion,
@@ -12,6 +21,7 @@ from cofola.frontend.objects import (
     BagInit,
     BagIntersection,
     BagObjDef,
+    BagPartRef,
     BagSupport,
     BagUnion,
     PartitionDef,
@@ -22,10 +32,12 @@ from cofola.frontend.objects import (
     SetDifference,
     SetInit,
     SetIntersection,
+    SetPartRef,
     SetUnion,
     TupleDef,
 )
 from cofola.frontend.types import Entity, ObjRef
+from cofola.parser.constants import TupleIndexSentinel
 from cofola.parser.errors import CofolaParsingError, CofolaTypeMismatchError
 
 if TYPE_CHECKING:
@@ -156,11 +168,16 @@ class ObjectTransformerMixin:
             if size is None:
                 raise CofolaParsingError(f"The size of a {op_type} must be specified.")
             ordered = op_type == "compose"
+            if not (is_set or is_bag):
+                raise CofolaParsingError(
+                    f"{op_type}() requires Set or Bag, got {kind}"
+                )
+            part_cls: type = SetPartRef if is_set else BagPartRef
             partition_ref = self.builder.add(
                 PartitionDef(source=obj, num_parts=size, ordered=ordered)
             )
             for i in range(size):
-                self.builder.add(PartRef(partition=partition_ref, index=i))
+                self.builder.add(part_cls(partition=partition_ref, index=i))
             return partition_ref
 
         if op_type == "tuple":
@@ -264,8 +281,6 @@ class ObjectTransformerMixin:
         raise CofolaParsingError(f"Unknown bag operation {op}.")
 
     def indexing(self: "CofolaTransfomer", args):
-        from cofola.parser.transformer import TupleIndexSentinel
-
         obj, index = args[0], args[2]
         defn = self._defn_of(obj)
 
@@ -289,16 +304,6 @@ class ObjectTransformerMixin:
         raise CofolaParsingError(f"Indexing not supported for {kind} objects.")
 
     def count(self: "CofolaTransfomer", args):
-        from cofola.frontend.constraints import (
-            BagCountAtom,
-            LessThanPattern,
-            NextToPattern,
-            PredecessorPattern,
-            SeqPatternCountAtom,
-            TogetherPattern,
-            TupleCountAtom,
-        )
-
         obj, count_name, _, entity_or_obj, _ = args
         deduplicate = str(count_name) == "dedup_count"
         _SEQ_PATTERNS = (TogetherPattern, LessThanPattern, PredecessorPattern, NextToPattern)

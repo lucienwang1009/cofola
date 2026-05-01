@@ -38,6 +38,7 @@ from cofola.frontend.objects import (
     BagDifference,
     BagInit,
     BagIntersection,
+    BagPartRef,
     BagSupport,
     BagUnion,
     FuncDef,
@@ -45,7 +46,7 @@ from cofola.frontend.objects import (
     FuncInverse,
     FuncInverseImage,
     PartitionDef,
-    PartRef,
+    SetPartRef,
     SequenceDef,
     SetChoose,
     SetChooseReplace,
@@ -183,7 +184,7 @@ def _fmt_defn(defn: object, problem: Problem) -> str:
         case PartitionDef(source=src, num_parts=np_, ordered=ord_):
             kind = "compose" if ord_ else "partition"
             return f"{kind}({n(src)}, into={np_})"
-        case PartRef(partition=p, index=i):
+        case SetPartRef(partition=p, index=i) | BagPartRef(partition=p, index=i):
             return f"{n(p)}[{i}]"
         case _:
             return repr(defn)
