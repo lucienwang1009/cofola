@@ -8,7 +8,7 @@ Ports the legacy fold_constants function to work with the new IR.
 
 from __future__ import annotations
 
-from dataclasses import fields, replace as dc_replace
+from dataclasses import replace as dc_replace
 
 from loguru import logger
 

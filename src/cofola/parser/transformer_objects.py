@@ -4,15 +4,29 @@ from __future__ import annotations
 from collections import defaultdict
 from typing import TYPE_CHECKING
 
-from cofola.frontend.types import Entity, ObjRef
 from cofola.frontend.objects import (
-    SetInit, SetChoose, SetChooseReplace,
-    SetUnion, SetIntersection, SetDifference,
-    BagInit, BagChoose, BagUnion, BagAdditiveUnion,
-    BagIntersection, BagDifference, BagSupport,
-    FuncImage,
-    TupleDef, SequenceDef, PartitionDef, PartRef,
+    AnySetObjDef,
+    BagAdditiveUnion,
+    BagChoose,
+    BagDifference,
+    BagInit,
+    BagIntersection,
+    BagObjDef,
+    BagSupport,
+    BagUnion,
+    PartitionDef,
+    PartRef,
+    SequenceDef,
+    SetChoose,
+    SetChooseReplace,
+    SetDifference,
+    SetInit,
+    SetIntersection,
+    SetUnion,
+    TupleDef,
 )
+from cofola.frontend.types import Entity, ObjRef
+from cofola.parser.errors import CofolaParsingError, CofolaTypeMismatchError
 
 if TYPE_CHECKING:
     from cofola.parser.transformer import CofolaTransfomer
@@ -23,19 +37,22 @@ class ObjectTransformerMixin:
 
     def base_object_init(self: "CofolaTransfomer", args):
         obj_type, _, obj_init, _ = args
-        if str(obj_type) == "set":
+        obj_type = str(obj_type)
+        if obj_type == "set":
             if isinstance(obj_init, ObjRef):
                 # set(S) — initialize from existing set reference; treat as alias
                 return obj_init
-            entities = []
+            entities: list[Entity] = []
             for atom in obj_init:
-                self._check_obj_type(atom, Entity)
+                if not isinstance(atom, Entity):
+                    raise CofolaTypeMismatchError(Entity, atom)
                 entities.append(atom)
             if len(entities) != len(set(entities)):
-                from cofola.parser.parser import CofolaParsingError
-                raise CofolaParsingError("Duplicate entities are not allowed in a set object.")
+                raise CofolaParsingError(
+                    "Duplicate entities are not allowed in a set object."
+                )
             defn = SetInit(entities=frozenset(entities))
-        elif str(obj_type) == "bag":
+        elif obj_type == "bag":
             if isinstance(obj_init, ObjRef):
                 return obj_init
             entity_multiplicity: dict[Entity, int] = defaultdict(lambda: 0)
@@ -48,16 +65,13 @@ class ObjectTransformerMixin:
             em = tuple(sorted(entity_multiplicity.items(), key=lambda x: x[0].name))
             defn = BagInit(entity_multiplicity=em)
         else:
-            from cofola.parser.parser import CofolaParsingError
             raise CofolaParsingError(f"Unknown object type: {obj_type}")
         return self.builder.add(defn)
 
     def entities_body(self: "CofolaTransfomer", args):
         entities = []
         for atom in args:
-            if isinstance(atom, Entity):
-                entities.append(atom)
-            elif isinstance(atom, list):
+            if isinstance(atom, list):
                 entities.extend(atom)
             else:
                 entities.append(atom)
@@ -65,16 +79,16 @@ class ObjectTransformerMixin:
 
     def slicing_entities(self: "CofolaTransfomer", args):
         name = ""
-        start = 0
-        end = 0
         if len(args) == 2:
-            start = args[0]
-            end = args[1]
+            start, end = args
         elif len(args) == 3:
             name = args[0].value
-            start = args[1]
-            end = args[2]
-        entities = [Entity(f'{name}{i}') for i in range(start, end)]
+            start, end = args[1], args[2]
+        else:
+            raise CofolaParsingError(
+                f"Unexpected slicing_entities args: {args}"
+            )
+        entities = [Entity(f"{name}{i}") for i in range(start, end)]
         for e in entities:
             self.entities.add(e.name)
         return entities
@@ -84,7 +98,6 @@ class ObjectTransformerMixin:
         return entity, int(count)
 
     def entity(self: "CofolaTransfomer", args):
-        from cofola.parser.parser import CofolaParsingError
         item = args[0]
         entity_name = str(item)
         if entity_name in self.id2ref:
@@ -95,26 +108,11 @@ class ObjectTransformerMixin:
         self.entities.add(entity_name)
         return e
 
-    def identity(self: "CofolaTransfomer", args):
-        obj_id = str(args[0].value)
-        if self._processing_part_name is not None and obj_id == self._processing_part_name:
-            part_refs = [
-                r for r, defn in self.builder._defs
-                if isinstance(defn, PartRef) and defn.partition == self._processing_partition_ref
-            ]
-            part_refs.sort(key=lambda r: self.builder.get_object(r).index)
-            return part_refs
-        if obj_id in self.entities:
-            return Entity(obj_id)
-        return self._get_ref_by_id(obj_id)
-
     def operations(self: "CofolaTransfomer", args):
-        # Child already called builder.add() and returned an ObjRef (or list for partition expansion)
+        # Child already called builder.add() and returned an ObjRef.
         return args[-1]
 
     def common_operations(self: "CofolaTransfomer", args):
-        from cofola.parser.parser import CofolaParsingError
-
         op_type = str(args[0])
         obj = args[2]
 
@@ -132,30 +130,32 @@ class ObjectTransformerMixin:
             size = args[3]
             op_arg = args[4]
 
-        obj_cat = self._ref_category(obj) if isinstance(obj, ObjRef) else 'unknown'
+        defn = self._defn_of(obj)
+        is_set = isinstance(defn, AnySetObjDef)
+        is_bag = isinstance(defn, BagObjDef)
+        kind = type(defn).__name__ if defn is not None else "unknown"
 
         if op_type == "choose":
-            if obj_cat == 'set':
+            if is_set:
                 return self.builder.add(SetChoose(source=obj, size=size))
-            elif obj_cat == 'bag':
+            if is_bag:
                 return self.builder.add(BagChoose(source=obj, size=size))
-            else:
-                raise CofolaParsingError(f"choose() requires Set or Bag, got {obj_cat}")
+            raise CofolaParsingError(f"choose() requires Set or Bag, got {kind}")
 
-        elif op_type == 'choose_replace':
-            if obj_cat != 'set':
-                raise CofolaParsingError(f"choose_replace() requires Set, got {obj_cat}")
+        if op_type == "choose_replace":
+            if not is_set:
+                raise CofolaParsingError(f"choose_replace() requires Set, got {kind}")
             return self.builder.add(SetChooseReplace(source=obj, size=size))
 
-        elif op_type == 'supp':
-            if obj_cat != 'bag':
-                raise CofolaParsingError(f"supp() requires Bag, got {obj_cat}")
+        if op_type == "supp":
+            if not is_bag:
+                raise CofolaParsingError(f"supp() requires Bag, got {kind}")
             return self.builder.add(BagSupport(source=obj))
 
-        elif op_type in ('compose', 'partition'):
+        if op_type in ("compose", "partition"):
             if size is None:
                 raise CofolaParsingError(f"The size of a {op_type} must be specified.")
-            ordered = (op_type == 'compose')
+            ordered = op_type == "compose"
             partition_ref = self.builder.add(
                 PartitionDef(source=obj, num_parts=size, ordered=ordered)
             )
@@ -163,175 +163,158 @@ class ObjectTransformerMixin:
                 self.builder.add(PartRef(partition=partition_ref, index=i))
             return partition_ref
 
-        elif op_type == 'tuple':
-            return self.builder.add(TupleDef(source=obj, choose=False, replace=False, size=size))
+        if op_type == "tuple":
+            return self.builder.add(
+                TupleDef(source=obj, choose=False, replace=False, size=size)
+            )
 
-        elif op_type == 'choose_tuple':
-            return self.builder.add(TupleDef(source=obj, choose=True, replace=False, size=size))
+        if op_type == "choose_tuple":
+            return self.builder.add(
+                TupleDef(source=obj, choose=True, replace=False, size=size)
+            )
 
-        elif op_type == 'choose_replace_tuple':
-            if obj_cat != 'set':
+        if op_type == "choose_replace_tuple":
+            if not is_set:
                 raise CofolaParsingError(
-                    f"choose_replace_tuple() requires Set, got {obj_cat}"
+                    f"choose_replace_tuple() requires Set, got {kind}"
                 )
-            return self.builder.add(TupleDef(source=obj, choose=True, replace=True, size=size))
+            return self.builder.add(
+                TupleDef(source=obj, choose=True, replace=True, size=size)
+            )
 
-        elif op_type == 'sequence':
+        if op_type == "sequence":
             return self.builder.add(
                 SequenceDef(source=obj, choose=False, replace=False, size=size)
             )
 
-        elif op_type == 'choose_sequence':
+        if op_type == "choose_sequence":
             return self.builder.add(
                 SequenceDef(source=obj, choose=True, replace=False, size=size)
             )
 
-        elif op_type == 'choose_replace_sequence':
-            if obj_cat != 'set':
+        if op_type == "choose_replace_sequence":
+            if not is_set:
                 raise CofolaParsingError(
-                    f"choose_replace_sequence() requires Set, got {obj_cat}"
+                    f"choose_replace_sequence() requires Set, got {kind}"
                 )
             return self.builder.add(
                 SequenceDef(source=obj, choose=True, replace=True, size=size)
             )
 
-        elif op_type == 'circle':
+        if op_type == "circle":
             return self.builder.add(
                 SequenceDef(
                     source=obj, choose=False, replace=False, size=size,
-                    circular=True, reflection=op_arg
+                    circular=True, reflection=op_arg,
                 )
             )
 
-        elif op_type == 'choose_circle':
+        if op_type == "choose_circle":
             return self.builder.add(
                 SequenceDef(
                     source=obj, choose=True, replace=False, size=size,
-                    circular=True, reflection=op_arg
+                    circular=True, reflection=op_arg,
                 )
             )
 
-        elif op_type == 'choose_replace_circle':
-            if obj_cat != 'set':
+        if op_type == "choose_replace_circle":
+            if not is_set:
                 raise CofolaParsingError(
-                    f"choose_replace_circle() requires Set, got {obj_cat}"
+                    f"choose_replace_circle() requires Set, got {kind}"
                 )
             return self.builder.add(
                 SequenceDef(
                     source=obj, choose=True, replace=True, size=size,
-                    circular=True, reflection=op_arg
+                    circular=True, reflection=op_arg,
                 )
             )
 
-        else:
-            raise CofolaParsingError(f"Unknown operation type: {op_type}")
+        raise CofolaParsingError(f"Unknown operation type: {op_type}")
 
     def binary_operations(self: "CofolaTransfomer", args):
-        from cofola.parser.parser import CofolaParsingError
-
-        objs1, op, objs2 = args
+        obj1, op, obj2 = args
         op = str(op)
-
-        def single_operation(obj1, obj2):
-            cat1 = self._ref_category(obj1)
-            cat2 = self._ref_category(obj2)
-            if (cat1 == 'set' and cat2 == 'bag') or (cat1 == 'bag' and cat2 == 'set'):
-                raise CofolaParsingError("Set and Bag objects cannot be operated together")
-            if cat1 == 'set' or cat2 == 'set':
-                if op == "+":
-                    return self.builder.add(SetUnion(left=obj1, right=obj2))
-                elif op == "++":
-                    raise CofolaParsingError(
-                        "Additive union is not supported for set objects."
-                    )
-                elif op == "&":
-                    return self.builder.add(SetIntersection(left=obj1, right=obj2))
-                elif op == "-":
-                    return self.builder.add(SetDifference(left=obj1, right=obj2))
-                else:
-                    raise CofolaParsingError(f"Unknown set operation {op}.")
-            else:  # bag
-                if op == "+":
-                    return self.builder.add(BagAdditiveUnion(left=obj1, right=obj2))
-                elif op == "++":
-                    return self.builder.add(BagUnion(left=obj1, right=obj2))
-                elif op == "&":
-                    return self.builder.add(BagIntersection(left=obj1, right=obj2))
-                elif op == "-":
-                    return self.builder.add(BagDifference(left=obj1, right=obj2))
-                else:
-                    raise CofolaParsingError(f"Unknown bag operation {op}.")
-
-        return self._op_or_constraint_on_list(single_operation, objs1, objs2)
+        d1 = self._defn_of(obj1)
+        d2 = self._defn_of(obj2)
+        is_set1, is_set2 = isinstance(d1, AnySetObjDef), isinstance(d2, AnySetObjDef)
+        is_bag1, is_bag2 = isinstance(d1, BagObjDef), isinstance(d2, BagObjDef)
+        if (is_set1 and is_bag2) or (is_bag1 and is_set2):
+            raise CofolaParsingError("Set and Bag objects cannot be operated together")
+        if is_set1 or is_set2:
+            if op == "+":
+                return self.builder.add(SetUnion(left=obj1, right=obj2))
+            if op == "++":
+                raise CofolaParsingError(
+                    "Additive union is not supported for set objects."
+                )
+            if op == "&":
+                return self.builder.add(SetIntersection(left=obj1, right=obj2))
+            if op == "-":
+                return self.builder.add(SetDifference(left=obj1, right=obj2))
+            raise CofolaParsingError(f"Unknown set operation {op}.")
+        # bag
+        if op == "+":
+            return self.builder.add(BagAdditiveUnion(left=obj1, right=obj2))
+        if op == "++":
+            return self.builder.add(BagUnion(left=obj1, right=obj2))
+        if op == "&":
+            return self.builder.add(BagIntersection(left=obj1, right=obj2))
+        if op == "-":
+            return self.builder.add(BagDifference(left=obj1, right=obj2))
+        raise CofolaParsingError(f"Unknown bag operation {op}.")
 
     def indexing(self: "CofolaTransfomer", args):
         from cofola.parser.transformer import TupleIndexSentinel
-        from cofola.parser.parser import CofolaParsingError
 
         obj, index = args[0], args[2]
-        cat = self._ref_category(obj) if isinstance(obj, ObjRef) else 'unknown'
+        defn = self._defn_of(obj)
 
-        if cat == 'partition':
+        if isinstance(defn, PartitionDef):
             idx = int(index)
-            for r, defn in self.builder._defs:
-                if isinstance(defn, PartRef) and defn.partition == obj and defn.index == idx:
+            for r, d in self.builder.iter_defs():
+                if isinstance(d, PartRef) and d.partition == obj and d.index == idx:
                     return r
             raise CofolaParsingError(f"Partition part index {idx} not found.")
 
-        elif cat == 'tuple':
+        if isinstance(defn, TupleDef):
             # If the tuple's source is a PartRef, return that PartRef directly.
             # This allows `t[k]` to be used as the source partition part in
             # constraints like `|t[0]| == 2` or `t[0] == e1`.
-            for r, defn in self.builder._defs:
-                if r == obj and isinstance(defn, TupleDef):
-                    src_ref = defn.source
-                    for r2, defn2 in self.builder._defs:
-                        if r2 == src_ref and isinstance(defn2, PartRef):
-                            return src_ref
-                    break
+            src_defn = self.builder.get_object(defn.source)
+            if isinstance(src_defn, PartRef):
+                return defn.source
             return TupleIndexSentinel(tuple_ref=obj, index=int(index))
 
-        else:
-            raise CofolaParsingError(f"Indexing not supported for {cat} objects.")
+        kind = type(defn).__name__ if defn is not None else "unknown"
+        raise CofolaParsingError(f"Indexing not supported for {kind} objects.")
 
     def count(self: "CofolaTransfomer", args):
-        from cofola.parser.parser import CofolaParsingError
         from cofola.frontend.constraints import (
-            TupleCountAtom, BagCountAtom, SeqPatternCountAtom,
-            TogetherPattern, LessThanPattern, PredecessorPattern, NextToPattern,
+            BagCountAtom,
+            LessThanPattern,
+            NextToPattern,
+            PredecessorPattern,
+            SeqPatternCountAtom,
+            TogetherPattern,
+            TupleCountAtom,
         )
 
-        objs, count_name, _, entity_or_obj, _ = args
+        obj, count_name, _, entity_or_obj, _ = args
         deduplicate = str(count_name) == "dedup_count"
         _SEQ_PATTERNS = (TogetherPattern, LessThanPattern, PredecessorPattern, NextToPattern)
 
-        def _effective_cat(obj: ObjRef) -> str:
-            """Get effective category, resolving PartRef chains to their base type."""
-            cat = self._ref_category(obj)
-            if cat == 'part':
-                # PartRef — recurse through the chain until we reach a non-part
-                defn = self.builder.get_object(obj)  # PartRef
-                partition_defn = self.builder.get_object(defn.partition)  # PartitionDef
-                return _effective_cat(partition_defn.source)
-            return cat
-
-        def single_operation(obj):
-            cat = _effective_cat(obj) if isinstance(obj, ObjRef) else 'unknown'
-            if deduplicate and cat != 'tuple':
-                raise CofolaParsingError(
-                    f"dedup_count() requires a Tuple, got {cat}"
-                )
-            if cat == 'bag' and isinstance(entity_or_obj, Entity):
-                return BagCountAtom(bag=obj, entity=entity_or_obj)
-            elif cat == 'tuple' and isinstance(entity_or_obj, (Entity, ObjRef)):
-                return TupleCountAtom(
-                    tuple_ref=obj, count_obj=entity_or_obj, deduplicate=deduplicate
-                )
-            elif cat == 'sequence' and isinstance(entity_or_obj, _SEQ_PATTERNS):
-                return SeqPatternCountAtom(seq=obj, pattern=entity_or_obj)
-            else:
-                raise CofolaParsingError(
-                    f"count() not supported for {cat} with {type(entity_or_obj).__name__}"
-                )
-
-        return self._op_or_constraint_on_list(single_operation, objs)
+        defn = self._defn_of(obj)
+        kind = type(defn).__name__ if defn is not None else "unknown"
+        if deduplicate and not isinstance(defn, TupleDef):
+            raise CofolaParsingError(f"dedup_count() requires a Tuple, got {kind}")
+        if isinstance(defn, BagObjDef) and isinstance(entity_or_obj, Entity):
+            return BagCountAtom(bag=obj, entity=entity_or_obj)
+        if isinstance(defn, TupleDef) and isinstance(entity_or_obj, (Entity, ObjRef)):
+            return TupleCountAtom(
+                tuple_ref=obj, count_obj=entity_or_obj, deduplicate=deduplicate
+            )
+        if isinstance(defn, SequenceDef) and isinstance(entity_or_obj, _SEQ_PATTERNS):
+            return SeqPatternCountAtom(seq=obj, pattern=entity_or_obj)
+        raise CofolaParsingError(
+            f"count() not supported for {kind} with {type(entity_or_obj).__name__}"
+        )

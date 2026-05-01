@@ -1,6 +1,6 @@
-set hearts = {heart1:14}
-set others = {other1:40}
-set cards = hearts + others
+hearts = set(heart1...14)
+others = set(other1...40)
+cards = hearts + others
 
-set chosen = choose(cards, 2)
+chosen = choose(cards, 2)
 |chosen & hearts| >= 1

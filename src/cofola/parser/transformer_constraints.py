@@ -3,18 +3,29 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from cofola.frontend.types import Entity, ObjRef
 from cofola.frontend.constraints import (
-    SizeConstraint,
-    MembershipConstraint, SubsetConstraint, DisjointConstraint, EqualityConstraint,
-    TupleIndexEq, TupleIndexMembership,
-    SequencePatternConstraint,
-    FuncPairConstraint,
-    BagSubsetConstraint, BagEqConstraint,
-    NotConstraint, AndConstraint, OrConstraint,
-    TogetherPattern, LessThanPattern, PredecessorPattern, NextToPattern,
+    AndConstraint,
+    BagEqConstraint,
+    BagSubsetConstraint,
+    DisjointConstraint,
+    EqualityConstraint,
     ForAllParts,
+    LessThanPattern,
+    MembershipConstraint,
+    NextToPattern,
+    NotConstraint,
+    OrConstraint,
+    PredecessorPattern,
+    SequencePatternConstraint,
+    SizeConstraint,
+    SubsetConstraint,
+    TogetherPattern,
+    TupleIndexEq,
+    TupleIndexMembership,
 )
+from cofola.frontend.objects import BagObjDef, SequenceDef
+from cofola.frontend.types import Entity, ObjRef
+from cofola.parser.errors import CofolaParsingError
 
 if TYPE_CHECKING:
     from cofola.parser.transformer import CofolaTransfomer
@@ -25,19 +36,7 @@ class ConstraintTransformerMixin:
 
     def size_constraint(self: "CofolaTransfomer", args):
         expr, comparator, param = args
-        expr = tuple(expr)
-        param = int(param)
-        if any(isinstance(obj, list) for obj, _ in expr):
-            if len(expr) > 1:
-                from cofola.parser.parser import CofolaParsingError
-                raise CofolaParsingError(
-                    "Only support simple size constraints on parts of partitions"
-                )
-            return list(
-                SizeConstraint(terms=((part, expr[0][1]),), comparator=comparator, rhs=param)
-                for part in expr[0][0]
-            )
-        return SizeConstraint(terms=expr, comparator=comparator, rhs=param)
+        return SizeConstraint(terms=tuple(expr), comparator=comparator, rhs=int(param))
 
     def size_atom(self: "CofolaTransfomer", args):
         if len(args) == 1:
@@ -68,110 +67,79 @@ class ConstraintTransformerMixin:
     def membership_constraint(self: "CofolaTransfomer", args):
         from cofola.parser.transformer import TupleIndexSentinel
 
-        entity_or_index, in_or_not, objs = args
-
-        def single_operation(obj):
-            cat = self._ref_category(obj) if isinstance(obj, ObjRef) else 'unknown'
-            if isinstance(entity_or_index, TupleIndexSentinel):
-                # T[i] in S → TupleIndexMembership
-                c = TupleIndexMembership(
-                    tuple_ref=entity_or_index.tuple_ref,
-                    index=entity_or_index.index,
-                    container=obj,
-                    positive=in_or_not,
-                )
-            elif isinstance(entity_or_index, ObjRef):
-                # P[0] in S (tuple from PartRef → resolves to PartRef) → SubsetConstraint
-                c = SubsetConstraint(sub=entity_or_index, sup=obj, positive=in_or_not)
-            elif isinstance(entity_or_index, Entity):
-                c = MembershipConstraint(
-                    entity=entity_or_index, container=obj, positive=in_or_not
-                )
-            else:
-                from cofola.parser.parser import CofolaParsingError
-                raise CofolaParsingError(
-                    f"membership_constraint: unsupported types "
-                    f"({type(entity_or_index).__name__} in {cat})"
-                )
-            return c
-
-        return self._op_or_constraint_on_list(single_operation, objs)
+        entity_or_index, in_or_not, obj = args
+        if isinstance(entity_or_index, TupleIndexSentinel):
+            # T[i] in S → TupleIndexMembership
+            return TupleIndexMembership(
+                tuple_ref=entity_or_index.tuple_ref,
+                index=entity_or_index.index,
+                container=obj,
+                positive=in_or_not,
+            )
+        if isinstance(entity_or_index, ObjRef):
+            # P[0] in S (tuple from PartRef → resolves to PartRef) → SubsetConstraint
+            return SubsetConstraint(sub=entity_or_index, sup=obj, positive=in_or_not)
+        if isinstance(entity_or_index, Entity):
+            return MembershipConstraint(
+                entity=entity_or_index, container=obj, positive=in_or_not
+            )
+        raise CofolaParsingError(
+            f"membership_constraint: unsupported LHS type "
+            f"{type(entity_or_index).__name__}"
+        )
 
     def subset_constraint(self: "CofolaTransfomer", args):
-        objs1, _, objs2 = args
-
-        def single_operation(obj1, obj2):
-            cat1 = self._ref_category(obj1) if isinstance(obj1, ObjRef) else 'unknown'
-            cat2 = self._ref_category(obj2) if isinstance(obj2, ObjRef) else 'unknown'
-            if cat1 == 'bag' and cat2 == 'bag':
-                return BagSubsetConstraint(sub=obj1, sup=obj2)
-            return SubsetConstraint(sub=obj1, sup=obj2)
-
-        return self._op_or_constraint_on_list(single_operation, objs1, objs2)
+        obj1, _, obj2 = args
+        d1 = self._defn_of(obj1)
+        d2 = self._defn_of(obj2)
+        if isinstance(d1, BagObjDef) and isinstance(d2, BagObjDef):
+            return BagSubsetConstraint(sub=obj1, sup=obj2)
+        return SubsetConstraint(sub=obj1, sup=obj2)
 
     def disjoint_constraint(self: "CofolaTransfomer", args):
         obj1, _, obj2 = args
-
-        def single_operation(o1, o2):
-            return DisjointConstraint(left=o1, right=o2)
-
-        return self._op_or_constraint_on_list(single_operation, obj1, obj2)
+        return DisjointConstraint(left=obj1, right=obj2)
 
     def equivalence_constraint(self: "CofolaTransfomer", args):
         from cofola.parser.transformer import TupleIndexSentinel
 
-        obj1, symbol, obj2 = args
+        o1, symbol, o2 = args
         symbol = str(symbol)
+        positive = symbol == "=="
 
-        def single_operation(o1, o2):
-            if isinstance(o1, TupleIndexSentinel) and isinstance(o2, Entity):
-                c = TupleIndexEq(
-                    tuple_ref=o1.tuple_ref,
-                    index=o1.index,
-                    entity=o2,
-                    positive=(symbol == '=='),
-                )
-            elif isinstance(o1, ObjRef) and isinstance(o2, Entity):
-                # e.g. P[0] == e1 (tuple from PartRef source): membership constraint
-                c = MembershipConstraint(
-                    entity=o2, container=o1, positive=(symbol == '==')
-                )
-            elif isinstance(o1, ObjRef) and isinstance(o2, ObjRef):
-                cat1 = self._ref_category(o1)
-                cat2 = self._ref_category(o2)
-                if cat1 == 'bag' and cat2 == 'bag':
-                    c = BagEqConstraint(
-                        left=o1, right=o2, positive=(symbol == '==')
-                    )
-                else:
-                    c = EqualityConstraint(
-                        left=o1, right=o2, positive=(symbol == '==')
-                    )
-            else:
-                from cofola.parser.parser import CofolaParsingError
-                raise CofolaParsingError(
-                    f"equivalence_constraint: unsupported types "
-                    f"({type(o1).__name__} {symbol} {type(o2).__name__})"
-                )
-            return c
-
-        return self._op_or_constraint_on_list(single_operation, obj1, obj2)
+        if isinstance(o1, TupleIndexSentinel) and isinstance(o2, Entity):
+            return TupleIndexEq(
+                tuple_ref=o1.tuple_ref,
+                index=o1.index,
+                entity=o2,
+                positive=positive,
+            )
+        if isinstance(o1, ObjRef) and isinstance(o2, Entity):
+            # e.g. P[0] == e1 (tuple from PartRef source): membership constraint
+            return MembershipConstraint(entity=o2, container=o1, positive=positive)
+        if isinstance(o1, ObjRef) and isinstance(o2, ObjRef):
+            d1 = self._defn_of(o1)
+            d2 = self._defn_of(o2)
+            if isinstance(d1, BagObjDef) and isinstance(d2, BagObjDef):
+                return BagEqConstraint(left=o1, right=o2, positive=positive)
+            return EqualityConstraint(left=o1, right=o2, positive=positive)
+        raise CofolaParsingError(
+            f"equivalence_constraint: unsupported types "
+            f"({type(o1).__name__} {symbol} {type(o2).__name__})"
+        )
 
     def count_parameter(self: "CofolaTransfomer", args):
         count = int(args[0])
         if count < 0:
-            from cofola.parser.parser import CofolaParsingError
             raise CofolaParsingError("Count parameter must be non-negative.")
         return count
 
     def seq_constraint(self: "CofolaTransfomer", args):
         pattern, is_in, obj = args
-        cat = self._ref_category(obj) if isinstance(obj, ObjRef) else 'unknown'
-        if cat != 'sequence':
-            from cofola.parser.parser import CofolaParsingError
-            raise CofolaParsingError(
-                f"seq_constraint requires a Sequence, got {cat}"
-            )
+        defn = self._defn_of(obj)
+        if not isinstance(defn, SequenceDef):
+            kind = type(defn).__name__ if defn is not None else "unknown"
+            raise CofolaParsingError(f"seq_constraint requires a Sequence, got {kind}")
         return SequencePatternConstraint(seq=obj, pattern=pattern, positive=is_in)
 
     def seq_pattern(self: "CofolaTransfomer", args):
@@ -201,13 +169,12 @@ class ConstraintTransformerMixin:
     def binary_constraint(self: "CofolaTransfomer", args):
         arg1, op, arg2 = args
         op = str(op)
-        if op == 'and':
+        if op == "and":
             return AndConstraint(left=arg1, right=arg2)
-        if op == 'or':
+        if op == "or":
             return OrConstraint(left=arg1, right=arg2)
-        from cofola.parser.parser import CofolaParsingError
         raise CofolaParsingError(f"Unknown binary constraint operator: {op}")
 
     def part_constraint(self: "CofolaTransfomer", args):
-        constraint_template, _, part_name_token, _, partition_ref = args
+        constraint_template, _, _part_name_token, _, partition_ref = args
         return ForAllParts(partition=partition_ref, constraint_template=constraint_template)

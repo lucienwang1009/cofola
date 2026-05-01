@@ -1,7 +1,6 @@
 """Shared logging configuration for cofola."""
 from __future__ import annotations
 
-import logging
 import sys
 
 from loguru import logger

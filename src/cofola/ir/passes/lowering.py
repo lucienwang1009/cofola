@@ -29,14 +29,11 @@ from cofola.frontend.objects import (
     SetChoose,
     SetIntersection,
     BagObjDef,
-    AnySetObjDef,
     PartRef,
-    PartitionDef,
 )
 from cofola.frontend.constraints import (
     SizeConstraint,
     DisjointConstraint,
-    EqualityConstraint,
     TupleIndexEq,
     TupleIndexMembership,
     MembershipConstraint,
@@ -49,6 +46,7 @@ from cofola.ir.pass_manager import TransformPass
 from cofola.frontend.problem import Problem
 from cofola.ir.analysis.entities import AnalysisResult
 from cofola.ir.analysis.merged import MergedAnalysis
+from cofola.ir.passes.optimize import UnsatisfiableConstraint
 
 
 # Prefix for generated index entities
@@ -466,7 +464,7 @@ class LoweringPass(TransformPass):
 
             # Rewrite constraints referencing this TupleDef
             new_constraints, extra_defs = self._lower_tuple_constraints(
-                tuple(new_constraints), ref, mapping_ref, indices_ref
+                tuple(new_constraints), ref, mapping_ref, indices_ref, size
             )
             new_defs.extend(extra_defs)
 
@@ -488,15 +486,22 @@ class LoweringPass(TransformPass):
         tuple_ref: ObjRef,
         mapping_ref: ObjRef,
         indices_ref: ObjRef,
+        size: int,
         extra_defs: list,
-    ) -> object:
+    ) -> object | None:
         """Lower a single atomic constraint that may reference tuple_ref.
 
         Handles TupleIndexEq, MembershipConstraint, TupleIndexMembership.
         Compound constraints (Or/And/Not) never reach LoweringPass — they are
         Shannon-expanded before LOCAL_PASSES run.
+
+        Returns ``None`` for trivially-true constraints (out-of-range index with
+        ``positive=False``); the caller drops these. An out-of-range index with
+        ``positive=True`` is unsatisfiable and raises ``UnsatisfiableConstraint``.
         """
         if isinstance(c, TupleIndexEq) and c.tuple_ref == tuple_ref:
+            if not 0 <= c.index < size:
+                return self._handle_out_of_range_index(c, tuple_ref, size)
             idx_entity = Entity(f"{IDX_PREFIX}{c.index}")
             return FuncPairConstraint(
                 func=mapping_ref,
@@ -513,6 +518,8 @@ class LoweringPass(TransformPass):
                 positive=c.positive,
             )
         elif isinstance(c, TupleIndexMembership) and c.tuple_ref == tuple_ref:
+            if not 0 <= c.index < size:
+                return self._handle_out_of_range_index(c, tuple_ref, size)
             idx_entity = Entity(f"{IDX_PREFIX}{c.index}")
             return FuncPairConstraint(
                 func=mapping_ref,
@@ -522,12 +529,31 @@ class LoweringPass(TransformPass):
             )
         return c
 
+    @staticmethod
+    def _handle_out_of_range_index(c, tuple_ref: ObjRef, size: int) -> None:
+        """Resolve a tuple-index constraint whose index is outside ``[0, size)``.
+
+        Positive form is unsatisfiable; negative form is trivially true so we
+        drop it by returning ``None``.
+        """
+        if c.positive:
+            raise UnsatisfiableConstraint(
+                f"Tuple {tuple_ref.id} index {c.index} out of range [0, {size}): "
+                f"constraint {c} is unsatisfiable"
+            )
+        logger.info(
+            "LoweringPass: dropping trivially-true tuple {} index {} (size {}) constraint",
+            tuple_ref.id, c.index, size,
+        )
+        return None
+
     def _lower_tuple_constraints(
         self,
         constraints: tuple,
         tuple_ref: ObjRef,
         mapping_ref: ObjRef,
         indices_ref: ObjRef,
+        size: int,
     ) -> tuple[tuple, list]:
         """Lower atomic constraints that reference a just-lowered TupleDef.
 
@@ -552,8 +578,10 @@ class LoweringPass(TransformPass):
         extra_defs: list = []
 
         new_constraints = tuple(
-            self._lower_one_constraint(c, tuple_ref, mapping_ref, indices_ref, extra_defs)
-            for c in constraints
+            lowered for c in constraints
+            if (lowered := self._lower_one_constraint(
+                c, tuple_ref, mapping_ref, indices_ref, size, extra_defs
+            )) is not None
         )
         return new_constraints, extra_defs
 
@@ -578,8 +606,6 @@ class LoweringPass(TransformPass):
             defn = problem.get_object(ref)
             if not isinstance(defn, SequenceDef):
                 continue
-
-            source_defn = problem.get_object(defn.source)
 
             # Reject choose-with-replacement from a bag source.
             # Check the SOURCE's bag_info (not the sequence's own, which would be BagInfo

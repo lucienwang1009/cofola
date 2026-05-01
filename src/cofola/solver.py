@@ -5,13 +5,14 @@ import math
 
 from loguru import logger
 
+from cofola.frontend.problem import Problem
 from cofola.log import setup_logging
 from cofola.ir.pipeline import IRPipeline
 from cofola.backend.wfomc.backend import WFOMCBackend
 from cofola.parser.parser import parse
 
 
-def solve(problem: "Problem", debug: bool = False) -> int:
+def solve(problem: Problem, debug: bool = False) -> int:
     """Solve a combinatorics problem.
 
     :param problem: A cofola.frontend.Problem instance.

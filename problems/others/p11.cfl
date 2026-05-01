@@ -3,7 +3,8 @@ americans = set(am1...5)
 spaniards = set(sp1...3)
 
 people = russians + americans + spaniards
-p1 = choose(people, 3)
-p2 = choose(people - p1, 3)
-p3 = choose(people - p1 - p2, 2)
+selection = choose(people)
+|selection & russians| >= 1
+|selection & americans| >= 1
+|selection & spaniards| >= 1
 

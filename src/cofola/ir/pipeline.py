@@ -30,7 +30,6 @@ Design invariant: no pass in LOCAL_PASSES may create new compound constraints.
 
 from __future__ import annotations
 
-import math
 from dataclasses import dataclass, fields
 from dataclasses import replace as dc_replace
 
@@ -59,7 +58,6 @@ from cofola.frontend.pretty import fmt_analysis, fmt_problem
 from cofola.frontend.problem import Problem
 from cofola.frontend.types import ObjRef
 from cofola.ir.analysis.bag_classify import BagClassification
-from cofola.ir.analysis.entities import AnalysisResult
 from cofola.ir.analysis.merged import MergedAnalysis
 from cofola.ir.pass_manager import AnalysisManager
 from cofola.ir.passes.lowering import LoweringPass

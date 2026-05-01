@@ -8,8 +8,6 @@ Ports the legacy preprocess_bags function to work with the new IR.
 
 from __future__ import annotations
 
-from dataclasses import replace
-
 from cofola.frontend.types import Entity, ObjRef
 from cofola.frontend.objects import (
     BagInit,
@@ -18,8 +16,6 @@ from cofola.frontend.objects import (
     BagAdditiveUnion,
     BagIntersection,
     BagDifference,
-    BagSupport,
-    ObjDef,
     PartitionDef,
     PartRef,
     SetChooseReplace,
@@ -40,8 +36,6 @@ class BagClassification(AnalysisPass):
     This analysis determines which entities can be "lifted" (treated as
     indistinguishable) in the WFOMC encoding, which can significantly
     improve performance.
-
-    Ports the legacy preprocess_bags function to work with the new IR.
     """
 
     required_analyses = [MergedAnalysis]

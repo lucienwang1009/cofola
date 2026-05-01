@@ -57,17 +57,11 @@ import math
 from functools import reduce
 from sympy import Eq, Ge, Gt, Le, Lt, Min, Ne
 from wfomc import (
-    Algo,
     Const,
-    Pred,
-    QuantifiedFormula,
-    Universal,
     WFOMCProblem,
-    X,
     exactly_one_qf,
     exclusive,
     fol_parse as parse,
-    top,
     MultinomialCoefficients,
 )
 
@@ -78,7 +72,7 @@ from cofola.backend.wfomc.decoder import Decoder
 from cofola.utils import create_aux_pred, create_cofola_pred, ListLessThan
 from cofola.frontend.problem import Problem
 from cofola.frontend.types import ObjRef, Entity
-from cofola.ir.analysis.entities import AnalysisResult, SetInfo, BagInfo
+from cofola.ir.analysis.entities import AnalysisResult
 from loguru import logger
 
 
@@ -212,7 +206,7 @@ def _encode_singleton(context: ContextIR) -> None:
             context.unary_evidence.add(~pred(Const(e.name)))
 
 
-def _encode_entity_in_ctx(entity: IREntity, context: ContextIR) -> object:
+def _encode_entity_in_ctx(entity: Entity, context: ContextIR) -> object:
     """Encode a single entity as a unary predicate with evidence.
 
     Returns the Pred. Idempotent — encoding the same entity twice is a no-op.
@@ -401,8 +395,6 @@ def _encode_set_choose_replace(
     context: ContextIR,
 ) -> None:
     """Encode a SetChooseReplace node (multiset chosen with replacement).
-
-    LEGACY EQUIVALENT: encode() branch for SetChooseReplace (encoder.py ~line 573).
 
     SetChooseReplace picks elements from a source set WITH replacement,
     producing a multiset. Encoded like a bag: uses dis_entities and
@@ -1091,6 +1083,8 @@ def _encode_partition(
     context.sentence = context.sentence & parse(
         f"\\forall X: ({source_pred}(X) <-> ({or_formula}))"
     )
+    if defn.num_parts <= 1:
+        return
 
     # Check if source is a set or bag
     set_info = analysis.set_info.get(defn.source)
@@ -1698,19 +1692,16 @@ def _get_bag_count_var(
     atom: ir_cst.BagCountAtom,
     context: ContextIR,
 ) -> object:
-    """Get the symbolic variable for a BagCountAtom (B.count(e)).
+    """Get the symbolic variable (or constant) for a BagCountAtom (B.count(e)).
 
-    LEGACY EQUIVALENT: BagMultiplicity weight variable in encoder.py ~line 101.
-
-    Returns context.get_entity_var(atom.bag, atom.entity).
-
-    Args:
-        atom: BagCountAtom dataclass (bag: ObjRef, entity: IREntity).
-        context: ContextIR.
-
-    Returns:
-        Symbolic Expr for the entity multiplicity variable.
+    If the entity is not a possible element of the bag, the count is 0 and
+    we return the integer 0 directly. Returning a fresh symbolic variable
+    here would leak an unbound symbol into the validator (no weighting ever
+    references it), which breaks decode_result.
     """
+    bag_info = context.analysis.bag_info.get(atom.bag)
+    if bag_info is None or atom.entity not in bag_info.p_entities_multiplicity:
+        return 0
     return context.get_entity_var(atom.bag, atom.entity)
 
 

@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass, fields, is_dataclass
 from typing import Iterator
 
-from cofola.frontend.types import ObjRef, Entity
+from cofola.frontend.types import ObjRef
 from cofola.frontend.constraints import (
     AndConstraint,
     Constraint,
@@ -330,6 +330,10 @@ class ProblemBuilder:
             if r == ref:
                 return defn
         return None
+
+    def iter_defs(self) -> list[tuple[ObjRef, ObjDef]]:
+        """Return the (ref, defn) pairs added so far, in insertion order."""
+        return list(self._defs)
 
     def build(self) -> Problem:
         """Build the immutable Problem from the accumulated definitions.

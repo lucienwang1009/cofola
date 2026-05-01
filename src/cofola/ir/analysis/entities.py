@@ -31,8 +31,6 @@ from cofola.frontend.objects import (
     FuncInverseImage,
     TupleDef,
     SequenceDef,
-    ObjDef,
-    PartitionDef,
     PartRef,
 )
 from cofola.ir.pass_manager import AnalysisPass
