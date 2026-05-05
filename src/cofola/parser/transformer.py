@@ -33,7 +33,7 @@ from cofola.frontend.problem import ProblemBuilder
 from cofola.frontend.types import Entity, ObjRef
 from cofola.parser.common import CommonTransformer
 from cofola.parser.constants import RESERVED_KEYWORDS, RESERVED_PREFIXES
-from cofola.parser.errors import CofolaParsingError
+from cofola.parser.common import CofolaParsingError
 from cofola.parser.transformer_constraints import ConstraintTransformerMixin
 from cofola.parser.transformer_objects import ObjectTransformerMixin
 
@@ -140,6 +140,23 @@ class CofolaTransfomer(
             if isinstance(statement, _CONSTRAINT_TYPES):
                 self.builder.add_constraint(statement)
         return self.builder.build()
+
+    def _call_userfunc(self, tree, new_children=None):
+        """Override to record source locations for ObjRefs created by rule methods.
+
+        After the user function returns, if the result is an ObjRef and the
+        tree has meta with a line/column, record it on the builder. This
+        side-table approach (cf. Problem.locs) keeps positions out of every
+        IR dataclass.
+        """
+        result = super()._call_userfunc(tree, new_children)
+        meta = getattr(tree, "meta", None)
+        if meta is not None and not getattr(meta, "empty", True):
+            line = getattr(meta, "line", None)
+            col = getattr(meta, "column", None)
+            if isinstance(result, ObjRef) and line is not None and col is not None:
+                self.builder.set_loc(result, line, col)
+        return result
 
     def _transform_tree(self, tree):
         if tree.data == "part_constraint":

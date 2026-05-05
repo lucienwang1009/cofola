@@ -6,13 +6,12 @@ from loguru import logger
 
 from cofola.frontend.pretty import fmt_problem
 from cofola.parser.constants import RESERVED_KEYWORDS, RESERVED_PREFIXES
-from cofola.parser.errors import CofolaParsingError, CofolaTypeMismatchError
+from cofola.parser.common import CofolaParsingError
 from cofola.parser.grammar import grammar
 from cofola.parser.transformer import CofolaTransfomer
 
 __all__ = [
     "CofolaParsingError",
-    "CofolaTypeMismatchError",
     "RESERVED_KEYWORDS",
     "RESERVED_PREFIXES",
     "parse",
@@ -27,7 +26,7 @@ def parse(text: str, debug: bool = False):
                   configured via cofola.log.setup_logging before calling).
     :return: The parsed ir.Problem.
     """
-    parser = Lark(grammar, start="cofola")
+    parser = Lark(grammar, start="cofola", propagate_positions=True)
     tree = parser.parse(text)
     logger.debug(
         "Grammar parsed successfully; tree has {} tokens",

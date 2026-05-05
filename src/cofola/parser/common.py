@@ -3,6 +3,10 @@ from __future__ import annotations
 from lark import Transformer
 
 
+class CofolaParsingError(Exception):
+    """Base exception for Cofola parsing errors."""
+
+
 common_grammar = r"""
     left_square_bracket: "["
     right_square_bracket: "]"

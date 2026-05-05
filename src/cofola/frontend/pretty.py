@@ -82,7 +82,7 @@ def _ref_or_entity(x: ObjRef | Entity, problem: Problem) -> str:
 def _fmt_pattern(pattern: object, problem: Problem) -> str:
     match pattern:
         case TogetherPattern(group=g):
-            return f"together({_name(g, problem)})"
+            return f"together({_ref_or_entity(g, problem)})"
         case LessThanPattern(left=l, right=r):
             return f"{_ref_or_entity(l, problem)} < {_ref_or_entity(r, problem)}"
         case PredecessorPattern(first=f, second=s):

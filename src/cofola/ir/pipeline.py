@@ -59,6 +59,7 @@ from cofola.frontend.problem import Problem
 from cofola.frontend.types import ObjRef
 from cofola.ir.analysis.bag_classify import BagClassification
 from cofola.ir.analysis.merged import MergedAnalysis
+from cofola.ir.analysis.type_check import TypeCheckPass
 from cofola.ir.pass_manager import AnalysisManager
 from cofola.ir.passes.lowering import LoweringPass
 from cofola.ir.passes.merge_identical import MergeIdenticalObjects
@@ -270,6 +271,9 @@ class IRPipeline:
             assignment.  Empty schedule means unsatisfiable (answer = 0).
         """
         logger.debug("\n{}", fmt_problem(problem, stage="[Input] Parsed Problem"))
+
+        # Phase 0: type check (raises CofolaTypeError on any spec violation).
+        TypeCheckPass().run(problem)
 
         # Phase 1: global structural passes
         try:

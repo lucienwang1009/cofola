@@ -38,7 +38,8 @@ from cofola.frontend.objects import (
 )
 from cofola.frontend.types import Entity, ObjRef
 from cofola.parser.constants import TupleIndexSentinel
-from cofola.parser.errors import CofolaParsingError, CofolaTypeMismatchError
+from cofola.ir.analysis.type_check import CofolaTypeError, TypeCheckError
+from cofola.parser.common import CofolaParsingError
 
 if TYPE_CHECKING:
     from cofola.parser.transformer import CofolaTransfomer
@@ -57,7 +58,14 @@ class ObjectTransformerMixin:
             entities: list[Entity] = []
             for atom in obj_init:
                 if not isinstance(atom, Entity):
-                    raise CofolaTypeMismatchError(Entity, atom)
+                    raise CofolaTypeError([TypeCheckError(
+                        loc=None,
+                        message=(
+                            f"set(...) entries must be entities, "
+                            f"got {atom!r} of type {type(atom).__name__}"
+                        ),
+                        node=atom,
+                    )])
                 entities.append(atom)
             if len(entities) != len(set(entities)):
                 raise CofolaParsingError(
@@ -142,37 +150,36 @@ class ObjectTransformerMixin:
             size = args[3]
             op_arg = args[4]
 
+        # Dispatch on source kind. For choose/compose/partition we still need
+        # to pick the right IR class (Set* vs Bag*); when the source is the
+        # wrong kind we default to the Set branch and let TypeCheckPass raise
+        # the proper post-parse error.
         defn = self._defn_of(obj)
         is_set = isinstance(defn, SetObjDef)
         is_bag = isinstance(defn, BagObjDef)
-        kind = type(defn).__name__ if defn is not None else "unknown"
 
         if op_type == "choose":
-            if is_set:
-                return self.builder.add(SetChoose(source=obj, size=size))
+            # Default to SetChoose for non-bag sources; TypeCheckPass enforces
+            # source kind.
             if is_bag:
                 return self.builder.add(BagChoose(source=obj, size=size))
-            raise CofolaParsingError(f"choose() requires Set or Bag, got {kind}")
+            return self.builder.add(SetChoose(source=obj, size=size))
 
         if op_type == "choose_replace":
-            if not is_set:
-                raise CofolaParsingError(f"choose_replace() requires Set, got {kind}")
+            # Always create SetChooseReplace; TypeCheckPass validates source is SET.
             return self.builder.add(SetChooseReplace(source=obj, size=size))
 
         if op_type == "supp":
-            if not is_bag:
-                raise CofolaParsingError(f"supp() requires Bag, got {kind}")
+            # Always create BagSupport; TypeCheckPass validates source is BAG.
             return self.builder.add(BagSupport(source=obj))
 
         if op_type in ("compose", "partition"):
             if size is None:
                 raise CofolaParsingError(f"The size of a {op_type} must be specified.")
             ordered = op_type == "compose"
-            if not (is_set or is_bag):
-                raise CofolaParsingError(
-                    f"{op_type}() requires Set or Bag, got {kind}"
-                )
-            part_cls: type = SetPartRef if is_set else BagPartRef
+            # Default to SetPartRef for non-bag sources; TypeCheckPass enforces
+            # source kind via PartitionDef signature.
+            part_cls: type = BagPartRef if is_bag else SetPartRef
             partition_ref = self.builder.add(
                 PartitionDef(source=obj, num_parts=size, ordered=ordered)
             )
@@ -191,10 +198,6 @@ class ObjectTransformerMixin:
             )
 
         if op_type == "choose_replace_tuple":
-            if not is_set:
-                raise CofolaParsingError(
-                    f"choose_replace_tuple() requires Set, got {kind}"
-                )
             return self.builder.add(
                 TupleDef(source=obj, choose=True, replace=True, size=size)
             )
@@ -210,10 +213,6 @@ class ObjectTransformerMixin:
             )
 
         if op_type == "choose_replace_sequence":
-            if not is_set:
-                raise CofolaParsingError(
-                    f"choose_replace_sequence() requires Set, got {kind}"
-                )
             return self.builder.add(
                 SequenceDef(source=obj, choose=True, replace=True, size=size)
             )
@@ -235,10 +234,6 @@ class ObjectTransformerMixin:
             )
 
         if op_type == "choose_replace_circle":
-            if not is_set:
-                raise CofolaParsingError(
-                    f"choose_replace_circle() requires Set, got {kind}"
-                )
             return self.builder.add(
                 SequenceDef(
                     source=obj, choose=True, replace=True, size=size,
@@ -251,34 +246,36 @@ class ObjectTransformerMixin:
     def binary_operations(self: "CofolaTransfomer", args):
         obj1, op, obj2 = args
         op = str(op)
+        # Dispatch on operand kinds to pick Set* vs Bag* IR class. Mixed-kind
+        # operands and ill-typed `++`/`+` usage are rejected by TypeCheckPass.
         d1 = self._defn_of(obj1)
         d2 = self._defn_of(obj2)
-        is_set1, is_set2 = isinstance(d1, SetObjDef), isinstance(d2, SetObjDef)
         is_bag1, is_bag2 = isinstance(d1, BagObjDef), isinstance(d2, BagObjDef)
-        if (is_set1 and is_bag2) or (is_bag1 and is_set2):
-            raise CofolaParsingError("Set and Bag objects cannot be operated together")
-        if is_set1 or is_set2:
+        # Use bag branch only when both operands are bags; otherwise default
+        # to the set branch (mixed-kind cases will be flagged by TypeCheckPass
+        # via the SetUnion/SetIntersection/SetDifference signatures).
+        if is_bag1 and is_bag2:
             if op == "+":
-                return self.builder.add(SetUnion(left=obj1, right=obj2))
+                return self.builder.add(BagUnion(left=obj1, right=obj2))
             if op == "++":
-                raise CofolaParsingError(
-                    "Additive union is not supported for set objects."
-                )
+                return self.builder.add(BagAdditiveUnion(left=obj1, right=obj2))
             if op == "&":
-                return self.builder.add(SetIntersection(left=obj1, right=obj2))
+                return self.builder.add(BagIntersection(left=obj1, right=obj2))
             if op == "-":
-                return self.builder.add(SetDifference(left=obj1, right=obj2))
-            raise CofolaParsingError(f"Unknown set operation {op}.")
-        # bag
+                return self.builder.add(BagDifference(left=obj1, right=obj2))
+            raise CofolaParsingError(f"Unknown bag operation {op}.")
+        # set (or mixed — TypeCheckPass will reject mixed)
         if op == "+":
-            return self.builder.add(BagAdditiveUnion(left=obj1, right=obj2))
+            return self.builder.add(SetUnion(left=obj1, right=obj2))
         if op == "++":
-            return self.builder.add(BagUnion(left=obj1, right=obj2))
+            # `++` on non-bag operands: still build a BagAdditiveUnion so that
+            # TypeCheckPass can report the proper "requires Bag" error.
+            return self.builder.add(BagAdditiveUnion(left=obj1, right=obj2))
         if op == "&":
-            return self.builder.add(BagIntersection(left=obj1, right=obj2))
+            return self.builder.add(SetIntersection(left=obj1, right=obj2))
         if op == "-":
-            return self.builder.add(BagDifference(left=obj1, right=obj2))
-        raise CofolaParsingError(f"Unknown bag operation {op}.")
+            return self.builder.add(SetDifference(left=obj1, right=obj2))
+        raise CofolaParsingError(f"Unknown set operation {op}.")
 
     def indexing(self: "CofolaTransfomer", args):
         obj, index = args[0], args[2]

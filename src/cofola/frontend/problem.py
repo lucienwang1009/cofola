@@ -6,7 +6,7 @@ ProblemBuilder is the mutable builder used to construct a Problem.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, fields, is_dataclass
+from dataclasses import dataclass, field, fields, is_dataclass
 from typing import Iterator
 
 from cofola.frontend.types import ObjRef
@@ -18,6 +18,11 @@ from cofola.frontend.constraints import (
     OrConstraint,
 )
 from cofola.frontend.objects import ObjDef
+
+
+# A source location is a (line, column) pair from the parser, or None when
+# the object was not produced by the parser (e.g. constructed by an IR pass).
+SourceLoc = tuple[int, int]
 
 
 @dataclass(frozen=True)
@@ -35,6 +40,10 @@ class Problem:
     defs: tuple[tuple[ObjRef, ObjDef], ...]  # tuple of pairs for determinism
     constraints: tuple[Constraint, ...]
     names: tuple[tuple[ObjRef, str], ...]
+    # Source locations for ObjRefs introduced by the parser. Side-table so we
+    # don't need to plumb (line, col) through every IR dataclass. Defaults to
+    # empty for objects/passes that don't track positions.
+    locs: tuple[tuple[ObjRef, SourceLoc], ...] = field(default_factory=tuple)
 
     def get_object(self, ref: ObjRef) -> ObjDef | None:
         """Get the object definition for a reference.
@@ -70,6 +79,17 @@ class Problem:
         for r, name in self.names:
             if r == ref:
                 return name
+        return None
+
+    def get_loc(self, ref: ObjRef) -> SourceLoc | None:
+        """Return the (line, col) source location for an object reference.
+
+        Returns None if no source location was recorded (e.g. the object was
+        constructed by an IR pass, or the parser did not propagate positions).
+        """
+        for r, loc in self.locs:
+            if r == ref:
+                return loc
         return None
 
     def get_refs(self, defn: ObjDef) -> list[ObjRef]:
@@ -281,6 +301,7 @@ class ProblemBuilder:
         self._defs: list[tuple[ObjRef, ObjDef]] = []
         self._constraints: list[Constraint] = []
         self._names: dict[ObjRef, str] = {}
+        self._locs: dict[ObjRef, SourceLoc] = {}
 
     def add(self, defn: ObjDef, name: str | None = None) -> ObjRef:
         """Add an object definition and return its reference.
@@ -310,6 +331,16 @@ class ProblemBuilder:
     def set_name(self, ref: ObjRef, name: str) -> None:
         """Set or update the name for an existing object reference."""
         self._names[ref] = name
+
+    def set_loc(self, ref: ObjRef, line: int, col: int) -> None:
+        """Record the parser source location (line, col) for an object reference.
+
+        Idempotent: if the ref already has a location, the first call wins.
+        Subsequent calls (e.g. from an outer rule re-visiting the same ref)
+        are ignored so we keep the innermost / earliest position.
+        """
+        if ref not in self._locs:
+            self._locs[ref] = (int(line), int(col))
 
     def find_equivalent(self, defn: ObjDef) -> ObjRef | None:
         """Find existing ref with an equivalent definition (deduplication).
@@ -350,8 +381,10 @@ class ProblemBuilder:
             The immutable Problem.
         """
         names_tuple = tuple((ref, name) for ref, name in self._names.items())
+        locs_tuple = tuple((ref, loc) for ref, loc in self._locs.items())
         return Problem(
             defs=tuple(self._defs),
             constraints=tuple(self._constraints),
             names=names_tuple,
+            locs=locs_tuple,
         )

@@ -23,10 +23,10 @@ from cofola.frontend.constraints import (
     TupleIndexEq,
     TupleIndexMembership,
 )
-from cofola.frontend.objects import BagObjDef, SequenceDef
+from cofola.frontend.objects import BagObjDef
 from cofola.frontend.types import Entity, ObjRef
 from cofola.parser.constants import TupleIndexSentinel
-from cofola.parser.errors import CofolaParsingError
+from cofola.parser.common import CofolaParsingError
 
 if TYPE_CHECKING:
     from cofola.parser.transformer import CofolaTransfomer
@@ -133,10 +133,8 @@ class ConstraintTransformerMixin:
 
     def seq_constraint(self: "CofolaTransfomer", args):
         pattern, is_in, obj = args
-        defn = self._defn_of(obj)
-        if not isinstance(defn, SequenceDef):
-            kind = type(defn).__name__ if defn is not None else "unknown"
-            raise CofolaParsingError(f"seq_constraint requires a Sequence, got {kind}")
+        # TypeCheckPass enforces that `seq` is a Sequence/Circle via the
+        # SequencePatternConstraint signature.
         return SequencePatternConstraint(seq=obj, pattern=pattern, positive=is_in)
 
     def seq_pattern(self: "CofolaTransfomer", args):
