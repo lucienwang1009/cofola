@@ -4,7 +4,7 @@ from wfomc import Pred, Expr
 from sympy import Eq, var
 
 
-AUX_PRED_PREFIX = '$cofola_aux_'
+AUX_PRED_PREFIX = '_cofola_aux_'
 
 
 class _AuxPredCounter:

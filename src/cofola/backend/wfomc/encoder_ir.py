@@ -1362,17 +1362,69 @@ def _get_seq_entity_pred(
 ) -> object:
     """Return the predicate for an entity/ref in the context of a sequence.
 
-    For sequences with a flatten object (Bag sources), entity type predicates
-    live on the flatten domain (position indices), so use get_entity_pred.
-    For plain Set sequences, entity type constants are domain elements themselves,
-    so use _encode_entity_in_ctx (unary evidence pinning).
+    For sequences with a flatten object (Bag sources or choose-with-replacement),
+    domain elements are position-index entities:
+    - Entity  → entity_pred(seq_ref, entity)  labels positions by type
+    - ObjRef  → aux pred = OR of entity_preds for entities in that set
+
+    For plain Set sequences (no flatten), domain elements are original entities:
+    - Entity  → _encode_entity_in_ctx  (unary evidence pinning)
+    - ObjRef  → get_pred(ref)  (the set predicate)
     """
+    seq_defn = context.problem.get_object(seq_ref)
+    has_flatten = seq_defn is not None and seq_defn.flatten is not None
+
     if isinstance(entity_or_ref, Entity):
-        seq_defn = context.problem.get_object(seq_ref)
-        if seq_defn is not None and seq_defn.flatten is not None:
+        if has_flatten:
             return context.get_entity_pred(seq_ref, entity_or_ref)
         return _encode_entity_in_ctx(entity_or_ref, context)
+
+    # ObjRef (a set/bag reference)
+    if has_flatten:
+        return _build_group_type_pred_for_seq(entity_or_ref, seq_ref, context)
     return context.get_pred(entity_or_ref)
+
+
+def _build_group_type_pred_for_seq(
+    group_ref: ObjRef,
+    seq_ref: ObjRef,
+    context: ContextIR,
+) -> object:
+    """Build an auxiliary predicate true for position X if its entity type is in group.
+
+    Used when encoding patterns in flatten-based sequences (bag source or
+    choose-with-replacement). entity_pred(seq_ref, e) labels position entities
+    by type, so we OR those together for entities in group_ref.
+
+    Only includes entities whose entity predicate was registered during
+    _encode_sequence; entities not in the sequence source are skipped.
+    """
+    group_defn = context.problem.get_object(group_ref)
+    if isinstance(group_defn, ir_obj.SetInit):
+        group_entities: frozenset = group_defn.entities
+    else:
+        group_set_info = context.analysis.set_info.get(group_ref)
+        group_entities = group_set_info.p_entities if group_set_info else frozenset()
+
+    # Only reference entity preds already created by _encode_sequence.
+    type_preds = [
+        context.ref_entity2pred[(seq_ref, e)]
+        for e in sorted(group_entities, key=lambda e: e.name)
+        if (seq_ref, e) in context.ref_entity2pred
+    ]
+    if not type_preds:
+        false_pred = create_aux_pred(1)
+        for e in context.analysis.all_entities:
+            context.unary_evidence.add(~false_pred(Const(e.name)))
+        return false_pred
+
+    name = context.problem.get_name(group_ref) or f"obj_{group_ref.id}"
+    group_type_pred = create_aux_pred(1, f"{name}_type_in_seq")
+    or_formula = " | ".join(f"{p}(X)" for p in type_preds)
+    context.sentence = context.sentence & parse(
+        f"\\forall X: ({group_type_pred}(X) <-> ({or_formula}))"
+    )
+    return group_type_pred
 
 
 def _encode_sequence_pattern_constraint(
@@ -1493,25 +1545,32 @@ def _encode_together_pattern(
     """Encode a TogetherPattern: elements of group appear consecutively in seq."""
     group_ref = pattern.group
 
-    # Get predicate for the group
-    group_defn = context.problem.get_object(group_ref)
-    if isinstance(group_defn, Entity):
-        obj_pred = _get_seq_entity_pred(group_defn, seq_ref, context)
-    else:
-        obj_pred = context.get_pred(group_ref)
+    # Get predicate for the group (handles flatten correctly)
+    obj_pred = _get_seq_entity_pred(group_ref, seq_ref, context)
 
-    # Get predecessor predicate for the sequence
+    # Get predecessor predicate and domain predicate for the sequence.
+    # domain_pred restricts X to positions that actually belong to the sequence:
+    # flatten_pred when the sequence has a flatten (bag source / choose-replace),
+    # otherwise the source set/bag predicate.  Without this restriction, entities
+    # in the group that are not in the sequence source would be counted as "first"
+    # elements (pred_pred(Y,X) is vacuously False for non-source X, so the
+    # ∀Y-quantifier is trivially satisfied).
     pred_pred = context.get_predecessor_pred(seq_ref)
-    source_pred = context.get_pred(context.problem.get_object(seq_ref).source)
+    seq_defn = context.problem.get_object(seq_ref)
+    domain_pred = context.get_pred(
+        seq_defn.flatten if seq_defn.flatten is not None else seq_defn.source
+    )
 
     # Create "first" predicate
     name = context.problem.get_name(group_ref) or f"obj_{group_ref.id}"
     first_pred = create_aux_pred(1, f"{name}_first")
 
-    # Define first(X) as the first element of the group in the sequence
+    # Define first(X) as the first element of the group in the sequence.
+    # source_pred(Y) is omitted from the ∀Y-guard because pred_pred already
+    # restricts both arguments to the sequence domain.
     context.sentence = context.sentence & parse(
-        f"\\forall X: ({first_pred}(X) <-> ({obj_pred}(X) & {source_pred}(X) & "
-        f"\\forall Y: (({obj_pred}(Y) & {source_pred}(Y)) -> ~{pred_pred}(Y,X))))"
+        f"\\forall X: ({first_pred}(X) <-> ({obj_pred}(X) & {domain_pred}(X) & "
+        f"(\\forall Y: ({obj_pred}(Y) -> ~{pred_pred}(Y,X)))))"
     )
 
     # Create variable for counting first elements
@@ -1779,13 +1838,6 @@ def _get_seq_pattern_count_var(
             next_to_var = context.create_var(obj_next_to_pred.name)
             context.weighting[obj_next_to_pred] = (next_to_var, 1)
             return next_to_var
-
-        case ir_cst.TogetherPattern():
-            # Together pattern - return the "first" variable
-            group_ref = pattern.group
-            name = context.problem.get_name(group_ref) or f"obj_{group_ref.id}"
-            first_var = context.create_var(f"{name}_first")
-            return first_var
 
         case _:
             raise TypeError(f"Unknown pattern type: {type(pattern)}")
