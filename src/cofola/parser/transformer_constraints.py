@@ -20,10 +20,11 @@ from cofola.frontend.constraints import (
     SizeConstraint,
     SubsetConstraint,
     TogetherPattern,
+    TupleCountAtom,
     TupleIndexEq,
     TupleIndexMembership,
 )
-from cofola.frontend.objects import BagObjDef
+from cofola.frontend.objects import BagObjDef, TupleDef
 from cofola.frontend.types import Entity, ObjRef
 from cofola.parser.constants import TupleIndexSentinel
 from cofola.parser.common import CofolaParsingError
@@ -75,9 +76,10 @@ class ConstraintTransformerMixin:
                 container=obj,
                 positive=in_or_not,
             )
-        if isinstance(entity_or_index, ObjRef):
-            # P[0] in S (tuple from PartRef → resolves to PartRef) → SubsetConstraint
-            return SubsetConstraint(sub=entity_or_index, sup=obj, positive=in_or_not)
+        if isinstance(self._defn_of(obj), TupleDef) and isinstance(entity_or_index, Entity):
+            return SizeConstraint(
+                terms=((TupleCountAtom(obj, entity_or_index, False), 1),), comparator=">", rhs=0
+            )
         if isinstance(entity_or_index, Entity):
             return MembershipConstraint(
                 entity=entity_or_index, container=obj, positive=in_or_not

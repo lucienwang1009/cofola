@@ -116,17 +116,7 @@ P = partition(S, 2)
 """,
         "unordered Partition",
     ),
-    # 11) entity in Tuple — only Set/Bag containers per CONTAINER = SET_LIKE.
-    (
-        "entity_in_tuple",
-        """
-S = set(a, b, c)
-T = tuple(S)
-a in T
-""",
-        "Set",
-    ),
-    # 12) T[i] in tuple — TupleIndexMembership requires SET_LIKE container.
+    # 11) T[i] in tuple — TupleIndexMembership requires SET_LIKE container.
     (
         "tuple_index_in_tuple",
         """
