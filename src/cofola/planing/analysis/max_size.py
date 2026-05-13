@@ -53,13 +53,13 @@ class _LPProblem:
     bounds: list[tuple[int, int | None]]
 
 
-class MaxSizeInference(AnalysisPass):
+class MaxSizeInference(AnalysisPass[SizeInferenceResult]):
     """Infers maximum sizes for objects from size constraints via LP.
 
     This pass examines SizeConstraints in the problem and uses linear
     programming to find tighter bounds on object sizes.
 
-    Ports the legacy infer_max_size function to work with the new IR.
+    Uses LP-compatible size constraints to infer tighter object bounds.
     """
 
     required_analyses = [EntityAnalysis]

@@ -19,7 +19,7 @@ Python's built-in `isinstance` accepts.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Callable, Optional
+from typing import Callable, Optional, Protocol
 
 from cofola.frontend.constraints import (
     BagCountAtom,
@@ -71,6 +71,12 @@ from cofola.frontend.objects import (
 from cofola.frontend.objects import Entity
 
 
+class _ObjectResolver(Protocol):
+    def get_object(self, ref: object) -> object | None:
+        """Resolve a frontend object reference."""
+        ...
+
+
 # A type expectation: a single class, or a tuple of classes (matching the
 # argument shape of built-in `isinstance`).
 TypeExpect = type | tuple[type, ...]
@@ -79,7 +85,7 @@ TypeExpect = type | tuple[type, ...]
 # Returns None if OK, or a human-readable message describing the problem.
 # `problem` is the surrounding Problem (passed through so predicates can
 # resolve refs to definitions).
-ExtraCheck = Callable[[object, object], Optional[str]]
+ExtraCheck = Callable[[object, _ObjectResolver], Optional[str]]
 
 
 @dataclass(frozen=True)
@@ -117,13 +123,13 @@ class Signature:
 # ---------------------------------------------------------------------------
 
 
-def _circle_pattern_compat(node: object, problem: object) -> Optional[str]:
+def _circle_pattern_supported(node: object, problem: _ObjectResolver) -> Optional[str]:
     """Circles only support `together` and `next_to` / adjacency patterns
     (and the implicit identity patterns). They reject `<` and predecessor
     patterns (which require a fixed starting position).
     """
     seq_ref = getattr(node, "seq")
-    seq_defn = problem.get_object(seq_ref)  # type: ignore[attr-defined]
+    seq_defn = problem.get_object(seq_ref)
     if not isinstance(seq_defn, CircleDef):
         return None
     pattern = getattr(node, "pattern")
@@ -134,7 +140,7 @@ def _circle_pattern_compat(node: object, problem: object) -> Optional[str]:
     return None
 
 
-def _disjoint_same_kind(node: object, problem: object) -> Optional[str]:
+def _disjoint_same_kind(node: object, problem: _ObjectResolver) -> Optional[str]:
     """`disjoint` requires both operands to be the same kind (Set/Set or
     Bag/Bag). The base SetLike check on each operand is done by Param;
     here we just enforce that the kinds match.
@@ -143,8 +149,8 @@ def _disjoint_same_kind(node: object, problem: object) -> Optional[str]:
     right_ref = getattr(node, "right", None)
     if left_ref is None or right_ref is None:
         return None
-    left_def = problem.get_object(left_ref)  # type: ignore[attr-defined]
-    right_def = problem.get_object(right_ref)  # type: ignore[attr-defined]
+    left_def = problem.get_object(left_ref)
+    right_def = problem.get_object(right_ref)
     if left_def is None or right_def is None:
         return None
     left_set = isinstance(left_def, SetObjDef)
@@ -158,7 +164,7 @@ def _disjoint_same_kind(node: object, problem: object) -> Optional[str]:
     return None
 
 
-def _no_together_count(node: object, problem: object) -> Optional[str]:
+def _no_together_count(node: object, problem: _ObjectResolver) -> Optional[str]:
     """Per spec (ordered_objects.tex): `together` does NOT have a count
     variant — `seq.count(together(...))` is forbidden.
     """
@@ -315,7 +321,7 @@ SIGNATURES: dict[type, Signature] = {
     ),
     SequencePatternConstraint: Signature(
         params=(Param(Linear, "seq", field="seq"),),
-        extra=(_circle_pattern_compat,),
+        extra=(_circle_pattern_supported,),
     ),
     FuncPairConstraint: Signature(
         params=(Param(FuncObjDef, "func", field="func"),),
@@ -336,7 +342,7 @@ SIGNATURES: dict[type, Signature] = {
     ),
     SeqPatternCountAtom: Signature(
         params=(Param(Linear, "seq", field="seq"),),
-        extra=(_circle_pattern_compat, _no_together_count),
+        extra=(_circle_pattern_supported, _no_together_count),
     ),
     # ------------------------------------------------------------------
     # Sequence patterns themselves: the type-check on their fields runs

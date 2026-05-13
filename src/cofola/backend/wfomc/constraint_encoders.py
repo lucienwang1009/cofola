@@ -363,11 +363,8 @@ def _encode_tuple_index_eq(
 ) -> None:
     """Encode a TupleIndexEq: T[index] [!=] entity.
 
-    LEGACY EQUIVALENT: not directly in encoder.py (tuples are lowered to functions
-    by LoweringPass before encoding). After lowering, tuple index constraints
-    become FuncPairConstraints. If this is still present, it's an error.
-
-    After LoweringPass, TupleIndexEq should not appear. Raise a warning/error.
+    LoweringPass should rewrite tuple index constraints into FuncPairConstraint
+    before backend encoding. Reaching this encoder is a pipeline invariant error.
 
     Args:
         c: TupleIndexEq dataclass.
@@ -384,7 +381,7 @@ def _encode_tuple_index_membership(
 ) -> None:
     """Encode a TupleIndexMembership: T[index] [not] in container.
 
-    LEGACY EQUIVALENT: Same as TupleIndexEq — should be lowered away.
+    LoweringPass should rewrite tuple membership constraints before backend encoding.
 
     Args:
         c: TupleIndexMembership dataclass.

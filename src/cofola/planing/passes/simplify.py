@@ -1,4 +1,4 @@
-"""Simplification pass for the immutable IR.
+"""Simplification pass for planning Problems.
 
 This module implements SimplifyPass, which removes unused objects
 from the IR.

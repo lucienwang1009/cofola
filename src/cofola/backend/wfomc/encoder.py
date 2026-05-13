@@ -8,7 +8,7 @@ from wfomc import MultinomialCoefficients, WFOMCProblem
 from cofola.backend.wfomc.constraint_encoders import _encode_constraint
 from cofola.backend.wfomc.context import Context
 from cofola.backend.wfomc.decoder import Decoder
-from cofola.backend.wfomc.encoding_helpers import _encode_entities, _encode_singleton
+from cofola.backend.wfomc.encoding_helpers import _encode_singleton
 from cofola.backend.wfomc.object_encoders import _encode_object
 from cofola.frontend.problem import Problem
 from cofola.planing.analysis.entities import AnalysisResult
@@ -40,7 +40,6 @@ def encode(
 
     context = Context(problem, encoding_analysis)
     MultinomialCoefficients.setup(len(context.domain))
-    _encode_entities(encoding_analysis, context)
 
     logger.debug("WFOMC encode: singletons={}", context.singletons)
 

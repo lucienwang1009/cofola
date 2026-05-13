@@ -1,4 +1,4 @@
-"""Backend ABC — decouples the IR from any specific solver."""
+"""Backend ABC — decouples planning Problems from concrete solvers."""
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -12,7 +12,7 @@ __all__ = ["Backend"]
 class Backend(ABC):
     """Abstract solver backend.
 
-    Implementations translate a fully-analysed, lowered IR Problem into
+    Implementations translate a fully-analysed, lowered planning Problem into
     an integer count.
 
     The Problem passed to :meth:`solve` must have been through:

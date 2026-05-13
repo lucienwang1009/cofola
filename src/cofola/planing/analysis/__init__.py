@@ -1,4 +1,4 @@
-"""Analysis passes for the immutable IR.
+"""Analysis passes for planning Problems.
 
 This module provides analysis passes that compute derived information
 from a Problem without mutating it:

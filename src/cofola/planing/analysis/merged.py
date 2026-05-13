@@ -1,9 +1,4 @@
-"""MergedAnalysis: combines EntityAnalysis + MaxSizeInference into one AnalysisResult.
-
-This replaces the _merge_size_inference method that was previously in pipeline.py.
-LoweringPass and BagClassification both declare MergedAnalysis as a required analysis,
-so they only need to call am.get(MergedAnalysis) to get fully-sized analysis results.
-"""
+"""MergedAnalysis combines EntityAnalysis and MaxSizeInference."""
 from __future__ import annotations
 
 from copy import deepcopy
@@ -16,7 +11,7 @@ from cofola.planing.analysis.entities import EntityAnalysis, AnalysisResult, Bag
 from cofola.planing.analysis.max_size import MaxSizeInference
 
 
-class MergedAnalysis(AnalysisPass):
+class MergedAnalysis(AnalysisPass[AnalysisResult]):
     """Merge EntityAnalysis and MaxSizeInference into a single AnalysisResult.
 
     Returns a new AnalysisResult (not mutated) with max_size and exact_size

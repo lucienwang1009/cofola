@@ -91,14 +91,3 @@ def test_can_load_problems(all_problems):
     assert "program" in first_problem
     assert "answer" in first_problem
     assert "tags" in first_problem
-
-
-if __name__ == "__main__":
-    # Print summary of encodable problems
-    encodable = get_encodable_problems()
-    all_p = load_problems()
-    benchmark = [p for p in all_p.values() if "benchmark" in p.get("tags", [])]
-    print(f"\nMode: {'FULL' if _RUN_ALL else 'BENCHMARK'}")
-    print(f"Running: {len(encodable)} problems")
-    print(f"Total benchmark problems: {len(benchmark)}")
-    print(f"Total problems in dataset: {len(all_p)}")

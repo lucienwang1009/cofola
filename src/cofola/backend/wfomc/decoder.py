@@ -82,7 +82,6 @@ class Decoder(object):
                     # overcount *= (factorial(len(indis_vars)) / prod(
                     #     factorial(n) for n in n_confs.values()
                     # ))
-                    # print(overcount)
                     # if the degrees of k tuples of variables are the same, we need to divide the overcount by k!
                     # note that here we need to be careful about the degrees of 0
                     overcount *= prod(

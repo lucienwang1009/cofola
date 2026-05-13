@@ -1,31 +1,11 @@
-"""WFOMC Context for encoding combinatorics problems to WFOMC.
+"""WFOMC context for encoding combinatorics problems.
 
 This module provides Context, the mutable state used while translating a
 planning Problem and AnalysisResult into a WFOMC problem.
-
-IMPLEMENTATION NOTES FOR THE IMPLEMENTER
-=========================================
-
-This class mirrors context.py but with the following key differences:
-
-1. **Keys**: Use ObjRef (or tuple[ObjRef, Entity]) instead of legacy object instances.
-2. **Data source**: Read analysis data from self.analysis (SetInfo/BagInfo) instead
-   of from object attributes (.dis_entities, .p_entities_multiplicity, etc.).
-3. **Name resolution**: Use self.problem.get_name(ref) instead of obj.name.
-4. **Sequence detection**: Scan problem.refs() for SequenceDef instead of checking
-   isinstance(obj, Sequence) in problem.objects.
-5. **pred creation**: Use create_cofola_pred(name, arity) from backend.wfomc.utils.
-6. **var creation**: Use create_cofola_var(name) from backend.wfomc.utils.
-
-TYPE ALIASES (for implementer convenience):
-    IREntity = cofola.planing.types.Entity
-    ObjRef   = cofola.planing.types.ObjRef
-
-WFOMC types (from wfomc package):
-    Pred, Const, Formula, AtomicFormula, Expr, Rational, WFOMCProblem
-    fol_parse as parse, to_sc2, top
 """
 from __future__ import annotations
+
+from typing import Any, TypeAlias
 
 from wfomc import (
     AtomicFormula,
@@ -38,7 +18,8 @@ from wfomc import (
     to_sc2,
     top,
 )
-from wfomc import Expr  # type: ignore[attr-defined]
+
+Expr: TypeAlias = Any
 
 from loguru import logger
 
@@ -46,7 +27,7 @@ from cofola.backend.wfomc.utils import create_aux_pred, create_cofola_pred, crea
 from cofola.backend.wfomc.decoder import Decoder
 
 from cofola.frontend.problem import Problem
-from cofola.frontend.objects import CircleDef, Linear, PartDef, SequenceDef
+from cofola.frontend.objects import CircleDef, Linear, PartDef
 from cofola.planing.analysis.entities import AnalysisResult
 from cofola.frontend.objects import ObjRef, Entity as IREntity
 
@@ -56,9 +37,6 @@ class Context:
 
     Holds all state built up during object/constraint encoding,
     then produces a (WFOMCProblem, Decoder) pair via build().
-
-    Mirrors the legacy Context class (context.py) but uses ObjRef
-    as dictionary keys and reads analysis data from AnalysisResult.
 
     Attributes:
         problem: The immutable planning Problem being encoded.
@@ -73,7 +51,8 @@ class Context:
         indis_vars: List of symbolic vars for indistinguishable-entity decoding.
         gen_vars: List of all generated symbolic vars (for Decoder).
         ref2pred: Maps ObjRef → WFOMC Pred (the predicate representing that object).
-        ref_entity2pred: Maps (ObjRef, IREntity) → Pred (entity-specific predicates).
+        ref_entity2pred: Maps (ObjRef | None, IREntity) → Pred
+            (entity-specific predicates).
         ref2var: Maps ObjRef → symbolic Expr (for size constraints).
         ref_entity2var: Maps (ObjRef, IREntity) → symbolic Expr (bag entity vars).
         ref_mul2var: Maps (ObjRef, int) → symbolic Expr (indis-entity multiplicity vars).
@@ -109,8 +88,8 @@ class Context:
 
         # ObjRef → WFOMC Pred (main predicate for each object)
         self.ref2pred: dict[ObjRef, Pred] = {}
-        # (ObjRef, IREntity) → Pred  (entity-specific predicates for bags/sequences)
-        self.ref_entity2pred: dict[tuple[ObjRef, IREntity], Pred] = {}
+        # (ObjRef | None, IREntity) → Pred  (entity-specific predicates)
+        self.ref_entity2pred: dict[tuple[ObjRef | None, IREntity], Pred] = {}
         # ObjRef → symbolic Expr  (for size-constraint variables)
         self.ref2var: dict[ObjRef, Expr] = {}
         # (ObjRef, IREntity) → Expr  (per-entity multiplicity variables)

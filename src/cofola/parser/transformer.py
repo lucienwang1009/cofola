@@ -236,7 +236,3 @@ class CofolaTransformer(
             "`for <part> in <partition>` requires a named partition or "
             "composition object."
         )
-
-
-# Compatibility alias for imports from the previous misspelled name.
-CofolaTransfomer = CofolaTransformer

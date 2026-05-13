@@ -1,4 +1,4 @@
-"""Rewriter passes for the immutable IR.
+"""Rewriter passes for planning Problems.
 
 This module provides the rewriter framework for IR-to-IR transformations:
 - Rewriter: Base class for transformation passes

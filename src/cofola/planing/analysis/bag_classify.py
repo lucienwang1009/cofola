@@ -1,9 +1,7 @@
-"""Bag classification for the immutable IR.
+"""Bag classification for planning Problems.
 
 This module implements BagClassification, which classifies bag entities
 as distinguishable or indistinguishable for lifted WFOMC encoding.
-
-Ports the legacy preprocess_bags function to work with the new IR.
 """
 
 from __future__ import annotations
@@ -17,7 +15,6 @@ from cofola.frontend.objects import (
     BagIntersection,
     BagDifference,
     Grouped,
-    PartitionDef,
     PartDef,
     SetChooseReplace,
     TupleDef,
@@ -31,7 +28,7 @@ from cofola.planing.analysis.entities import AnalysisResult, BagInfo
 from cofola.planing.analysis.merged import MergedAnalysis
 
 
-class BagClassification(AnalysisPass):
+class BagClassification(AnalysisPass[AnalysisResult]):
     """Classifies bag entities as distinguishable or indistinguishable.
 
     This analysis determines which entities can be "lifted" (treated as

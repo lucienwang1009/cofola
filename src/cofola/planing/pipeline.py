@@ -54,11 +54,12 @@ from cofola.frontend.constraints import (
     TupleIndexEq,
     TupleIndexMembership,
 )
-from cofola.frontend.objects import BagInit, Ordered, SetInit, TupleDef, SequenceDef
+from cofola.frontend.objects import BagInit, Ordered, SetInit
 from cofola.frontend.pretty import fmt_analysis, fmt_problem
 from cofola.frontend.problem import Problem
 from cofola.frontend.utils import constraint_refs
 from cofola.frontend.objects import ObjRef
+from cofola.planing.analysis.entities import AnalysisResult
 from cofola.planing.analysis.bag_classify import BagClassification
 from cofola.planing.analysis.merged import MergedAnalysis
 from cofola.planing.pass_manager import (
@@ -81,10 +82,10 @@ from cofola.planing.passes.simplify import SimplifyPass
 class SolveBranch:
     """One Shannon truth-assignment.
 
-    ``components`` is a list of (Problem, BagClassification) pairs that are
+    ``components`` is a list of (Problem, AnalysisResult) pairs that are
     *independent* of each other.  Their WFOMC counts must be multiplied.
     """
-    components: list[tuple[Problem, BagClassification]]
+    components: list[tuple[Problem, AnalysisResult]]
 
 
 @dataclass
@@ -315,7 +316,7 @@ class PlaningPipeline:
 
     @staticmethod
     def _coerce_pass_result(result, current_problem: Problem) -> PassResult:
-        """Normalize legacy transform returns into PassResult."""
+        """Normalize transform returns into PassResult."""
         if isinstance(result, PassResult):
             return result
         return PassResult(problem=result, changed=result is not current_problem)
@@ -529,7 +530,7 @@ class PlaningPipeline:
                 len(components),
             )
 
-        branch_components: list[tuple[Problem, BagClassification]] = []
+        branch_components: list[tuple[Problem, AnalysisResult]] = []
         for comp in components:
             # Local passes per component: SizeConstraintFolder (LP is most
             # accurate here, since all constraints are atomic), LoweringPass,
@@ -553,7 +554,3 @@ class PlaningPipeline:
             logger.debug("  component: {} objects", len(comp_am.problem.defs))
 
         return [SolveBranch(components=branch_components)]
-
-
-# Backward-compatible class name for callers that imported the old symbol.
-IRPipeline = PlaningPipeline

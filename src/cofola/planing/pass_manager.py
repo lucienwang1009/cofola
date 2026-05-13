@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, TypeVar
+from typing import Any, Generic, TypeVar, cast
 
 from loguru import logger
 
@@ -16,6 +16,7 @@ from cofola.frontend.objects import ObjRef
 from cofola.frontend.problem import Problem
 
 A = TypeVar("A")
+R = TypeVar("R")
 
 
 @dataclass(frozen=True)
@@ -53,7 +54,7 @@ class RefAllocator:
         return ref
 
 
-class AnalysisPass(ABC):
+class AnalysisPass(ABC, Generic[R]):
     """Abstract base class for analysis passes.
 
     An analysis pass reads a Problem and produces some derived data,
@@ -68,7 +69,7 @@ class AnalysisPass(ABC):
     required_analyses: list[type] = []
 
     @abstractmethod
-    def run(self, problem: Any, am: Any = None) -> Any:
+    def run(self, problem: Any, am: Any = None) -> R:
         """Run the analysis pass.
 
         Args:
@@ -153,7 +154,7 @@ class AnalysisManager:
             self._problem = new_problem
             self._cache.clear()
 
-    def get(self, analysis_cls: type[A]) -> A:
+    def get(self, analysis_cls: type[AnalysisPass[A]]) -> A:
         """Return the cached result for an analysis, computing it if needed.
 
         Recursively resolves ``required_analyses`` before running the analysis
@@ -166,7 +167,7 @@ class AnalysisManager:
             The cached (or freshly computed) analysis result.
         """
         if analysis_cls in self._cache:
-            return self._cache[analysis_cls]  # type: ignore[return-value]
+            return cast(A, self._cache[analysis_cls])
 
         # Resolve dependencies first (recursive, but each is cached after first run)
         for dep_cls in getattr(analysis_cls, "required_analyses", []):
@@ -176,4 +177,4 @@ class AnalysisManager:
         instance = analysis_cls()
         result = instance.run(self._problem, self)
         self._cache[analysis_cls] = result
-        return result  # type: ignore[return-value]
+        return result

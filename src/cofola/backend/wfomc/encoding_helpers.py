@@ -1,7 +1,6 @@
 """Shared helpers for WFOMC encoding."""
 from __future__ import annotations
 
-from sympy import Eq
 from wfomc import Const, fol_parse as parse
 
 import cofola.frontend.constraints as ir_cst
@@ -10,34 +9,6 @@ from cofola.backend.wfomc.context import Context
 from cofola.backend.wfomc.utils import create_aux_pred, create_cofola_pred
 from cofola.frontend.objects import Entity, ObjRef
 from cofola.planing.analysis.entities import AnalysisResult
-
-
-# Entity encoding
-# =============================================================================
-
-
-def _encode_entities(analysis: AnalysisResult, context: Context) -> None:
-    """Create one WFOMC constant for each entity in the problem.
-
-    Entities that are singletons get special treatment: their constant
-    is added as unary evidence for all set predicates.
-
-    LEGACY EQUIVALENT: _encode_entity() loop in encoder.py (lines ~90–130)
-
-    Args:
-        analysis: The analysis result (provides all_entities, singletons).
-        context: The encoding context (mutated in place).
-
-    IMPLEMENTATION:
-        For each entity in analysis.all_entities:
-            entity_const = Const(entity.name)  # already in context.domain
-            # Singleton handling is done per-object during object encoding,
-            # because only then do we know which predicates the entity belongs to.
-        # No action needed here — entities become domain constants automatically.
-        # This function may encode singleton unary evidence if the strategy requires it.
-        pass  # or handle singletons here
-    """
-    pass  # entities become domain constants via context.domain; singleton evidence added per-object
 
 
 def _encode_singleton(context: Context) -> None:

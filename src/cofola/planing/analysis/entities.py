@@ -1,9 +1,7 @@
-"""Entity analysis for the immutable IR.
+"""Entity analysis for planning Problems.
 
 This module implements EntityAnalysis, which computes derived properties
 like p_entities, max_size, and dis_entities for all objects in a Problem.
-
-Replaces the legacy inherit() + propagate() methods.
 """
 
 from __future__ import annotations
@@ -197,13 +195,13 @@ class _AnalysisState:
         )
 
 
-class EntityAnalysis(AnalysisPass):
+class EntityAnalysis(AnalysisPass[AnalysisResult]):
     """Computes entity-related properties for all objects in a Problem.
 
     This is a bottom-up analysis that processes objects in topological order,
     computing p_entities, max_size for each object based on its dependencies.
 
-    Replaces the legacy inherit() methods on each object class.
+    Centralizes entity propagation for all frontend object definitions.
     """
 
     required_analyses: list[type] = []

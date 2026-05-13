@@ -16,7 +16,10 @@ __all__ = ["WFOMCBackend"]
 class WFOMCBackend(Backend):
     """Solves a problem by translating it to a WFOMC problem via encode()."""
 
-    name = "wfomc"
+    @property
+    def name(self) -> str:
+        """Human-readable backend identifier."""
+        return "wfomc"
 
     def __init__(
         self,

@@ -129,8 +129,6 @@ def _encode_set_init(
 
     A SetInit is a base set defined by explicit entities: e.g. A = {a, b, c}.
 
-    LEGACY EQUIVALENT: encode() branch for SetInit (encoder.py ~line 547).
-
     Strategy:
     - Create one unary predicate p_<name> for the set.
     - For each entity in defn.entities: add unary evidence p_<name>(entity) = True.
@@ -160,8 +158,6 @@ def _encode_set_choose(
     context: Context,
 ) -> None:
     """Encode a SetChoose node (subset of known size or any size).
-
-    LEGACY EQUIVALENT: encode() branch for SetChoose (encoder.py ~line 560).
 
     A SetChoose B picks a subset of B (without replacement).
     - If defn.size is set: the chosen subset has exactly that size.
@@ -290,9 +286,6 @@ def _encode_set_difference(
 #    Entities with the same multiplicity are treated as interchangeable.
 #    They share a single symbolic variable, and the count is a multinomial.
 #
-# See encoder.py ~lines 380–590 for the legacy implementation.
-
-
 def _encode_bag_init(
     ref: ObjRef,
     defn: ir_obj.BagInit,

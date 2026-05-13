@@ -22,6 +22,23 @@ cofola = "cofola.solver:main"
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
+include = ["src/cofola"]
+exclude = ["scripts", "tests", "**/__pycache__"]
+typeCheckingMode = "basic"
+reportUnusedImport = "error"
+reportUnusedClass = "warning"
+reportUnusedFunction = "warning"
+reportUnusedVariable = "warning"
+reportOperatorIssue = "warning"
+reportAttributeAccessIssue = "warning"
+reportArgumentType = "warning"
+reportAssignmentType = "warning"
+reportCallIssue = "warning"
+reportGeneralTypeIssues = "warning"
+reportOptionalIterable = "warning"
+reportOptionalMemberAccess = "warning"
+reportPossiblyUnboundVariable = "warning"
+reportReturnType = "warning"
 
 [tool.uv.sources]
 wfomc = { git = "https://github.com/yuanhong-wang/WFOMC.git", branch = "for_cofola" }
@@ -32,5 +49,6 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
+    "pyright>=1.1.407",
     "pytest>=9.0.2",
 ]
