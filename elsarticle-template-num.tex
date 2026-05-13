@@ -1,0 +1,1994 @@
+%% 
+%% Copyright 2007-2020 Elsevier Ltd
+%% 
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%% 
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%% 
+%% The list of all files belonging to the 'Elsarticle Bundle' is
+%% given in the file `manifest.txt'.
+%% 
+
+%% Template article for Elsevier's document class `elsarticle'
+%% with numbered style bibliographic references
+%% SP 2008/03/01
+%%
+%% 
+%%
+%% $Id: elsarticle-template-num.tex 190 2020-11-23 11:12:32Z rishi $
+%%
+%%
+\documentclass[3p,times,preprint,doubleblind]{elsarticle}
+
+% Use the postscript times font!
+\usepackage{times}
+% \usepackage{natbib}
+\usepackage{soul}
+\usepackage{url}
+\usepackage[colorlinks=true, 
+            linkcolor=green, 
+            citecolor=green, 
+            urlcolor=green]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[small]{caption}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{booktabs}
+\usepackage{bbm}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\SetFuncSty{textbf}
+\urlstyle{same}
+\usepackage{xcolor}
+\definecolor{halfgray}{gray}{0.55}
+\usepackage{makecell}
+\renewcommand{\arraystretch}{1.5}
+\usepackage{etoolbox}
+\makeatletter
+% uncomment the following if you don't want \clubpenalty\@M ...
+% \let\nearly@afterheading\@afterheading
+% \patchcmd\nearly@afterheading
+%   {\@M}% original temporary setting for \clubpenalty replaced by ...
+%   {\@clubpenalty}% ... or whichever value you deem right
+%   {}{}
+% ... and use \nearly@afterheading instead of \@afterheading here:
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+
+\usepackage[most]{tcolorbox}
+\usepackage{amssymb}
+\usepackage{mathtools} 
+\usepackage{amsfonts}
+\usepackage{complexity}
+\usepackage{hyperref}
+\usepackage{csquotes}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage[capitalise]{cleveref}
+\crefname{appendix}{}{}
+\usepackage[most]{tcolorbox}
+
+\renewcommand{\ttdefault}{pxtt}
+% for problem example
+\tcbset{colback=white}
+\newtcbtheorem[auto counter]{problemwithtitle}{Problem}{code={\edef\@currentlabelname{#2}},top=-0.5pt,bottom=-0.5pt,left=0pt,right=0pt}{prob}
+\newtcbtheorem[auto counter]{tcbproblem}{Problem}{
+    top=-15pt,bottom=-5pt,
+    fontupper=\itshape,
+    notitle,
+    enhanced,
+    frame hidden, 
+    breakable,
+    % borderline north = {0.5pt}{0pt}{black},
+    % borderline south = {0.5pt}{0pt}{black},
+    opacityfill=0,
+}{prob}
+\crefname{tcb@cnt@problemwithtitle}{Problem}{Problems}
+% for cofola code
+% \renewcommand{\ttfamily}{\fontencoding{T1}\fontfamily{cmtt}\selectfont}
+\tcbuselibrary{listings, skins, breakable}
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\lstdefinelanguage{cofola}{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\bfseries\color{pblue},
+    stringstyle=\bfseries\itshape\color{green!40!black},
+    commentstyle=\itshape\color{black!60},
+    showspaces=false,
+    % literate=*{\\}{{\textbackslash{}}}{1},
+    numbers=left,
+    numberstyle=\tiny\color{halfgray},
+    breaklines=true,
+    showstringspaces=false,
+    tabsize=1,
+    emph={
+        set, bag, choose, choose_replace, in,
+        func, disjoint, subset, seq, cir,
+        permute, choose_permute, choose_replace_permute, circular_permute, par, comp, partition, ordered_partition, tup
+    },
+    emphstyle={\bfseries\color{pblue}},
+}
+\lstdefinestyle{verbatim}{
+    basicstyle=\ttfamily, % font style and size
+    literate=
+    *{\\}{{\textbackslash{}}}{1}, % \
+    keepspaces,
+}
+\lstset{
+    style=verbatim, 
+    breaklines=true,
+    mathescape=true,
+    basicstyle=\ttfamily,
+}
+\newtcblisting[auto counter]{cofolacode}[1]{%
+    label=#1,
+    enhanced,
+    frame hidden, 
+    breakable,
+    borderline north = {0.5pt}{0pt}{black},
+    borderline south = {0.5pt}{0pt}{black},
+    opacityfill=0,
+    top=-5pt,bottom=-5pt,
+    % title={\textcolor{black}{Code \thetcbcounter}},
+    % attach boxed title to top left={xshift=-1mm,yshift=-0.4mm},
+    % boxed title style={colback=black!0!white},
+    fonttitle=\bfseries,
+    listing only,
+    % after={\par\noindent},
+    listing options={language=cofola}
+}
+% \NoIndentAfterEnv{cofolacode}
+\newtcblisting[auto counter]{cofolacodeblock}[1]{%
+    label=#1,
+    enhanced,
+    frame hidden, 
+    % breakable,
+    borderline north = {0.5pt}{0pt}{black},
+    borderline south = {0.5pt}{0pt}{black},
+    borderline west = {0.5pt}{0pt}{black},
+    borderline east = {0.5pt}{0pt}{black},
+    opacityfill=0,
+    top=-5pt,bottom=-5pt,
+    fonttitle=\bfseries,
+    listing only,
+    % before upper={\parindent0pt},
+    % after={\par\noindent},
+    listing options={language=cofola}
+}
+\newtcblisting[auto counter]{problemwithcode}[2]{%
+    label=#1,
+    enhanced,
+    % frame hidden, 
+    colback=white,
+    breakable,
+    % borderline north = {0.5pt}{0pt}{black},
+    % borderline south = {0.5pt}{0pt}{black},
+    % opacityfill=0,
+    bottom=-5pt,left=0pt,right=0pt, middle=1pt,
+    title={Code Example \thetcbcounter},
+    % attach boxed title to top left={xshift=-1mm,yshift=-0.4mm},
+    % boxed title style={colback=black!0!white},
+    fonttitle=\bfseries,
+    comment and listing,
+    comment={\textbf{Problem:} #2},
+    after={\par\noindent},
+    listing options={language=cofola}
+}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\theoremstyle{definition}
+\newtheorem{problem}{P\ignorespaces}
+\crefformat{problem}{#2\textbf{P#1}#3}
+% \newcommand{\code}[1]{\lstinline|#1|}
+\newcommand{\code}[1]{\relax\ifmmode\mathtt{#1}\else\lstinline|#1|\fi}
+% \newcommand{\code}[1]{\ensuremath{\texttt{#1}}}
+\renewcommand{\sharp}{\code{\#}}
+\newcommand{\myand}{\code{\&}}
+\newcommand{\ourlang}{{Cofola}}
+
+\newcommand{\mln}{\Phi}
+\newcommand{\sentence}{\Gamma}
+\newcommand{\generalsentence}{{\widehat{\sentence}}}
+\newcommand{\recursivesentence}{{\widetilde{\sentence}}}
+\newcommand{\fotwoformula}{\psi}
+\newcommand{\formula}{\alpha}
+\newcommand{\formulas}{\Psi}
+\newcommand{\weight}{w}
+\newcommand{\vecweight}{\mathbf{\weight}}
+\newcommand{\negweight}{\bar{w}}
+\newcommand{\negvecweight}{i\mathbf{\negweight}}
+\newcommand{\World}{\Omega}
+\newcommand{\world}{\omega}
+\newcommand{\wfomc}{WFOMC}
+\newcommand{\fastwfomc}{FastWFOMC}
+\newcommand{\fomc}{FOMC}
+\newcommand{\symwfomc}{\ensuremath{\mathsf{WFOMC}}}
+\newcommand{\symfomc}{\ensuremath{\mathsf{FOMC}}}
+\newcommand{\wmc}{WMC}
+\newcommand{\symwmc}{\ensuremath{\mathsf{WMC}}}
+\newcommand{\fo}{\ensuremath{\mathbf{FO}}}
+\newcommand{\fotwo}{\ensuremath{\mathbf{FO}^2}}
+\newcommand{\ctwo}{\ensuremath{\mathbf{C}^2}}
+\newcommand{\sctwo}{\ensuremath{\mathbf{SC}^2}}
+\newcommand{\setcell}{\mathbf{C}}
+\newcommand{\config}{C}
+\newcommand{\indicator}{\mathbbm{1}}
+\newcommand{\indices}{\mathbf{N}}
+\newcommand{\cardinality}{\mathbf{N}}
+\newcommand{\domain}{\Delta}
+\newcommand{\repdomain}{\tilde{\domain}}
+\newcommand{\dftdomain}{D}
+\newcommand{\dftvec}{\mathbf{M}}
+\newcommand{\vecn}{\mathbf{n}}
+\newcommand{\veck}{\mathbf{k}}
+\newcommand{\vecg}{\mathbf{g}}
+\newcommand{\vech}{\mathbf{h}}
+\newcommand{\vecj}{\mathbf{j}}
+\newcommand{\vecy}{\mathbf{y}}
+\newcommand{\vecx}{\mathbf{x}}
+\newcommand{\vecu}{\mathbf{u}}
+\newcommand{\innerprod}[2]{\langle#1,#2\rangle}
+\newcommand{\nat}{\mathbb{N}}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\complex}{\mathbb{C}}
+\newcommand{\dftmln}{\mln_{\textrm{DFT}}}
+\newcommand{\generaor}{\mathcal{G}}
+\newcommand{\pro}{\mathbb{P}}
+\newcommand{\extformula}{\varphi}
+\newcommand{\rejsentence}{\sentence_{\rm{reject}}}
+\newcommand{\rejlineage}{\eta_{\rm{reject}}}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\multiset}[1]{\{#1\}}
+\newcommand{\constraint}{C}
+\newcommand{\fomodels}[2]{\mathcal{M}_{#1, #2}}
+\newcommand{\tree}{\ensuremath{\mathsf{T}}}
+\newcommand{\treesum}{\ensuremath{\mathsf{TS}}}
+\newcommand{\ufotwo}{\ensuremath{\mathbf{UFO}^2}}
+\newcommand{\distinctpair}{\Omega}
+\newcommand{\onetypes}{\mathcal{U}}
+\newcommand{\twotypes}{\mathcal{B}}
+\newcommand{\structure}{\mathcal{A}}
+\newcommand{\typeweight}[1]{\langle \weight, \negweight\rangle(#1)}
+\newcommand{\generalonetype}{\widetilde{\tau}}
+\newcommand{\sumweight}{\mathcal{W}}
+\newcommand{\relaxcelltype}[2]{{#1}\downarrow{{#2}}}
+\newcommand{\relaxcelltypeb}[2]{({#1}\downarrow{{#2}})}
+\newcommand{\proj}[2]{\langle#1\rangle_{#2}}
+\newcommand{\repeatable}{\ensuremath{\mathcal{R}}}
+
+\newcommand{\twoheadrightarrowtail}{\mathrel{\mathrlap{\rightarrowtail}}\mathrel{\mkern2mu\twoheadrightarrow}}
+\newcommand{\disentity}{{\hat{e}}}
+\newcommand{\indisentity}{{\bar{e}}}
+\newcommand{\csp}{CSP}
+\newcommand{\sharpcsp}{\ensuremath{\#}CSP}
+\newcommand{\symsharpcsp}[1]{\ensuremath{\mathsf{\#\langle #1 \rangle}}}
+\newcommand{\sem}[1]{\ensuremath{\llbracket #1 \rrbracket}}
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark}
+\newcounter{cycle}
+\newcommand{\cycle}[2]{\stepcounter{cycle}\tikzset{tikzmark prefix=\thecycle}\tikzmark{start}#1\tikzmark{stop}\tikz[remember picture, overlay]{
+% over arrow
+\draw[line width=0.2mm, #2]([shift={(-1ex,1.5ex)}]pic cs:stop) to[bend right=10] ([shift={(.5ex,1.5ex)}]pic cs:start);
+}}
+\newcommand{\mycircle}[1]{\ensuremath{[\cycle{#1}{->}]}}
+\newcommand{\mycircleref}[1]{\ensuremath{[\cycle{#1}{<->}]}}
+\newcommand{\support}[1]{\ensuremath{\text{Supp}(#1)}}
+\newcommand{\partition}[2]{\ensuremath{\text{Par}_{#1}(#2)}}
+\newcommand{\composition}[2]{\ensuremath{\text{Comp}_{#1}(#2)}}
+\newcommand{\mylist}[1]{\ensuremath{\text{List}(#1)}}
+\newcommand{\mycirclist}[1]{\ensuremath{\text{Cir}(#1)}}
+\newcommand{\mycirclistref}[1]{\ensuremath{\text{RCir}(#1)}}
+\newcommand{\together}[2]{\ensuremath{\text{Together}_{#2}(#1)}}
+\newcommand{\evidence}{\ensuremath{\mathcal{E}}}
+\newcommand{\cardconst}{\ensuremath{\mathcal{C}}}
+\newcommand{\axiom}{\ensuremath{LC}}
+\newcommand{\setclass}{\ensuremath{\mathsf{s}}}
+\newcommand{\multisetclass}{\ensuremath{\mathsf{ms}}}
+\newcommand{\orderedlistclass}{\ensuremath{\mathsf{ol}}}
+\newcommand{\circularlistclass}{\ensuremath{\mathsf{cl}}}
+\newcommand{\reflexivecircularlistclass}{\ensuremath{\mathsf{rcl}}}
+\newcommand{\setsofset}{\ensuremath{\mathsf{ss}}}
+\newcommand{\setsofmultiset}{\ensuremath{\mathsf{sms}}}
+\newcommand{\orderedlistsofset}{\ensuremath{\mathsf{ols}}}
+\newcommand{\orderedlistsofmultiset}{\ensuremath{\mathsf{olms}}}
+\newcommand{\cspv}[1]{\ensuremath{v_{\code{#1}}}}
+\newcommand{\cspd}[1]{\ensuremath{D_{\code{#1}}}}
+\newcommand{\cspc}[1]{\ensuremath{c_{\code{#1}}}}
+\newcommand{\lv}[2]{\ensuremath{\cspv{#1}^{#2}}}
+\newcommand{\closedevidence}[3]{\ensuremath{{#1}[{#3}, {#2}]}}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+
+\newcommand{\lnote}[1]{\textcolor{orange}{[Lucien: #1]}}
+
+\journal{Artificial Intelligence}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Solving Combinatorial Counting Problems with Weighted First-Order Model Counting}
+
+
+% \author[inst1,inst2]{Yuanhong Wang\corref{cor1}}
+% \ead{lucienwang@buaa.edu.cn}
+% \address[inst1]{State Key Laboratory of Software Development Environment, Beihang University, Beijing, China}
+% \address[inst2]{Zhongfa Aviation Institute of Beihang University, Hangzhou, China China}
+% \author[inst1,inst2]{Juhua Pu}
+% \author[inst3,inst4]{Yuyi Wang}
+% % \ead{yuyiwang920@gmail.com}
+% \address[inst3]{CRRC Zhuzhou Insitute, Zhuzhou, China}
+% \address[inst4]{ETH Zurich, Zurich, Switzerland}
+% \author[inst5]{Ond\v{r}ej Ku\v{z}elka}
+% \ead{ondrej.kuzelka@fel.cvut.cz}
+% \address[inst5]{Czech Technical University in Prague, Prague, Czech Republic}
+
+\begin{abstract}
+We propose a declarative language, \ourlang{}, for modeling combinatorial problems with first-order model counting.
+\end{abstract}
+
+%%Graphical abstract
+\begin{graphicalabstract}
+\includegraphics{grabs}
+\end{graphicalabstract}
+
+%Research highlights
+% \begin{highlights}
+% \item Model sampling in first-order logic is liftable, without the need of domain grounding
+% \item The two variables fragment of first-order logic with counting quantifiers is tractable for model sampling, with a complexity in time polynomial in the domain size
+% \item Domain recursion scheme is useful for designing first-order model sampling algorithms
+% \end{highlights}
+
+\begin{keyword}
+%% keywords here, in the form: keyword \sep keyword
+model sampling,  first-order logic, domain-liftability, counting quantifier
+%% PACS codes here, in the form: \PACS code \sep code
+% \PACS 0000 \sep 1111
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+% \MSC 0000 \sep 1111
+\end{keyword}
+
+\end{frontmatter}
+
+% \linenumbers
+
+%% main text
+% \section{Sample Section Title}
+% \label{sec:sample1}
+% Lorem ipsum dolor sit amet, consectetur adipiscing \cite{Fabioetal2013} elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit \cite{Blondeletal2008,FabricioLiang2013} anim id est laborum.
+
+% Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum see \ref{sec:sample:appendix}.
+
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as normal sections
+
+\section{Introduction}
+\lnote{We may want to mention the symbolic method used in combinatorics.}
+
+\subsection{Notations}
+\label{sub:combinatorial_notations}
+
+A \emph{partition} of a set $S$ (or a multiset $M$) is a set of disjoint subsets of $S$ (or multisubsets of $M$) whose union is $S$ (or $M$).
+We use $\partition{n}{S}$ to denote the set of all partitions of $S$ with size $n$: $\partition{n}{S} := \{P \mid P \subseteq 2^S, |P| = n, \forall P_i, P_j\in P \text{ s.t. } i\neq j, P_i \cap P_j = \emptyset, \bigcup_{P_i\in P} P_i = S\}$.
+Similarly, the set of all partitions of a multiset $M$ of size $n$ is denoted as $\partition{n}{M}$.
+A \emph{composition} is an ordered partition, where the order of the subsets matters.
+The set of all compositions of a set $S$ (or a multiset $M$) with size $n$ is denoted as $\composition{n}{S}$ (or $\composition{n}{M}$).
+We can view a composition as an ordered list of subsets or multisubsets, and write $C[i]$ for the $i$-th subset or multisubset in the composition $C$.
+
+We denote the \emph{polynomial ring} by $R[u_1, u_2, \dots, u_n]$, where $R$ is a ring, $u_1, \dots, u_n$ are symbolic variables.
+For a polynomial $f \in R[u_1, \dots, u_n]$, we write $[u_1^{k_1}u_2^{k_2}\dots u_n^{k_n}]f$ for the coefficient of $u_1^{k_1}u_2^{k_2}\dots u_n^{k_n}$ in $f$.
+Let $A$ be a system of equations and inequalities\footnote{We do not require $A$ to be linear; any system that can be solved in $O(poly(n))$ time is acceptable.} over $u_1, u_2, \dots, u_n$, and let $S$ be the integer solutions of $A$.
+Then we write $[A]f := \sum_{(k_1, k_2, \dots, k_n)\in S}[u_1^{k_1}u_2^{k_2}\dots u_n^{k_n}]f$ for the sum of the coefficients of $f$ that satisfy $A$.
+
+\section{Preliminaries}
+
+\subsection{Combinatorics Terminology}
+
+
+We use $\set{e_1, e_2, \dots, e_n}$ to denote a set.
+A multiset is denoted as $\multiset{e_1: k_1, e_2: k_2, \dots, e_n: k_n}$, where $k_1, k_2, \dots, k_n$ are the multiplicities of $e_1, e_2, \dots, e_n$.
+We write $\subseteq$ and $\subseteq_m$ for the subset and multisubset relations, respectively.
+The power set of a set $S$ is written as $2^S$.
+The power multiset of a multiset $M$ is also defined as $2^M := \multiset{N \mid N \subseteq_m M}$.
+The union, intersection, and difference are denoted as $\cup$, $\cap$, and $\setminus$, respectively for sets.
+Multisets use the same symbols for these operators with the understanding that the multiplicities are preserved.
+The cardinality of a set $S$ is written as $|S|$.
+We define the cardinality of a multiset $M$ as $\sum_{e\in M} M(e)$, and also denote it as $|M|$.
+The multiplicity of an element $e$ in a multiset $M$ is written as $M(e)$.
+The additive union of multisets is denoted by $\uplus$, i.e, $M \uplus N := \multiset{e: M(e) + N(e)\mid e\in M\cup N}$.
+The support of a multiset $M$ is defined as $\support{M} := \multiset{e \mid e\in M, M(e) > 0}$.
+The equivalence of two multisets $M$ and $N$ is denoted as $M = N$ iff $\support{M} = \support{N}$ and $M(e) = N(e)$ for all $e\in \support{M}$.
+
+We are also interested in \emph{ordered lists}, collections of elements where the order matters.
+An ordered list is denoted as $[e_1, e_2, \dots, e_n]$. The elements $e_1, e_2, \dots, e_n$ in an ordered list can be duplicated, e.g., $[a, a, b, c]$ is a valid ordered list.
+% Given a set or a multiset $S$, we can write $\Pi_S$ for the set of all ordered lists formed by permuting the elements in $S$.
+We often view an ordered list as a set or a multiset by ignoring the order of the elements.
+For instance, $e\in L$ means that $e$ appears in the ordered list $L$, and $L_1 \subseteq L_2$ means that all elements in the ordered list $L_1$ also appear in the ordered list $L_2$ (assuming $L_1$ and $L_2$ do not contain duplicated elements).
+In this way, the length of an ordered list $L$ is written as $|L|$.
+% The relations of sets and multisets are extended to ordered lists naturally by viewing the ordered list as a set or a multiset.
+The $i$-th element of an ordered list $L$ is denoted by $L[i]$.
+We use $e_1 <_L e_2$ (resp. $e_1 >_L e_2$) to denote that $e_1$ appears before (resp. after) $e_2$ in the ordered list $L$.
+The notation $(e_1, e_2) \in L$ means that $e_1$ and $e_2$ appear consecutively in the ordered list $L$.
+Given an entity $e$ and an ordered list $L$, we say that $e$ is \emph{together} in $L$ if $L$ can be written as $[h_1, h_2, \dots, h_i, e, e, \dots, e, t_1, t_2, \dots, t_k]$ such that $h_1 \neq e, \dots, h_i \neq e, t_1 \neq e, \dots, t_k \neq e$.
+Similarly, a set (or a multiset) $S$ is said to be \emph{together} in an ordered list $L$ if $m_1\in S, \dots, m_k\in S$ and $h_1 \notin S, \dots, h_i \notin S, t_1 \notin S, \dots, t_j \notin S$.
+
+A \emph{circular list} is an ordered list where the first element is the successor of the last element.
+We denote a circular list by $\mycircle{e_1, e_2, \dots, e_n}$.
+The rotations do not change a circular list, i.e., $\mycircle{e_1, e_2, \dots, e_n} \equiv \mycircle{e_2, \dots, e_n, e_1}$.
+Given a circular list $C$, the notation $(e_1, e_2) \in C$ is extended to indicate that $e_1$ and $e_2$ appear consecutively (either clockwise or counterclockwise) in the circular list $C$.
+A \emph{reflexive circular list}, denoted as $\mycircleref{e_1, e_2, \dots, e_n}$, is a circular list that is invariant under the reflection, i.e., $\mycircleref{e_1, e_2, \dots, e_n} \equiv \mycircleref{e_n, e_{n-1}, \dots, e_1}$.
+% Given a set or a multiset $S$, we can write $\overleftarrow{\Pi}_S$ and $\overleftrightarrow{\Pi}_S$ for the set of all circular lists and reflexive circular lists formed by permuting the elements in $S$, respectively.
+
+\begin{table}[]
+    \centering
+    \caption{Notations for combinatorial objects.}
+    \label{tab:combinatorial_relation}
+    \begin{tabular}{c|c|c}
+    \hline
+    \textbf{Type} & \textbf{Notation} & \textbf{Description}    \\ \hline\hline 
+    \multirow{5}{*}{\makecell{Set \& \\Multiset}} & $\{e_1, e_2, \dots, e_n\}$ & a set of elements $e_1, e_2, \dots, e_n$ \\ \cline{2-3}
+    & $\{e_1: k_1, e_2: k_2, \dots, e_n: k_n\}$ & \makecell{a multiset of elements $e_1, e_2, \dots, e_n$ \\with multiplicities $k_1, k_2, \dots, k_n$} \\ \cline{2-3}
+    & $|SM|$ & the cardinality of a set (or multiset) $SM$ \\ \cline{2-3}
+    % & $\support{M}$ & the support set of $M$ \\ \cline{2-3}
+    & $M(e)$ & the multiplicity of $e$ in $M$ \\ \cline{2-3}
+    & $e \in SM$ & $e$ is an element of the set (or multiset) $SM$ \\ \hline\hline
+    % & $M_1 = M_2$ & \makecell{$\support{M_1} = \support{M_2}$ and \\$M_1(e) = M_2(e)$ for all $e\in \support{M_1}$} \\ \cline{2-3}
+    % & $S_1 \subseteq S_2$ & $S_1$ is a subset of $S_2$ \\ \cline{2-3}
+    % & $M_1 \subseteq_m M_2$ & $M_1$ is a multisubset of $M_2$ \\ \cline{2-3}
+    % & $SM_1 \cup SM_2$ & the union of sets (or multisets) $SM_1$ and $SM_2$ \\ \cline{2-3}
+    % & $SM_1 \cap SM_2$ & the intersection of sets (or multisets) $SM_1$ and $SM_2$ \\ \cline{2-3}
+    % & $SM_1 \setminus SM_2$ & the difference of sets (or multisets) $SM_1$ and $SM_2$ \\ \cline{2-3}
+    % & $M_1 \uplus M_2$ & the additive union of multisets $M_1$ and $M_2$ \\ \hline \hline
+    \multirow{7}{*}{\makecell{Ordered List \&\\ Circular List}} & $[e_1, e_2, \dots, e_n]$ & \makecell{an ordered list of (possibly repeated) elements $e_1, e_2, \dots, e_n$} \\ \cline{2-3}
+    & $\mycircle{e_1, e_2, \dots, e_n}$ & \makecell{a circular list of (possibly repeated) elements $e_1, e_2, \dots, e_n$} \\ \cline{2-3}
+    & $\mycircleref{e_1, e_2, \dots, e_n}$ & \makecell{a reflexive circular list of (possibly repeated) elements $e_1, e_2, \dots, e_n$} \\ \cline{2-3}
+    & $|L|$ & the length of an ordered (or circular) list $L$ \\ \cline{2-3}
+    % & $\mylist{MS}$ & \makecell{the set of all ordered lists formed by \\permuting the elements in the set (or multiset) $MS$} \\ \cline{2-3}
+    % & $\mycirclist{MS}$ & \makecell{the set of all circular lists formed by \\permuting the elements in the set (or multiset) $MS$} \\ \cline{2-3}
+    \cline{2-3}
+    % & $\mycirclistref{MS}$ & \makecell{the set of all reflexive circular lists formed by \\permuting the elements in the set (or multiset) $MS$} \\ \cline{2-3}
+    & $L[i]$ & the $i$-th element of an ordered list $L$ \\ \cline{2-3}
+    & $e_1 <_L e_2$ & \makecell{$e_1$ appears before $e_2$ in the ordered list $L$\\
+    or $e_1$ appears clockwise before $e_2$ in the circular list $L$} \\ \hline\hline
+    % & $(e_1, e_2) \in L$ & $e_1$ and $e_2$ appear consecutively in the ordered (or circular) list $L$ \\ \cline{2-3}
+    % & $\together{e_1, \dots, e_k}{L}$ & $e_1, \dots, e_k$ are together in the ordered (or circular) list $L$ \\\hline\hline 
+    % \multirow{2}{*}{\makecell{Partition \&\\ Composition}} & $\partition{n}{MS}$ & the set of all partitions of a set (or multiset) $MS$ with size $n$ \\ \cline{2-3}
+    % & $\composition{n}{MS}$ & the set of all compositions of a set (or a multiset) $S$ with size $n$ \\ \hline\hline
+    All & $O_1 \equiv O_2$ & an equivalence relation between two objects $O_1$ and $O_2$ \\\hline
+    \end{tabular}
+\end{table}
+
+
+\subsection{First-Order Model Counting}
+\label{sub:wfomc}
+
+We consider the function-free finite domain fragment of first-order logic.
+The syntax is defined by the following grammar
+\begin{align*}
+    \phi &::= R(x_1, x_2, \dots, x_k) \mid x_1 = x_2 \mid \phi \land \phi \mid \phi \lor \phi \mid \neg \phi \mid \phi \Rightarrow \phi \mid \phi \Leftrightarrow \phi \mid \exists x: \phi \mid \forall x: \phi \mid \exists_{\le k} x: \phi
+\end{align*}
+where $R$ is a predicate symbol from a finite predicate vocabulary, $x_1, x_2, \dots, x_k$ are logical variables from a finite variable vocabulary, and $\exists$, $\forall$, and $\exists_{\le k}$ are the existential, universal, and counting quantifiers, respectively.
+
+Each predicate $R$ is associated with a non-negative integer $k$, called the \emph{arity} of $R$, which specifies the number of arguments that $R$ takes.
+We write $R/k$ to denote a predicate $R$ with arity $k$.
+We call a formula $R(x_1, x_2, \dots, x_k)$ an \emph{atomic formula} (or simply an \emph{atom}), and an atom or its negation a \emph{literal}.
+A logical variable $x$ is \emph{free} in a formula $\phi$ if it is not bound by a quantifier.
+A formula with no free variables is called a \emph{sentence}.
+\emph{Grounding} a formula $\formula$ is the process of replacing one or more variables with constants in a finite domain $\domain$, and removing the possible quantifiers.
+We write $\phi[x_1/c_1, x_2/c_2, \dots, x_k/c_k]$ for the result of replacing $x_1, x_2, \dots, x_k$ with $c_1, c_2, \dots, c_k$ in $\phi$.
+The \emph{grounding} of a formula is obtained by grounding all the variables in the formula.
+
+Given a first-order logic formula $\phi$, we write $\mathcal{P}_{\phi}$ for the set of all predicates that appear in $\phi$.
+An \emph{interpretation} (or a \emph{possible world} in the context of lifted probabilistic inference) $\world$ of a sentence $\sentence$ over a finite domain $\domain$ is a mapping from each predicate $R/k \in \mathcal{P}_{\sentence}$ to a relation $\world_R \subseteq \domain^k$.
+The satisfaction relation $\world \models \sentence$ is defined inductively as follows:
+\begin{itemize}
+    \item $\world \models R(c_1, c_2, \dots, c_k)$ iff $(c_1, c_2, \dots, c_k) \in \world_R$, where $c_1, c_2, \dots, c_k$ are constants in $\domain$;
+    \item $\world \models x_1 = x_2$ iff $\world_{=} = \{(c, c) \mid c \in \domain\}$;
+    \item $\world \models \phi \land \psi$ iff $\world \models \phi$ and $\world \models \psi$;
+    \item $\world \models \neg \phi$ iff $\world \not\models \phi$;
+    \item $\world \models \phi \lor \psi$ iff $\world \models \neg (\neg \phi \land \neg \psi)$, $\world\models \phi \Rightarrow \psi$ iff $\world \models \neg \phi \lor \psi$, and $\world \models \phi \Leftrightarrow \psi$ iff $\world \models (\phi \Rightarrow \psi) \land (\psi \Rightarrow \phi)$;
+    \item $\world \models \exists x: \phi$ iff there exists a constant $c \in \domain$ such that $\world \models \phi[x/c]$;
+    \item $\world \models \forall x: \phi$ iff for all constants $c \in \domain$, $\world \models \phi[x/c]$;
+    \item $\world \models \exists_{\le k} x: \phi$ iff there are at most $k$ constants $c \in \domain$ such that $\world \models \phi[x/c]$.
+\end{itemize}
+An interpretation $\world$ is a \emph{model} of $\sentence$ if $\world \models \sentence$.
+We write $\fomodels{\sentence}{\domain}$ for the set of all models of $\sentence$ over $\domain$.
+
+\begin{definition}[First-Order Model Counting]
+    Given a first-order logic sentence $\sentence$ and a finite domain $\domain$, the \emph{first-order model counting} (\fomc) problem is to compute the number of models of $\sentence$ over $\domain$, denoted as $\symfomc(\sentence, \domain) = |\fomodels{\sentence}{\domain}|$.
+\end{definition}
+
+\begin{example}
+    \label{ex:fomc}
+    Consider the \fomc{} problem of $\sentence = \forall x: ((Red(x) \lor Black(x)) \land \neg (Red(x) \land Black(x)))$ over the domain $\domain = \{ball_1, ball_2, ball_3\}$.
+    We have that $\symfomc(\sentence, \domain) = 2^3 = 8$, the answer of the combinatorial problem: \emph{How many ways can we put three distinguishable balls into red and black boxes?}
+\end{example}
+
+\begin{remark}\label{rem:shannon}
+    When the sentence $\sentence$ only contains nullary predicates, the \fomc{} problem reduces to the well-known propositional model counting (\#SAT) problem~\cite{valiant_complexity_1979}. 
+    When $\sentence$ contains both nullary and non-nullary predicates, the \fomc{} problem can be reduced to a set of \fomc{} problems with only non-nullary predicates by Shannon expansion on the nullary predicates.
+    For instance, given a sentence $\sentence$ with a nullary predicate $P/0$, we have that $\symfomc(\sentence, \domain) = \symfomc(\sentence_{P\leftarrow \top}, \domain) + \symfomc(\sentence_{P\leftarrow \bot}, \domain)$, where $\sentence_{P\leftarrow \top}$ (resp. $\sentence_{P\leftarrow \bot}$) is the sentence obtained by replacing $P$ with true (resp. false) in $\sentence$.
+\end{remark}
+
+We need the cardinality constraints extension of the \fomc{} problem to model more general combinatorial counting problems.
+Let $\mathcal{P}$ be a set of predicates.
+A \emph{cardinality constraint} is an arithmetic (in)equation of the form $\sum_{R\in \mathcal{P}} a_R\cdot |R| \bowtie b$, where $a_R$ and $b$ are real numbers, and $\bowtie\in \{<, \leq, =, \geq, >\}$.
+The cardinality constraint can be viewed as a special kind of atomic formula, and can be connected to the sentence by the logical connectives.
+The satisfaction relation is extended as follows: $\world\models \sum_{R\in \mathcal{P}} a_R\cdot |R| \bowtie b$ iff $\sum_{R\in \mathcal{P}} a_R\cdot |\world_R| \bowtie b$, where $|\world_R|$ is the cardinality of the relation $\world_R$.
+
+\begin{example}
+    \label{ex:cardinality}
+    Consider a variant of the combinatorial counting problem in \Cref{ex:fomc}: \emph{How many ways can we put three distinguishable balls into red and black boxes, such that the number of balls in the red box is no more than two?}
+    The additional constraint on the number of balls in the red box can be modeled as $|Red| \leq 2$.
+\end{example}
+
+Cardinality constraints can be also used to encode the \emph{functionality axiom}~\cite{kuusisto_weighted_2018-1}, enforcing a predicate to act as a function.
+It is useful for modeling permutations of a set of entities.
+
+\begin{example}
+    \label{ex:permutation}
+    Counting the number of permutations of $n$ entities can be modeled as the \fomc{} problem of $\forall x\exists y: Perm(x,y)\land \forall y\exists x: Perm(x,y)\land |Perm| = n$ over a domain of $n$ entities.
+    It is easy to check that the predicate $Perm$ represents a bijective function of the entities, and $\symfomc(\sentence, \domain) = n!$ is exactly the number of permutations of $n$ entities.
+\end{example}
+
+The \fomc{} problem is known to be $\#\P_1$-complete\footnote{A variant of the counting complexity class $\#\P$ where the input of the problem is restricted to a unary representation~\cite{valiant_complexity_1979}.} and thus intractable in general.
+In fact, there exists a sentence from the three-variable fragment of first-order logic without counting quantifiers ($\mathbf{FO}^3$) such that computing its \fomc{} is $\#\P_1$-complete~\cite{beame_symmetric_2015-1}.
+However, if we restrict the sentence to contains only two logical variables, i.e., within the \emph{two-variable fragment with counting (\ctwo{})}, the problem becomes tractable.
+
+% \begin{theorem}[\cite{guy_van_den_broeck_completeness_2011,beame_symmetric_2015-1}]
+%     For a fixed first-order logic sentence $\sentence$ in \fotwo{}, $\symfomc(\sentence, \domain)$ can be computed in time polynomial in the domain size $|\domain|$.
+% \end{theorem}
+
+One might have noticed that we are not allowing constants appear in our definition of first-order logic formulas.
+It is due to the tractability concern: \citet{van_den_broeck_conditioning_2012-1} proved that the \fomc{} problem of a fixed sentence conjuncted with various binary ground literals is intractable in the sense that there is no counting algorithm with polynomial time complexity in the number of the ground literals.
+However, if the constants are restricted to appear in unary predicates\footnote{The constants can also appear in the form $R(c, c)$, where $R$ is a binary predicate, without affecting the tractability. However we will not consider this case in this paper.}, the problem remains tractable.
+In the following, we will also call the unary ground literals \emph{unary evidence} to keep consistent with the prior literature.
+
+% \begin{theorem}[\cite{van_den_broeck_conditioning_2012-1,wang_lifted_2024}]
+%     For a fixed first-order logic sentence $\sentence$ in \fotwo{}, and a set of unary ground literals $\evidence$, $\symfomc(\sentence\land \evidence, \domain)$ can be computed in time polynomial in the domain size $|\domain|$ and the number of ground literals in $\evidence$.
+% \end{theorem}
+
+% There are several ways to handle the unary evidence in the \wfomc{} problem~\cite{van_den_broeck_conditioning_2012-1,wang_lifted_2024}.
+% In our implementation, we adopt the reduction from unary evidence to cardinality constraints~\cite{wang_lifted_2024}.
+% We refer the readers to the Appendix~A of~\cite{wang_lifted_2024} for the detailed reduction, and illustrate its basic idea by the following example.
+
+% \begin{example}
+%     Consider the combinatorial counting problem in \Cref{ex:fomc} but with the constraint that the first ball must be in the red box.
+%     The corresponding \fomc{} problem is of $\sentence\land Red(ball_1)$, where $Red(ball_1)$ is the unary evidence.
+%     We can solve this problem by first transforming the sentence to $\sentence' = \sentence\land\forall x: \xi(x) \Rightarrow Red(x)$, where $\xi(x)$ is an auxiliary predicate.
+%     Then the \fomc{} problem can be reduced to the \fomc{} problem of $\sentence'\land |\xi| = 1$ with $\symfomc(\sentence, \domain) = \symfomc(\sentence', \domain)/\binom{3}{1}$, where $\binom{3}{1}$ is for overcounting the number of ways to choose the first ball.
+% \end{example}
+
+% Given a unary predicate $P/1$, a domain $\domain$ and a set of constants $c_1, c_2, \dots, c_k\in\domain$, we write $\closedevidence{P}{ \domain}{\{c_1, c_2, \dots, c_k\}} = \{P(c_1), P(c_2), \dots, P(c_k)\} \cup \{P(c) \mid c\in\domain\setminus\{c_1, \dots, c_k\}\}$ for the evidence $\{P(c_1), P(c_2), \dots, P(c_k)\}$ under the closed world assumption.
+% For reading convenience, we also view $\closedevidence{P}{\domain}{\{c_1, \dots, c_k\}}$ as the conjunction of the unary ground literals in it.
+
+\subsection{Weighted First-Order Model Counting}
+
+% This complexity result serves as the base of the lifted probabilistic inference algorithms for many probabilistic graphical models, such as Markov logic networks~\cite{richardson_markov_2006-1} and probabilistic logic programming languages like ProbLog~\cite{de_raedt_problog_2007-1}, and also lays the foundation for efficient solving of combinatorial counting problems in this paper.
+
+% \subsection{Extensions of FOMC}
+
+% We need several extensions of the \fomc{} problem to model combinatorial counting problems.
+% All these extensions introduced in this subsection preserve the tractability of the \fomc{} problem.
+% The formal complexity results will be presented in the end of this subsection.
+
+% \subsubsection{Weighted First-Order Model Counting}
+
+\emph{Weighted first-order model counting (\wfomc)} is a generalization of the \fomc{} problem that associates weights to the true and false ground atoms in an interpretation.
+
+We consider a ring $(S, \oplus, \otimes, 0, 1)$, where $S$ is a set, $\oplus$ and $\otimes$ are binary operations, and $0$ and $1$ are the additive and multiplicative identities, respectively.
+The \wfomc{} problem augments the \fomc{} problem with a pair of weighting functions $(\weight, \negweight)$ that map predicate symbols to elements in a ring.
+
+For ease of presentation, in the following we often regard an interpretation (and a model) as \emph{a set of ground literals}:
+\begin{equation*}
+    \world := \bigcup_{R/k\in\mathcal{P}_\sentence}\left(\{R(c_1, \dots, c_k) \mid (c_1, \dots, c_k) \in \world_R\}\cup \{\neg R(c_1, \dots, c_k) \mid (c_1, \dots, c_k) \in \domain^k\setminus \world_R\}\right)
+\end{equation*}
+Let $\world_T$ be the set of ground literals that are true in $\world$ (i.e., the first part of the inner union), and $\world_F$ be the set of ground literals that are false in $\world$ (i.e., the second part of the inner union).
+Denote the predicate symbol of a ground literal $l$ as $\textsc{pred}(l)$.
+The weight of an interpretation $\world$ w.r.t. the weighting functions $(\weight, \negweight)$ is defined as
+\begin{equation*}
+    W(\world; \weight, \negweight) = \bigotimes_{l\in \world_T} \weight(\textsc{pred}(l)) \otimes \bigotimes_{l\in \world_F} \negweight(\textsc{pred}(l)).
+\end{equation*}
+
+\begin{definition}[Weighted First-Order Model Counting]
+    Given a first-order logic sentence $\sentence$, a finite domain $\domain$, and a pair of weighting functions $(\weight, \negweight)$, the \emph{weighted first-order model counting} problem is to compute the weighted sum of the number of models of $\sentence$ over $\domain$:
+    \begin{equation*}
+        \symwfomc(\sentence, \domain; \weight, \negweight) := \bigoplus_{\world\in \fomodels{\sentence}{\domain}} W(\world; \weight, \negweight).
+    \end{equation*}
+\end{definition}
+
+The \wfomc{} problem with the real numbers $\real$ has been widely studied in the literature~\cite{van_den_broeck_lifted_2011,van_den_broeck_introduction_2021,van_bremen_lifted_2021-1,timothy_van_bremen_faster_2021,kuzelka_weighted_2021-1}.
+In this paper, we consider the general case of the polynomial ring $\real[u_1, u_2, \dots u_n]$.
+It will turn out that the \wfomc{} problem with the polynomial ring is essential for solving combinatorial counting problems.
+For an illustration, let us consider the following example.
+\begin{example}
+    Consider the combintorial counting problem in \Cref{ex:fomc} but with indistinguishable balls: How many ways can we put three indistinguishable balls into red and black boxes?
+    It can be modeled as the \wfomc{} problem of $\sentence = \forall x: (Red(x) \lor Black(x))$ with the weighting functions $\weight(Red) = u_R + u_R^2 + u_R^3$ and $\weight(Black) = u_B + u_B^2 + u_B^3$ over the domain $\domain = \{ball\}$.
+    Then the answer of the combinatorial problem is 
+    \begin{equation*}
+        [u_R + u_B = 3]\symwfomc(\sentence, \domain; \weight, \negweight) = \sum_{i=0}^3[u_R^iu_B^{3-i}]\symwfomc(\sentence, \domain; \weight, \negweight) = 4.
+    \end{equation*}
+\end{example}
+
+A \wfomc{} problem with cardinality constraints can be reduced to a \wfomc{} problem without cardinality constraints following the techinique in~\cite{kuzelka_weighted_2021-1}.
+
+\begin{example}
+    Continuing \Cref{ex:cardinality}, the \fomc{} problem of $\sentence\land |Red| \leq 2$ can be reduced to the \wfomc{} problem of $\sentence$ with the weighting functions $\weight(Red) = u$.
+    Then 
+    \begin{equation*}
+        \fomc{}(\sentence\land |Red| \leq 2, \domain) = [u\le 2]\symwfomc(\sentence, \domain; \weight, \negweight) = [u\le 2]((1 + u)^3) = 7.
+    \end{equation*}
+\end{example}
+
+\subsection{Linear Order Axiom and Cyclic Order Axiom}
+
+Finally, we need the linear order axiom~\cite{toth_lifted_2022-1} and the cyclic order axiom to model the sequential relations among entities in combinatorial counting problems.
+A \emph{linear order axiom} is of the form $Linear(R, Pred)$, where $R$ and $Pred$ are binary predicates.
+It enforces the interpretation of $R$ to be a linear (total) order on the domain elements, and the interpretation of $Pred$ to be a set of successive pairs in the order.
+Formally, an interpretation $\world\models Linear(R, Pred)$ iff $\world$ satisifies the following formulas:
+\begin{itemize}
+    \item reflexivity: $\forall x: R(x, x)$,
+    \item connectiveness: $\forall x\forall y: R(x, y) \lor R(y, x)$,
+    \item anti-symmetry: $\forall x\forall y: R(x, y) \land R(y, x) \Rightarrow x = y$,
+    \item transitivity: $\forall x\forall y\forall z: R(x, y) \land R(y, z) \Rightarrow R(x, z)$, and 
+    \item predecessor: $\forall x\forall y: Pred(x, y) \Leftrightarrow (R(x, y) \land \neg \exists z: (z\neq x \land z \neq y\land R(x, z) \land R(z, y)))$.
+\end{itemize}
+Note that the last two formulas both contain three logical variables, and thus directly encoding them to the sentence might make the \fomc{} problem intractable (recall that the \fomc{} problem for $\mathbf{FO}^3$ is $\#\P_1$-complete).\footnote{Whether the \fomc{} problem with transitivity is tractable is still an important open problem~\cite{beame_symmetric_2015-1}.}
+Thus we introduce the linear order axiom as an extension rather than a primitive in the first-order logic.
+
+Similar to the cardinality constraints, we write $Linear(R, Pred)$ like an atomic formula, and connect it to the sentence by the logical connectives.
+When $Pred$ is not specified, we assume it to be a fresh predicate symbol, and simply write $Linear(R)$.
+With the linear order axiom, the problem in \Cref{ex:permutation} can be also modeled as $\sentence = Linear(Perm)$.
+Moveover, the linear order axiom can be used to model the \emph{relative position constraints} in combinatorial counting problems.
+
+\begin{example}
+    \label{ex:linear}
+    Consider the combinatorial counting problem: \emph{How many ways can we rearrange two distinguishable red balls and three distinguishable balls of other colors in a line such that the red balls are \emph{not} adjacent?}
+    We can model the problem as the \fomc{} problem of $\sentence = Linear(R, Pred)\land \forall x\forall y:(Red(x)\land \neg Red(y)\Rightarrow \neg Pred(x,y))$ with the unary evidence $\{Red(ball_1), Red(ball_2),\neg Red(ball_3), \neg Red(ball_4), \neg Red(ball_5)\}$.
+\end{example}
+
+We can further extend the linear order axiom to the \emph{cyclic order axiom} $Circle(Pred)$ to model a cycle of entities.
+$\world\models Circle(Pred)$ iff $\world_{Pred}$ is a cyclic order on the domain elements and the predicate $Pred$ interprets the successive pairs in the clockwise order.
+% The tractability of the cyclic order axiom can be obtained by a reduction to the linear order axiom:\footnote{For model counting, this reduction has an overcounting factor of $n$ for the cyclic order axiom, where $n$ is the number of entities.}
+% \begin{align*}
+%     &Linear(R,Pred')\land \\
+%     &\forall x: First(x) \Leftrightarrow \neg (\exists y: Pred'(y,x))\land \\
+%     &\forall x\forall y: Last(x) \Leftrightarrow \neg (\exists y: Pred'(x,y))\land \\
+%     &\forall x\forall y: Pred(x,y) \Leftrightarrow (Pred'(x,y) \lor (Last(x) \land First(y))).
+% \end{align*}
+
+\subsection{Tractability Results and Implementations for \wfomc{}}
+
+The following theorem summarizes the complexity results of the \wfomc{} problem with the extensions introduced above.
+% We have the following complexity results for the \wfomc{} problem with the extensions, which is based on integrating the results in~\cite{beame_symmetric_2015-1,kuzelka_weighted_2021-1,wang_lifted_2024,toth_lifted_2022-1}.
+
+\begin{theorem}[Summary of results from \cite{beame_symmetric_2015-1,kuzelka_weighted_2021-1,wang_lifted_2024,toth_lifted_2022-1}]\label{thm:complexity}
+    Let $\sentence$ be a \emph{fixed} \ctwo{} sentence, and let $(\weight, \negweight)$ be a pair of weighting functions.
+    For any domain $\domain$, any set $\cardconst$ of cardinality constraints, any unary evidence $\evidence$, and any linear order or cyclic order axiom $\axiom$, the \wfomc{} problem $\symwfomc(\sentence\land \cardconst\land \evidence\land \axiom, \domain; \weight, \negweight)$ can be computed in time polynomial in the domain size $|\domain|$, the size (and parameters) of the cardinality constraints, and the number of ground literals in the unary evidence.
+\end{theorem}
+
+Pushing the tractability frontier of the \wfomc{} problem to a more general case of first-order logic has been a long-standing research topic, and there are many other extensions and restrictions of the \wfomc{} problem that are tractable, e.g., the tree axiom~\cite{van_bremen_lifted_2021-1}, the extension to counting quantifiers~\cite{kuzelka_weighted_2021-1}, and the directed acyclic graph axiom~\cite{malhotra_lifted_2023,kuang_bridging_2024}.
+We do not cover all these extensions in this paper since the introduced extensions are sufficient for modeling the combinatorial counting problems considered in this paper.
+Though, they are evidently useful for modeling more complex problems, such as the ones about graphs and networks, which we leave for future work.
+
+There are several \wfomc{} solvers for the \wfomc{} problem, e.g., \textsc{ForcLift}~\cite{van_den_broeck_lifted_2011}, \textsc{FastWFOMC}~\cite{timothy_van_bremen_faster_2021}, \textsc{IncrementalWFOMC}~\cite{toth_lifted_2022-1} (and \textsc{IncrementalWFOMC2}~\cite{zou_faster_2025}), and \textsc{RecursiveWFOMC}~\cite{endriss_more_2024}, optimized for different extensions of the \wfomc{} problem.
+In this paper, we use \textsc{FastWFOMC} and \textsc{IncrementalWFOMC2} as the back-end solvers in our implementation, since they support all the extensions introduced above and are efficient in practice.
+The code of our implementation is available at \url{https://github.com/yuanhong-wang/WFOMC}.
+
+\subsection{\sharpcsp{}}
+\label{sub:csp}
+
+We use the constraint satisfaction problem (\csp{}) as the formalism to model combinatorial counting problems.
+A \csp{} is a tuple $\langle D, V, C\rangle$, where
+\begin{itemize}
+    \item $V = \{v_1, v_2, \dots, v_n\}$ is a set of variables,
+    \item $D = \{D_{v_1}, D_{v_2}, \dots, D_{v_n}\}$ is a set of domains, where $v_i$ takes values from $D_{v_i}$ (also called the domain of $v_i$), and
+    \item $C = \{c_1, c_2, \dots, c_m\}$ is a set of constraints, where $c_i = (W, R_W)$ is a constraint, $W$ is a tuple of variables in $ V$, and $R_W\subseteq D_{W_1}\times D_{W_2}\times \dots \times D_{W_k}$ is a relation on $W$, where $W_i$ is the $i$-th variable in $W$.
+\end{itemize}
+We consider the counting version of \csp{}s, called the \emph{counting constraint satisfaction problem} (\sharpcsp{}), which is to count the number of solutions to a \csp{}.
+\begin{definition}[Solution]
+    A solution of a \csp{} $\langle D, V, C\rangle$ is a function $f: V\rightarrow D$ such that for every constraint $c_i = (W, R_W)\in C$, $(f(W_1), f(W_2), \dots, f(W_k))\in R_W$.
+\end{definition}
+
+
+We use $MC(D, V, C)$ to denote the answer of the \sharpcsp{} of $\langle D, V, C\rangle$.
+The task of \sharpcsp{} is similar to first-order model counting discussed in \Cref{sub:wfomc}, where the problem is to find the number of models of a given first-order logic sentence.
+However, we note that we only use the \sharpcsp{} problem for formalizing the combinatorial counting problems, but not trying to solve the \sharpcsp{} problem using the general-purpose \sharpcsp{} solvers due to the lack of theoretical tractability guarantees.
+
+The combinatorial objects in a combinatorial counting problem are represented by the variables in the \sharpcsp{}, while the constraints specify the relations between the objects.
+For example, consider the combinatorial counting problem in \Cref{ex:fomc}.
+Let $D = \{ball_1, ball_2, ball_3\}$ be the set of constants representing the distinguishable balls.
+This problem can be modeled as a \csp{} with three variables $All$, $Red$ and $Black$, where $D_{All} = \{D\}$, $D_{Red} = D_{Black} = 2^{D}$, and the constraints $C$ are 
+\begin{align*}
+    \{&((All, Red), \{(S_{All}, S_{Red})\in D_{All}\times D_{Red}\mid S_{Red}\subseteq S_{All}\}), \\
+    &((All, Black), \{(S_{All}, S_{Black})\in D_{All}\times D_{Black}\mid S_{Black}\subseteq S_{All}\}), \\
+    &((Red, Black), \{(S_{Red}, S_{Black})\in D_{Red}\times D_{Black}\mid S_{Red}\cap S_{Black} = \emptyset\}).
+\end{align*}
+The answer of the \sharpcsp{} is $MC(D, V, C) = 8$, equivalent to the solution of the combinatorial counting problem.
+Observe that the domain of the \csp{} variable, e.g., $D_{Red}$ and $D_{Black}$, might be implicitly specified by the constraints, for which we omit it in the notation.
+
+\paragraph{Simplifications for constraints}
+We often write a constraint as a relation with the standard operators for the combinatorial objects.
+For instance, for two \csp{} variables $v$ and $v'$ with the set class, we write $v \subseteq v'$ for a constraint $c_1 = ((v, v'), \{(s, s')\in D_v\times D_{v'}\mid s\subseteq s'\})$ and $|v| \equiv 3$ for a constraint $c_2 = ((v, ), \{(s, )\in D_v\mid |s| = 3\})$.
+We also use logical connectives to combine constraints, e.g., the constraint $(v\subseteq v')\lor (|v| \equiv 3)$ is equivalent to the constraint $((v, v'), \{(s, s')\in D_v\times D_{v'}\mid s\subseteq s'\lor |s| = 3\})$.
+% When the domain of a variable can be implicitly specified by some constraints, we omit the domain in the notation.
+% For example, the constraint $v_1\subseteq v_2$ implies that the domain of $v_1$ is $D_{v_1} = \left\{\bigcup_{S\in D_{v_2}} 2^S\right\}$, we omit $D_{v_1}$ in the notation.
+
+% In this paper, we are often interested in the counting problems over a set of \csp{}s.
+% Let $V = (V_1, V_2, \dots, V_k)$, $D = (D_1, D_2, \dots, D_k)$, and $C = (C_1, C_2, \dots, C_k)$ be the sets of sets of variables, domains, and constraints, respectively.
+% We denote $\{\langle V_1, D_1, C_1\rangle, \langle V_2, D_2, C_2\rangle, \dots, \langle V_k, D_k, C_k\rangle\}$ by $\langle V, D, C\rangle$, and extend the definition of the \sharpcsp{} problem to $\langle V, D, C\rangle$ as follows:
+% \begin{equation*}
+%     MC( V, D, C) = \sum_{\langle V, D, C\rangle\in \langle V, D, C\rangle} MC( V, D, C).
+% \end{equation*}
+% For presentation, we write $\langle V_1, D_1, C_1\rangle \cup \langle V_2, D_2, C_2\rangle$ for the union of two sets of \sharpcsp{} problems, i.e., $\langle V_1, D_1, C_1\rangle \cup \langle V_2, D_2, C_2\rangle = \langle V_1\cup V_2, D_1\cup D_2, C_1\cup C_2\rangle$.
+% We also write $\langle V, D, C\rangle \sqcup \langle V, D, C\rangle$ for
+% \begin{equation*}
+%     \langle (V_1\cup V, V_2\cup V, \dots, V_k\cup V), (D_1\cup D, D_2\cup D, \dots, D_k\cup D), (C_1\cup C, C_2\cup C, \dots, C_k\cup C)\rangle.
+% \end{equation*}
+
+\section{Overview of the \ourlang{} Language}
+\label{sec:cofola}
+
+In this section, we briefly introduce our Combinatorial counting LAnguage with First-Order logic (\ourlang{}) for modeling combinatorial counting problems.
+The details of the language, including its syntax, semantics, and solver, are presented in the following sections.
+
+% \subsection{Overview}
+% \label{sub:cofola_overview}
+
+
+\begin{figure}[htb]
+    \begin{cofolacodeblock}{}
+stmts ::= (object_declaration | constraint)*
+object_declaration ::= obj_id "=" expr
+expr ::= set_expr
+    | bag_expr
+    | tuple_expr
+    | sequence_expr
+    | circle_expr
+    | composition_expr
+    | partition_expr
+constraint ::= atomic_constraint | compound_constraint
+compound_constraint ::= constraint ("and" | "or") constraint
+    | "not" constraint
+atomic_constraint ::= size_constraint 
+    | membership_constraint 
+    | subset_constraint 
+    | disjoint_constraint
+    | equivalence_constraint 
+    | sequence_constraint
+    | partition_constraint
+...
+    \end{cofolacodeblock}
+    \caption{The overview of the abstract syntax of the \ourlang{} language. The terminal symbol \code{obj_id} represents a valid string.}
+    \label{fig:syntax_overview}
+\end{figure}
+
+\subsection{Syntax Overview}
+
+\ourlang{} is a declarative language, whose abstract syntax is overviewed in \cref{fig:syntax_overview}.
+A \ourlang{} program consists of a set of \emph{object declarations} and \emph{constraints} in order.
+The object declarations give the definition of the objects in the problem, and the constraints specify the properties of the objects or their relationships.
+The order of the object declarations and constraints need to respect the dependencies between them, i.e., the objects used in the constraints or other object declarations should be declared before they are used (see the semantics of the \ourlang{} language below).
+
+Compared to CoLa~\cite{totis_lifted_2023}, where only one combinatorial object is allowed in a problem, \ourlang{} allows multiple objects, which makes it more flexible to model combinatorial counting problems.
+For instance, to model \cref{prob:water_polo}, we need at least two objects, one for the starting team and another for the goalie, which is only possible in \ourlang{}.
+\lnote{Harder example to show the advantage of multiple objects.}
+
+\begin{problem}
+    \label{prob:water_polo}
+    Our water polo team has 15 members.  I want to choose a starting team consisting of 7 players, one of whom will be the goalie.  In how many ways can I choose my starting team?
+\end{problem}
+
+The objects in \ourlang{} are declared using the \code{I = expr} statement, where \code{I} is an identifier representing the name of the object and \code{expr} is an expression that defines the object.
+We assume that all the identifiers in \ourlang{} programs are valid, i.e., they start with a letter or an underscore, followed by letters, digits, or underscores.
+The general form of the expression \code{expr} is \code{op(src, arg1, arg2, ...)}, where \code{op} is a symbol representing the operator that forms the object, i.e., how the entities are organized, and \code{src} defines the source of the entities, either a concrete collection of entities or other objects.
+For example, the expression \code{polo\_team = set(member1, member2, ..., member15)} defines an object of type set that contains the members of the water polo team, where \code{member1, member2, ..., member15} are the entities representing the members.
+Another example is \code{starting\_team = choose(polo\_team, 7)}, which defines another object \code{starting\_team} of type set that is formed by choosing 7 members from the object \code{polo\_team}.
+
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figs/actions.pdf}
+    \caption{The type dependecies of object declaration in \ourlang{}. Each arrow represents the operations that forms a new object of the target type (head) from the source object(s) (tail).}
+    \label{fig:actions}
+\end{figure}
+
+\ourlang{} uses a \emph{strict} type system and provides seven types for objects: \emph{set, bag, tuple, sequence, circle, composition, and partition}.
+% Note that the types of \ourlang{} objects are not the same as the classes of combinatorial objects in \sharpcsp{}s.
+The type of an object is determined by the operation \code{op}.
+\ourlang{} allows only sets and bags to be formed from concrete collections of entities, i.e., \code{set(e1, e2, ...)} and \code{bag(e1:k1, e2:k2, ...)}, while the others can only be formed from existing objects with specific types. \lnote{I didn't really get your point about \code{seq1 = [e1, e2, x, e3]} in your comment.}
+The \ourlang{} operators with their type specifications are dipicted in \cref{fig:actions}.
+\ourlang{} does \emph{not} allow type casting either implicitly or explicitly, and the type of an object is \emph{fixed} once it is declared.
+
+\subsection{Semantics Overview}
+
+The semantics of the \ourlang{} language is defined with \sharpcsp{}s.
+We do not want to involve the tedious details of the formal semantics in the main text, therefore we leave its formal definition in the appendix.
+
+The semantics of \ourlang{} is given by mapping a \ourlang{} program to a \sharpcsp{} instance $\langle V, D, C\rangle$, where the variables $V$, domains $D$, and constraints $C$ are derived from the object declarations and constraints in the program.
+We define the solution of a \ourlang{} program as the solution of the corresponding \sharpcsp{}.
+\begin{definition}[Solution of a \ourlang{} program]
+    Given a \ourlang{} program $P$, let $\langle V, D, C\rangle$ be the corresponding \sharpcsp{} instance derived from $P$.
+    The \emph{solution} of the \ourlang{} program $P$ is defined as $MC(V, D, C)$.
+\end{definition}
+
+We briefly summarize the semantics of \ourlang{} as follows, and show how to solve a \ourlang{} program with \wfomc{} in the next subsection.
+
+The \sharpcsp{} instance $\langle V, D, C\rangle$ is obtained inductively from the statements in the \ourlang{} program, where \emph{the order of the statements matters}.
+In brief, an object declaration statement \code{I = expr} introduces a new \csp{} variable $\cspv{I}$ with the specific domain $\cspd{I}$ and also possibly a new constraint $\cspc{I}$ to the \sharpcsp{}.
+% The universal domain $D$ is updated accordingly if \code{expr} includes a concrete collection of entities.
+% Both $cls$ and $c$ are derived from the expression \code{expr}, while $cls$ mainly specifies how the entities are organized and $c$ usually specifies where the entities come from.
+For instance, the semantics of the statement \code{I = choose(I', 5)}, where \code{I'} is the identifier of an existing set object with the \csp{} variable $\cspv{I'}$, is $V = V\cup \{\cspv{I}\}$ and $C = C\cup \{\cspv{I}\subseteq \cspv{I'}, |\cspv{I}| = 5\}$ (the domain of $\cspv{I}$ is implicitly specified by the constraint and thus omitted).
+For another example, the expression \code{I = set(e1, e2, ...)} updates $V$ by adding a new variable $\cspv{I}$ with the domain $\cspd{I} = \{e_1, e_2, \dots\}$.
+Throughout the paper, we always denote the \csp{} variable corresponding to an object identifier \code{I} by $\cspv{I}$.
+% By this convention, the updates of $V$ in the semantics of object declarations are omitted in the rest of the paper for simplicity.
+
+% A constraint statement updates the \csp{} by adding a new \csp{} constraint to $C$.
+\ourlang{} has two kinds of constraints: \emph{atomic constraints} and \emph{compound constraints} (ref. \cref{fig:syntax_overview}), both introducing a new \csp{} constraint to the \sharpcsp{}.
+They differ in that an atomic constraint statement corresponds to a single \csp{} constraint without logical connectives, while a compound constraint statement combines multiple constraints with logical connectives (recall the simplification of \csp{} constraints in \Cref{sub:csp}).
+For example, an atomic constraint \code{I1 subset I2} introduces $\cspv{I1}\subseteq \cspv{I2}$ to the \sharpcsp{}.
+A compound constraint \code{I1 subset I2 and I1 subset I3} produces the constraint $\cspv{I1}\subseteq \cspv{I2}\land \cspv{I1}\subseteq \cspv{I3}$ to the \sharpcsp{}.
+
+% where the new constraint is derived from the constraint statement inductively as follows:
+% \begin{itemize}
+%     \item an atomic constraint statement corresponds to a single \csp{} constraint without logical connective;
+%     \item a compound constraint statement \code{cst1 and cst2} (resp. \code{cst1 or cst2}) defines $c_1\land c_2$ (resp. $c_1\lor c_2$), where $c_1$ and $c_2$ are the \csp{} constraints given by \code{cst1} and \code{cst2}, respectively;
+%     \item and a compound constraint statement \code{not cst} defines $\neg c$, where $c$ is the corresponding \csp{} constraint of \code{cst}.
+% \end{itemize}
+
+% \begin{example}
+%     \label{ex:cofola_semantics}
+%     Consider a \ourlang{} program
+%     \begin{cofolacode}{}
+% I1 = expr1
+% I2 = expr2
+% acst1 and (acst2 or acst3)
+%     \end{cofolacode}
+%     \noindent where \code{expr1} and \code{expr2} are object expressions, and \code{acst1}, \code{acst2}, and \code{acst3} are atomic constraints.
+%     The semantics of the program in~\Cref{ex:cofola_semantics} is a \sharpcsp{} of $\langle \{\cspv{I1}, \cspv{I2}\}, \{\cspd{I1}, \cspd{I2}\}, \{\cspc{I1}, \cspc{I2}, c_1\land (c_2\lor c_3)\}\rangle$, where $\cspv{I1}$ and $\cspv{I2}$ are the \csp{} variables defined by the object declarations, $\cspd{I1}$ and $\cspd{I2}$ are the domains of the variables, $\cspc{I1}$ and $\cspc{I2}$ are the constraints introduced by the object declarations, and $c_1$, $c_2$, and $c_3$ are the \csp{} constraints defined by the atomic constraints \code{acst1}, \code{acst2}, and \code{acst3}, respectively.
+% \end{example}
+
+\begin{example}
+    The problem~\cref{prob:water_polo} can be modeled by the following \ourlang{} program:
+    \begin{cofolacode}{}
+players = set(player1...16)
+starting_team = choose(players, 7)
+goalie = choose(players, 1)
+    \end{cofolacode}
+    \label{ex:water_polo}
+    The corresponding \sharpcsp{} instance is $\langle V, D, C\rangle$, where 
+    \begin{align*}
+        V &= \left\{\cspv{players}, \cspv{starting\_team}, \cspv{goalie}\right\},\\
+        D &= \{\cspd{players} = \{\{player_1, player_2, \dots, player_{16}\}\}\},\\
+        C &= \{\cspv{starting\_team} \subseteq \cspv{players}, |\cspv{starting\_team}| \equiv 7, \cspv{goalie} \subseteq \cspv{players}, |\cspv{goalie}| \equiv 1\},
+    \end{align*}
+    where the domain of $\cspv{starting\_team}$ and $\cspv{goalie}$ are implicitly specified by the constraints.
+    If we further require that \code{player1} must be in the starting team and \code{player1} or \code{player2} must be the goalie, we can add the following constraint statement to the program:
+    \begin{cofolacode}{}
+player1 in starting_team and (player1 in goalie or player2 in goalie)
+    \end{cofolacode}
+    The new \sharpcsp{} constraint introduced by the statement is $\code{player1} \in \cspv{starting\_team} \land (\code{player1} \in \cspv{goalie} \lor \code{player2} \in \cspv{goalie})$.
+\end{example}
+
+To describe the details of the semantics of specific statements in \ourlang{}, we need the binding of variables.
+Let $\mathcal{I}$ be the set of object identifiers, and let $Type = \{set, bag, tup, seq, cir, comp, par\}$ be the set of types.
+We use a state $\mathcal{I}\mapsto Type \times V$ to store the binding of variables in a \ourlang{} program.
+We use the auxiliary function $\textsc{update}(\code{I}, t, \cspv{I})$ to update the state by mapping the identifier \code{I} to the type $t$ and the variable $\cspv{I}$, and return the updated entry $(t, \cspv{I})$.
+Another function $\textsc{lv}(\code{I}, t_1, t_2, \dots)$ is used to looks up the corresponding variable $\cspv{I}$ of the identifier \code{I}; if the identifier is in the state and its type matches one of the expected types $t_1, t_2, \dots$, it returns the variable $\cspv{I}$; otherwise, it returns an \emph{error signal}.
+A program is considered \emph{valid} if no error occurs.
+For simplicity, we denote the variable returned from $\textsc{lv}(\code{I}, t_1, t_2, \dots)$ by $\lv{I}{t_1, t_2, \dots}$.
+
+\begin{algorithm}[tbp]
+    \DontPrintSemicolon
+    \SetNoFillComment
+    \caption{Solve \ourlang{} programs with \wfomc{}s}
+    \label{alg:compile}
+    \KwIn{A \ourlang{} program \code{stmts}}
+    \KwOut{The solution of \code{stmts}}
+    \SetKwFunction{compile}{compile}
+    \SetKwFunction{expand}{shannon\_expand}
+    \SetKwFunction{compiledom}{compile\_dom}
+    \SetKwFunction{compileobj}{compile\_obj}
+    \SetKwFunction{compilecst}{compile\_cst}
+    \SetKwProg{Fn}{Function}{:}{}
+    $Problems \gets \emptyset$ \;
+    \code{obj_decs}, \code{csts} $\gets$ the object declarations and constraint statements in \code{stmts} \;
+    \tcc{Decompose the constraints}
+    \ForEach{$\code{acsts} \gets \mathbf{product}(\{\expand(\code{cst})\mid \code{cst}\in \code{csts}\})$\label{line:shannon}}{
+        \tcc{Compile to \wfomc{} problems}
+        $Problems \gets Problems \cup \{\compile(\code{obj\_decs}, \code{acsts})\}$ \label{line:compile}\;
+    }
+    $result \gets 0$\;
+    \ForEach{$(\sentence, \domain, \weight, \negweight, A, factor) \in Problems$}{
+        \tcc{Compute the \wfomc{} problems}
+        $result \gets result + [A]\symwfomc(\sentence, \domain; \weight, \negweight)\cdot factor$ \label{line:solve}\;
+    }
+    \Return $result$\;
+    \ \;
+    \Fn{\compile(\code{obj\_decs}, \code{acsts})}{
+        % \tcc{The \fotwo{} sentence possibly with cardinality constraints, unary evidence, and linear order or cyclic order axioms}
+        $\sentence\gets \top$,$\weight, \negweight \gets$ the constant function that always return 1, $A \gets \emptyset$, $factor \gets 1$ \;
+        \tcc{Obtain the domain $\domain$ and the repeated entities $\repdomain$}
+        $\domain, \repdomain \gets \compiledom(\code{obj\_decs})$ \label{line:domain} \;
+        \ForEach{\code{I = op(src, arg1, arg2, ...)} $\in$ \code{obj\_decs}}{
+            $\sentence, \weight, \negweight, A, factor \gets \compileobj(\code{I  = op(src, arg1, arg2, ...)}, \sentence, \domain, \repdomain, \weight, \negweight, A, factor)$ \label{line:compileobj} \\
+        }
+        \ForEach{\code{acst} $\in$ \code{acsts}}{
+            $\sentence, \weight, \negweight, A, factor \gets \compilecst(\code{acst}, \sentence, \domain, \repdomain, \weight, \negweight, A, factor)$ \label{line:compilecst} \\
+        }
+        \Return $(\sentence, \domain, \weight, \negweight, A, factor)$
+    }
+\end{algorithm}
+\subsection{Solving \ourlang{} Programs with \wfomc{}}
+\label{sub:cofola_solution}
+
+The efficient solving of \ourlang{} programs is achieved by reducing them to the \wfomc{} problem.
+Compared with the existing methods such as CoSo for CoLa programs~\cite{totis_lifted_2023}, which rely on either general-purpose or specialized \sharpcsp{} solvers, our method utilizes the off-the-shelf lifted \wfomc{} algorithms with both theoretical guarantees (by \cref{thm:complexity}) and practical performance (\lnote{from our experiments}).
+
+The pseudo-code of the solver is shown in \cref{alg:compile}.
+Given a \ourlang{} program \code{stmts}, the constraints are first decomposed into a set of atomic constraints using the Shannon expansion (\cref{line:shannon}, similar to the one for \wfomc{} in \cref{rem:shannon}).
+Then, the decomposed atomic constraints combined with the object declarations are compiled into a set of tuples $(\sentence, \domain, \weight, \negweight, A, factor)$ (\cref{line:compile}), where $\sentence$ is a \fotwo{} sentence possibly with cardinality constraints, unary evidence, and linear order or cyclic order axioms, $\domain$ is the domain of the problem, $(\weight, \negweight)$ is a pair of weighting functions, $A$ is a system of equations and inequalities over the symbolic variables used in $\weight$ and $\negweight$, and $factor$ is the overcounting or undercounting factor.
+The \wfomc{} problem $(\sentence, \domain; \weight, \negweight)$ is then fed to any lifted \wfomc{} solver, providing the solution $[A]\symwfomc(\sentence, \domain; \weight, \negweight)$.
+The final answer of the \ourlang{} program is obtained by summing up the solutions of all the \wfomc{} problems weighted by the factor (\cref{line:solve}).
+By \cref{thm:complexity}, the solving of a \ourlang{} program is polynomial in the domain size, the size (and parameters) of the cardinality constraints, and the number of ground literals in the unary evidence.
+\lnote{if we want to state any theoretical results here.}
+
+The compilation of the \ourlang{} program to \wfomc{} problems is performed in the function $\mathbf{compile}$, which takes the object declarations and the constraints as input and returns a tuple $(\sentence, \domain, \weight, \negweight, A, factor)$.
+Specifically, the function first extracts the domain $\domain$ and the repeated entities $\repdomain$ from the object declarations (\cref{line:domain}).
+The repeated entities are the entities that might appear multiple times in the object declarations, and we will discuss them in detail in the next section.
+Then, the object declarations and constraints are compiled consecutively with the function $\mathbf{compile\_obj}$ and $\mathbf{compile\_cst}$, respectively (\cref{line:compileobj,line:compilecst}).
+The tuple $(\sentence, \domain, \weight, \negweight, A, factor)$ is maintained throughout the compilation process, and the final tuple is returned as the output of the function.
+
+% Denote the set of all possible states by $State$.
+% We introduce two auxiliary functions $\textsc{update}$ and $\textsc{lookup}$ for manipulating the state:
+% \begin{align*}
+%     &\textsc{update}: State \times \mathcal{I}\times Type \times V\times D \mapsto State,\\
+%     &\qquad \textsc{update}(state, \code{I}, t, v, D_v)(\code{I'}) \triangleq \begin{cases}
+%         (t, v, D_v), & \text{if } \code{I} = \code{I'},\\
+%         state(\code{I'}), & \text{otherwise}.
+%     \end{cases}\\
+%     &\textsc{lookup}: State \times \mathcal{I} \times Type \mapsto V\times D,\\
+%     &\qquad \textsc{lookup}(state, \code{I}, t) \triangleq \begin{cases}
+%         (v, D_v), & \text{if } state(\code{I}) = (t, v, D_v),\\
+%         error, & \text{otherwise},
+%     \end{cases}
+% \end{align*}
+% where $error$ is a special value indicating that the identifier is not in the state or its type mismatches the expected type.
+% For brevity, the state is used implicitly in the semantics function, pretending that the state is passed as an argument to the semantics function.
+% One could think of the state as a global variable that is updated by the semantics function, e.g., the semantics of an object declaration can be written more formally as
+% \begin{align*}
+%     \sem{\code{I = expr}}(state, V, D, C) &\triangleq (state, \langle V, D, C\rangle \sqcup \langle \{v\}, \{D_v\}, \emptyset\rangle),\\
+%     \text{ where } (state, v, D_v) &= \textsc{obj }\sem{\code{I = expr}}(state, V, D, C),
+% \end{align*}
+% and
+% \begin{align*}
+%     &\textsc{obj }\sem{\code{I = expr}}(state, V, D, C) \triangleq (state', v, D_v), \\
+%     &\text{ where } state' = \textsc{update}(state, \code{I}, \textsc{type }\sem{\code{expr}}, \textsc{str }\sem{\code{I}}, \textsc{dom }\sem{\code{expr}}(state)) \text{ and } state'(\code{I}) = (t, v, D_v).
+% \end{align*}
+% The function $\textsc{type }\sem{\code{expr}}$ and $\textsc{dom }\sem{\code{expr}}$ are used to extract the type and the domain of the object expression \code{expr}, and $\textsc{str }\sem{\code{I}}$ returns the string of the identifier \code{I}.
+
+\section{Basic Objects: Sets and Bags}
+
+We start with the basic object types in \ourlang{} programs: sets and bags.
+Both sets and bags are collections of entities where the order of entities does not matter.
+Sets and bags differ in that the entities in a set are distinct, while the entities in a bag may be \emph{repeated}, i.e., a bag represents a multiset.
+
+\subsection{Syntax}
+
+The abstract syntax
+% \footnote{For clarity, the BNF used here might contain ambiguities, which we will resolve in the following sections. The ambiguity of syntax in the rest of the paper will be resolved in the same way, and we will not repeat this note.} 
+of the object declarations for the sets and bags is shown in \Cref{fig:set_bag_syntax}.
+The terminial symbol \code{INT} represents a non-negative integer, \code{NUMBER} represents a rational number, and \code{entity} is a string representing an entity.
+\ourlang{} also provides a concise way to declare a set of consecutive entities as \code{set(entity1...10)}, which is equivalent to \code{set(entity1, entity2, ..., entity9)}. \lnote{HI, I prefer the first as it aligns with Math's packages like Sage, sympy, etc.}
+The operators \code{union}, \code{intersect}, and \code{diff} can be abbreviated in the infix forms \code{I1 + I2}, \code{I1 & I2}, and \code{I1 - I2}, respectively.
+Note that the additive union operator \code{add_union} only supports bags, and it is abbreviated by the infix operator \code{++}.
+
+\begin{figure}[tb]
+    \begin{cofolacodeblock}{}
+set_expr ::= "set" "(" entity ("," entity)* ")"
+    | "choose" "(" obj_id "," INT? ")"
+    | "supp" "(" obj_id ")"
+    | "union" "(" obj_id "," obj_id ")"
+    | "intersect" "(" obj_id "," obj_id ")"
+    | "diff" "(" obj_id "," obj_id ")"
+
+bag_expr ::= "bag" "(" repeated_entities ("," repeated_entities)* ")"
+    | "choose" "(" obj_id "," INT? ")"
+    | "choose_replace" "(" obj_id "," INT ")"
+    | "union" "(" obj_id "," obj_id ")"
+    | "intersect" "(" obj_id "," obj_id ")"
+    | "diff" "(" obj_id "," obj_id ")"
+    | "add_union" "(" obj_id "," obj_id ")"
+repeated_entities: entity ":" INT
+
+set_bag_constraint ::= membership_constraint
+    | subset_constraint
+    | disjoint_constraint
+    | equivalence_constraint
+membership_constraint ::= entity "in" obj_id
+subset_constraint ::= obj_id "subset" obj_id
+disjoint_constraint ::= obj_id "disjoin" obj_id
+equivalence_constraint ::= obj_id "==" obj_id
+size_constraint ::= size_expr comp size_expr
+comp ::= "==" | "<" | ">" | "<=" | ">="
+size_expr ::= size_atom
+    | size_expr "+" size_atom
+    | size_expr "-" size_atom
+size_atom: NUMBER? "|" obj_id "|"
+    | obj_id "." "count" "(" entity ")"
+    | ...
+    \end{cofolacodeblock}
+    \caption{The abstract syntax of the object declarations for the sets and bags, where \code{INT} is a non-negative integer and \code{entity} is a valid string representing an entity.}
+    \label{fig:set_bag_syntax}
+\end{figure}
+
+\ourlang{} supports flexible size constraints, where the size expression can be an atomic expression \code{\|I\|} for the cardinality of a set or bag \code{I} and \code{I.count(entity)} for the multiplicity of an entity in a bag \code{I}, and a linear combination of these atomic expressions.
+For example, one can specify the ratio of the size of two sets or bags by using, e.g., \code{\|I1\| -2\|I2\| = 0}.
+% It will turn out that the semantics and the compilation of a size constraint can be reduced to the semantics and compilation of its atomic expressions.
+We only consider the set and bag size atoms in this section, leaving the atoms for other object types in their respective sections.
+
+\begin{problem}
+    On the refrigerator, ``MATHCOUNTS'' is spelled out with 10 magnets, one letter per magnet. If the Ts are indistinguishable, how many distinct possible collections of 4 letters could be put in the bag such that the number of vowels is less than the number of consonants?
+    \label{prob:mathcounts}
+\end{problem}
+\begin{example}
+    \label{ex:mathcounts}
+    The \ourlang{} program for \cref{prob:mathcounts} can be written as
+    \begin{cofolacode}{}
+vowels = bag(A: 1, O: 1, U: 1)
+consonants = bag(M: 1, T: 2, H: 1, C: 1, N: 1, S: 1)
+magnets = vowels ++ consonants
+chosen = choose(magnets, 4)
+chosen_vowels = chosen & vowels
+chosen_consonants = chosen & consonants
+|chosen_vowels| -1 |chosen_consonants| < 0
+    \end{cofolacode}
+\end{example}
+
+\subsection{Semantics and Compilation}
+
+\subsubsection{Sets}
+
+Let us first introduce the semantics and compilation of the set expressions.
+First, we need to obtain the domain $\domain$ of the problem, which is realized by the function \CommentSty{compile\_dom} shown in \cref{alg:compile_dom}.
+The domain simply contains all the entities that appear in the sets and bags, e.g., $\domain = \{player_1, \dots, player_{16}\}$ for the \wfomc{} problem in \cref{ex:water_polo}.
+The function \code{compile\_dom} also extracts the \emph{repeatable} entities $\repdomain$ specifically for bags compilation, whose details will be discussed later when we introduce bags.
+
+\paragraph{Initialization}
+The semantics of \code{I = set(e1, ..., en)} updates the \sharpcsp{} by $D = D\cup \{\cspd{I} = \{\{e_1, \dots, e_n\}\}\}$, where each $e_i$ is a constant with the same name as \code{e_i}, that is, the \csp{} variable $\cspv{I}$ can only take the value $\{e_1, \dots, e_n\}$.
+For example, the semantics of \code{players = set(player1...16)} in~\Cref{ex:water_polo} is 
+$$D = D\cup \{\cspd{players} = \{\{player_1, player_2, \dots, player_{16}\}\}\}.$$
+
+A set initialization statement \code{I = set(e1, e2, ..., en)} is compiled to the unary evidence $\closedevidence{I}{\domain}{\{e_1, \dots, e_n\}}$, where $I/1$ is a new unary predicate introduced to represent the set \code{I}, and $e_1, e_2, \dots, e_n$ are the constants in the domain $\domain$ corresponding to the entities in the set.
+For simplicity, in the following, we always use the same symbol but in the font style to denote the constant and its corresponding entity.
+The symbols for the predicate and its corresponding object identifier are also the same.
+% Furthermore, we also keep track of the \emph{repeatable} entities $\repdomain$ that \emph{might appear multiple times} in the problem.
+% Identifying the repeatable entities is crucial for the compilation of bags, as the multiplicities of these entities are required to be specified in the actions and constraints.
+% The repeatable entities can be extracted by the function \CommentSty{extract\_repeatable\_entities} shown in \cref{alg:repeatable}.
+% First, all entities that appear multiple times in the bags are extracted.
+% Then, the possibly repeated entities in the objects formed by the actions \emph{choosing with replacement} are extracted.
+% The second step is achieved by the function \CommentSty{backtrack}, which recursively obtains the entities of the objects used by the action \code{choose\_replace}.
+
+\begin{algorithm}[tbp]
+    \DontPrintSemicolon
+    \SetNoFillComment
+    \caption{$\mathbf{compile\_dom}(\code{obj\_decs})$}
+    \label{alg:compile_dom}
+    \KwIn{A set of object declarations \code{obj\_decs}}
+    \KwOut{The domain $\domain$ and the repeatable entities $\repdomain$}
+    \SetKwFunction{backtrack}{backtrack}
+    \SetKwProg{Fn}{Function}{:}{}
+    $\domain \gets \emptyset$, $\repdomain \gets \emptyset$ \;
+    \ForEach{\code{I = expr} $\in$ \code{obj\_decs}}{
+        \If{\code{expr} is \code{set(e1, e2, ..., en)}}
+        {
+            $\domain \gets \domain \cup \{e_1, e_2, \dots, e_n\}$ \;
+        }
+        \ElseIf{\code{expr} is \code{bag(e1: k1, e2: k2, ..., en: kn)} }
+        {
+            $\domain \gets \domain \cup \{e_1, e_2, \dots, e_n\}$ \; \label{line:domain_bag}
+            $\repdomain \gets \repdomain \cup \{e_i\mid k_i > 1\}$ \; \label{line:repeatable_bag}
+        }
+        \ElseIf{\code{expr} is \code{choose\_replace(id, n)} or \code{add\_union(id1, id2)}\label{line:repeatable_bag_condition}}
+        {
+            $\backtrack(\code{id}, \repdomain)$ \; \label{line:repeatable_bag_backtrack}
+        }
+    }
+    \Return $\domain, \repdomain$ \;
+    \ \;
+    \Fn{$\backtrack(\code{id}, \repdomain)$}{
+        \If{$\code{id = set(e1, e2, ..., en)} \in \code{obj\_decs}$ or $\code{id = bag(e1: k1, e2: k2, ..., en: kn)} \in \code{obj\_decs}$}
+        {
+            $\repdomain \gets \repdomain \cup \{e_1, e_2, \dots, e_n\}$ \;
+        }
+        \ElseIf{\code{parent\_id = op(id, arg1, arg2, ...)}}
+        {
+            $\backtrack(\code{parent\_id}, \repdomain)$ \;
+        }
+    }
+\end{algorithm}
+
+\paragraph{Operations}
+The semantics of a choosing statement \code{I = choose(I1, n)} is defined as $C = C \cup \{\cspv{I} \subseteq \lv{I1}{set}, |\cspv{I}| \equiv n\}$.
+The domain of the new \csp{} variable $\cspv{I}$ is 
+% the union of the powerset of $S$ for each possible value $S\in \cspd{I1}$ such that the size of the subset is $n$, 
+implicitly defined by the constraint and thus omitted.
+% The constraint $I \subseteq \textsc{lv}(\code{id}, set)$ ensures that the assignment of $I$ can only take constants from the source set \code{id}.
+Recall that the lookup function only returns the variable of the declared object with the expected type, which means that the choosing operator can only be applied to a set object.
+If the argument \code{n} is not provided, the updated constraint $|\cspv{I}| \equiv n$ is left out.
+The compilation of the choosing statement \code{I = choose(I1, n)} is straightforward, simply appending the formula $\forall x: I(x) \Rightarrow I_1(x)\land |I| = n$ to the \fotwo{} sentence $\sentence$.
+
+\begin{example}
+    Consider the program in~\cref{ex:water_polo}, the semantics of the choosing statements is
+    \begin{align*}
+        V &= \left\{\cspv{players}, \cspv{starting\_team}, \cspv{goalie}\right\},\\
+        D &= \{\cspd{players} = \{\{player_1, player_2, \dots, player_{16}\}\}\},\\
+        C &= \{\cspv{starting\_team} \subseteq \cspv{players}, |\cspv{starting\_team}| \equiv 7, \cspv{goalie} \subseteq \cspv{players}, |\cspv{goalie}| \equiv 1\}.
+    \end{align*}
+    The compilation of this program is
+    \begin{align*}
+        \sentence = &\forall x: starting\_team(x) \Rightarrow players(x) \land \\
+        &\forall x: goalie(x) \Rightarrow players(x) \land \\
+        &\closedevidence{players}{\domain}{\{player_1, player_2, \dots, player_{16}\}}\land \\
+        &|starting\_team| = 7 \land |goalie| = 1,\\
+        \domain = &\{player_1, player_2, \dots, player_{16}\}, \weight = \negweight = 1, A = \emptyset, factor = 1.
+    \end{align*}
+    It is easy to check $[A]\symwfomc(\sentence, \domain; \weight, \negweight) \cdot factor = 16!/(7!9!) = 11440$, which equates to $MC(V, D, C)$.
+\end{example}
+
+The union statement \code{I = union(I1, I2)} have the same semantics as the standard set operation: $C = C \cup \{\cspv{I} \equiv \lv{I1}{set} \cup \lv{I2}{set}\}$.
+The semantics of the \code{intersect} and \code{diff} statements are defined similarly.
+The operator \code{supp} is to return the support of a bag, and its semantics is deferred to the semantics of the bag type.
+The union, intersection, and difference statements are compiled to the \fotwo{} sentence by appending the formulas respectively
+\begin{align*}
+    \forall x: &I(x) \Leftrightarrow I_1(x) \lor I_2(x)\\
+    \forall x: &I(x) \Leftrightarrow I_1(x) \land I_2(x)\\
+    \forall x: &I(x) \Leftrightarrow I_1(x) \land \neg I_2(x).
+\end{align*}
+
+\paragraph{Constraints}
+The set constraints have the following semantics: the semantics of \code{e in I} is $C = C \cup \{e \in \lv{I}{set}\}$; \code{I1 subset I2} is $C = C \cup \{\lv{I1}{set} \subseteq \lv{I2}{set}\}$; \code{I1 disjoint I2} is $C = C \cup \{\lv{I1}{set} \cap \lv{I2}{set} = \emptyset\}$; and \code{I1 == I2} is $C = C \cup \{\lv{I1}{set} \equiv \lv{I2}{set}\}$.
+We compile these constraints, respectively, by adding the unary evidence $I(e)$, $\forall x: I_1(x) \Rightarrow I_2(x)$, $\forall x: \neg (I_1(x)\land I_2(x))$ and $\forall x: I_1(x) \Leftrightarrow I_2(x)$ to the \fotwo{} sentence $\sentence$.
+
+The semantics of size constraints is defined in a compositional way.
+For a size constraint \code{size_expr1 comp size_expr2}, the semantics is defined as $expr_1 \bowtie expr_2$ where $expr_1$ and $expr_2$ are the respective semantics of \code{size_expr1} and \code{size_expr2} and $\bowtie \in \{=, <, >, \leq, \geq\}$ according to \code{comp}.
+The semantics of a size expression is simply a linear combination of the semantics of its atomic expressions.
+Thus, we only consider the semantics of the size atomic expressions.
+
+The compilation of a size constraint is performed in a similar way as its semantics: Each size atom is compiled to a symbolic variable or a polynomial; the size constraint is then compiled to an inequality or equality according to their linear combination and the comparison operator in the size expression; and finally the resulting inequality or equality is added to $A$ (recall that $[A]\symwfomc(\sentence, \domain; \weight, \negweight)\cdot factor$ is the final answer).
+For sets, the size atom can be only in the form \code{\|I\|}, whose semantics is defined as $|\lv{I}{set}|$.
+For compilation, we introduce a symbolic variable $u_I$ for \code{\|I\|} and set $\weight(I) = u_I$, $\negweight(I) = 1$.
+
+\begin{example}
+    Consider the \ourlang{} program:
+    \begin{cofolacode}{}
+I = set(entity1...10)
+I1 = choose(I)
+I2 = choose(I)
+|I1| - 2|I2| = 0
+    \end{cofolacode}
+    The domain $\domain = \{entity_1, entity_2, \dots, entity_{10}\}$ and the compiled sentence is $\forall x: I_1(x) \Rightarrow I(x) \land \forall x: I_2(x) \Rightarrow I(x) \land \closedevidence{I}{\domain}{\{entity_1, entity_2, \dots, entity_{10}\}}$.
+    The weights are $\weight(I_1) = u_1$, $\weight(I_2) = u_2$, $\negweight(I_1) = \negweight(I_2) = \weight(I) = \negweight(I) = 1$ and $A = \{u_1 - 2u_2 = 0\}$.
+    It is easy to check that $[A]\symwfomc(\sentence, \domain; \weight, \negweight)$ is the count of \code{I1} and \code{I2} such that the size of \code{I1} is equal to twice the size of \code{I2}.
+\end{example}
+
+\subsubsection{Bags}
+
+Let us move on to the bag expressions.
+Since the semantics of bags is similar to sets except the multiplicities of entities, we only highlight the differences in the following.
+
+\paragraph{Semantics.}
+The semantics of a bag declaration \code{I = bag(e1: k1, e2: k2, ..., en: kn)} is defined as $D = D\cup \{\cspd{I} = \cup \left\{\multiset{e_1: k_1, e_2: k_2, \dots, e_n: k_n}\right\}\}$.
+The operators \code{choose}, \code{intersect} and \code{diff} for bags are defined as the same as sets except the subset relation $\subseteq$ being replaced by the multisubset relation $\subseteq_m$, and the \csp{} variable are looked up with the bag type, i.e., $\lv{id}{bag}$.
+Bags can also be formed from a set by the \code{choose\_replace} expression, e.g., \code{I = choose\_replace(I1, n)}, whose semantics is $C = C \cup \{\cspv{I} \subseteq_m \lv{I1}{set}, |\cspv{I}| = n\}$.
+The semantics of the additive union \code{I = I1 ++ I2} is $C = C \cup \{\cspv{I} = \lv{I1}{bag} \uplus \lv{I2}{bag}\}$.
+The \code{supp} statement \code{I = supp(I1)} updates the \csp{} constraints by $C = C \cup \{\cspv{I} = \support{\lv{I1}{bag}}\}$.
+
+The constraints for bags are defined similarly as sets, which we avoid repeating here.
+There are two size atoms specific to bags: \code{I.count(e)} for the multiplicity of an entity \code{e} in a bag \code{I}, whose semantics is defined as $\lv{I}{bag}(e)$; and the size atom \code{\|I\|} for the size of a bag \code{I}, whose semantics is defined as $|\lv{I}{bag}|$.
+
+\begin{example}
+    The semantics of the \ourlang{} problem in \cref{ex:mathcounts} is
+    \begin{align*}
+        V &= \left\{\cspv{vowels}, \cspv{consonants}, \cspv{magnets}, \cspv{fall}, \cspv{fall\_vowels}, \cspv{fall\_consonants}\right\},\\
+        D &= \{\cspd{vowels} = \{\{A: 1, O: 1, U: 1\}\}, \cspd{consonants} = \{\{M: 1, T: 2, H: 1, C: 1, N: 1, S: 1\}\}\},\\
+        C &= \{\cspv{magnets} = \lv{vowels}{bag} \uplus \lv{consonants}{bag}, \cspv{fall} \subseteq_m \lv{magnets}{bag}, |\cspv{fall}| = 4, \\
+        &\qquad \cspv{fall\_vowels} = \lv{fall}{bag} \cap \lv{vowels}{bag}, \cspv{fall\_consonants} = \lv{fall}{bag} \cap \lv{consonants}{bag},\\
+        &\qquad |\cspv{fall\_vowels}| - |\cspv{fall\_consonants}| < 0\}.
+    \end{align*}
+\end{example}
+
+% The type checking of the lookup function ensures the type consistency of the objects to be operated on.
+% In terms of sets and bags, a set can be formed from a concrete collection of entities, by choosing a subset of entities from another set, or from the support of a bag, by union, intersection, or difference of two sets.
+% A bag can be formed from a concrete collection of entities with multiplicities, or by choosing entities from a set with or without replacement, or by union, intersection, difference or additive union of two bags.
+
+The compilation of the bag is more involved, as \wfomc{} does not support repeated constants.
+To this end, we use the symbolic weights to represent the multiplicities of the entities in a bag.
+
+\paragraph{Repeatable Entities}
+First we need to extract the \emph{repeatable} entities.
+The repeatable entities are those that might appear multiple times in the bags, either declared in the bag declarations, which is easy to identify, or formed by the actions \code{choose\_replace} and \code{add\_union}.
+For the latter case, we backtrack the objects used by these actions until reaching the object initializations, and add all the entities in the initializations to $\repdomain$, which is shown in \cref{alg:compile_dom}.
+For instance, in the program of \cref{ex:mathcounts}, the domain $\domain = \{A, O, U, M, T, H, C, N, S\}$ and the repeatable entities $\repdomain = \domain$.
+We can further optimize the compilation by folding the object \code{magnets} as \code{magnets = bag(A: 1, O: 1, U: 1, M: 1, T: 2, H: 1, C: 1, N: 1, S: 1)}, and then we have $\repdomain = \{T\}$.\footnote{It resembles constant folding used in the modern compilers, where the constant expressions are evaluated at compile time.}
+% For ease of illustration, we will use the folded version of the program in the following discussion.
+Next, we introduce a new unary predicate $Rep^e/1$ for each repeatable entity $e$ in $\repdomain$, and add the unary evidence $\closedevidence{Rep^e}{\domain}{\{e\}}$ to the sentence.
+The predicate $Rep^e/1$ is used to identify the occurrences of the entity $e$ in the bags.
+
+Now, we are ready to compile the bags.
+For a bag initialization \code{I = bag(e1: k1, e2: k2, ..., en: kn)}, we simply introduce a new unary predicate $I/1$ and append $\closedevidence{I}{\domain}{\{e_1, \dots, e_n\}}$ to $\sentence$.
+% Finally, for each repeatable entity $e$ declared in the bag \code{B}, we introduce a new unary predicate $B_e/1$ and append $\forall x: B_e(x) \Leftrightarrow Rep_e(x)\land B(x)$ to $\sentence$.
+
+\begin{example}
+    Consider the folding-optimized program of \cref{ex:mathcounts}. The compilation of the initializations \code{vowels}, \code{consonants}, and \code{magnets} are
+    \begin{align*}
+        \sentence = & \closedevidence{Rep^T}{\domain}{\{T\}}\land \closedevidence{Vowels}{\domain}{\{A, O, U\}} \land \closedevidence{Consonants}{\domain}{\{M, T, H, C, N, S\}} \\
+        &\qquad \land \closedevidence{Magnets}{\domain}{\{A, O, U, M, T, H, C, N, S\}},\\
+        \domain = &\{A, O, U, M, T, H, C, N, S\}, \weight = \negweight = 1, M = \emptyset, factor = 1.
+    \end{align*}
+\end{example}
+
+\paragraph{Choosing and Choosing with Replacement}
+For the choosing statement \code{I = choose(I1, n)}, we introduce a new unary predicate $I/1$ for \code{I}.
+The relation between \code{I} and \code{I1} is encoded similarly to the set choosing case, by adding the formula $\forall x: I(x) \to I_1(x)$ to $\sentence$.
+Moreover, we introduce auxiliary predicates $I^e/1$ for each repeatable entity $e$ in $\repdomain$ and append the formula $\forall x: I^e(x) \leftrightarrow (I(x) \land Rep^{e}(x))$ to $\sentence$.\footnote{In practice, we only need to introduce the auxiliary predicates for the repeatable entities that appear in \code{I1}, which can be inferred from the context.}
+The weight of $I^e$ is set to be a univariate polynomial whose degrees reflect the possible multiplicities of the entity $e$ in the bag \code{I}.
+
+Let us first consider the case where \code{I1} is an initialized bag where we know the exact multiplicities of the repeatable entities $e$.
+Let $m$ be the multiplicity of the entity $e$ in \code{I1}.
+We set $\weight(I^e) = u_{I,e} + u_{I, e}^2 + \dots + u_{I, e}^m$ and $\negweight(I^e) = 1$, where $u_{I, e}$ is a new symbolic variable.
+Then the count of \code{I}, where the multiplicity of $e$ is $k$, is given by the coefficient of $u_{I, e}^k$ in the final polynomial returned by \wfomc{}.
+
+If \code{I1} is not an initialized bag, we also need to constrain the multiplicities of the repeatable entities in \code{I} such that they do not exceed those in \code{I1}.
+We assume that each repeatable entity $e$ in \code{I1} has been encoded by a unary predicate $I_1^e/1$ with the weight $\weight(I_1^e) = u_{I_1,e} + u_{I_1, e}^2 + \dots + u_{I_1, e}^m$.
+% Here $m$ is the upper bound of the multiplicity of $e$ in \code{I1}, which is inferred from the context where \code{I1} is formed.
+We set $\weight(I^e) = u_{I,e} + u_{I, e}^2 + \dots + u_{I, e}^m$ and $\negweight(I^e) = 1$, while also adding the constraint $u_{I, e} \leq u_{I_1, e}$ to $A$.
+
+Finally, to constrain the size $n$ of \code{I}, we introduce a new predicate $\hat{I}/1$ to represent the non-repeatable entities in \code{I}, and add the formula $\forall x: \hat{I}(x) \leftrightarrow (I(x) \land \bigwedge_{e\in \repdomain} \neg Rep^{e}(x))$ to $\sentence$.
+The weight of $\hat{I}$ is set to be $\weight(\hat{I}) = u_{I}$ and $\negweight(\hat{I}) = 1$, where $u_{I}$ is a new symbolic variable.
+The size atom \code{\|I\|} is then compiled into the expression $u_{I} + \sum_{e\in \repdomain} u_{I, e}$.
+
+\begin{example}
+    Consider the choosing statement \code{fall = choose(magnets, 4)} in \cref{ex:mathcounts}.
+    The compilation is
+    \begin{align*}
+        \sentence = \dots \land &\forall x: Fall(x) \Rightarrow Magnets(x) \land \\
+        &\forall x: Fall^T(x) \Leftrightarrow (Fall(x) \land Rep^T(x)) \land \\
+        &\forall x: \widehat{Fall}(x) \Leftrightarrow (Fall(x) \land \neg Rep^T(x))\\
+        &\weight(Fall^T) = u_{Fall,T} + u_{Fall,T}^2, \negweight(Fall^T) = 1,\\
+        &\weight(\widehat{Fall}) = u_{Fall}, \negweight(\widehat{Fall}) = 1.
+    \end{align*}
+    The size constraint of \code{fall} is compiled into the expression $u_{Fall} + u_{Fall,T} = 4$.
+\end{example}
+
+The compilation of \code{choose\_replace} is similar to that of \code{choose}, while the weights of the auxiliary predicates $I^e/1$ are set to be $\weight(I^e) = 1 + u_{I, e} + u_{I, e}^2 + \dots + u_{I, e}^m$, where $m$ is the size argument of \code{choose\_replace}.
+
+\paragraph{Other Operations}
+The compilation of the union, intersection, difference, and additive union statements for bags follows the similar idea as the choosing statements.
+For \code{I = union(I1, I2)}, we introduce a new unary predicate $I/1$ and append $\forall x: I(x) \leftrightarrow (I_1(x) \lor I_2(x))$ to $\sentence$.
+For each repeatable entity $e$ in $\repdomain$, we introduce auxiliary predicates $I^e/1$, and append the formula $\forall x: I^e(x) \leftrightarrow (I(x) \land Rep^{e}(x))$ to $\sentence$.
+The weight of $I^e$ is set to be $\weight(I^e) = u_{I,e} + u_{I, e}^2 + \dots + u_{I, e}^m$, where $m$ is the maximum possible multiplicity of $e$ in \code{I1} and \code{I2}.
+If any of \code{I1} and \code{I2} is not an initialized bag, we also need to add the corresponding constraints to ensure that the multiplicity of $e$ in \code{I} does not exceed those in \code{I1} and \code{I2}: $u_{I, e} \leq u_{I_1, e}$ if \code{I1} is not initialized, $u_{I, e} \leq u_{I_2, e}$ if \code{I2} is not initialized, and $u_{I, e} \leq \max(u_{I_1, e}, u_{I_2, e})$ if both are not initialized.
+The compilation of \code{intersect}, \code{diff}, and \code{++} statements are exactly the same except replacing the logical operator in the formula and the multiplicity constraints accordingly.
+We thus omit the details here.
+
+\begin{example}\label{ex:bag_intersection}
+    Consider the additive union statement \code{fall\_vowels = fall \& vowels} in \cref{ex:mathcounts}.
+    When \code{magnets} is folded, the compilation is
+    \begin{align*}
+        \sentence = \dots \land &\forall x: Fall\_Vowels(x) \Leftrightarrow (Fall(x) \land Vowels(x)) \land \\
+        &\forall x: Fall\_Vowels^T(x) \Leftrightarrow (Fall\_Vowels(x) \land Rep^T(x)) \land\\
+        &\forall x: \widehat{Fall\_Vowels}(x) \Leftrightarrow (Fall\_Vowels(x) \land \neg Rep^T(x))\\
+        &\weight(Fall\_Vowels^T) = u_{Fall\_Vowels,T} + u_{Fall\_Vowels,T}^2, \negweight(Fall\_Vowels^T) = 1\\
+        &\weight(\widehat{Fall\_Vowels}) = u_{Fall\_Vowels}, \negweight(\widehat{Fall\_Vowels}) = 1.
+    \end{align*}
+    The constraint added to $A$ is $u_{Fall\_Vowels,T} \leq u_{Fall,T}$.
+\end{example}
+
+The compilation of the support statement \code{I = supp(I1)} is easy: We introduce a new unary predicate $I/1$ and append the formula $\forall x: I(x) \leftrightarrow I_1(x)$ to $\sentence$.
+
+\paragraph{Constraints.}
+Finally, let us consider the compilation of the bag constraints.
+The compiled \fotwo{} sentence for membership, subset, disjoint, and equivalence constraints are exactly the same as those of sets.
+Besides, we also need additional constraints for the multiplicities of the repeatable entities.
+Taking the subset constraint \code{I1 subset I2} as an example, we add the constraint $u_{I_1, e} \leq u_{I_2, e}$ to $A$ for each repeatable entity $e$ in $\repdomain$, where $u_{I_1, e}$ and $u_{I_2, e}$ are the symbolic variables of the weights of the predicates $I_1^e/1$ and $I_2^e/1$ respectively.
+
+The same idea applies to the size constraints.
+For a size atom \code{\|I\|}, we compile it into the expression $\hat{u}_I + \sum_{e\in \repdomain} u_{I, e}$ as in the choosing statements.
+While for a size atom \code{I.count(e)}, we compile it into the symbolic variable $u_{I, e}$.
+
+\begin{example}
+    Consider the size constraint $\code{|fall\_vowels| - |fall\_consonants| < 0}$ in \cref{ex:mathcounts}.
+    The compilation is
+    \begin{align*}
+        &(\hat{u}_{Fall\_Vowels} + u_{Fall\_Vowels,T}) - (\hat{u}_{Fall\_Consonants} + u_{Fall\_Consonants,T}) < 0,
+    \end{align*}
+    where $u_{Fall\_Vowels}$, $u_{Fall\_Vowels,T}$, $u_{Fall\_Consonants}$, and $u_{Fall\_Consonants,T}$ are the symbolic variables for the weights of the predicates $\widehat{Fall\_Vowels}/1$, $Fall\_Vowels^T/1$, $\widehat{Fall\_Consonants}/1$, and $Fall\_Consonants^T/1$ respectively (see \cref{ex:bag_intersection}).
+\end{example}
+
+\section{Ordered Objects: Tuple, Sequence, Circle}
+
+There are three ordered object types in \ourlang{}: tuple, sequence, and circle, where the entities are organized in a specific order.
+
+\subsection{Syntax of Tuple, Sequence, and Circle}
+
+\begin{figure}[bt]
+    \begin{cofolacodeblock}{}
+tuple_expr ::= "tuple" "(" obj_id ")"
+    | "choose_tuple" "(" obj_id "," INT? ")"
+    | "choose_replace_tuple" "(" obj_id "," INT ")"
+sequence_expr ::= "sequence" "(" obj_id ")"
+    | "choose_sequence" "(" obj_id "," INT? ")"
+    | "choose_replace_sequence" "(" obj_id "," INT ")"
+circle_expr ::= "circle" "(" obj_id ("," "reflexive")? ")"
+    | "choose_circle" "(" obj_id "," INT? ")"
+    | "choose_replace_circle" "(" obj_id "," INT ")"
+
+tuple_constraint ::= obj_id "[" INT "]" "=" entity
+    | obj_id "[" INT "]" "in" obj_id
+seq_circle_constraint: pattern "in" obj_id
+pattern: together
+    | less_than
+    | next_to
+    | predecessor
+together: "together" "(" obj_or_entity ")"
+less_than: obj_or_entity "<" obj_or_entity
+predecessor: "(" obj_or_entity "," obj_or_entity ")"
+next_to: "next_to" "(" obj_or_entity "," obj_or_entity ")"
+obj_or_entity: obj_id | entity
+
+size_atom ::= ... | obj_id "." "count" "(" (less_than | predecessor | next_to) ")"
+    \end{cofolacodeblock}
+    \caption{The abstract syntax of the object declarations for the tuple type.}
+    \label{fig:tuple_syntax}
+\end{figure}
+
+\Cref{fig:tuple_syntax} presents the abstract syntax of the object declarations for the tuple, sequence, and circle types.
+All these three types can be formed from a set or a bag, and \ourlang{} does not support the direct declaration from a concrete collection of entities.
+That is, one cannot declare a tuple, sequence, or circle by a ordered list or a circular list of entities.
+% \lnote{do we need to mention that only one sequence is allowed in a program? I think no...}
+A circle can be declared as a reflexive circle with the keyword \code{reflexive}.
+For instance, the object declaration statements for \cref{prob:keychain} can be written as
+\begin{cofolacode}{}
+keys = set(house, car, key3, key4, key5)
+keychain = circle(keys, reflexive)
+\end{cofolacode}
+
+\begin{problem}
+    In how many distinct ways can I arrange my five keys on a keychain, if I want to put my house key next to my car key? Two arrangements are not considered different if the keys can be made to be in the same order without taking the keys off the chain.
+    \label{prob:keychain}
+\end{problem}
+
+In \ourlang{}, we also allow a more compact syntax to declare a tuple, sequence, or circle if it is formed from a subset or a multisubset of entities, e.g., the statements \code{id1 = choose(id2, k)} and \code{I = tuple(id1)} can be abbreviated as \code{I = choose\_tuple(id2, k)}, and the statements \code{id1 = choose\_repalce(id2, k)} and \code{I = sequence(id1)} can be abbreviated as \code{I = choose\_replace\_sequence(id2, k)}.
+
+Both a tuple and a sequence are ordered lists of entities, but we explicitly discriminate them in \ourlang{} for the different constraints they support: a tuple \emph{only} supports the constraints on \emph{absolute} positions of the entities, while a sequence \emph{only} supports the \emph{relative} position constraints between entities.
+More specifically, a tuple can be indexed by an non-negative integer to specify the entity at the position, whose value or membership is constrained.
+In contrast, a sequence can be constrained by the relative positions of the entities, which is defined by \emph{patterns}.
+A pattern, including \emph{together}, \emph{less than}, {next to} and \emph{predecessor}, is a relative positional property between or within entities.
+For instance, the pattern \code{together(obj)} specifies that all the entities in \code{obj} are together in the sequence, and the pattern \code{next\_to(e1, e2)} specifies that the entity \code{e1} is next to the entity \code{e2} in the sequence.
+A circle, where the absolute position of the entities is meaningless, also only supports the constraints on the relative positions, just like a sequence.
+For example, the constraint in~\cref{prob:keychain} can be modeled as \code{next\_to(house, car) in keychain}.
+
+There are two further extensions for the relative position constraints.
+First, the patterns can be defined over the entities in a set or a bag, e.g., \code{obj\_id1 < obj\_id2} specifies that \emph{all} the entities in \code{obj\_id1} appear before \emph{all} the entities in \code{obj\_id2} in the sequence.
+\lnote{future work: we can extend the syntax to allow the patterns to be with universal and existential quantifiers.}
+It is useful when imposing relative position constraints between two groups of entities.
+For example, the constraint in~\cref{prob:books} can be modeled as \code{math\_books < physics\_books in arrangment}.
+Second, the relative positional constraints apart from the together constraint can be incorporated into the size constraints with the additional size atom \code{obj\_id.count(pattern)}, which counts the number of patterns appearing in the sequence.
+For instance, we can use \code{arrangement.count(next\_to(math\_books, physics\_books)) = 1} to specify that the physics book is next to exactly one math book in the sequence.
+
+\begin{problem}
+    \label{prob:books}
+    I have 7 books I want to arrange on a shelf. Two of them are math books, and one is a physics book. How many ways are there for me to arrange the books if I want to put the math books next to each other, and put both of them to the left of the physics book?
+\end{problem}
+\begin{example}
+    The \ourlang{} program for \cref{prob:books} can written as
+    \begin{cofolacode}{}
+math_books = set(math1, math2)
+physics_books = set(physics)
+books = set(math1, math2, physics, book4, book5, book6, book7)
+arrangement = sequence(books)
+together(math_books) in arrangement
+math_books < physics_books in arrangement
+    \end{cofolacode}
+    \label{ex:books}
+\end{example}
+
+\subsubsection{Semantics of Tuple, Sequence, and Circle}
+
+A declaration of a tuple and a sequence in \ourlang{} has the same semantics.
+Recall that $\Pi_S$, $\overleftarrow{\Pi}_S$, and $\overleftrightarrow{\Pi}_S$ are the set of all ordered lists, circular lists, and reflexive circular lists formed by permuting the entities in the set or multisubset $S$, respectively.
+The semantics of \code{I = tuple(id)} and \code{I = sequence(id)} is defined as
+\begin{align*}
+    V = V \cup \{I\}, D = D \cup \left\{\bigcup_{S \in\textsc{ld}(\code{I}, set, bag)}\{[e_1, e_2, \dots]\mid e_i\in S\}\right\}, C = \{I = \textsc{lv}(\code{id}, set, bag)\}.
+\end{align*}
+Note that the entities $e_1, e_2, \dots$ can be repeated in the sequence, but must be equal to the entities in the source set or bag by the constraint $I = \textsc{lv}(\code{id}, set, bag)$.
+The circle declarations \code{I = circle(id)} and \code{I = circle(id, reflexive)} are defined similarly, except that the updated domain is a set of circles and reflexive circles, respectively:
+\begin{align*}
+    D = D \cup \left\{\bigcup_{S\in\textsc{ld}(\code{id}, set, bag)}\{\mycircle{e_1, e_2, \dots}\mid e_i\in S\}\right\} \text{ and } D = D \cup \left\{\bigcup_{S\in\textsc{ld}(\code{id}, set, bag)}\{\mycircleref{e_1, e_2, \dots}\mid e_i\in S\}\right\}.
+\end{align*}
+
+There are two absolute position constraints for the tuples, either specifying the entity's value or its membership.
+Their semantics are defined as follows: The semantics of \code{I[k] = e} is $C = C \cup \{(\textsc{lv}(\code{I}, tup))[k] = e\}$, and the semantics of \code{I[k] in T} is $C = C \cup \{(\textsc{lv}(\code{I}, tup))[k] \in \textsc{lv}(\code{T}, set, bag)\}$.
+
+Sequences and circles share the same semantics for the relative position constraints.
+Let us first consider the semantics of the together constraint.
+For the constraint \code{together(e) in I}, we define the semantics as
+\begin{equation*}
+    C = C \cup \{((\textsc{lv}(\code{I}, seq, cir)), \{L \mid L \in \textsc{ld}(\code{I}, seq, cir), e \text{ is together in } L\})\}.
+\end{equation*}
+where the constrained \csp{} variable is $\textsc{lv}(\code{I}, seq, cir)$, and the constrained domain is the set of sequences or circles in the domain of \code{I} where the entity \code{e} is together (recall the definition of the together relation in~\Cref{sub:combinatorial_notations}).
+Similarly, if the together pattern is defined over a set or a bag, i.e., \code{togehter(id) in I}, the semantics is
+\begin{align*}
+    C = C \cup \{(&(\textsc{lv}(\code{I}, seq, cir), \textsc{lv}(\code{id}, set, bag)), \\
+    &\{(L, S) \mid L \in \textsc{ld}(\code{I}, seq, cir), S \in \textsc{ld}(\code{id}, set, bag), S \text{ is together in } L\})\}.
+\end{align*}
+
+Now, let us move on to the simple ``less than'', ``predecessor'' and ``next to'' patterns that only involves, e.g., \code{e1 < e2 in I}.
+Their semantics are defined respectively as
+\begin{align*}
+    C &= C \cup \{e_1 <_{\textsc{lv}(\code{I}, seq, cir)} e_2\},\\
+    C &= C \cup \{(e_1, e_2) \in \textsc{lv}(\code{I}, seq, cir)\},\\
+    C &= C \cup \{(e_1, e_2) \in \textsc{lv}(\code{I}, seq, cir)\lor (e_2, e_1) \in \textsc{lv}(\code{I}, seq, cir)\}.
+\end{align*}
+For the constraint with patterns involving two sets or bags \code{id1} and \code{id2}, it updates the \csp{} constraints with a conjunction of the constraints for each pair of entities in the sets or bags, e.g., the semantics of \code{id1 < id2 in I} is
+\begin{align*}
+    C = C \cup \left\{\bigwedge_{\substack{e_1\in\textsc{lv}(\code{id1}, set, bag)\\ e_2\in\textsc{lv}(\code{id2}, set, bag)}} e_1 <_{\textsc{lv}(\code{I}, seq, cir)} e_2\right\}.
+\end{align*}
+The semantics of other patterns as well as the semantics of the patterns concerning both entities and sets or bags are defined similarly.
+The details are deferred to \Cref{app:full_semantics}.
+
+\begin{example}
+    The \csp{} constraints produced by the program in~\Cref{ex:books} are
+    \begin{align*}
+        \{arr \subseteq books, ((arr, math), \{(L, S) \mid L \in arr, S \in math, S \text{ is together in } L\}), \bigwedge_{e_1\in math, e_2\in physics} e_1 <_{arr} e_2\},
+    \end{align*}
+    where $arr$, $math$ and $physics$ are the \csp{} variables corresponding to the objects \code{arrangement}, \code{math\_books} and \code{physics\_books}, respectively.
+\end{example}
+
+The counting expression \code{I.count(pattern)} can be incorporated into the size constraints by defining the semantics of the size atom \code{ai} in~\Cref{eq:size_constraint} as the number of patterns in the sequence or the circle.
+For instance, the semantics of \code{I.count((e1, e2))} is defined as
+\begin{equation*}
+    |\{(e_1, e_2) \mid e_1 \in \textsc{lv}(\code{I}, seq, cir), e_2 \in \textsc{lv}(\code{I}, seq, cir) \text{ s.t. } (e_1, e_2)\in \textsc{lv}(\code{I}, seq, cir)\}|.
+\end{equation*}
+When the pattern in the counting expression is defined over sets or bags, the semantics is defined similarly, e.g., the semantics of \code{I.count(id1 < id2)} is defined as
+\begin{equation*}
+    |\{(e_1, e_2) \mid e_1 \in \textsc{lv}(\code{I}, seq, cir), e_2 \in \textsc{lv}(\code{I}, seq, cir) \text{ s.t. } e_1\in \textsc{lv}(\code{id1}, set, bag), e_2\in \textsc{lv}(\code{id2}, set, bag), e_1 <_{\textsc{lv}(\code{I}, seq, cir)} e_2\}|.
+\end{equation*}
+
+\subsection{Grouped Objects: Partition and Composition}
+
+\begin{figure}
+    \begin{cofolacodeblock}{}
+partition_expr ::= "partition" "(" obj_id "," INT ")"
+composition_expr ::= "composition" "(" obj_id "," INT ")"
+
+set_expr ::= ... | obj_id "[" INT "]"
+bag_expr ::= ... | obj_id "[" INT "]"
+
+partition_composition_constraint ::= atomic_constraint "for" "part" "in" obj_id
+    \end{cofolacodeblock}
+    \caption{The abstract syntax of the object declarations for the composition and partition types.}
+    \label{fig:composition_syntax}
+\end{figure}
+
+Finally, \ourlang{} provides two grouped object types: partition and composition, where the entities are divided into several disjoint groups.
+Similar to the tuple, sequence, and circle, the partition and composition can be only formed from the basic object types, i.e., sets and bags.
+
+In \ourlang{}, the size of the partition or the composition is required to be specified.
+Compositions differ from partitions in that the order of the groups in a composition matters, while the order in a partition does not matter.
+Thus compositions support the indexing operation, which forms a new set or bag by selecting the group with the specified index from the composition.
+With such indexing operations, one can easily impose constraints on some specific groups in the composition.
+For instance, one can use the constraint \code{aloe in white\_lamps} with the object declarations in~\Cref{ex:plants} to specify that the aloe plant is put under the white lamps.
+
+\begin{example}
+    We can declare the objects for \cref{prob:plants} as
+\begin{cofolacode}{}
+plants = bag(basil: 2, aloe: 1)
+lamps = composition(plants, 2)
+white_lamps = lamps[0]
+red_lamps = lamps[1]
+white_lamps_plants = partition(white_lamps, 2)
+red_lamps_plants = partition(red_lamps, 2)
+\end{cofolacode}
+    \noindent The object \code{lamps} represents the grouping of the plants into white and red lamps with \code{lamps[0]} being the plants under the white lamps and \code{lamps[1]} being the plants under the red lamps.
+    The objects \code{white\_lamps\_plants} and \code{red\_lamps\_plants} corresponds to the further grouping of plants under the white and red lamps, respectively.
+    Since the two white lamps and the two red lamps are identical, the further groupings are partitions.
+    \label{ex:plants}
+\end{example}
+
+\begin{problem}
+    \label{prob:plants}
+    Rachel has two identical basil plants and an aloe plant. She also has two identical white lamps and two identical red lamps she can put each plant under. How many ways are there for Rachel to put her plants under her lamps?
+\end{problem}
+
+Partitions and compositions also support defining atomic constraints over every group in the partition.
+We use the keyword \code{part} to refer to the group in the partition and composition, and allow the atomic constraints to be stated with the identifier \code{part} (as if it is a set or a bag).
+\lnote{Consider \code{\|part & women\| > 0 for part in obj}}
+A common usage of this constraint is to specify the size of each group in the partition, e.g., \code{\|part\| = 1 for part in white\_lamps\_plants} means that each white lamp has exactly one plant.
+
+The semantics of the partition and composition declarations are defined as follows.
+A partition \code{I = partition(id, n)} groups the entities in the source object \code{id} into a set of $n$ groups, as defined by
+\begin{align*}
+    V &= V \cup \{I\},\qquad D = D \cup \left\{\bigcup_{S\in\textsc{ld}(\code{id}, set, bag)}\partition{n}{S}\right\}, C = C \cup \{I \in \partition{n}{\textsc{lv}(\code{id}, set, bag)}\},
+\end{align*}
+where recall that $\partition{n}{S}$ denotes the set of all partitions of $S$ into $n$ groups.
+The semantics of a composition \code{I = composition(id, n)} is defined similarly as
+\begin{align*}
+    V &= V \cup \{I\},\qquad D = D \cup \left\{\bigcup_{S\in\textsc{ld}(\code{id}, set, bag)}\composition{n}{S}\right\}, C = C \cup \{I \in \composition{n}{\textsc{lv}(\code{id}, set, bag)}\}.
+\end{align*}
+The semantics of the indexing operation \code{I = id[k]} for a composition \code{id} is defined as
+\begin{equation*}
+    V = V \cup \{I\},\qquad D = D \cup \left\{\bigcup_{T\in\textsc{ld}(\code{id}, comp)}T[k]\right\},\qquad C = C \cup \{I = \textsc{lv}(\code{id}, comp)[k]\}.
+\end{equation*}
+
+\begin{example}
+    \label{ex:plants_semantics}
+    Let $M = \{basil: 2, aloe: 1\}$.
+    The semantics of the program in~\cref{ex:plants} is
+    \begin{align*}
+        V &= \left\{plants, lamps, white\_lamps, red\_lamps, white\_lamps\_plants, red\_lamps\_plants\right\}, \\
+        D &= \{\{M\}, \composition{2}{M}, 2^M, 2^M, \cup_{T\in 2^M}\partition{2}{T}, \cup_{T\in 2^M}\partition{2}{T}\}, \\
+        C &= \{lamps \in \composition{2}{M}, white\_lamps = lamps[0], red\_lamps = lamps[1], \\
+        &\qquad white\_lamps\_plants \in \partition{2}{white\_lamps}, red\_lamps\_plants \in \partition{2}{red\_lamps}\}.
+    \end{align*}
+\end{example}
+
+A partition or composition constraint \code{acst for part in I} imposes the atomic constraint \code{acst} over every group in the partition or composition \code{I}:
+\begin{equation*}
+    C = C \cup \bigwedge_{T \in\textsc{ld}(\code{I}, partition, composition)}acst[\textsc{lv}(\code{part}, \dots)\mapsto T],
+\end{equation*}
+where $acst[\textsc{lv}(\code{part}, \dots)\mapsto T]$ denotes the corresponding \csp{} constraint with the variable $\textsc{lv}(\code{part}, \dots)$ replaced by the group $T$ in the partition or composition \code{I}.
+For instance, the constraint \code{\|part\| = 1 for part in white\_lamps\_plants} updates the \csp{} constraints in \Cref{ex:plants_semantics} to $C = C \cup \left\{\bigwedge_{T\in\textsc{ld}(\code{white\_lamps\_plants}, par, comp)}|T| = 1\right\}$.
+
+\section{Lifted Counting for \ourlang{} with \wfomc{}}
+
+
+\begin{algorithm}[tbp]
+    \caption{Solve \ourlang{} problem}
+    \label{alg:solve}
+    \KwIn{A combinatorics math problem $\mathfrak{P}$ in \ourlang}
+    \KwOut{The answer to the problem}
+    \SetKwFunction{compile}{compile}
+    $\sentence, \domain, \weight, \negweight, A, factor \gets \compile(\mathfrak{P})$ \\
+    $f \gets \symwfomc(\sentence, \domain, \weight, \negweight)$ \\
+    $answer \gets [A]f$ \\
+    \Return $answer \times factor$
+\end{algorithm}
+
+\subsection{From \ourlang{} to \wfomc{}}
+
+A combinatorics math problem in \ourlang{} can be represented as a list of combinatorial objects $\mathcal{O}$ as well as the constraints $C$ on these objects.
+
+The compilation processes follows the order of first compiling the combinatorial objects (\lnote{lines}) and then the constraints (\lnote{lines}).
+Within the objects and constraints, the compilation order is determined by the statements present in the problem.
+The algorithm is shown in \cref{alg:compile}.
+We use a dictionary $Context$ to store the information about the combinatorial objects that have been compiled, which is used to resolve the subsequent actions and constraints.
+The compilation of combinatorial objects and constraints is achieved by the functions \CommentSty{compile\_obj} and \CommentSty{compile\_const}, respectively.
+The compiled components as well as the dictionary $Context$ are updated in each iteration, and the final results are returned.
+
+Before we delve into the details of the compilation of each combinatorial object and constraint, we first present the function \CommentSty{compile\_domain} executed at the beginning of the compilation process, which compiles the domain and returns the entities that can appear multiple times in the problem.
+
+% \begin{algorithm}[tbp]
+%     \caption{$\CommentSty{compile}(\mathfrak{P})$}
+%     \label{alg:compile}
+%     \KwIn{A combinatorics math problem $\mathfrak{P}$ in \ourlang}
+%     \KwOut{A first-order logic sentence, a domain, weighting functions, linear equations and inequalities, and a factor}
+%     \SetKwFunction{compileobj}{compile\_obj}
+%     \SetKwFunction{compileconst}{compile\_const}
+%     \SetKwFunction{compiledomain}{compile\_domain}
+%     Obtain the combinatorial objects $\mathcal{O}$ and the constraints $C$ from $\mathfrak{P}$ \\
+%     $\sentence = \top, \weight, \negweight = \indicator{}$ \\
+%     $M = \emptyset, factor = 1$ \\
+%     $Context \gets \mathsf{dict}()$ \\
+%     $(\domain, \repdomain) \gets \compiledomain(\mathcal{O})$ \\
+%     \ForEach{$O\in\mathcal{O}$}{
+%         $\compileobj(O, Context, \sentence, \domain, \repdomain, \weight, \negweight, M, $ $factor)$
+%     }
+%     \ForEach{$C\inC$}{
+%         $\compileconst(C, Context, \sentence, \domain, \repdomain, \weight, \negweight, M, $ $factor)$
+%     }
+%     \Return $\sentence, \domain, \weight, \negweight, M, factor$
+% \end{algorithm}
+
+\subsubsection{Domain and repeatable entities}
+
+The domain $\domain$ of the compiled \wfomc{} contains all entities in the problem, and the new entities that are introduced during the compilation, e.g., the entities representing the indices of a tuple (see \lnote{tuples}).
+
+Furthermore, we also need to keep track of the \emph{repeatable} entities that \emph{might appear multiple times} in the problem, which are stored in the set $\repdomain$.
+Identifying the repeatable entities is crucial for the compilation of bags, as the multiplicities of these entities are required to be specified in the actions and constraints.
+The repeatable entities can be extracted by the function \CommentSty{extract\_repeatable\_entities} shown in \cref{alg:repeatable}.
+First, all entities that appear multiple times in the bags are extracted.
+Then, the possibly repeated entities in the objects formed by the actions \emph{choosing with replacement} are extracted.
+The second step is achieved by the function \CommentSty{backtrack}, which recursively obtains the entities of the objects used by the action \code{choose\_replace}.
+
+\begin{algorithm}[tbp]
+    \DontPrintSemicolon
+    \caption{$\CommentSty{extract\_repeatable\_entities}(\mathcal{O})$}
+    \label{alg:repeatable}
+    \KwIn{A list of combinatorial objects $\mathcal{O}$}
+    \KwOut{A domain and a set of repeatable entities}
+    \SetKwFunction{backtrack}{backtrack}
+    $\repdomain \gets \emptyset$ \\
+    \ForEach{$O\in\mathcal{O}$}{
+        \If{$O$ is a bag}{
+            $\repdomain \gets \repdomain \cup \{e \mid e \in O \text{ and } \text{multiplicity}(e) > 1\}$
+        }
+        \If{$O$ is formed by \code{choose\_replace}}{
+            $\repdomain \gets \repdomain \cup \backtrack(O)$
+        }
+    }
+    \Return $\repdomain$
+
+    \SetKwProg{Fn}{Function}{:}{}
+    \Fn{\backtrack{$O$}}{
+        \If{$O$ is initialized}{
+            \Return the entities in $O$
+        }
+        $S \gets \emptyset$ \\
+        Obtain the objects $O_1$ that $O$ is formed from \\
+        $S \gets S \cup \backtrack(O_1)$ \\
+        \Return $S$
+    }
+\end{algorithm}
+
+\begin{example}
+    Consider the following combinatorics math problem:
+    \begin{displayquote}
+        A bakery sells three kinds of rolls. How many different combinations of rolls could Jack purchase if he buys a total of six rolls and includes at least one of each kind?
+    \end{displayquote}
+    The \ourlang{} code is as follows
+    \begin{cofolacode}{}
+set rolls = {r1, r2, r3}
+bag purchase = choose_replace(rolls, 6)
+purchase.count(*) >= 1
+    \end{cofolacode}
+    The repeatable entities in this problem are \code{r1}, \code{r2}, and \code{r3}.
+\end{example}
+
+\subsubsection{Sets and Bags}
+
+Although the types of sets and bags are defined differently in the \ourlang{}, they are compiled into the \wfomc{} in a similar manner.
+In the following, we treat a set as a bag with all multiplicities being $1$, and focus on the compilation of bags.
+
+For an initialized bag \code{B}, we descriminate the entities in \code{B} by whether they are repeatable.
+For the unrepeatable entities \code{a1,a2,...,ak} in \code{B}, we introduce a unary predicate $B_a/1$ and append the conjunction of unary evidence
+\begin{align*}
+    \{B_a(a_1), \dots, B_a(a_k)\}\cup \{\neg B_a(e) \mid e \in \domain \setminus \{a_1, \dots, a_k\}\}
+\end{align*}
+to the sentence $\sentence$.
+The unary evidence means that all constants $a_1, a_2, \dots, a_k$ interprets the predicate $B_c$, i.e., the entities $a_1, a_2, \dots, a_k$ are in the bag \code{B}.
+
+For each repeatable entity \code{c} in \code{B}, i.e., \code{c} is in $\repdomain$, the encoding is more subtle.
+Since \wfomc{} does not support repeated constants in its domain, we introduce a new unary predicate $B_c/1$ and add the following unary evidence to the sentence $\sentence$:
+\begin{align*}
+    \{B_c(c)\} \cup \{\neg B_c(e)\mid e\in \domain \setminus \{c\}\}
+\end{align*}
+to $\sentence$.
+Using one predicate for each repeatable entity has another advantage that will be shown in the following: we can use the weight of the predicate to represent the multiplicity of the entity when the explicit multiplicity is unknown.
+
+Denote by $C$ the set of all predicates $B_c/1$ for repeatable entities in \code{B}.
+We further introduce a new unary predicate $B/1$ to represent the whole bag \code{B}, and add the formula $\forall X: B(X) \leftrightarrow (B_a(X) \lor \bigvee_{c\in C} B_c(X))$ to $\sentence$.
+
+Finally, we record the multiplicities of all repeatable entities in an initialized bag \code{B} to $Context[\code{B}]$.
+As we know which entities are repeatable in the problem, for ease of notation, we use a vector $\vech_B = \{h_1, h_2, \dots, h_{|\repdomain|}\}$ to represent the multiplicities of the repeatable entities in the bag \code{B}, which $h_i$ is the multiplicity of the $i$th entity in $\repdomain$.
+
+Next, we show how to encode the bags formed by actions in \ourlang{}.
+
+For a bag formed by \code{bag B' = choose(B,n)}, where \code{B} is an initialized bag, we introduce a new unary predicate $B'/1$ and add the formula $\forall X: B'(X) \to B(X)$ to $\sentence$.
+We use the symbolic weights to handle the multiplicity of the entities in the bag.
+For each repeatable entity \code{c} in \code{B} with multiplicity $m > 0$, we introduce a new unary predicate $B_c'/1$ and add $\forall X: B_c'(X) \to B_c(X)$ to $\sentence$.
+The weight of the predicate $B_c'$ is set to 
+\begin{equation*}
+    \weight(B_c') = x_{B', c} + x_{B', c}^2 + \dots + x_{B', c}^{h_{B, c}}, \qquad \negweight(B_c') = 1
+\end{equation*}
+where $x_{B', c}$ is a new symbolic variable that represents the multiplicity of the entity \code{c} in the bag \code{B'}, and $h_{B, c}$ is the saved multiplicity of the entity \code{c} in the bag \code{B}.
+% We also need to add $x_{B', c} \le h_c$ to the linear equations and inequalities $M$, where $h_c$ is the saved multiplicity of the entity \code{c} in $Context[\code{B}]$, to specify that the multiplicity of \code{c} in the bag \code{B'} is no more than the multiplicity of \code{c} in the bag \code{B}.
+The symbolic variables $x_{B', c}$ as well as the multiplicities $h_{B, c}$ are then stored in $Context[\code{B'}]$ for future reference.
+
+For the code \code{bag B' = choose(B, n)}, where \code{B} is formed by another choosing action, the compilation is subtle.
+Specifically, when \code{B'} is used in the subsequent actions or constraints, the symbolic variables $x_{B', c}$ are used to represent the multiplicities of the entities in the bag, and $h_{B, c}$ serves as the upper bound of the multiplicities if the explicit multiplicity is required.
+For instance, consider \code{bag B'' = choose(B', m)}.
+The appended formulas share the same form as those introduced for \code{B'}, but the weight of the new unary predicate $B_c''$ are set to $\weight(B_c'') = x_{B'', c} + x_{B'', c}^2 + \dots + x_{B'', c}^{h_{B, c}}$, and 
+The size argument in the \code{choose} action is compiled with a size constraint that will be introduced below.
+
+The compilation of \code{choose\_replace} is similar to that of \code{choose}, while the multiplicity of the entities in the bag is not limited by the multiplicities of the entities in the original bag, but by the size argument.
+
+% We use unary predicates to represent the sets in the \wfomc{}.
+% For an initialized set \code{set S = \{e1, ..., en\}}, we introduce a novel unary predicate $S/1$, and append the conjunction of unary evidence
+% \begin{align*}
+%     \{S(e_1), \dots, S(e_n)\}\cup \{\neg S(e) \mid e \in \domain \setminus \{e_1, \dots, e_n\}\}
+% \end{align*}
+% to the sentence $\sentence$.
+% For a set formed by \code{choose} action: \code{set S1 = choose(S, n)}, we introduce a new unary predicate $S1/1$ and add $\forall x: S1(x) \to S(x)$ to the sentence $\sentence$.
+% For a set \code{S} formed by union, intersection, or difference of two sets \code{S1} and \code{S}, we introduce a new unary predicate $S/1$ and add $\forall x: S(x) \leftrightarrow S1(x) \land S2(x)$, $\forall x: S(x) \leftrightarrow S1(x) \lor S2(x)$, or $\forall x: S(x) \leftrightarrow S1(x) \land \neg S2(x)$ to the sentence $\sentence$, respectively.
+% Once an unary predicate is introduced for a set \code{S}, we add the predicate into $Context[\code{S}]$ for future reference.
+
+% The size constraints on a set \code{S} is compiled into the linear equations and inequalities $M$.
+% For a size constraint
+% $$\code{c1 \|S1\| + c2 \|S2\| + ... + cn \|Sn\| $\bowtie$ c},$$
+% we create a new symbolic variable $x_{\code{Si}}$ for each set \code{Si} in the constraint, and add the linear equation or inequality $\code{c1}x_{\code{S1}} + \code{c2}x_{\code{S2}} + \dots + \code{cn}x_{\code{Sn}} \bowtie \code{c}$ to $M$.
+% The other constraints are straightforward to compile in first-order logic: we append $S(e)$ to $\sentence$ for the membership constraint, $\forall x: S1(x) \to S2(x)$ for the subset constraint, $\forall x: S1(x) \leftrightarrow S2(x)$ for the equality constraint, and $\forall x: \neg S1(x) \lor \neg S2(x)$ for the disjoint constraint to the sentence $\sentence$.
+
+% \subsubsection{Bags}
+
+% We also use unary predicates to represent the bags in the \wfomc{}, but in a more subtle manner. For an initialized \code{bag B}, we discriminate the entities in \code{B} by their multiplicities. For the entities \code{a1,a2,...,an} which appear only once in \code{B}, we introduce a unary predicate $B_s/1$ and append the conjunction of unary evidence
+% \begin{equation*}
+%     \{B_s(a_1), \dots, B_s(a_n)\}\cup \{\neg B_s(e) \mid e \in \domain \setminus \{a_1, \dots, a_n\}\}
+% \end{equation*}
+% to the sentence $\sentence$. For each entity \code{c} in \code{B} that appears multiple times, we introduce a new unary predicate $B_c/1$ and add the conjunction of unary evidence
+% \begin{equation*}
+%     \{B_c(c)\} \cup \{\neg B_c(e)\mid e\in \domain \setminus \{c\}\}
+% \end{equation*}
+% to $\sentence$.
+% Denote by $C$ the set of predicates $B_c/1$ for all entities that appear multiple times in \code{B}.
+% We further introduce a new unary predicate $B/1$ to represent the bag \code{B}, and add the formula $\forall x: B(x) \leftrightarrow (B_s(x) \lor \bigvee_{c\in C} B_c(x))$ to $\sentence$.
+% Finally, the multiplicities of the entities in the bag are represented by a dictionary $h_B = \{e_1: m_1, e_2: m_2, \dots, e_n: m_n\}$, where $m_i$ is the multiplicity of entity $e_i$ in the bag.
+
+
+\subsubsection{Tuples}
+
+% \section{Lifted Inference with \wfomc{}}
+
+\section{Experiments}
+
+\section{Discussion}
+
+\subsection{Hardness of \ourlang{} program}
+
+
+\section{Related Work}
+
+\subsection{Constraint Satisfaction Problems}
+
+\subsection{Lifted Inference}
+
+\bibliography{SRL}
+\bibliographystyle{plainnat}
+
+\appendix
+
+\section{The Semantics of \ourlang{}}
+\label{app:full_semantics}
+
+We use the \emph{donatational semantics}, which use mathematical objects to represent the meaning of the programs.
+Given a \ourlang{} program \code{stmts}, the answer to \code{stmts}, denoted by $\textsc{eval }\sem{\code{stmts}}$, is the result of a \sharpcsp{}:
+\begin{equation*}
+    \textsc{eval } \sem{\code{stmts}} \triangleq MC(\sem{\code{stmts}}(\emptyset, \emptyset, \emptyset, \emptyset)),
+\end{equation*}
+where the semantics $\sem{\code{stmts}}$ is a function that maps a \csp{} to another \csp{}.
+The semantics $\sem{\code{stmts}}$ is defined in a compositional way:
+\begin{align*}
+    \sem{\code{stmt1\ stmt2}}(D, V, Cls, C) &\triangleq \sem{\code{stmt2}} \circ \sem{\code{stmt1}}(D, V, Cls, C)
+\end{align*}
+where $\circ$ is the function composition operator.
+
+\begin{example}
+    Consider the \ourlang{} program in~\Cref{ex:cofola_semantics}.
+    The semantics of the program is 
+    \begin{equation*}
+        (D, V, Cls, C) = \sem{\code{acst1\ and\ (acst2\ or\ acst3)}} \circ \sem{\code{I2 = expr2}} \circ \sem{\code{I1 = expr1}}(\emptyset, \emptyset, \emptyset, \emptyset),
+    \end{equation*}
+    and the answer to the program is $MC(D, V, Cls, C)$.
+\end{example}
+
+An object declaration introduce a new variable with a specified class, and updates the universal domain if necessary, i.e.,
+\begin{align*}
+    \sem{\code{I = expr}}(D, &V, Cls, C) \triangleq \langle D \cup D_v, V \cup \{v\}, Cls \cup \{cls_v\}, C \cup \{c_v\} \rangle,\\
+    &\text{where } (D_v, V_v, Cls_v, C_v) = \textsc{obj }\sem{\code{I = expr}}.
+\end{align*}
+The function $\textsc{obj }\sem{\code{I = expr}}$ gives the actual semantic of the object declaration, which will be introduced later.
+\begin{example}
+    For the program in \cref{ex:cofola_semantics}, the semantics of $\sem{\code{I1 = expr1}}$ maps an empty \csp{} to $\langle D_1, \{v_1\}, \{cls_1\}, \{c_1\}\rangle$, where $D_1$ contains the entities introduced by the expression \code{expr1}, $v_1$ is the variable of \code{I1}, $cls_1$ is the class of \code{I1}, and $c_1$ is the constraint derived from \code{expr1}.
+    The semantics of $\sem{\code{I2 = expr2}}$ further maps the \csp{} to $\langle D_1\cup D_2, \{v_1, v_2\}, \{cls_1, cls_2\}, \{c_1, c_2\}\rangle$.
+\end{example}
+
+A constraint introduces a new constraint to the \csp{}:
+\begin{equation*}
+    \sem{\code{cst}}(D, V, Cls, C) \triangleq \langle D, V, Cls, C \cup \{\textsc{cst }\sem{\code{cst}}\} \rangle,
+\end{equation*}
+where $\textsc{cst }\sem{\code{cst}}$ is defined inductively:
+\begin{itemize}
+    \item if \code{cst} is an atomic constraint, then $\textsc{cst }\sem{\code{cst}}$ is a single \csp{} constraint without any logical connectives, and will be discussed later;
+    \item if \code{cst = cst1 and cst2}, then $\textsc{cst }\sem{\code{cst}} = (\textsc{cst }\sem{\code{cst1}}) \land (\textsc{cst }\sem{\code{cst2}}$);
+    \item if \code{cst = cst1 or cst2}, then $\textsc{cst }\sem{\code{cst}} = (\textsc{cst }\sem{\code{cst1}}) \lor (\textsc{cst }\sem{\code{cst2}}$);
+    \item if \code{cst = not cst1}, then $\textsc{cst }\sem{\code{cst}} = \neg (\textsc{cst }\sem{\code{cst1}}$).
+\end{itemize}
+
+\begin{example}
+    Continuing the example. The semantics of the constraint \code{acst1 and (acst2 or acst3)} is defined as
+    \begin{align*}
+        \sem{&\code{acst1\ and\ (acst2\ or\ acst3)}}(D_1\cup D_2, \{v_1, v_2\}, \{cls_1, cls_2\}, \{c_1, c_2\}) \\
+        &= \langle D_1\cup D_2, \{v_1, v_2\}, \{cls_1, cls_2\}, \{c_1, c_2\} \cup \{acst_1 \land (acst_2 \lor acst_3)\} \rangle,
+    \end{align*}
+    where $acst_1$, $acst_2$, and $acst_3$ are the \csp{} constraints defined by $\textsc{cst }\sem{\code{acst1}}$, $\textsc{cst }\sem{\code{acst2}}$, and $\textsc{cst }\sem{\code{acst3}}$, respectively.
+\end{example}
+
+Let $\mathcal{I}$ be the set of object identifiers, and let $Type = \{set, bag, tup, seq, cir, par, comp\}$ be the set of object types in \ourlang{}.
+We use a state $\mathcal{I}\mapsto Type$ to store the binding of variables and domains in a \ourlang{} program.
+For ease of presentation, we use the state implicitly in the semantics functions, pretending that the state is passed as an argument to the semantics functions.
+One could think of the state as a global variable that can be updated and accessed by the semantics functions.
+There are two auxiliary functions for manipulating the state:
+\begin{itemize}
+    \item $\textsc{update}(\code{I}, t, v)$ updates the state by mapping the identifier \code{I} to the type $t$ and the variable $v$, and returns the updated entry $(t, v)$;
+    \item \textsc{lv}$(\code{I}, t_1, t_2, \dots)$ looks up the variable $v$ of the identifier \code{I}; if the identifier is in the state and its type matches one of the expected types $t_1, t_2, \dots$, it returns the variable $v$; otherwise, it returns an \emph{error signal}.
+\end{itemize}
+We assume that the error signal returned by \textsc{lv} is propagated to the semantics of the program, and the program is considered \emph{valid} if no error occurs.
+
+With the function $\textsc{update}$, the semantics $\textsc{obj }\sem{\code{I = expr}}$ is defined as follows:
+\begin{equation}
+    \begin{aligned}
+        &\textsc{obj }\sem{\code{I = expr}} \triangleq (\textsc{dom } \sem{\code{expr}}, v, \textsc{cls } \sem{\code{expr}}, \textsc{cst } \sem{\code{I = expr}}) \\
+        &\qquad \text{ where } (t, v) = \textsc{update}(\code{I}, \textsc{type }\sem{\code{expr}}, \sem{\code{I}}),
+    \end{aligned}
+    \label{eq:obj_dec_semantics}
+\end{equation}
+where $\textsc{type }\sem{\code{expr}}$ return the type of the object according to \code{expr}, e.g., $\textsc{type }\sem{\code{set\_expr}} = set$, and $\sem{\code{I}}$ returns the \csp{} variable with the same name as \code{I}.
+The function $\textsc{dom }\sem{\code{expr}}$ defines the set of possible \csp{} constants introduced by \code{expr}, e.g., both $\textsc{dom }\sem{\code{set(e1, e2, ..., en)}}$ and $\textsc{dom }\sem{\code{bag(e1: k1, e2: k2, ..., en: kn)}}$ are $\{\sem{\code{e1}}, \dots, \sem{\code{en}}\}$, where $\sem{\code{ei}}$ is a \csp{} constant with the same name as \code{ei}.
+The other two functions $\textsc{cls }\sem{\code{expr}}$, and $\textsc{cst }\sem{\code{I = expr}}$ are used to define the class and the constraints of the object, respectively.
+
+Next, we define the domain semantics $\textsc{dom } \sem{\code{expr}}$, the class semantics $\textsc{cls } \sem{\code{expr}}$, and the constraint semantics $\textsc{cst } \sem{\code{I = expr}}$ for specific object declarations.
+The full definitions of $\textsc{dom } \sem{\cdot}$ are shown in \cref{tab:semantics_dom}.
+Recall that \ourlang{} only allows the set and bag objects to be declared with concrete collections of entities.
+The other objects can only be declared from the existing objects; they do not introduce new entities.
+Thus, the domain semantics of only the set and bag objects can be nonempty.
+
+\begin{table}[htb]
+    \centering
+    \caption{The domain semantics.}
+    \label{tab:semantics_dom}
+    \begin{tabular}{c|c}
+    \hline
+    \textbf{Expression} & \textbf{$\textsc{dom }\sem{\cdot}$} \\ \hline\hline
+    \code{set(e1, e2, ..., en)} & $\{\sem{\code{e1}}, \sem{\code{e2}}, \dots, \sem{\code{en}}\}$ \\ \hline
+    \code{bag(e1: k1, e2: k2, ..., en: kn)} & $\{\sem{\code{e1}}, \sem{\code{e2}},  \dots, \sem{\code{en}}\}$ \\ \hline
+    Others expressions & $\emptyset$ \\ \hline
+    \end{tabular}
+\end{table}
+
+The full definitions of $\textsc{cls } \sem{\cdot}$ are shown in \cref{tab:semantics_cls}.
+The class of a \csp{} variable is determined by the type of its corresponding object, which in turn is determined by the expression used to declare the object (recall \ourlang{} is a strictly typed language).
+We emphasize that the class of a \csp{} variable only defines the combinatorial structure of the variable, but does not specify which entities are in the variable.
+
+\begin{table}[htb]
+    \centering
+    \caption{The class semantics.}
+    \label{tab:semantics_cls}
+    \begin{tabular}{c|c}
+    \hline
+    \textbf{Returned Type of Expression} & \textbf{$\textsc{cls }\sem{\cdot}$} \\ \hline\hline
+    Set & $f_{set}(S) = 2^S$ \\ \hline
+    Bag & $f_{mset}(S) = \{\{e_1: k_1, e_2: k_2, \dots, e_n: k_n\}\mid e_1,\dots,e_n\in S, k_i \in \mathbb{N}\}$ \\ \hline
+    Tuple \& Sequence & $f_{list}(S) = \{[e_1, e_2, \dots]\mid e_1, e_2, \dots \in S\}$ \\ \hline
+    Circle & $f_{cir}(S) = \begin{cases}
+        \{\mycircleref{e_1, e_2, \dots}\mid e_i\in S\} & \text{if reflexive}, \\
+        \{\mycircle{e_1, e_2, \dots}\mid e_i\in S\} & \text{otherwise}
+    \end{cases}
+    $ \\\hline
+    Partition & $f_{par}(S) = \begin{cases}
+        \{\{S_1, S_2, \dots\}\mid S_1, S_2, \dots \in f_{set}(S), S_i \cap S_j = \emptyset\} & \text{if from a set}, \\
+        \{\{M_1, M_2, \dots\}\mid M_1, M_2, \dots \in f_{mset}(S)\} & \text{if from a bag}
+    \end{cases}$ \\ \hline
+    Composition & $f_{comp}(S) = \begin{cases}
+        \{[S_1, S_2, \dots]\mid S_1, S_2, \dots \in f_{set}(S), S_i \cap S_j = \emptyset\} & \text{if from a set}, \\
+        \{[M_1, M_2, \dots]\mid M_1, M_2, \dots \in f_{mset}(S)\} & \text{if from a bag}
+    \end{cases}$ \\ \hline
+    \end{tabular}
+\end{table}
+
+For ease of presentation, we introduce another auxiliary function $\textsc{lve}(\code{I}, t_1, t_2, \dots)$ to extract the entities from the object identifier or the entity:
+\begin{equation}
+    \textsc{lve}(\code{I}, t_1, t_2, \dots) \triangleq \begin{cases}
+        \textsc{lv}(\code{I}, t_1, t_2, \dots) & \text{if } \code{I} \text{ is an object identifier}, \\
+        \{\sem{\code{I}}\} & \text{if } \code{I} \text{ is an entity}, \\
+        \text{error} & \text{otherwise}.
+    \end{cases}.
+    \label{eq:lve}
+\end{equation}
+
+\begin{table}[]
+    \centering
+    \caption{The constraint semantics of object declarations.}
+    \label{tab:semantics_cst}
+    \begin{tabular}{c|c|c}
+    \hline
+    \textbf{Type} & \textbf{Statement} & \textbf{$\textsc{cst }\sem{\cdot}$} \\ \hline
+    \multirow{7}{*}{Set} & \code{I = set(e1, e2, ..., en)} & $\textsc{lv}(\code{I}, set) \equiv \{\sem{\code{e1}}, \sem{\code{e2}}, \dots, \sem{\code{en}}\}$ \\ \cline{2-3}
+    & \code{I = choose(id, n)} & $\textsc{lv}(\code{I}, set) \subseteq \textsc{lv}(\code{id}, set)\land |\textsc{lv}(\code{I}, set)| = n$ \\ \cline{2-3}
+    & \code{I = choose(id)} & $\textsc{lv}(\code{I}, set) \subseteq \textsc{lv}(\code{id}, set)$ \\ \cline{2-3}
+    & \code{I = supp(id)} & $\textsc{lv}(\code{I}, set) \equiv \support{\textsc{lv}(\code{id}, bag)}$ \\ \cline{2-3}
+    & \code{I = union(id1, id2)} & $\textsc{lv}(\code{I}, set) \equiv \textsc{lv}(\code{id1}, set) \cup \textsc{lv}(\code{id2}, set)$ \\ \cline{2-3}
+    & \code{I = intersect(id1, id2)} & $\textsc{lv}(\code{I}, set) \equiv \textsc{lv}(\code{id1}, set) \cap \textsc{lv}(\code{id2}, set)$ \\ \cline{2-3}
+    & \code{I = diff(id1, id2)} & $\textsc{lv}(\code{I}, set) \equiv \textsc{lv}(\code{id1}, set) \setminus \textsc{lv}(\code{id2}, set)$ \\ \hline
+    \multirow{8}{*}{Bag} & \code{I = bag(e1: k1, e2: k2, ..., en: kn)} & $\textsc{lv}(\code{I}, bag) \equiv \{\sem{\code{e1}}: k_1, \sem{\code{e2}}: k_2, \dots, \sem{\code{en}}: k_n\}$ \\ \cline{2-3}
+    & \code{I = choose(id, n)} & $\textsc{lv}(\code{I}, bag) \subseteq_m \textsc{lv}(\code{id}, bag)\land |\textsc{lv}(\code{I}, bag)| = n$ \\ \cline{2-3}
+    & \code{I = choose(id)} &  $\textsc{lv}(\code{I}, bag) \subseteq_m \textsc{lv}(\code{id}, bag)$ \\ \cline{2-3}
+    & \code{I = choose\_replace(id, n)} & $\support{\textsc{lv}(\code{I}, bag)} \subseteq \textsc{lv}(\code{id}, set)\land |\textsc{lv}(\code{I}, bag)| = n$ \\ \cline{2-3}
+    & \code{I = union(id1, id2)} & $\textsc{lv}(\code{I}, bag) \equiv \textsc{lv}(\code{id1}, bag) \cup \textsc{lv}(\code{id2}, bag)$ \\ \cline{2-3}
+    & \code{I = add\_union(id1, id2)} & $\textsc{lv}(\code{I}, bag) \equiv \textsc{lv}(\code{id1}, bag) \uplus \textsc{lv}(\code{id2}, set)$ \\ \cline{2-3}
+    & \code{I = intersect(id1, id2)} & $\textsc{lv}(\code{I}, bag) \equiv \textsc{lv}(\code{id1}, bag) \cap \textsc{lv}(\code{id2}, bag)$ \\ \cline{2-3}
+    & \code{I = diff(id1, id2)} & $\textsc{lv}(\code{I}, bag) \equiv \textsc{lv}(\code{id1}, bag) \setminus \textsc{lv}(\code{id2}, bag)$ \\ \hline
+    \multirow{4}{*}{Tuple} & \code{I = tuple(id)} & \makecell{\lnote{not sure} $\textsc{lv}(I, tup)$ shares the same entities \\and the same multiplicities with $\textsc{lv}(id, set, bag)$} \\ \cline{2-3}
+    & \code{I = choose\_tuple(id)} & if the type of \code{id} is set, $\textsc{lv}(\code{I}, tup) \subseteq \textsc{lv}(\code{id}, set)$ \\ \cline{2-2}
+    & \code{I = choose\_tuple(id, k)} & else $\textsc{lv}(\code{I}, tup) \subseteq_m \textsc{lv}(\code{id}, bag)$ \\ \cline{2-3}
+    & \code{I = choose\_replace\_tuple(id, k)} & $\support{\textsc{lv}(\code{I}, tup)} \subseteq \textsc{lv}(\code{id}, set)$ \\ \hline
+    Sequence & - & same as tuple but with type $seq$ \\ \hline
+    Circle & - & same as tuple but with type $cir$ \\ \hline
+    Partition & \code{I = partition(id, k)} & \makecell{if \code{id} is a set, $\bigcup_{S\in \textsc{lv}(\code{I}, par)} S \equiv \textsc{lv}(\code{id}, set)\land |\textsc{lv}(\code{I}, par)| = k$ \\ else $\biguplus_{M\in \textsc{lv}(\code{I}, par)} M \equiv \textsc{lv}(\code{id}, bag)\land |\textsc{lv}(\code{I}, par)| = k$} \\ \hline
+    Composition & \code{I = composition(id, k)} & same as partition but with type $comp$ \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[]
+    \centering
+    \caption{The semantics for atomic constraints.}
+    \label{tab:semantics_obj_cst}
+    \begin{tabular}{c|c|c}
+    \hline
+    \textbf{Constraint type} & \textbf{Statement or expression} & \textbf{Semantics} \\ \hline
+    \multirow{9}{*}{Set and bag} & \code{e in I} & $\sem{\code{e}} \in \textsc{lv}(I, set, bag)$ \\ \cline{2-3}
+    & \code{id1 subset id2} & \makecell{if \code{id1} is a set, $\textsc{lv}(\code{id1}, set) \subseteq \textsc{lv}(\code{id2}, set)$\\else $\textsc{lv}(\code{id1}, bag) \subseteq_m \textsc{lv}(\code{id2}, bag)$} \\ \cline{2-3}
+    & \code{id1 disjoint id2} & $\textsc{lv}(\code{id1}, set, bag) \cap \textsc{lv}(\code{id2}, set, bag) = \emptyset$ \\ \cline{2-3}
+    & \code{id1 = id2} & $\textsc{lv}(\code{id1}, set, bag) = \textsc{lv}(\code{id2}, set, bag)$ \\ \cline{2-3}
+     & \code{n1\ a1\ n2\ a2\ ...\ nk\ ak\ OP\ N} & $\sum_{i=1}^k \sem{\code{ni}} \cdot \sem{\code{ai}} \sem{\code{OP}} \sem{\code{N}}$ \\ \cline{2-3}
+    & \code{OP} & the operator in $\{=, <, >, \leq, \geq\}$ \\ \cline{2-3}
+    & \code{\|I\|} & $|\textsc{lv}(\code{I}, set, bag, tup, seq, cir)|$ \\ \cline{2-3}
+    & \code{I.count(e)} & $(\textsc{lv}(\code{I}, bag))[\sem{\code{e}}]$ \\ \hline
+    \multirow{2}{*}{Tuple} & \code{id[k] = e} & $\textsc{lv}(\code{id}, tup)[k] = \sem{\code{e}}$ \\ \cline{2-3}
+    & \code{id[k] in I} & $\textsc{lv}(\code{id}, tup)[k] \in \textsc{lv}(\code{I}, set, bag)$ \\ \hline
+    \multirow{17}{*}{Sequence and circle} & \code{together(e) in I} & $((\textsc{lv}(\code{I}, seq, cir)), \{L \mid L \in \textsc{ld}(\code{I}, seq, cir), \sem{\code{e}} \text{ is together in } L\})$ \\ \cline{2-3}
+    & \code{together(id) in I} & $\begin{aligned}
+        \Bigg(&(\textsc{lv}(\code{I}, seq, cir), \textsc{lv}(\code{id}, set, bag)), \Big\{(L, S) \mid L \in \textsc{ld}(\code{I}, seq, cir), \\
+        &\quad S \in \textsc{ld}(\code{id}, set, bag), S \text{ is together in } L\Big\}\Bigg)
+    \end{aligned}$ \\ \cline{2-3}
+    & \code{id1 < id1 in I} & $\bigwedge_{e_1 \in \textsc{lve}(\code{id1}, set, bag), e_2\in \textsc{lve}(\code{id2}, set, bag)} e_1 <_{\textsc{lv}(\code{I}, seq, cir)} e_2$ \\ \cline{2-3}
+    & \code{(id1, id2) in I} & $\bigwedge_{e_1 \in \textsc{lve}(\code{id1}, set, bag), e_2\in \textsc{lve}(\code{id2}, set, bag)} (e_1, e_2) \in \textsc{lv}(\code{I}, seq, cir)$ \\ \cline{2-3}
+    & \code{next\_to(id1, id2) in I} & $
+    \begin{aligned}
+        \bigwedge_{e_1 \in \textsc{lve}(\code{id1}, set, bag), e_2\in \textsc{lve}(\code{id2}, set, bag)} \Big(&(e_1, e_2)\in \textsc{lv}(\code{I}, seq, cir) \\
+        &\lor (e_2, e_1)\in \textsc{lv}(\code{I}, seq, cir)\Big)
+    \end{aligned}$ \\ \cline{2-3}
+    & \code{I.count(id1 < id2)} & $\begin{aligned}
+        \big|\Big\{&\{e_1, e_2\}\mid e_1 \in \textsc{lve}(\code{id1}, set, bag), e_2\in \textsc{lve}(\code{id2}, set, bag) \\
+        &\qquad \text{ s.t. } e_1 <_{\textsc{lv}(\code{I}, seq, cir)} e_2\Big\}\big|
+    \end{aligned}$ \\ \cline{2-3}
+    & \code{I.count((id1, id2))} & $\begin{aligned}
+        \big|\Big\{&\{e_1, e_2\}\mid e_1 \in \textsc{lve}(\code{id1}, set, bag), e_2\in \textsc{lve}(\code{id2}, set, bag) \\
+        &\qquad \text{ s.t. } (e_1, e_2)\in \textsc{lv}(\code{I}, seq, cir)\Big\}\big|
+    \end{aligned}$ \\ \cline{2-3}
+    & \code{I.count(next\_to(id1, id2))} & $\begin{aligned}
+        \big|\Big\{&\{e_1, e_2\}\mid e_1 \in \textsc{lve}(\code{id1}, set, bag), e_2\in \textsc{lve}(\code{id2}, set, bag) \\
+        &\qquad \text{ s.t. } (e_1, e_2)\in \textsc{lv}(\code{I}, seq, cir) \lor (e_2, e_1)\in \textsc{lv}(\code{I}, seq, cir)\Big\}\big|
+    \end{aligned}$ \\ \hline
+    Partition and composition & \code{acst for part in I} & $\bigwedge_{T\in \textsc{lv}(\code{I}, par, comp)} (\textsc{cst }\sem{\code{acst}})[\textsc{lv}(\code{part}, \dots) \mapsto T]$ \\ \hline
+    \end{tabular}
+\end{table}
+
+
+%% else use the following coding to input the bibitems directly in the
+%% TeX file.
+
+% \begin{thebibliography}{00}
+
+% %% \bibitem{label}
+% %% Text of bibliographic item
+
+% \bibitem{}
+
+% \end{thebibliography}
+\end{document}
+\endinput
+%%
+%% End of file `elsarticle-template-num.tex'.
