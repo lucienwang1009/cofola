@@ -1,0 +1,5 @@
+contacts = set(contact1...26)
+neighbors = set(neighbor1...21)
+
+call = choose(contacts, 1)
+|call & neighbors| = 0

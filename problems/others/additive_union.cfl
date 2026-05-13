@@ -1,0 +1,6 @@
+oreos = set(oreo0...5)
+milk = set(m0...3)
+products = oreos + milk
+Alpha = choose(products)
+Beta = choose_replace(oreos)
+|Alpha| + |Beta| = 3

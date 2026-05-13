@@ -1,0 +1,5 @@
+computers = set(computer1...13)
+def = set(d1:5)
+
+purchase = choose(computers, 3)
+|purchase & def| >= 1

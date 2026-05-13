@@ -1,0 +1,6 @@
+hearts = set(heart1...14)
+spades = set(spade1...14)
+cards = hearts + spades + set(diamond1...13) + set(club1...13)
+hand1 = choose(cards, 4)
+hand2 = choose(cards, 4)
+hand1 disjoint hand2

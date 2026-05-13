@@ -1,0 +1,6 @@
+workers = set(worker1...15)
+jobs = set(job1...4)
+
+assign = workers -> jobs
+|assign-1(job1)| = 7
+|assign-1(job2)| = 5

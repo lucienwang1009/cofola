@@ -1,0 +1,8 @@
+president = set(p0...6)
+vp = set(vp0...4)
+secretary = set(s0...5)
+treasurer = set(t0...3)
+president_list = tuple(president)
+vp_list = tuple(vp)
+secretary_list = tuple(secretary)
+treasurer_list = tuple(treasurer)

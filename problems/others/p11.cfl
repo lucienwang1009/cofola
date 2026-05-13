@@ -1,0 +1,10 @@
+russians = set(ru1...4)
+americans = set(am1...5)
+spaniards = set(sp1...3)
+
+people = russians + americans + spaniards
+selection = choose(people)
+|selection & russians| >= 1
+|selection & americans| >= 1
+|selection & spaniards| >= 1
+

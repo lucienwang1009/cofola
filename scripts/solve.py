@@ -1,0 +1,81 @@
+import json
+import argparse
+import pandas as pd
+
+from loguru import logger
+from wfomc import Algo
+from contexttimer import Timer
+
+from cofola.log import setup_logging
+from cofola.parser.parser import parse
+from cofola.solver import solve
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--input', '-i', required=True, type=str)
+    parser.add_argument('--ids', '-ids', type=str, nargs='+',
+                        help='List of problem ids to solve, '
+                        'None means all problems in the input file')
+    parser.add_argument('--debug', '-d', action='store_true')
+    return parser.parse_args()
+
+
+if __name__ == '__main__':
+    args = parse_args()
+    setup_logging(args.debug)
+    input_file = args.input
+    all_problems = json.load(open(input_file, 'r'))
+    ids = []
+    df = []
+    if args.ids is None:
+        ids = all_problems.keys()
+    else:
+        for i in args.ids:
+            if '-' in i:
+                start, end = i.split('-')
+                ids.extend(str(j) for j in range(int(start), int(end) + 1))
+            else:
+                ids.append(i)
+    for i in ids:
+        problem = all_problems[i]
+        tags = problem['tags']
+        unchecked = [
+            'timeout', 'unencodeable'
+        ]
+        # checked = [
+        #     'circle', 'sequence'
+        # ]
+        checked = None
+        if any(tag in tags for tag in unchecked) \
+                or (checked is not None and
+                    (not any(tag in tags for tag in checked))):
+            df.append({
+                'problem_id': i,
+                'gt_result': problem['answer'],
+                'result': 'skipped',
+                'running time': 0,
+                'unencodeable_reason': ', '.join(tags)
+            })
+        else:
+            gt_result = problem['answer']
+            with Timer() as t:
+                try:
+                    cofola_problem = parse(problem['program'], debug=args.debug)
+                    res = solve(cofola_problem, debug=args.debug)
+                except Exception as e:
+                    res = 'error'
+                    logger.exception(e)
+            if res != int(gt_result):
+                logger.error('The answer is wrong for problem {}: {} != {}', i, res, gt_result)
+                exit(1)
+            df.append({
+                'problem_id': i,
+                'gt_result': gt_result,
+                'result': res,
+                'running time': t.elapsed,
+                'unencodeable_reason': ''
+            })
+        pd_df = pd.DataFrame(df)
+        pd_df.to_csv('exp/results.csv', index=False)
+    print(pd_df)

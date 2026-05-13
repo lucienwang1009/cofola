@@ -1,0 +1,6 @@
+hearts = set(heart1...14)
+others = set(other1...40)
+cards = hearts + others
+
+chosen = choose(cards, 2)
+|chosen & hearts| >= 1

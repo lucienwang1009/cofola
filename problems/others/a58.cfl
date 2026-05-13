@@ -1,0 +1,8 @@
+hearts = set(h1...14)
+spades = set(s1...14)
+others = set(o1...27)
+cards = hearts + spades + others
+
+chosen_card = choose(cards, 3)
+|chosen_card & spades| = 2
+|chosen_card & hearts| = 1
