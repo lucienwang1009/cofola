@@ -451,19 +451,14 @@ def _encode_less_than_pattern(
     context: Context,
 ) -> None:
     """Encode a LessThanPattern: left appears before right in seq."""
-
-    leq_var = _encode_sequence_relation_count(
+    _encode_sequence_relation_universal(
         seq_ref,
         pattern.left,
         pattern.right,
-        "leq",
         context.get_leq_pred(seq_ref),
+        positive,
         context,
     )
-    if positive:
-        context.validator.append(leq_var > 0)
-    else:
-        context.validator.append(Eq(leq_var, 0))
 
 
 def _encode_predecessor_pattern(
@@ -473,19 +468,14 @@ def _encode_predecessor_pattern(
     context: Context,
 ) -> None:
     """Encode a PredecessorPattern: first immediately precedes second in seq."""
-
-    pred_var = _encode_sequence_relation_count(
+    _encode_sequence_relation_universal(
         seq_ref,
         pattern.first,
         pattern.second,
-        "pred",
         context.get_predecessor_pred(seq_ref),
+        positive,
         context,
     )
-    if positive:
-        context.validator.append(pred_var > 0)
-    else:
-        context.validator.append(Eq(pred_var, 0))
 
 
 def _encode_next_to_pattern(
@@ -495,22 +485,46 @@ def _encode_next_to_pattern(
     context: Context,
 ) -> None:
     """Encode a NextToPattern: first and second are adjacent in seq."""
-
-    next_to_var = _encode_sequence_relation_count(
+    _encode_sequence_relation_universal(
         seq_ref,
         pattern.first,
         pattern.second,
-        "next_to",
         context.get_next_to_pred(seq_ref),
+        positive,
         context,
     )
-    if positive:
-        context.validator.append(next_to_var > 0)
-    else:
-        context.validator.append(Eq(next_to_var, 0))
 
 
 # =============================================================================
+
+def _encode_sequence_relation_universal(
+    seq_ref: ObjRef,
+    left: Entity | ObjRef,
+    right: Entity | ObjRef,
+    relation_pred: object,
+    positive: bool,
+    context: Context,
+) -> None:
+    """Encode an asserted sequence relation with universal pattern semantics.
+
+    Pattern constraints such as ``A < B in seq`` mean every matching left
+    occurrence stands in the relation to every matching right occurrence.
+    Negative constraints mean the pattern has no occurrences, so every matching
+    pair must fail the relation.
+    """
+    left_pred = _get_seq_entity_pred(left, seq_ref, context)
+    right_pred = _get_seq_entity_pred(right, seq_ref, context)
+    if positive:
+        context.sentence = context.sentence & parse(
+            f"\\forall X: (\\forall Y: (({left_pred}(X) & {right_pred}(Y)) -> "
+            f"{relation_pred}(X,Y)))"
+        )
+    else:
+        context.sentence = context.sentence & parse(
+            f"\\forall X: (\\forall Y: (({left_pred}(X) & {right_pred}(Y)) -> "
+            f"~{relation_pred}(X,Y)))"
+        )
+
 
 def _encode_sequence_relation_count(
     seq_ref: ObjRef,

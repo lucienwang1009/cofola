@@ -76,6 +76,41 @@ B.count(a) == 1
     ) == 0
 
 
+def test_group_less_than_pattern_uses_universal_semantics() -> None:
+    """A < B requires every A entity to precede every B entity."""
+    assert parse_and_solve(
+        """
+A = set(a0, a1)
+B = set(b0, b1)
+row = sequence(A + B)
+A < B in row
+"""
+    ) == 4
+
+
+def test_group_next_to_pattern_uses_universal_semantics() -> None:
+    """next_to(A, b) requires every A entity to be adjacent to b."""
+    assert parse_and_solve(
+        """
+A = set(a0, a1)
+S = A + set(b)
+row = sequence(S)
+next_to(A, b) in row
+"""
+    ) == 2
+
+
+def test_negative_predecessor_pattern_forbids_all_occurrences() -> None:
+    """(a, b) not in seq means no matching predecessor pair occurs."""
+    assert parse_and_solve(
+        """
+creatures = bag(crocodile: 4, catfish, squid: 2)
+order = sequence(creatures)
+(crocodile, crocodile) not in order
+"""
+    ) == 3
+
+
 def test_negative_bag_equality_is_any_multiplicity_difference() -> None:
     """B != C means at least one multiplicity differs."""
     assert parse_and_solve(
