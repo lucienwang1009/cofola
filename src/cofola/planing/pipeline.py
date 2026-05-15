@@ -33,6 +33,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import replace as dc_replace
+from typing import Iterable, TypeAlias, cast
 
 from loguru import logger
 from sympy import Symbol, satisfiable
@@ -66,6 +67,7 @@ from cofola.planing.pass_manager import (
     AnalysisManager,
     FixedPointPass,
     PassResult,
+    TransformPass,
     UnsatisfiableConstraint,
 )
 from cofola.planing.passes.lowering import LoweringPass
@@ -119,6 +121,7 @@ _HAS_POSITIVE = (
     BagEqConstraint,
 )
 _COMPOUND = (NotConstraint, AndConstraint, OrConstraint)
+PassSpec: TypeAlias = type[TransformPass] | FixedPointPass
 
 
 def _negate_constraint(c: Constraint) -> Constraint:
@@ -231,6 +234,9 @@ class PlaningPipeline:
         SimplifyPass,
     ]
 
+    def __init__(self, local_passes: list[PassSpec] | None = None) -> None:
+        self.local_passes = self.LOCAL_PASSES if local_passes is None else local_passes
+
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
@@ -270,7 +276,7 @@ class PlaningPipeline:
     def run_passes(
         cls,
         problem: Problem,
-        pass_classes: list,
+        pass_classes: list[PassSpec],
         *,
         check_compound_invariant: bool = False,
     ) -> AnalysisManager:
@@ -423,20 +429,24 @@ class PlaningPipeline:
         logger.info("Shannon: {} atoms, formula={}", len(atomic_constraints), formula)
 
         branches: list[SolveBranch] = []
-        for model in satisfiable(formula, all_models=True):
+        models = satisfiable(formula, all_models=True)
+        if models is False or models is None:
+            return branches
+        for model in cast(Iterable[dict[Symbol, bool] | bool], models):
             if model is False:
                 break
+            model_values = {} if model is True else model
             sub_constraints: list[Constraint] = []
             for idx, atomic in enumerate(atomic_constraints):
                 sym = idx_to_sym[idx]
-                if model.get(sym, True):
+                if model_values.get(sym, True):
                     sub_constraints.append(atomic)
                 else:
                     sub_constraints.append(_negate_constraint(atomic))
 
             logger.debug(
                 "  model={} → {} constraints",
-                {str(k): v for k, v in model.items()},
+                {str(k): v for k, v in model_values.items()},
                 len(sub_constraints),
             )
             sub_prob = dc_replace(problem, constraints=tuple(sub_constraints))
@@ -536,7 +546,7 @@ class PlaningPipeline:
             # accurate here, since all constraints are atomic), LoweringPass,
             # MergeIdenticalObjects, SimplifyPass.
             try:
-                comp_am = self.run_passes(comp, self.LOCAL_PASSES)
+                comp_am = self.run_passes(comp, self.local_passes)
             except UnsatisfiableConstraint as exc:
                 logger.info("PlaningPipeline: unsatisfiable after local passes → 0 ({})", exc)
                 return []
