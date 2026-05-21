@@ -780,7 +780,7 @@ def _encode_sequence(
         circle_size = defn.size or source_exact or domain_size
         context.circle_len = circle_size
         context.overcount = context.overcount * circle_size
-        if defn.reflection:
+        if defn.reflection and circle_size > 2:
             context.overcount = context.overcount * 2
 
 
