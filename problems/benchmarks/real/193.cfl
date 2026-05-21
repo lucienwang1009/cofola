@@ -1,0 +1,5 @@
+odds = set(1, 3, 5, 7, 9)
+evens = set(2, 4, 6, 8)
+number = sequence(odds + evens)
+(odds, odds) not in number
+(evens, evens) not in number

@@ -1,0 +1,2 @@
+balls = set(ball0...4)
+boxes = compose(balls, 2)

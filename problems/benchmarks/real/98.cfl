@@ -1,0 +1,4 @@
+letters = set(E, Q, U, A, L, S)
+seq = choose_tuple(letters, 4)
+seq[0] == L
+seq[3] == Q

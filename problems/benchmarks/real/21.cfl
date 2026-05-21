@@ -1,0 +1,2 @@
+S = set(chocolate, vanilla, strawberry)
+B = choose_replace(S, 4)

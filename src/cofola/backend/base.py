@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 
 from cofola.frontend.problem import Problem
 from cofola.planing.analysis.entities import AnalysisResult
+from cofola.planing.pipeline import PlanningProfile
 
 __all__ = ["Backend"]
 
@@ -12,16 +13,11 @@ __all__ = ["Backend"]
 class Backend(ABC):
     """Abstract solver backend.
 
-    Implementations translate a fully-analysed, lowered planning Problem into
-    an integer count.
+    Implementations translate a fully-analysed planning Problem into an integer
+    count.
 
-    The Problem passed to :meth:`solve` must have been through:
-    - EntityAnalysis
-    - ConstantFolder
-    - MaxSizeInference
-    - LoweringPass
-    - SimplifyPass
-    - BagClassification
+    The Problem passed to :meth:`solve` has been prepared by the planning
+    pipeline according to this backend's :meth:`planning_profile`.
 
     Inspired by Z3's solver interface pattern.
     """
@@ -31,6 +27,11 @@ class Backend(ABC):
     def name(self) -> str:
         """Human-readable backend identifier."""
         ...
+
+    def planning_profile(self) -> PlanningProfile:
+        """Return the planning profile requested by this backend."""
+
+        return PlanningProfile()
 
     @abstractmethod
     def solve(self, problem: Problem, analysis: AnalysisResult) -> int:

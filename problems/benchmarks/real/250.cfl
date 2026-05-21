@@ -1,0 +1,11 @@
+materials = set(plastic, wood)
+sizes = set(small, medium, large)
+colors = set(blue, green, red, yellow)
+shapes = set(circle, hexagon, square, triangle)
+different = set(plastic, medium, red, circle)
+chosen_material = choose(materials, 1)
+chosen_size = choose(sizes, 1)
+chosen_color = choose(colors, 1)
+chosen_shape = choose(shapes, 1)
+chosen = chosen_material + chosen_size + chosen_color + chosen_shape
+|chosen & different| == 2

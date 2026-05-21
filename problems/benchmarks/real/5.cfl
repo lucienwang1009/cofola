@@ -1,0 +1,4 @@
+S = set(A, B, C, D, E, F)
+arrangement = choose_tuple(S, 4)
+arrangement[1] == C
+arrangement.count(B) > 0

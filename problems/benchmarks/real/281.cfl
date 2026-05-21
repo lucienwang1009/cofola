@@ -1,0 +1,5 @@
+vowels = bag(A, O, U)
+consonants = bag(M, T, T, H, C, N, S)
+fall = choose(vowels + consonants, 5)
+|fall & vowels| == 2
+|fall & consonants| == 3

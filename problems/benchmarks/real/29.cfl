@@ -1,0 +1,6 @@
+math_books = set(math0...2)
+physics_books = set(physic)
+other_books = set(other0...4)
+arrangement = sequence(math_books + physics_books + other_books)
+together(math_books) in arrangement
+math_books < physics_books in arrangement

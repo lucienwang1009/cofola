@@ -1,0 +1,10 @@
+U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)
+P0 = set(e0, e1, e2, e3, e4, e8, e9, e10, e11, e15, e18)
+P1 = set(e1, e2, e4, e5, e7, e9, e13, e14, e16, e17, e18, e19)
+P2 = set(e0, e1, e4, e9, e10, e13, e16, e19)
+cfg = compose(U, 5)
+|cfg[0]| == 2
+|cfg[1]| == 8
+|cfg[2]| == 1
+|cfg[3]| == 8
+|cfg[4]| == 1

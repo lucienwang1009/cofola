@@ -1,7 +1,10 @@
 """WFOMC backend — implements Backend ABC using the wfomc library."""
 from __future__ import annotations
 
+from typing import Union
+
 from wfomc import Algo
+from wfomc.algo import LinearOrderEncoding
 from loguru import logger
 
 from cofola.backend.base import Backend
@@ -9,8 +12,27 @@ from cofola.backend.wfomc.solver import solve_wfomc
 from cofola.backend.wfomc.encoder import encode
 from cofola.frontend.problem import Problem
 from cofola.planing.analysis.entities import AnalysisResult
+from cofola.planing.pass_manager import FixedPointPass
+from cofola.planing.passes.lowering import LoweringPass
+from cofola.planing.passes.merge_identical import MergeIdenticalObjects
+from cofola.planing.passes.optimize import ConstantFolder, SizeConstraintFolder
+from cofola.planing.passes.simplify import SimplifyPass
+from cofola.planing.pipeline import PlanningProfile
 
-__all__ = ["WFOMCBackend"]
+__all__ = ["WFOMC_GLOBAL_PASSES", "WFOMC_LOCAL_PASSES", "WFOMCBackend"]
+
+
+WFOMC_GLOBAL_PASSES = (
+    FixedPointPass(ConstantFolder),
+    MergeIdenticalObjects,
+)
+
+WFOMC_LOCAL_PASSES = (
+    SizeConstraintFolder,
+    FixedPointPass(LoweringPass),
+    MergeIdenticalObjects,
+    SimplifyPass,
+)
 
 
 class WFOMCBackend(Backend):
@@ -26,10 +48,22 @@ class WFOMCBackend(Backend):
         algo: Algo = Algo.FASTv2,
         use_partition_constraint: bool = True,
         lifted: bool = False,
+        linear_order_encoding: Union[LinearOrderEncoding, str, None] = None,
     ) -> None:
         self.algo = algo
         self.use_partition_constraint = use_partition_constraint
         self.lifted = lifted
+        # Only consulted when algo == Algo.PROPOSITIONAL; ignored otherwise.
+        # None lets the wfomc library use its default (PIN).
+        self.linear_order_encoding = linear_order_encoding
+
+    def planning_profile(self) -> PlanningProfile:
+        """Return the WFOMC-compatible planning profile."""
+
+        return PlanningProfile(
+            global_passes=WFOMC_GLOBAL_PASSES,
+            local_passes=WFOMC_LOCAL_PASSES,
+        )
 
     def solve(
         self,
@@ -54,11 +88,12 @@ class WFOMCBackend(Backend):
 
         algo = self.algo
         use_partition_constraint = self.use_partition_constraint
-        if wfomc_problem.contain_linear_order_axiom() and \
-                algo != Algo.INCREMENTAL and algo != Algo.RECURSIVE:
+        _order_capable = (Algo.INCREMENTAL, Algo.RECURSIVE, Algo.PROPOSITIONAL)
+        if wfomc_problem.contain_linear_order_axiom() and algo not in _order_capable:
             logger.warning(
                 'Linear order axiom with the predicate LEQ is found, '
-                'while the algorithm is not INCREMENTAL or RECURSIVE. '
+                'while the algorithm does not support it '
+                '(supported: INCREMENTAL, RECURSIVE, PROPOSITIONAL). '
                 'Switching to INCREMENTAL algorithm...'
             )
             algo = Algo.INCREMENTAL
@@ -67,7 +102,12 @@ class WFOMCBackend(Backend):
         logger.debug("WFOMCBackend: algo={}", algo)
 
         try:
-            raw = solve_wfomc(wfomc_problem, algo, use_partition_constraint)
+            raw = solve_wfomc(
+                wfomc_problem,
+                algo,
+                use_partition_constraint,
+                linear_order_encoding=self.linear_order_encoding,
+            )
         except IndexError as exc:
             # WFOMC library crashes on degenerate problems (e.g. empty domains).
             # Treat as unsatisfiable → 0.

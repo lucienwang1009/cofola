@@ -1,0 +1,3 @@
+books = set(book0...4)
+bookshelf = tuple(books)
+bookshelf[1] != book0

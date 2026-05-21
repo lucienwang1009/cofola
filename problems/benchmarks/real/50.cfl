@@ -1,0 +1,2 @@
+letters = bag(M, I:4, S:4, P:2)
+arrangement = tuple(letters)

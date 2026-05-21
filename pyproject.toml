@@ -24,6 +24,9 @@ coso = [
 [project.scripts]
 cofola = "cofola.solver:main"
 
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
@@ -60,6 +63,7 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
+    "matplotlib>=3.10.9",
     "pyright>=1.1.407",
     "pytest>=9.0.2",
 ]

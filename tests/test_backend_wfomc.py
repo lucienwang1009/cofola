@@ -4,7 +4,11 @@ from __future__ import annotations
 import pytest
 from wfomc import Algo
 
-from cofola.backend.wfomc.backend import WFOMCBackend
+from cofola.backend.wfomc.backend import (
+    WFOMC_GLOBAL_PASSES,
+    WFOMC_LOCAL_PASSES,
+    WFOMCBackend,
+)
 from cofola.backend.wfomc.context import Context
 from cofola.backend.wfomc.encoder import encode
 from cofola.frontend import (
@@ -20,7 +24,21 @@ from cofola.frontend import (
     TupleIndexEq,
 )
 from cofola.planing.analysis.entities import AnalysisResult, BagInfo, SetInfo
+from cofola.planing.pass_manager import FixedPointPass
+from cofola.planing.passes.lowering import LoweringPass
 from cofola.solver import parse_and_solve
+
+
+def test_wfomc_backend_declares_default_planning_profile() -> None:
+    profile = WFOMCBackend().planning_profile()
+
+    assert profile.global_passes == WFOMC_GLOBAL_PASSES
+    assert profile.local_passes == WFOMC_LOCAL_PASSES
+    assert profile.local_passes is not None
+    assert any(
+        isinstance(pass_spec, FixedPointPass) and pass_spec.pass_cls is LoweringPass
+        for pass_spec in profile.local_passes
+    )
 
 
 def test_bag_difference_counts_leftover_multiplicities() -> None:
@@ -317,7 +335,8 @@ def test_backend_does_not_convert_unexpected_solver_errors_to_zero(monkeypatch) 
     def fake_encode(problem: object, analysis: object, lifted: bool):
         return FakeProblem(), FakeDecoder()
 
-    def fake_solve_wfomc(problem: object, algo: Algo, use_partition_constraint: bool):
+    def fake_solve_wfomc(problem: object, algo: Algo, use_partition_constraint: bool,
+                         *, linear_order_encoding=None):
         raise ValueError("backend bug")
 
     import cofola.backend.wfomc.backend as backend_module

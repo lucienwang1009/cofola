@@ -1,0 +1,7 @@
+U = bag(e0, e1: 4, e2: 2, e3: 4, e4: 3, e5, e6, e7: 3, e8)
+P0 = set(e4)
+P1 = set(e0, e1, e2, e3, e4, e6, e8)
+P2 = set(e0, e1, e2, e7)
+cfg = choose(U)
+|cfg| == 5
+cfg.count(e0) >= 1

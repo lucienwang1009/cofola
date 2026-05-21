@@ -1,0 +1,3 @@
+members = set(member0...20)
+president = choose(members, 1)
+vice_president = choose(members - president, 1)

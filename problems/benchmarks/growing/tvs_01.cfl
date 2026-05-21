@@ -1,0 +1,4 @@
+defective = set(d0...4)
+working = set(w0...10)
+purchase = choose(defective + working, 5)
+|purchase & defective| >= 2

@@ -1,0 +1,3 @@
+letters = bag(T, A, R, G, E, T)
+S = choose_tuple(letters, 3)
+S.count(T) > 0

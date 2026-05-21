@@ -1,0 +1,4 @@
+flavors = set(flavor0...4)
+toppings = set(topping0...6)
+chosen_flavor = choose(flavors, 1)
+chosen_toppings = choose(toppings, 2)

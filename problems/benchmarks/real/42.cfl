@@ -1,0 +1,5 @@
+reps = set(rep0...5)
+dems = set(dem0...4)
+committe = reps + dems
+chairs = sequence(committe)
+together(dems) in chairs

@@ -1,0 +1,7 @@
+girls = set(girl0...6)
+boys = set(boy0...6)
+students = girls + boys
+teams = compose(students, 3)
+|part| == 4 for part in teams
+|part & girls| >= 1 for part in teams
+|part & boys| >= 1 for part in teams

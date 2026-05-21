@@ -1,0 +1,3 @@
+prime = set(2, 3, 5, 7, 11)
+chosen = choose(prime)
+|chosen| > 0

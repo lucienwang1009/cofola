@@ -1,0 +1,5 @@
+Democrats = set(D0...5)
+Republicans = set(R0...5)
+table = circle(Democrats + Republicans)
+next_to(Democrats, Democrats) not in table
+next_to(Republicans, Republicans) not in table

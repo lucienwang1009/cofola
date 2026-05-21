@@ -1,0 +1,2 @@
+students = set(student0...6)
+committee = choose(students, 4)
