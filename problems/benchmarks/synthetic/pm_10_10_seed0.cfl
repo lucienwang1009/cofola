@@ -1,0 +1,7 @@
+U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)
+P0 = set(e1, e2, e4, e6, e7, e8, e9)
+P1 = set(e5, e6, e7)
+P2 = set(e1, e3, e5, e6, e7, e8, e9)
+cfg = choose_tuple(U, 10)
+cfg.count(P0) <= 0
+cfg[6] in P1

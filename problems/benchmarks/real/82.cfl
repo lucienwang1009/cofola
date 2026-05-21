@@ -1,0 +1,3 @@
+people = set(John, Sam, other0...4)
+table = circle(people)
+next_to(John, Sam) in table

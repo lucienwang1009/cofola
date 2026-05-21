@@ -1,0 +1,8 @@
+chickens = set(chi0...4)
+dogs = set(dog0...2)
+cats = set(cat0...5)
+animals = chickens + dogs + cats
+arrangement = sequence(animals)
+together(chickens) in arrangement
+together(dogs) in arrangement
+together(cats) in arrangement

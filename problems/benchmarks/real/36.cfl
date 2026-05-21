@@ -1,0 +1,5 @@
+leopards = set(leopards0...7)
+shortest = set(leopards0, leopards1)
+row = tuple(leopards)
+row[0] in shortest
+row[6] in shortest

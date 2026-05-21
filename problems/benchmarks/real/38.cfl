@@ -1,0 +1,2 @@
+B = bag(ball: 4)
+P = partition(B, 2)

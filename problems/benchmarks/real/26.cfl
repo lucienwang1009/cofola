@@ -1,0 +1,6 @@
+white_socks = set(white0...4)
+brown_socks = set(brown0...4)
+blue_socks = set(blue0...2)
+socks = white_socks + brown_socks + blue_socks
+pairs = choose(socks, 2)
+(pairs subset white_socks) or (pairs subset brown_socks) or (pairs subset blue_socks)

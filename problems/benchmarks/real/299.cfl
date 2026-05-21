@@ -1,0 +1,7 @@
+dogs = set(Fluffy, Nipper, dog0...8)
+groups = compose(dogs, 3)
+|groups[0]| == 3
+|groups[1]| == 5
+|groups[2]| == 2
+Fluffy in groups[0]
+Nipper in groups[1]

@@ -1,0 +1,2 @@
+group = set(friend0...6)
+C = compose(group, 3)

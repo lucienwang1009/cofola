@@ -12,7 +12,11 @@ from cofola.backend.wfomc.api import (
     parse,
     top,
 )
-from cofola.backend.wfomc.backend import WFOMCBackend
+from cofola.backend.wfomc.backend import (
+    WFOMC_GLOBAL_PASSES,
+    WFOMC_LOCAL_PASSES,
+    WFOMCBackend,
+)
 from cofola.backend.wfomc.context import Context
 from cofola.backend.wfomc.decoder import Decoder
 from cofola.backend.wfomc.encoder import encode
@@ -30,7 +34,21 @@ from cofola.frontend import (
     TupleIndexEq,
 )
 from cofola.planing.analysis.entities import AnalysisResult, BagInfo, SetInfo
+from cofola.planing.pass_manager import FixedPointPass
+from cofola.planing.passes.lowering import LoweringPass
 from cofola.solver import parse_and_solve
+
+
+def test_wfomc_backend_declares_default_planning_profile() -> None:
+    profile = WFOMCBackend().planning_profile()
+
+    assert profile.global_passes == WFOMC_GLOBAL_PASSES
+    assert profile.local_passes == WFOMC_LOCAL_PASSES
+    assert profile.local_passes is not None
+    assert any(
+        isinstance(pass_spec, FixedPointPass) and pass_spec.pass_cls is LoweringPass
+        for pass_spec in profile.local_passes
+    )
 
 
 def test_constant_result_treats_absent_weight_generators_as_zero() -> None:

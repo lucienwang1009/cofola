@@ -1,0 +1,2 @@
+points = set(0...7)
+triangle = choose(points, 3)

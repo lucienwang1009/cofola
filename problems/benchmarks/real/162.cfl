@@ -1,0 +1,2 @@
+classes = set(class0...8)
+chosen = choose(classes, 3)

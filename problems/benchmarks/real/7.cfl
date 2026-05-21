@@ -1,0 +1,5 @@
+math_books = set(math0...3)
+english_books = set(english0...5)
+shelf = sequence(math_books + english_books)
+together(math_books) in shelf
+together(english_books) in shelf

@@ -1,0 +1,4 @@
+together_people = set(Pierre, Rosa, Thomas)
+people = together_people + set(other0...5)
+table = circle(people)
+together(together_people) in table

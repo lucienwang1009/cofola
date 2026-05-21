@@ -1,0 +1,3 @@
+code = set(dash, dot)
+symbol = choose_replace_tuple(code)
+|symbol| <= 4

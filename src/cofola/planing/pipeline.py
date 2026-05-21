@@ -3,7 +3,7 @@
 PlaningPipeline.process(problem) is the single entry point.  It performs all
 planning work — passes, Shannon decomposition, connected-component
 decomposition — and returns a SolveSchedule describing exactly which
-(Problem, Analysis) pairs to hand to the WFOMC backend and how to combine
+(Problem, Analysis) pairs to hand to the selected backend and how to combine
 their counts.
 
 The caller (solver.py) only needs to:
@@ -33,7 +33,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import replace as dc_replace
-from typing import Iterable, TypeAlias, cast
+from typing import Iterable, cast
 
 from loguru import logger
 from sympy import Symbol, satisfiable
@@ -70,15 +70,24 @@ from cofola.planing.pass_manager import (
     TransformPass,
     UnsatisfiableConstraint,
 )
-from cofola.planing.passes.lowering import LoweringPass
-from cofola.planing.passes.merge_identical import MergeIdenticalObjects
-from cofola.planing.passes.optimize import ConstantFolder, SizeConstraintFolder
-from cofola.planing.passes.simplify import SimplifyPass
 
 
 # ---------------------------------------------------------------------------
 # Result types
 # ---------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class PlanningProfile(object):
+    """Backend-requested planning configuration."""
+
+    global_passes: tuple[type[TransformPass] | FixedPointPass, ...] = ()
+    local_passes: tuple[type[TransformPass] | FixedPointPass, ...] | None = None
+
+    def is_empty(self) -> bool:
+        """Return True when no planner transformations are requested."""
+
+        return not self.global_passes and not self.local_passes
+
 
 @dataclass
 class SolveBranch:
@@ -121,7 +130,6 @@ _HAS_POSITIVE = (
     BagEqConstraint,
 )
 _COMPOUND = (NotConstraint, AndConstraint, OrConstraint)
-PassSpec: TypeAlias = type[TransformPass] | FixedPointPass
 
 
 def _negate_constraint(c: Constraint) -> Constraint:
@@ -219,23 +227,13 @@ class PlaningPipeline:
 
     Call process(problem) to get a SolveSchedule.  All pass execution,
     Shannon decomposition, and connected-component decomposition happen here.
-    The caller only needs to evaluate the schedule against a WFOMC backend.
+    The caller only needs to evaluate the schedule against a backend.
     """
 
-    GLOBAL_PASSES = [
-        FixedPointPass(ConstantFolder),
-        MergeIdenticalObjects,
-    ]
-
-    LOCAL_PASSES = [
-        SizeConstraintFolder,
-        FixedPointPass(LoweringPass),
-        MergeIdenticalObjects,
-        SimplifyPass,
-    ]
-
-    def __init__(self, local_passes: list[PassSpec] | None = None) -> None:
-        self.local_passes = self.LOCAL_PASSES if local_passes is None else local_passes
+    def __init__(self, profile: PlanningProfile | None = None) -> None:
+        self.profile = profile or PlanningProfile()
+        self.global_passes = list(self.profile.global_passes)
+        self.local_passes = list(self.profile.local_passes or ())
 
     # ------------------------------------------------------------------
     # Public API
@@ -245,9 +243,10 @@ class PlaningPipeline:
         """Transform and decompose a problem into a ready-to-solve schedule.
 
         Steps:
-        1. Run GLOBAL_PASSES once on the full problem.
-        2. Shannon-decompose compound constraints (recursively flattened).
-        3. For each Shannon branch: run LOCAL_PASSES + component decomposition.
+        1. If the profile is empty, return the intact problem as one component.
+        2. Run profile.global_passes once on the full problem.
+        3. Shannon-decompose compound constraints (recursively flattened).
+        4. For each Shannon branch: run profile.local_passes + component decomposition.
 
         Returns:
             SolveSchedule with one SolveBranch per satisfying Shannon
@@ -255,9 +254,12 @@ class PlaningPipeline:
         """
         logger.debug("\n{}", fmt_problem(problem, stage="[Input] Parsed Problem"))
 
+        if self.profile.is_empty():
+            return self._make_intact_schedule(problem)
+
         # Phase 1: global structural passes
         try:
-            am = self.run_passes(problem, self.GLOBAL_PASSES)
+            am = self.run_passes(problem, self.global_passes)
         except UnsatisfiableConstraint as exc:
             logger.info("PlaningPipeline: unsatisfiable after global passes → 0 ({})", exc)
             return SolveSchedule(branches=[])
@@ -268,6 +270,14 @@ class PlaningPipeline:
         branches = self._collect_branches(am.problem)
         return SolveSchedule(branches=branches)
 
+    def _make_intact_schedule(self, problem: Problem) -> SolveSchedule:
+        """Return the original problem as one backend component."""
+
+        analysis = AnalysisManager(problem).get(BagClassification)
+        if analysis.unsatisfiable:
+            return SolveSchedule(branches=[])
+        return SolveSchedule(branches=[SolveBranch(components=[(problem, analysis)])])
+
     # ------------------------------------------------------------------
     # Pass runner (reusable helper)
     # ------------------------------------------------------------------
@@ -276,7 +286,7 @@ class PlaningPipeline:
     def run_passes(
         cls,
         problem: Problem,
-        pass_classes: list[PassSpec],
+        pass_classes: Iterable[type[TransformPass] | FixedPointPass],
         *,
         check_compound_invariant: bool = False,
     ) -> AnalysisManager:

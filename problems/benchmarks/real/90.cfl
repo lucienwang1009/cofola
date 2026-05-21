@@ -1,0 +1,2 @@
+beads = set(bead0...8)
+necklace = choose_circle(beads, 5, reflection=True)

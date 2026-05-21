@@ -1,0 +1,2 @@
+politicians = set(D0...5) + set(R0...5)
+table = circle(politicians)

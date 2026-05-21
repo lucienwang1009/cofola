@@ -1,0 +1,4 @@
+digits = bag(2: 3, 3, 7, 9)
+odds = set(3, 7, 9)
+age = tuple(digits)
+age[1] in odds

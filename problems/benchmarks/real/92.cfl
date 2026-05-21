@@ -1,0 +1,3 @@
+members = set(member0...25)
+president_secretary_treasurer = choose_replace_tuple(members, 3)
+president_secretary_treasurer.dedup_count(members) > 1

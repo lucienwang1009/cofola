@@ -1,0 +1,3 @@
+marbles = set(red, blue, green, yellow)
+S = choose(marbles)
+|S| > 0

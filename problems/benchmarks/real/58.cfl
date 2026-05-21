@@ -1,0 +1,4 @@
+pens = set(pen0...8)
+dogs = choose(pens, 4)
+cats = choose(pens - dogs, 3)
+roosters = pens - dogs - cats

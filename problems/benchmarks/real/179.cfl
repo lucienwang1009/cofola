@@ -1,0 +1,8 @@
+parents = set(Mr_Lopez, Mrs_Lopez)
+children = set(Child1, Child2)
+family = parents + children
+front = choose(family, 2)
+back = family - front
+front_seat = tuple(front)
+back_seat = tuple(back)
+front_seat[0] in parents

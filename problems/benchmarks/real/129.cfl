@@ -1,0 +1,2 @@
+balls = bag(gree: 2, red: 2)
+boxes = compose(balls, 3)

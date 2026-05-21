@@ -1,0 +1,6 @@
+condiments = set(ketchup, mustard, mayonnaise, tomato, lettuce, pickles, cheese, onions)
+patties = set(patty)
+patties_choice = choose_replace(patties)
+|patties_choice| <= 3
+|patties_choice| >= 1
+condiments_choice = choose(condiments)

@@ -1,0 +1,8 @@
+guys = set(guy0...4)
+girls = set(girl0...4)
+president = choose(guys + girls, 1)
+vice = choose((guys + girls) - president, 1)
+treasurer = choose((guys + girls) - president - vice, 1)
+officers = president + vice + treasurer
+|officers & guys| >= 1
+|officers & girls| >= 1

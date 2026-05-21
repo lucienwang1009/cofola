@@ -1,0 +1,3 @@
+team = set(0...15)
+starting = choose(team, 7)
+goalie = choose(starting, 1)

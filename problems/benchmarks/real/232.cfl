@@ -1,0 +1,8 @@
+letters = set(l0...26)
+vowel = set(l0...5)
+digits = set(0...10)
+first_digit = set(1,2,4,6)
+S1 = choose_tuple(letters, 3)
+S2 = choose_tuple(digits, 3)
+S1[0] in vowel
+S2[0] in first_digit

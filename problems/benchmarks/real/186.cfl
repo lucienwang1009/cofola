@@ -1,0 +1,5 @@
+letters = set(A, E, G, I, K, O, P, R, S, T, U, V)
+license = choose_tuple(letters, 5)
+(license[0] == G)
+license[4] == T
+S not in license

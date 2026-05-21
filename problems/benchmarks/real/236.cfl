@@ -1,0 +1,2 @@
+beads = set(bead0...5)
+bracelet = circle(beads, reflection=True)

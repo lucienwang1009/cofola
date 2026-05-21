@@ -1,0 +1,2 @@
+points = set(point0...12)
+plane = choose(points, 3)

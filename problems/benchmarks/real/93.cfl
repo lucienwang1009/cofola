@@ -1,0 +1,4 @@
+books = bag(book: 6)
+checked_out = choose(books)
+|checked_out| > 0
+|checked_out| < 6

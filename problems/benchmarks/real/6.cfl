@@ -1,0 +1,3 @@
+B = bag(apple: 3, orange: 3)
+C = compose(B, 4)
+C[0].count(orange) == 0

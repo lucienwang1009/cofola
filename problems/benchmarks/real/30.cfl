@@ -1,0 +1,8 @@
+men = set(man0...5)
+women = set(woman0...6)
+male_roles = choose(men, 2)
+female_roles = choose(women, 2)
+other_roles = choose((men - male_roles) + (women - female_roles), 2)
+male_roles_permute = tuple(male_roles)
+female_roles_permute = tuple(female_roles)
+other_roles_permute = tuple(other_roles)

@@ -1,0 +1,4 @@
+meat = set(meat0...10)
+cheese = set(c0...9)
+sandwich_meat = choose(meat, 1)
+sandwich_cheese = choose(cheese, 2)

@@ -1,0 +1,3 @@
+books = set(math1, math2, other0...4)
+shelf = sequence(books)
+next_to(math1, math2) not in shelf

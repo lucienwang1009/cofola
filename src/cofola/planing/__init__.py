@@ -19,7 +19,7 @@ from .pass_manager import (
     UnsatisfiableConstraint,
 )
 from .passes import ConstantFolder, LoweringPass, MergeIdenticalObjects, SimplifyPass
-from .pipeline import PlaningPipeline, SolveBranch, SolveSchedule
+from .pipeline import PlaningPipeline, PlanningProfile, SolveBranch, SolveSchedule
 
 __all__ = [
     "AnalysisResult",
@@ -41,6 +41,7 @@ __all__ = [
     "MergeIdenticalObjects",
     "SimplifyPass",
     "PlaningPipeline",
+    "PlanningProfile",
     "SolveBranch",
     "SolveSchedule",
 ]

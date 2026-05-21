@@ -1,0 +1,4 @@
+triplets = set(Missy, Lauren, Liz)
+players = triplets + set(other0...11)
+lineup = choose(players, 6)
+|lineup & triplets| != 3

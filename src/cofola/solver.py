@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import argparse
 import math
+from typing import Union
 
 from loguru import logger
+from wfomc import Algo
+from wfomc.algo import LinearOrderEncoding
 
 from cofola.backend.base import Backend
 from cofola.backend.coso.backend import CoSoBackend
-from cofola.backend.coso.planning import COSO_LOCAL_PASSES
 from cofola.backend.wfomc.backend import WFOMCBackend
 from cofola.frontend import validate_problem
 from cofola.frontend.problem import Problem
@@ -17,23 +19,46 @@ from cofola.parser.parser import parse
 
 
 BackendChoice = str | Backend
+AlgoChoice = Union[Algo, str, None]
+LinearOrderEncodingChoice = Union[LinearOrderEncoding, str, None]
 
 
-def _make_backend(backend: BackendChoice, *, debug: bool = False) -> Backend:
+def _resolve_algo(algo: AlgoChoice) -> Algo:
+    if algo is None:
+        return Algo.FASTv2
+    if isinstance(algo, Algo):
+        return algo
+    return Algo(algo)
+
+
+def _resolve_linear_order_encoding(
+    encoding: LinearOrderEncodingChoice,
+) -> LinearOrderEncodingChoice:
+    """Pass-through resolver: wfomc accepts None/str/enum so we just normalise None."""
+    if encoding is None or isinstance(encoding, LinearOrderEncoding):
+        return encoding
+    return LinearOrderEncoding(encoding)
+
+
+def _make_backend(
+    backend: BackendChoice,
+    *,
+    debug: bool = False,
+    algo: AlgoChoice = None,
+    linear_order_encoding: LinearOrderEncodingChoice = None,
+) -> Backend:
     if isinstance(backend, Backend):
         return backend
     normalized = backend.lower()
     if normalized == "wfomc":
-        return WFOMCBackend(lifted=False)
+        return WFOMCBackend(
+            algo=_resolve_algo(algo),
+            lifted=False,
+            linear_order_encoding=_resolve_linear_order_encoding(linear_order_encoding),
+        )
     if normalized == "coso":
         return CoSoBackend(debug=debug)
     raise ValueError(f"Unknown backend {backend!r}. Expected 'wfomc' or 'coso'.")
-
-
-def _make_pipeline(backend: Backend) -> PlaningPipeline:
-    if isinstance(backend, CoSoBackend):
-        return PlaningPipeline(local_passes=COSO_LOCAL_PASSES)
-    return PlaningPipeline()
 
 
 def solve(
@@ -41,6 +66,8 @@ def solve(
     debug: bool = False,
     validate: bool = True,
     backend: BackendChoice = "wfomc",
+    algo: AlgoChoice = None,
+    linear_order_encoding: LinearOrderEncodingChoice = None,
 ) -> int:
     """Solve a combinatorics problem.
 
@@ -48,6 +75,11 @@ def solve(
     :param debug: Enable debug logging.
     :param validate: Run frontend type validation before solving.
     :param backend: Backend name or Backend instance.
+    :param algo: WFOMC algorithm to use (only honoured for the wfomc backend).
+        Accepts an Algo enum value or its string form ("fastv2", "incremental",
+        "recursive", "propositional"). Defaults to FASTv2.
+    :param linear_order_encoding: Only consulted when algo == PROPOSITIONAL;
+        picks how the order axioms are encoded ("pin" or "axioms").
     :return: the answer
     """
     setup_logging(debug)
@@ -55,8 +87,13 @@ def solve(
         validate_problem(problem)
     logger.info("Solving problem with {} objects, {} constraints",
                 len(problem.defs), len(problem.constraints))
-    solver_backend = _make_backend(backend, debug=debug)
-    schedule = _make_pipeline(solver_backend).process(problem)
+    solver_backend = _make_backend(
+        backend,
+        debug=debug,
+        algo=algo,
+        linear_order_encoding=linear_order_encoding,
+    )
+    schedule = PlaningPipeline(solver_backend.planning_profile()).process(problem)
     return sum(
         math.prod(solver_backend.solve(p, a) for p, a in branch.components)
         for branch in schedule.branches
@@ -67,17 +104,28 @@ def parse_and_solve(
     text: str,
     debug: bool = False,
     backend: BackendChoice = "wfomc",
+    algo: AlgoChoice = None,
+    linear_order_encoding: LinearOrderEncodingChoice = None,
 ) -> int:
     """Parse .cfl source text and solve the combinatorics problem.
 
     :param text: the .cofola source text
     :param debug: Enable debug logging.
     :param backend: Backend name or Backend instance.
+    :param algo: see :func:`solve`.
+    :param linear_order_encoding: see :func:`solve`.
     :return: the answer
     """
     setup_logging(debug)
     logger.debug("Parsing input text ({} chars)", len(text))
-    return solve(parse(text, debug=debug), debug=debug, validate=False, backend=backend)
+    return solve(
+        parse(text, debug=debug),
+        debug=debug,
+        validate=False,
+        backend=backend,
+        algo=algo,
+        linear_order_encoding=linear_order_encoding,
+    )
 
 
 def parse_args():
@@ -92,6 +140,23 @@ def parse_args():
         default='wfomc',
         help='solver backend to use',
     )
+    parser.add_argument(
+        '--algo', '-a',
+        type=Algo,
+        choices=list(Algo),
+        default=Algo.FASTv2,
+        help='WFOMC algorithm (wfomc backend only). Default: fastv2. '
+             'Use "propositional" to ground the sentence and count with ganak '
+             '(requires an external ganak binary; see wfomc README).',
+    )
+    parser.add_argument(
+        '--linear-order-encoding', '-l',
+        type=LinearOrderEncoding,
+        choices=list(LinearOrderEncoding),
+        default=None,
+        help='How the propositional counter encodes order axioms (LEQ / PRED / '
+             'CIRCULAR_PRED). Ignored by other algorithms. Default: pin.',
+    )
     return parser.parse_args()
 
 
@@ -102,5 +167,11 @@ def main():
     logger.info('Input file: {}', input_file)
     with open(input_file, 'r') as f:
         text = f.read()
-    res: int = parse_and_solve(text, debug=args.debug, backend=args.backend)
+    res: int = parse_and_solve(
+        text,
+        debug=args.debug,
+        backend=args.backend,
+        algo=args.algo,
+        linear_order_encoding=args.linear_order_encoding,
+    )
     logger.info('Answer: {}', res)

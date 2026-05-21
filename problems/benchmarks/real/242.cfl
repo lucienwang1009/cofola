@@ -1,0 +1,5 @@
+friends = set(Manoj, friend0...5)
+chemistry = choose(friends)
+biology = friends - chemistry
+(Manoj not in chemistry) or |chemistry| > 1
+(Manoj not in biology) or |biology| > 1

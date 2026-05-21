@@ -1,0 +1,2 @@
+seats = set(seats0...7)
+arrangement = circle(seats)

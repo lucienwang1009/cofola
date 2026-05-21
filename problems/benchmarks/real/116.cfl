@@ -1,0 +1,2 @@
+people = set(0...9)
+committee = choose(people, 4)

@@ -1,0 +1,5 @@
+teacher_committee = set(teacher0...4)
+non_teacher_committee = set(non_teacher0...6)
+committee = teacher_committee + non_teacher_committee
+subcommittees = choose(committee, 4)
+|subcommittees & teacher_committee| > 0
