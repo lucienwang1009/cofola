@@ -1,0 +1,7 @@
+U = bag(e0: 2, e1: 2, e2, e3)
+P0 = set(e0, e1, e2, e3)
+P1 = set(e1, e2, e3)
+P2 = set(e0, e1, e2)
+cfg = choose_tuple(U, 4)
+cfg.count(P0) <= 1
+cfg[0] in P1

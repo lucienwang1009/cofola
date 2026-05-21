@@ -1,0 +1,4 @@
+girls = set(girl0...6)
+boys = set(boy0...2)
+row = sequence(girls+boys)
+together(boys) in row

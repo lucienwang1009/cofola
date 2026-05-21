@@ -1,0 +1,2 @@
+people = set(0...10)
+shake_hands = choose(people, 2)

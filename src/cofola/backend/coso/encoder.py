@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Sequence
 from dataclasses import dataclass, field
+from math import factorial
 
 from cofola.frontend.constraints import (
     BagCountAtom,
@@ -22,15 +24,21 @@ from cofola.frontend.constraints import (
     TupleIndexMembership,
 )
 from cofola.frontend.objects import (
+    BagDifference,
+    BagIntersection,
     BagChoose,
     CircleDef,
     CompositionDef,
     Entity,
     ObjRef,
+    BagPartDef,
     PartitionDef,
     SequenceDef,
     SetChoose,
     SetChooseReplace,
+    SetDifference,
+    SetIntersection,
+    SetPartDef,
     TupleDef,
 )
 from cofola.frontend.problem import Problem
@@ -51,6 +59,7 @@ class CoSoProgram:
     target: ObjRef | None = None
     is_trivial: bool = False
     trivial_count: int = 1
+    count_divisor: int = 1
 
 
 @dataclass(frozen=True)
@@ -123,15 +132,16 @@ def encode(problem: Problem, analysis: AnalysisResult) -> CoSoProgram:
     lines.append(f"cfg in {_config_expr(spec.kind, 'u')};")
 
     constraints = list(_size_lines(spec))
-    constraints.extend(
-        line
-        for c in problem.constraints
-        if (line := _constraint_line(c, state)) is not None
-    )
+    constraint_lines, count_divisor = _constraint_lines(problem.constraints, state, spec)
+    constraints.extend(constraint_lines)
 
     lines.extend(state.property_lines)
     lines.extend(constraints)
-    return CoSoProgram(cola="\n".join(lines) + "\n", target=spec.target)
+    return CoSoProgram(
+        cola="\n".join(lines) + "\n",
+        target=spec.target,
+        count_divisor=count_divisor,
+    )
 
 
 def _find_config(problem: Problem, analysis: AnalysisResult) -> _ConfigSpec | None:
@@ -208,11 +218,65 @@ def _source_multiplicities(ref: ObjRef, analysis: AnalysisResult) -> dict[Entity
 
 def _size_lines(spec: _ConfigSpec) -> list[str]:
     if spec.size is None:
-        raise CoSoEncodingError(
-            "CoSo backend currently requires an exact target size. "
-            "Add a size constraint such as `|X| == k`."
-        )
+        return []
     return [f"#cfg={spec.size};"]
+
+
+def _constraint_lines(
+    constraints: Sequence[Constraint],
+    state: _EncodingState,
+    spec: _ConfigSpec,
+) -> tuple[list[str], int]:
+    part_sizes, skip = _indexed_part_size_constraints(constraints, state)
+    count_divisor = 1
+    lines: list[str] = []
+
+    if part_sizes:
+        for size, count in sorted(part_sizes.items()):
+            lines.append(f"#( #part={size} )={count};")
+        if spec.kind == "composition" and sum(part_sizes.values()) == spec.size:
+            count_divisor = _part_size_permutation_count(part_sizes)
+
+    for idx, c in enumerate(constraints):
+        if idx in skip:
+            continue
+        line = _constraint_line(c, state)
+        if line is not None:
+            lines.append(line)
+
+    return lines, count_divisor
+
+
+def _indexed_part_size_constraints(
+    constraints: Sequence[Constraint],
+    state: _EncodingState,
+) -> tuple[dict[int, int], set[int]]:
+    sizes: dict[int, int] = {}
+    skip: set[int] = set()
+    for idx, c in enumerate(constraints):
+        if not isinstance(c, SizeConstraint):
+            continue
+        atom = _single_unit_size_atom(c)
+        if not isinstance(atom, ObjRef):
+            continue
+        part_defn = state.problem.get_object(atom)
+        if not isinstance(part_defn, (SetPartDef, BagPartDef)) or part_defn.partition != state.target:
+            continue
+        if c.comparator != "==":
+            raise CoSoEncodingError(
+                "CoSo backend supports indexed part size constraints only when they are exact."
+            )
+        sizes[c.rhs] = sizes.get(c.rhs, 0) + 1
+        skip.add(idx)
+    return sizes, skip
+
+
+def _part_size_permutation_count(part_sizes: dict[int, int]) -> int:
+    total = sum(part_sizes.values())
+    divisor = 1
+    for count in part_sizes.values():
+        divisor *= factorial(count)
+    return factorial(total) // divisor
 
 
 def _constraint_line(c: Constraint, state: _EncodingState) -> str | None:
@@ -236,17 +300,12 @@ def _constraint_line(c: Constraint, state: _EncodingState) -> str | None:
 
 
 def _size_constraint_line(c: SizeConstraint, state: _EncodingState) -> str:
-    if len(c.terms) != 1:
-        raise CoSoEncodingError("CoSo backend only supports single-term size constraints.")
-    atom, coeff = c.terms[0]
-    if coeff != 1:
-        raise CoSoEncodingError("CoSo backend only supports unit-coefficient size constraints.")
+    atom = _single_unit_size_atom(c)
 
     comparator = _comparator(c.comparator)
     if isinstance(atom, ObjRef):
-        if atom != state.target:
-            raise CoSoEncodingError("CoSo backend only supports size constraints on the target.")
-        return f"#cfg{comparator}{c.rhs};"
+        counted = _counted_ref_expr(atom, state)
+        return f"#{counted}{comparator}{c.rhs};"
     if isinstance(atom, BagCountAtom):
         if atom.bag != state.target:
             raise CoSoEncodingError("CoSo backend only supports count atoms on the target.")
@@ -260,6 +319,47 @@ def _size_constraint_line(c: SizeConstraint, state: _EncodingState) -> str:
     if isinstance(atom, SeqPatternCountAtom):
         raise CoSoEncodingError("CoSo backend does not support sequence pattern count atoms.")
     raise CoSoEncodingError(f"Unsupported CoSo size atom: {type(atom).__name__}.")
+
+
+def _single_unit_size_atom(c: SizeConstraint) -> object:
+    if len(c.terms) != 1:
+        raise CoSoEncodingError("CoSo backend only supports single-term size constraints.")
+    atom, coeff = c.terms[0]
+    if coeff != 1:
+        raise CoSoEncodingError("CoSo backend only supports unit-coefficient size constraints.")
+    return atom
+
+
+def _counted_ref_expr(ref: ObjRef, state: _EncodingState) -> str:
+    if ref == state.target:
+        return "cfg"
+    defn = state.problem.get_object(ref)
+    if isinstance(defn, SetIntersection):
+        other = _binary_ref_other_side(defn.left, defn.right, state.target)
+        if other is not None:
+            return f"cfg&{_property(other, state)}"
+    if isinstance(defn, BagIntersection):
+        other = _binary_ref_other_side(defn.left, defn.right, state.target)
+        if other is not None:
+            return f"cfg&{_property(other, state)}"
+    if isinstance(defn, SetDifference) and defn.left == state.target:
+        return f"cfg&{_complement_property(defn.right, state)}"
+    if isinstance(defn, BagDifference) and defn.left == state.target:
+        return f"cfg&{_complement_property(defn.right, state)}"
+    if isinstance(defn, (SetPartDef, BagPartDef)) and defn.partition == state.target:
+        return "part"
+    raise CoSoEncodingError(
+        "CoSo backend supports size constraints on the target, "
+        "target/property intersections, target differences, and target parts."
+    )
+
+
+def _binary_ref_other_side(left: ObjRef, right: ObjRef, target: ObjRef) -> ObjRef | None:
+    if left == target and right != target:
+        return right
+    if right == target and left != target:
+        return left
+    return None
 
 
 def _membership_line(c: MembershipConstraint, state: _EncodingState) -> str | None:
@@ -310,13 +410,13 @@ def _tuple_index_line(c: TupleIndexEq | TupleIndexMembership, state: _EncodingSt
         raise CoSoEncodingError("CoSo backend only supports positional constraints on the target.")
     pos = c.index + 1
     if isinstance(c, TupleIndexEq):
-        if not c.positive:
-            raise CoSoEncodingError("CoSo backend does not support negative tuple index equality.")
-        term = _entity_term(c.entity, state)
+        term = (
+            _entity_term(c.entity, state)
+            if c.positive
+            else _entity_complement_property(c.entity, state)
+        )
     else:
-        if not c.positive:
-            raise CoSoEncodingError("CoSo backend does not support negative tuple index membership.")
-        term = _property(c.container, state)
+        term = _property(c.container, state) if c.positive else _complement_property(c.container, state)
     return f"cfg[{pos}]={term};"
 
 
@@ -358,6 +458,20 @@ def _complement_property(ref: ObjRef, state: _EncodingState) -> str:
         label
         for entity, label in sorted(state.entity_labels.items(), key=lambda item: item[0].name)
         if entity not in ref_entities
+    ]
+    state.property_lines.append(f"property {name}={{{','.join(labels)}}};")
+    return name
+
+
+def _entity_complement_property(entity: Entity, state: _EncodingState) -> str:
+    label = _entity_term(entity, state)
+    name = f"{label}_comp"
+    if any(line.startswith(f"property {name}=") for line in state.property_lines):
+        return name
+    labels = [
+        other_label
+        for other_entity, other_label in sorted(state.entity_labels.items(), key=lambda item: item[0].name)
+        if other_entity != entity
     ]
     state.property_lines.append(f"property {name}={{{','.join(labels)}}};")
     return name

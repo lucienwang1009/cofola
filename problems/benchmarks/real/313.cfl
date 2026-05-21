@@ -1,0 +1,5 @@
+digits = set(0...10)
+integer = choose_replace_tuple(digits, 3)
+integer[0] in set(0...5)
+integer.count(0) != 3
+integer.dedup_count(digits) != 3

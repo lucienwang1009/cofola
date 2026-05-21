@@ -1,10 +1,15 @@
-"""Lowering pass for the immutable planning problem.
+"""Lowering passes for the immutable planning problem.
 
-This module implements LoweringPass, which lowers high-level constructs
-to primitive objects that the WFOMC encoder can handle:
+This module implements ``LoweringPass`` as a fixed-point driver over
+fine-grained lowering steps.  The driver remains the public ``TransformPass``
+used by the planning pipeline so all lowering steps share one fixed-point scope
+and one lowering state.
+
+The lowering steps convert high-level constructs to primitive objects that the
+WFOMC encoder can handle:
 
 - TupleDef → FuncDef + SetInit(indices)
-- SequenceDef → (various transformations)
+- Linear sequence/circle choices → explicit choose objects or flatten domains
 - FuncDef with injective → FuncDef + SizeConstraint
 """
 
@@ -57,6 +62,16 @@ from cofola.frontend.problem import Problem
 from cofola.planing.analysis.entities import AnalysisResult
 from cofola.planing.analysis.merged import MergedAnalysis
 
+__all__ = [
+    "ForAllPartsExpansionStep",
+    "InjectiveFunctionLoweringStep",
+    "LinearDefLoweringStep",
+    "LoweringPass",
+    "LoweringStep",
+    "TupleCountAtomLoweringStep",
+    "TupleDefLoweringStep",
+]
+
 
 IDX_PREFIX = "idx_"
 
@@ -69,12 +84,109 @@ class _TupleInfo:
     choose: bool
 
 
-class LoweringPass(TransformPass):
-    """Lowers high-level constructs to primitive objects.
+class LoweringStep(object):
+    """One semantic lowering rewrite used by :class:`LoweringPass`.
 
-    This pass transforms:
+    These are intentionally not standalone ``TransformPass`` classes.  They run
+    under one outer ``FixedPointPass(LoweringPass)`` so cross-step interactions
+    keep the same convergence behavior as the original monolithic lowering
+    pass.
+    """
+
+    name = "lowering-step"
+
+    def run(
+        self,
+        lowering: "LoweringPass",
+        problem: Problem,
+        analysis: AnalysisResult,
+    ) -> tuple[Problem, bool]:
+        """Run this lowering step once."""
+
+        raise NotImplementedError
+
+
+class ForAllPartsExpansionStep(LoweringStep):
+    """Expand ``ForAllParts`` constraints into concrete per-part constraints."""
+
+    name = "for-all-parts-expansion"
+
+    def run(
+        self,
+        lowering: "LoweringPass",
+        problem: Problem,
+        analysis: AnalysisResult,
+    ) -> tuple[Problem, bool]:
+        return lowering._try_lower_for_all_parts(problem)
+
+
+class TupleDefLoweringStep(LoweringStep):
+    """Lower one ``TupleDef`` into primitive function/set objects."""
+
+    name = "tuple-def-lowering"
+
+    def run(
+        self,
+        lowering: "LoweringPass",
+        problem: Problem,
+        analysis: AnalysisResult,
+    ) -> tuple[Problem, bool]:
+        return lowering._try_lower_tuples(problem, analysis)
+
+
+class LinearDefLoweringStep(LoweringStep):
+    """Lower one linear sequence/circle choice or flatten-domain requirement."""
+
+    name = "linear-def-lowering"
+
+    def run(
+        self,
+        lowering: "LoweringPass",
+        problem: Problem,
+        analysis: AnalysisResult,
+    ) -> tuple[Problem, bool]:
+        return lowering._try_lower_sequences(problem, analysis)
+
+
+class InjectiveFunctionLoweringStep(LoweringStep):
+    """Lower one injective ``FuncDef`` into a size constraint on its image."""
+
+    name = "injective-function-lowering"
+
+    def run(
+        self,
+        lowering: "LoweringPass",
+        problem: Problem,
+        analysis: AnalysisResult,
+    ) -> tuple[Problem, bool]:
+        return lowering._try_lower_functions(problem, analysis)
+
+
+class TupleCountAtomLoweringStep(LoweringStep):
+    """Lower one size constraint term containing a ``TupleCountAtom``."""
+
+    name = "tuple-count-atom-lowering"
+
+    def run(
+        self,
+        lowering: "LoweringPass",
+        problem: Problem,
+        analysis: AnalysisResult,
+    ) -> tuple[Problem, bool]:
+        return lowering._try_lower_size_constraints(problem, analysis)
+
+
+class LoweringPass(TransformPass):
+    """Fixed-point driver for high-level construct lowering.
+
+    The driver applies fine-grained lowering steps in the original monolithic
+    order and returns after the first change.  The planning pipeline wraps this
+    driver in one ``FixedPointPass``; do not split these steps into independent
+    fixed-point passes unless the combined fixpoint semantics are re-proven.
+
+    The lowering steps transform:
     - TupleDef → indices SetInit + FuncDef(indices → source)
-    - SequenceDef → various transformations based on properties
+    - Linear SequenceDef/CircleDef choices → choose objects or flatten domains
     - FuncDef(injective=True) → FuncDef + SizeConstraint
 
     The lowering process creates new objects and constraints, and updates
@@ -82,12 +194,25 @@ class LoweringPass(TransformPass):
     """
 
     required_analyses = [MergedAnalysis]
+    STEP_CLASSES: tuple[type[LoweringStep], ...] = (
+        ForAllPartsExpansionStep,
+        TupleDefLoweringStep,
+        LinearDefLoweringStep,
+        InjectiveFunctionLoweringStep,
+        TupleCountAtomLoweringStep,
+    )
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        step_classes: tuple[type[LoweringStep], ...] | None = None,
+    ) -> None:
         self._ref_allocator: RefAllocator | None = None
         # FixedPointPass reuses one LoweringPass instance, so this survives
         # across iterations after the original TupleDef has been removed.
         self._lowered_tuple_info: dict[ObjRef, _TupleInfo] = {}
+        self._steps = tuple(
+            step_cls() for step_cls in (step_classes or self.STEP_CLASSES)
+        )
 
     def run(self, problem: Problem, am=None) -> PassResult:
         """Run one lowering step on a Problem.
@@ -126,26 +251,11 @@ class LoweringPass(TransformPass):
         Returns:
             Tuple of (new Problem, whether any changes were made).
         """
-        # Try lowering in order: ForAllParts, tuples, sequences, functions
-        result, changed = self._try_lower_for_all_parts(problem)
-        if changed:
-            return result, True
-
-        result, changed = self._try_lower_tuples(problem, analysis)
-        if changed:
-            return result, True
-
-        result, changed = self._try_lower_sequences(problem, analysis)
-        if changed:
-            return result, True
-
-        result, changed = self._try_lower_functions(problem, analysis)
-        if changed:
-            return result, True
-
-        result, changed = self._try_lower_size_constraints(problem, analysis)
-        if changed:
-            return result, True
+        for step in self._steps:
+            result, changed = step.run(self, problem, analysis)
+            if changed:
+                logger.debug("LoweringPass: {} changed the problem", step.name)
+                return result, True
 
         return problem, False
 

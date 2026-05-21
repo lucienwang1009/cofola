@@ -1,0 +1,4 @@
+S = set(3, 4, 5, 6)
+number = choose_tuple(S, 3)
+odds = set(3, 5)
+number[2] in odds

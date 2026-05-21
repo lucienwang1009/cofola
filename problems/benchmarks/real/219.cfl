@@ -1,0 +1,2 @@
+stickers = bag(sticker: 8)
+sheets = compose(stickers, 4)

@@ -1,0 +1,3 @@
+players = set(Justin, Tim, player0...8)
+game = choose(players, 5)
+set(Justin, Tim) subset game

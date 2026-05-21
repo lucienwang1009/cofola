@@ -1,0 +1,3 @@
+digits = set(1, 2, 3, 4, 5)
+integer = sequence(digits)
+(1 < 2) in integer

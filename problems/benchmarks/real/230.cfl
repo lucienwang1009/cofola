@@ -1,0 +1,2 @@
+books = set(0...12)
+read = choose(books, 4)

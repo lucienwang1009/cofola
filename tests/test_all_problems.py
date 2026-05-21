@@ -1,4 +1,4 @@
-"""Test all encodable problems from problems/all.json.
+"""Test all encodable problems from problems/real/corpus.json.
 
 By default only "benchmark" problems are run (20 representative problems
 covering all major feature areas).  Set the environment variable
@@ -15,7 +15,7 @@ from cofola.solver import parse_and_solve
 
 
 # Load problems from JSON
-PROBLEMS_FILE = Path(__file__).parent.parent / "problems" / "all.json"
+PROBLEMS_FILE = Path(__file__).parent.parent / "problems" / "real" / "corpus.json"
 
 # Run the full suite only when explicitly requested
 _RUN_ALL = os.environ.get("COFOLA_ALL_TESTS", "0").strip() not in ("", "0", "false", "no")
@@ -59,7 +59,7 @@ def all_problems():
 
 
 class TestAllEncodableProblems:
-    """Test suite for all encodable problems from all.json."""
+    """Test suite for all encodable problems from corpus.json."""
 
     @pytest.mark.parametrize("problem_id,problem_data", get_encodable_problems())
     def test_problem(self, problem_id, problem_data):

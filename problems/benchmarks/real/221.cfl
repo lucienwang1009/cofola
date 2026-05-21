@@ -1,0 +1,3 @@
+people = set(youngest, p1, p2, p3)
+line = tuple(people)
+line[1] != youngest

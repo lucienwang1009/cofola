@@ -1,0 +1,10 @@
+hearts = set(heart0...13)
+diamonds = set(diamond0...13)
+clubs = set(club0...13)
+spades = set(spade0...13)
+suits = hearts + diamonds + clubs + spades
+cards = choose(suits, 3)
+|cards & hearts| <= 1
+|cards & diamonds| <= 1
+|cards & clubs| <= 1
+|cards & spades| <= 1

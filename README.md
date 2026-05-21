@@ -27,8 +27,8 @@ payment.count(nickel) == 1
 Run it:
 
 ```bash
-uv run cofola -i problems/others/bag.cfl
-uv run cofola -i problems/others/bag.cfl -d
+uv run cofola -i problems/examples/bag.cfl
+uv run cofola -i problems/examples/bag.cfl -d
 ```
 
 You can also solve source text or hand-built problems from Python:

@@ -1,0 +1,4 @@
+tribe = set(mother, wife, chief, other0...5)
+arrangement = circle(tribe)
+next_to(mother, chief) in arrangement
+next_to(chief, wife) in arrangement

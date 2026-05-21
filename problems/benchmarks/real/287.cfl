@@ -1,0 +1,2 @@
+points = set(point0...10)
+quadrilaterals = choose(points, 4)

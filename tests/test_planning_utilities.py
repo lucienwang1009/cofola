@@ -37,8 +37,15 @@ from cofola.planing.pass_manager import FixedPointPass
 from cofola.planing.pass_manager import AnalysisManager
 from cofola.planing.pass_manager import RefAllocator
 from cofola.planing.pass_manager import UnsatisfiableConstraint
-from cofola.planing.pipeline import PlaningPipeline
-from cofola.planing.passes.lowering import LoweringPass
+from cofola.planing.pipeline import PlaningPipeline, PlanningProfile
+from cofola.planing.passes.lowering import (
+    ForAllPartsExpansionStep,
+    InjectiveFunctionLoweringStep,
+    LinearDefLoweringStep,
+    LoweringPass,
+    TupleCountAtomLoweringStep,
+    TupleDefLoweringStep,
+)
 from cofola.planing.passes.merge_identical import MergeIdenticalObjects
 from cofola.planing.passes.optimize import ConstantFolder, SizeConstraintFolder
 from cofola.planing.passes.simplify import SimplifyPass
@@ -312,6 +319,63 @@ P = partition(S, 2)
     assert result.constraints == (
         SizeConstraint(terms=((_part_ref(problem, partition, 0), 1),), comparator="==", rhs=1),
         SizeConstraint(terms=((_part_ref(problem, partition, 1), 1),), comparator="==", rhs=1),
+    )
+
+
+def test_lowering_steps_are_grouped_under_one_fixed_point_driver() -> None:
+    """Split lowering steps should preserve the original combined fixpoint."""
+
+    assert LoweringPass.STEP_CLASSES == (
+        ForAllPartsExpansionStep,
+        TupleDefLoweringStep,
+        LinearDefLoweringStep,
+        InjectiveFunctionLoweringStep,
+        TupleCountAtomLoweringStep,
+    )
+
+
+def test_empty_planning_profile_returns_intact_problem() -> None:
+    """No profile means no planner transformations or decomposition."""
+
+    problem = parse("""
+S = set(a, b)
+T = choose(S)
+|T| == 1
+""")
+
+    implicit_schedule = PlaningPipeline().process(problem)
+    explicit_schedule = PlaningPipeline(PlanningProfile()).process(problem)
+
+    for schedule in (implicit_schedule, explicit_schedule):
+        assert len(schedule.branches) == 1
+        branch = schedule.branches[0]
+        assert len(branch.components) == 1
+        planned_problem, _analysis = branch.components[0]
+        assert planned_problem is problem
+
+
+def test_lowering_split_steps_share_tuple_state_across_iterations() -> None:
+    """Tuple-count lowering depends on metadata from an earlier tuple step."""
+
+    problem = parse("""
+S = set(a, b)
+T = tuple(S)
+T.count(a) == 1
+""")
+    lowering = LoweringPass()
+    am = AnalysisManager(problem)
+
+    first = lowering.run(am.problem, am)
+    assert first.changed
+    am.update(first.problem)
+
+    second = lowering.run(am.problem, am)
+    assert second.changed
+    assert not any(
+        isinstance(atom, TupleCountAtom)
+        for constraint in second.problem.constraints
+        if isinstance(constraint, SizeConstraint)
+        for atom, _coef in constraint.terms
     )
 
 

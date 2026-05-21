@@ -1,0 +1,2 @@
+B = bag(plant: 6)
+C = compose(B, 3)

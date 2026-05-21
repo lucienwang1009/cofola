@@ -1,0 +1,2 @@
+toppings = set(0...8)
+pizza = choose(toppings, 2)

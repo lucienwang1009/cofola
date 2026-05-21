@@ -1,0 +1,8 @@
+Cubs = set(C0...3)
+Red_Sox = set(R0...3)
+Yankees = set(Y0...2)
+All_Stars = Cubs + Red_Sox + Yankees
+row = sequence(All_Stars)
+together(Cubs) in row
+together(Red_Sox) in row
+together(Yankees) in row

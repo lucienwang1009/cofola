@@ -1,0 +1,407 @@
+suite,case_id,expected,tags,source,program_path,program_sha256
+real,0,3003,set;choose;benchmark,problems/real/corpus.json,real/0.cfl,48ed94912cc1232ec620efc7749cb7c767c738db27c04ede31e84dc3747b4926
+real,1,609,set;choose_replace_permute;tuple;size constraint;intersection;benchmark,problems/real/corpus.json,real/1.cfl,f4d04c515033184718ddb9db4afa15b5e62b531f86cd341e100fcc045d27d856
+real,2,23,bag;choose;size constraint;benchmark,problems/real/corpus.json,real/2.cfl,f157bcf4fc3052f6e4e0457514a7f0a865d11c6ce35a2cc8272c2b68b3a3ac56
+real,3,165,set;choose,problems/real/corpus.json,real/3.cfl,fa2c02fa60fdeca78db3f944516dac9c8f14ba5535587dc55acbb11ee58b08d3
+real,4,6732,set;choose;not constraint;or constraint;benchmark,problems/real/corpus.json,real/4.cfl,815471b4dbf99a03ca097508fb186bb1dd2042e2d72c990244da5361b9ef2e55
+real,5,36,set;choose;tuple;index;count;benchmark,problems/real/corpus.json,real/5.cfl,a11dca51ba4b861e39ad09fed6ee33be54fc8eaa2bde95428adc7033e01206ac
+real,6,200,bag;composition;index;size constraint;benchmark,problems/real/corpus.json,real/6.cfl,085a7f248fe090ca12b53eaa45b774ac907812fe832a7c5abb0d9f50c498ef13
+real,7,1440,set;sequence;together;benchmark,problems/real/corpus.json,real/7.cfl,02302154e7d2aada36395671127d9dea1f2e6db071d2ec345f03bb021c81c8f9
+real,8,14400,set;circle;together;benchmark,problems/real/corpus.json,real/8.cfl,7854183b428b5003ab30931718edafd583673c4ae00f87c5433ef120626d4d85
+real,9,117,unencodeable;second order logic,problems/real/corpus.json,real/9.cfl,d6e1342d102948be85bd2dcac72b4797f88fcbd135f04eb885514c651257a64e
+real,11,28,bag;composition;benchmark,problems/real/corpus.json,real/11.cfl,5b41440fc4df29c6f852f15011eacc17f4b7743a85feb44c95726999bd7698f5
+real,12,540,set;composition;none_empty,problems/real/corpus.json,real/12.cfl,24fbc41bc7023b4e3b199ddb9cef6acf5fd6507fabcbe68a392f8c779061bd9d
+real,13,6,bag;composition,problems/real/corpus.json,real/13.cfl,4b99cebd289d40f210503e3e3e9a0bf0f6b1e3a826799a066e2335a8c2b7591d
+real,14,9240,set;choose;multiple choosing,problems/real/corpus.json,real/14.cfl,58514813cffd7d29aebfc25e5b02ad60f440956b6896f3d9506cba27fee5032f
+real,15,729,set;composition,problems/real/corpus.json,real/15.cfl,da4d300cf9875498ea6bae75fa1da2cadf574fef3b205bfd1559ae156e3956db
+real,18,12,set;choose;tuple;index;in,problems/real/corpus.json,real/18.cfl,1c902a6a80f51d408cbd70185be36bf20e6041972d9c4a670a2043fe410cdc7c
+real,19,4,bag;partition,problems/real/corpus.json,real/19.cfl,af480251679a63bff0ac178c0966e4d2a5364db0ad7cdbfd84ea4c68a40307f2
+real,20,10,set;choose,problems/real/corpus.json,real/20.cfl,c5804aad64df4ecab3b813a3c4355c1d11ca059c8bf28d9f6258e552c9984311
+real,21,15,bag;choose_replace;benchmark,problems/real/corpus.json,real/21.cfl,846916658b39474bde2092f27bac70d36890c4f151e4feacff259393d4b7b0c3
+real,22,36,set;choose;multiple choosing;size constraint;intersection,problems/real/corpus.json,real/22.cfl,b90386f55e491a199f121ee42bb52318cfb833f63289fd5fec2e1637986b366a
+real,23,10080,set;sequence;together,problems/real/corpus.json,real/23.cfl,e7b9157b3e96e76356c44de9961b1ff7d59d36e51beff8f8be539950f4346984
+real,24,1296540,set;choose;multiple choosing;second order logic,problems/real/corpus.json,real/24.cfl,3fd4c52a224429e48c08e58b55fba88136fbdcdc5657d6be65f74a503cc77499
+real,25,72,set;choose;multiple choosing,problems/real/corpus.json,real/25.cfl,c81f69a695b9e0e4180d9dbc95a94dbe88c778c397a83fb5833d667815921bb1
+real,26,13,set;choose;or constraint;subset;benchmark,problems/real/corpus.json,real/26.cfl,8f5c880b81d59d35dc771bc1aa2c78c3321d6f23150c77534d8290a16acda174
+real,27,15,set;choose,problems/real/corpus.json,real/27.cfl,6715d8f8e8fbf36c89c04567e871d10d361c2a3d2a685468d797d6974a297c47
+real,28,243,set;composition,problems/real/corpus.json,real/28.cfl,5b1a226de7d9f75ad68e4fa4896de279fcb454d9af7b7a2e908e6409685aa0c6
+real,29,720,set;sequence;together;leq,problems/real/corpus.json,real/29.cfl,7dbfb12fddc45f67b9994757dd3b9fb3df35304372ea47addfc2ab5c4cb93f3d
+real,30,25200,set;choose;tuple;multiple choosing;difference,problems/real/corpus.json,real/30.cfl,7c9ff8c7b8d40b5c71d6d43fadfbc932b673d5ce573a3e96be3bc05baf271883
+real,31,12,set;sequence;next_to;not constraint;benchmark,problems/real/corpus.json,real/31.cfl,7ec41530bfce6ce41bb0de06ff660987df660891a13ffc440f115403ac98c481
+real,32,21,bag;tuple,problems/real/corpus.json,real/32.cfl,f1c3bb0e0809330e0d60190e870ed51beef2d3413605289ed88d11d2f84893ae
+real,33,960,set;circle;next_to;not constraint;benchmark,problems/real/corpus.json,real/33.cfl,034030b3f9e49478f280fde2f86848f201726776f5dbfdc2a1e620081f2df443
+real,34,3,bag;sequence;pred;not constraint;benchmark,problems/real/corpus.json,real/34.cfl,6046839931703ec5d15ae3ce8b54289179a6dd451b785e5cf6c97e0c53ece68d
+real,35,60,bag;tuple;index;in,problems/real/corpus.json,real/35.cfl,243a88f3db6d8cd21b12cc52433ec6273d3419cecb464da76f7f94fcb68177f4
+real,36,240,set;tuple;index;in,problems/real/corpus.json,real/36.cfl,d00a5aaabeb067eec92c39b3014c689a067800eb5265aeca0801e7352243e74a
+real,38,3,bag;partition,problems/real/corpus.json,real/38.cfl,d52c84a0fd4bec754c10a890335ddd756d11e9f73ed8e78d79b6984fed5bf2f7
+real,39,720,set;circle;together,problems/real/corpus.json,real/39.cfl,b48e85c3ba0be2b466d4cbb9035744afc785e0c5b94f20036d26117f5066d38d
+real,40,560,bag;choose_replace_permute;sequence;pred;count pred,problems/real/corpus.json,real/40.cfl,82af0696160d47d965c56d8b759ea9038de659ddb68ff5819ed98350c41ecc95
+real,41,1386,set;choose;size constraint;intersection,problems/real/corpus.json,real/41.cfl,2fa43ec9260d41ac718764676e379839d7a0d0c7a8d69d1ca57c68ad8d834d65
+real,42,17280,set;sequence;together,problems/real/corpus.json,real/42.cfl,26446505c09c757faa498a371561addd8545781a77539a99a3194c67a862cedc
+real,43,15,set;choose;size constraint,problems/real/corpus.json,real/43.cfl,a5a1b5fdb7b14f0b077b12228ff6b5e223e218d5510e02e27caf27c6527a64b9
+real,44,672,set;choose;intersection;size constraint,problems/real/corpus.json,real/44.cfl,dceaac4f99b52db9be5cbc89bf3d3b0f487e30b6513165534b89f60a67d4a792
+real,45,2880,set;sequence;together,problems/real/corpus.json,real/45.cfl,841c832b4aac03382450f9dc57509526fccfda7bef4c07be59b335aa4a49f654
+real,46,25,bag;tuple;index;compare element;or constraint;benchmark,problems/real/corpus.json,real/46.cfl,459077d40151fa1a83fa3fe49065734afffe905ee8842493742325b2ba47f48c
+real,47,144,set;circle;next_to;not constraint,problems/real/corpus.json,real/47.cfl,06fccc3292bde86059602cbcc5d2f343067ae262e33075d8e9c7933345728b4b
+real,48,35,bag;tuple,problems/real/corpus.json,real/48.cfl,e0e8ab5002f3160f14e6cee60e53bb1c8669c2adff9d0ad6224ca9451eb157ea
+real,49,12441600,set;tuple,problems/real/corpus.json,real/49.cfl,2e887dd1130742e3171662d0aecbd3297fdab87a902665032edc8046b0de7cbc
+real,50,34650,bag;tuple,problems/real/corpus.json,real/50.cfl,5ce0941a5718a1281f35f6f59c1d76e5d411004660f12b266282d0731809247e
+real,53,28800,set;circle;together,problems/real/corpus.json,real/53.cfl,13f83e309a3432d61c3909173489eb1986dee186d53a1bc42c23cbff97c48e13
+real,55,18,set;tuple;index;not constraint;compare element,problems/real/corpus.json,real/55.cfl,fe1170fce3f3e262850bab3afe9691a8f018989433cf126a85b1cf52fe697481
+real,56,45045,set;choose;multiple choosing,problems/real/corpus.json,real/56.cfl,af9974f2a9cc4b2c8ae87c3c9e78b8f5c2e8dba0c3b9a12c6ddd6216f7ca50f4
+real,57,25972650,set;choose;multiple choosing,problems/real/corpus.json,real/57.cfl,583ba244e1acaa67db695f29ebe759fb5696130153893d0c52f2e44c2ae04174
+real,58,280,set;choose;multiple choosing,problems/real/corpus.json,real/58.cfl,7daf4fbf56a14a111aebc76979a0a2ef2cece36913bdc20d57058295cff931da
+real,59,10,set;choose,problems/real/corpus.json,real/59.cfl,75cb8fcbdbf5d7c4e89af3682123e5628e49bc4789b12a5c67885129aa880541
+real,60,36,set;choose,problems/real/corpus.json,real/60.cfl,dcbff53524c6588c351217c7de4a025c630f5fbf48c8865d98e35880dff9abe0
+real,61,5120,set;choose;multiple choosing,problems/real/corpus.json,real/61.cfl,dc45000e9916c8b146536c6456bfdbae9c6ac7b9d680a787aa21b592ca275ccb
+real,62,1920,set;choose;multiple choosing;choose_permute;tuple,problems/real/corpus.json,real/62.cfl,b95a3711a49d59d14c828327c289176ebbc7eea3105b0e3c3f5a72505ce483cb
+real,63,220,set;choose,problems/real/corpus.json,real/63.cfl,d4a3ced23bf3b16839cb52b5aae1cee8a01ca5f37c5a1bfdbf8b5df7bac42efe
+real,65,61328,set;choose_replace_permute;tuple;index;compare element;count element;not constraint;or constraint,problems/real/corpus.json,real/65.cfl,1dc67686f9672b2d17509c870261075a63a51313fbb8c0c4eef1cf1ac2043be1
+real,66,750,set;choose;multiple choosing,problems/real/corpus.json,real/66.cfl,8bd0c4dca39c7ebe5447fe00ff7dc3d08f8725b91c2be34d4f4cbc446b1681ae
+real,67,840,set;choose;circle,problems/real/corpus.json,real/67.cfl,fe57445eb14709313eb16bd398c8af4f68d359e95a17e9a7de6cfb1ae28611ac
+real,68,252,set;choose;intersection;size constraint,problems/real/corpus.json,real/68.cfl,20458fbb195055e5fd8e8c93f5dbfe75acc7061578b8320800340c5bcb921e25
+real,69,840,bag;tuple,problems/real/corpus.json,real/69.cfl,eb92c54e0b28d7ae81a44ec3d7770a18312b45aefca6c83f411b0eb5163b91a0
+real,70,28,set;choose_replace,problems/real/corpus.json,real/70.cfl,2cac8f6c2f2028798f7a341d68a7eb3fdb59e1ec30e0ebd36ea94c76bb119775
+real,71,12650,set;choose,problems/real/corpus.json,real/71.cfl,2c4a5b08303782051d5034e6c05b28fe1055db3277e54e08e6db28b7329579f8
+real,72,75075,set;choose;multiple choosing,problems/real/corpus.json,real/72.cfl,96e8019960dc4c6b9120af19514a9b2330a589c9bf6b8b59c9c6d7bf4fb5179f
+real,73,48,bag;tuple;choose_permute;in,problems/real/corpus.json,real/73.cfl,249dd3682d563afa843d095cf638c42aa2ce928cd2a888fd11f73a0e14a78446
+real,74,30951,set;choose_replace_permute;index;compare element;multiplicity constraint;not constraint;benchmark,problems/real/corpus.json,real/74.cfl,c94734a54bc7ab2681a3fa88f480627d7e8dc321417bd4a9a79ea24bd30b1bdc
+real,75,6,bag;tuple,problems/real/corpus.json,real/75.cfl,aca17554e7c16791bccaafe64a6e0f449b618cb2f37d0606c9458d803b93b9ac
+real,76,70,set;partition;not constraint;subset;benchmark,problems/real/corpus.json,real/76.cfl,c6d5a6830024b6b27816cbf9fb906b352b55c30d1c4f049ada2a17f01ea5a3e0
+real,78,1414,set;choose;intersection;size constraint,problems/real/corpus.json,real/78.cfl,9ad47f537963ac01731d4592bfcc917028383fbb3d6096acc0b1259cbda1ff31
+real,80,24,set;sequence;next_to;not constraint,problems/real/corpus.json,real/80.cfl,2db168ef0f704e999f3dcef62143d6f9f9370ad13259e61f66629ab160a44053
+real,81,840,set;choose;intersection;size constraint,problems/real/corpus.json,real/81.cfl,3a5c9c97fed72124591a30d6a4926592caa8f87ac38c527e136d022aec9262f1
+real,82,48,set;circle;next_to,problems/real/corpus.json,real/82.cfl,41d6ff21504f9f8f66bdd93d751f26e1e67deefae1f410283862b8170f1dd9f4
+real,83,195,set;choose;intersection;size constraint,problems/real/corpus.json,real/83.cfl,b959603a8e011901cc62556e26dfe329d971c461b3ff95f37138caa0315b0b27
+real,84,28,set;choose,problems/real/corpus.json,real/84.cfl,6ed2fbeee3f403efb6debfb6edba502fdb8dda77689552f05c75ba21e4544dc8
+real,85,225,set;choose;multiple choosing,problems/real/corpus.json,real/85.cfl,1a08a4c161515123b9d9a4811cefe329e9ace87fa840477aa4a7fdc198e8b562
+real,86,10,bag;tuple;index;compare element;not constraint,problems/real/corpus.json,real/86.cfl,089c1a81fd73331d499af560bcea03caaf312a7d5e20d8c5390b80c8fb5f43a5
+real,87,2838,set;choose;intersection;size constraint,problems/real/corpus.json,real/87.cfl,83de40865e665cf9eb81abf15bbbfc8f070cafde77247d56279c1c3927a49b78
+real,90,672,circle;reflection;benchmark,problems/real/corpus.json,real/90.cfl,13410e741dd08a1419f200e8baae7f78390e3faca48b469e2e17bc0054b3f817
+real,91,771400,set;choose;multiple choosing,problems/real/corpus.json,real/91.cfl,9e4e82ec289a9bc3ea80342042b45478205be164346cb39c882917b4b01ddecb
+real,92,15600,set;choose;multiple choosing;union;size constraint,problems/real/corpus.json,real/92.cfl,e28e008370f3b0939be5788e8a76e1629375e29da2032dbbde18b09d2d08a1a0
+real,93,5,bag;choose;size constraint,problems/real/corpus.json,real/93.cfl,b20913d94e359a6d1567fd2b33190ede8ac134f8ebfe69e9b6aae0cbfd3bd103
+real,94,56,set;choose;subset,problems/real/corpus.json,real/94.cfl,8aee1cf911dc8794d95148deda491446bcb936ddc493aff6ad1d491bfb7b5cfd
+real,95,6,bag;tuple;index;compare element;not constraint,problems/real/corpus.json,real/95.cfl,410edf4812205e22820fdbe2bc85809be020c096fa5e0b12640f601eaec83adb
+real,96,480,set;sequence;next_to;not constraint,problems/real/corpus.json,real/96.cfl,1aa57379ab7c6307d272825ce746c2bc550a124045a5fbc240295de35baebdec
+real,97,16,set;choose;in,problems/real/corpus.json,real/97.cfl,f07cc2ea723ff93ecf0b61ba74da243edb8e3c36030a60f54592d6a6ac68e4e8
+real,98,12,set;tuple;index;compare element,problems/real/corpus.json,real/98.cfl,9924396b3e8763d44407709956465531c4067090f99e702a6ffface4a230202c
+real,99,360,set;sequence;leq,problems/real/corpus.json,real/99.cfl,77902021a32e49f34b12fc0deea1bdb474029d6099b65dad84bfe38821a49bee
+real,100,650,set;choose;tuple,problems/real/corpus.json,real/100.cfl,90e35826e5faaf380c9dc597f92b297b78ee1237841a0c22fdc5606710e0912b
+real,101,5,bag;composition,problems/real/corpus.json,real/101.cfl,3d753aa3cad42be3ddce0c1f815ab64df74c74bf3796a1f8a6e70c193c725187
+real,102,432,set;sequence;together,problems/real/corpus.json,real/102.cfl,4809682d7d286b721506ca0023d4c0eb56f1b985e35090ed5e49c33ebd60a4f7
+real,103,495,set;choose,problems/real/corpus.json,real/103.cfl,c6ea0797ecb8dda8e6e8c00aba7f16c15ab7c421fc21aff47ef5307f610c774f
+real,104,840,set;choose;intersection;size constraint,problems/real/corpus.json,real/104.cfl,385cd174451d5f2a21697e7f7057bd7a25ef7f441bbdb51618024371e15481e1
+real,105,720,set;tuple,problems/real/corpus.json,real/105.cfl,4347050e0edab84b8c08b9f95a3560457ab66e349b4645d4dcbf0ec5ae4ac116
+real,106,15,bag;partition,problems/real/corpus.json,real/106.cfl,9e4a371305e9bbcd60ba7249e7e4598aeec7f9961d286f42eb3f1fdff2289de1
+real,107,15,bag;composition,problems/real/corpus.json,real/107.cfl,7ddd03713066fe5b95fbe798c8a57ef8d5db23028de6b92ed58f3f9815194adc
+real,108,126,partition;benchmark,problems/real/corpus.json,real/108.cfl,d6c20144a0962d96cce82b4c6910a872ce54573d86d189e0f6ad8b69526c833e
+real,109,140,set;choose;multiple choosing;not constraint,problems/real/corpus.json,real/109.cfl,678f9e1143977ef24b0eea337299f81176f0875182f5b57b5d63f9003b56d254
+real,110,504,set;choose;multiple choosing,problems/real/corpus.json,real/110.cfl,d55d4af68540ac92267a3c7b10e2afa99407bffa2119cb76ad38966a0836e7b4
+real,111,3,bag;partition,problems/real/corpus.json,real/111.cfl,c964d2cfd24ef5e0c8126f15d6108caf7215a798e36814fd6bcf7f36c8e6a6ac
+real,112,1940,set;choose;intersection;size constraint,problems/real/corpus.json,real/112.cfl,4290aef00224700d70234d979ba61fe41e7d83ba58f9b75d61927c3ee0a92f0c
+real,113,362880,set;circle,problems/real/corpus.json,real/113.cfl,3dfc3298cb2138df8e8d55cdad034197a5a6246a12b58a3d1c81c706e0f99185
+real,114,21,set;choose,problems/real/corpus.json,real/114.cfl,9ae6b94a0996ef6525741e664f596239b5e67e914dbfb128735cbe8779322234
+real,116,126,set;choose,problems/real/corpus.json,real/116.cfl,888133b31b1bcb89e4f56a9d5a4e51d6690704a65d65ae3197f588e48a95c99e
+real,117,5,bag;partition,problems/real/corpus.json,real/117.cfl,564e5dacfec4918343c0e3ac7b8356e3edbe7d99e3ec5b0c67fe11c03553ba1e
+real,118,1024,set;composition,problems/real/corpus.json,real/118.cfl,fbb18fe2b87671ca5c37193bc131bed7ff13d34128ca92ce24a875abd17b3eab
+real,119,30,set;choose;multiple choosing,problems/real/corpus.json,real/119.cfl,069eaa781fa449f5f338212cb6c05458d49b21a260e62a75957d326403740741
+real,120,30860,tuple;unknown length,problems/real/corpus.json,real/120.cfl,087af79fba032a13d7f00028e13d629eb6c71351e0cc4cf8c2784ae2240b6bc2
+real,121,4,set;choose;or constraint;subset,problems/real/corpus.json,real/121.cfl,bf8cf7872ab58631772ed9602c8632552b0fabadcc392604d65b9f936b50709b
+real,122,12,circle;reflection,problems/real/corpus.json,real/122.cfl,aa5bed1c0c74fcbf6a7d2d769c5acaae563b487ce3b7ef17dc2111c5023d7fac
+real,124,32,set;composition,problems/real/corpus.json,real/124.cfl,b66ddcac27470447668853913434a566b2b78bad43d443f76b4de2dd8e6a5451
+real,125,100000,set;choose_replace_permute,problems/real/corpus.json,real/125.cfl,9ee3f6f3977acd3ac0b6f683d2caa54f3dd399c27a86c396710e127a49f92435
+real,126,6,set;choose,problems/real/corpus.json,real/126.cfl,00b8949d38260918f0ff678ad95c287e72677216cf913f115e8dfd6a29a7e84c
+real,127,43,bag;tuple;choose_permute,problems/real/corpus.json,real/127.cfl,44c07849954af6b309588436eef8cca4536989dc23ac4ba1de10bda6cc3243a3
+real,128,12500,set;choose_permute;tuple;index;in,problems/real/corpus.json,real/128.cfl,5bebd60140a4973e31ed25c310c50d00763d85b5ed8389f771bc7af995baaa3d
+real,129,36,bag;composition,problems/real/corpus.json,real/129.cfl,40d64f1dc553fc330e6e6cc26b4f6ebcfe04b5ae575799b4b40da05396c477e1
+real,130,34560,set;sequence;together,problems/real/corpus.json,real/130.cfl,5cb653e1650aadfbed0b59f4c95c9a74e6790039e7b077ae35e178726e07ac62
+real,131,1512,set;choose_permute;tuple;index;in,problems/real/corpus.json,real/131.cfl,bf9f2a0998bcdc862604129a062f0e68d77c6260d1f5c8a19d1cd3b495bdbf77
+real,132,72,bag;choose;multiple choosing;benchmark,problems/real/corpus.json,real/132.cfl,0a51bffe677d6bc053dc7de884ecf8e2823f9766befa201533bace593abe6095
+real,133,880,set;choose_replace_permute;sequence;count pred,problems/real/corpus.json,real/133.cfl,cd07e461bd4308f5b30cc349af8ac3c3f922080c84fe60175d0918ed91bc4965
+real,134,4320,set;tuple;index;in,problems/real/corpus.json,real/134.cfl,42290a0c2d3f3453f41351d930872e307311d4b5cc8bc5bd2ac8e92b8ac57bb9
+real,135,60,set;sequence;leq,problems/real/corpus.json,real/135.cfl,79a995b0098638ffe5e759add25cecedb5d5c4225cf02abf554d92d2f7862dfc
+real,136,4320,set;choose;tuple;intersection;size constraint,problems/real/corpus.json,real/136.cfl,884e37c6f4cf4029264c7775904ba8cfcc1d58efa88ff740577134b2776f254f
+real,137,3600,set;circle;next_to;not constraint,problems/real/corpus.json,real/137.cfl,884969e84b519cdb1142c7894862f58f50d660e21c2dfb45bf8bf026e0400ccb
+real,138,7000,set;choose;multiple choosing,problems/real/corpus.json,real/138.cfl,4650ed967a95676ab7acdf7ded5969b326f1196638d46492df601098d5a266cd
+real,139,165,set;choose;subset,problems/real/corpus.json,real/139.cfl,3bba1ed8db8a096bdd7930d6abbf5efdb769bc769115b13b3bd4691bf2b5090f
+real,141,120,set;choose;subset,problems/real/corpus.json,real/141.cfl,f4e4ee5d37d865208f1ca33d0055a997badbf2c8b03a46586f73647de86ad7a0
+real,142,151200,set;choose;multiple choosing,problems/real/corpus.json,real/142.cfl,25b8096e78bd8c1d776215bf65ea90ead96b8f2c70b944bd3d134c7e9dc5e839
+real,143,10,bag;composition;none_empty,problems/real/corpus.json,real/143.cfl,5578f4c020a22ce23a71e7f0fdb022bf4afd6aeaab229e82ac47adc804928865
+real,144,15,set;partition,problems/real/corpus.json,real/144.cfl,45bbce5ccedeed74a0c9a4b013bc8f583a310b9b0b991f9c75fbb897b2d16bba
+real,145,59049,set;composition,problems/real/corpus.json,real/145.cfl,ab6b1f6e42473b283afadce30bc1653baa5290f3e7a41c8a3e29ed02ff78608a
+real,146,371043400,set;choose;intersection;size constraint,problems/real/corpus.json,real/146.cfl,4f967873dcafa1aab1e2ed135ece3b3bfa1bc5a9a0512fab2d5acc10cb800e0e
+real,147,33800,set;choose_replace_permute;tuple;intersection;size constraint,problems/real/corpus.json,real/147.cfl,95a88e4696c1583140982c913c9af84dd24f4c95eff9480909e2376b9a6c41a1
+real,148,29700,over partitioned sets,problems/real/corpus.json,real/148.cfl,5f7915341b88869682e2b3ac8546ef8586153440e9eed22d72ce6d48a8e3c72a
+real,149,2880,set;circle;pred;succ,problems/real/corpus.json,real/149.cfl,5daebae4b565c3f067e2c0a71850f07df9b83b20822c2fd3ceee4e69597e1247
+real,151,180,set;choose;multiple choosing;subset;or constraint,problems/real/corpus.json,real/151.cfl,3e8b20895140fce0790a51598ea967f791da238b29c0771223412d0d8d125f17
+real,152,36,set;choose;size constraint,problems/real/corpus.json,real/152.cfl,c5b25354c86993c387091c01f951b4dc83433457c3e891969862333cb186db50
+real,153,8,set;partition,problems/real/corpus.json,real/153.cfl,836d0d2e64fe32e15f1b4ddde79539533967d0e385013ebcf88155415f264d8e
+real,154,12,circle;reflection,problems/real/corpus.json,real/154.cfl,05e0d794c3cbf41acecc20ddadd6f88ddc0b4e2ebc3c7c53c2a708c07ad17a60
+real,155,40320,set;circle,problems/real/corpus.json,real/155.cfl,41cd6bd27bc3f50f39f291d5fc6041d890bb8d3f7ad0e42071117670401223ec
+real,156,62,set;composition;none_empty,problems/real/corpus.json,real/156.cfl,32e4971ba75da9997be713485cc09655f95ea5fd87bf2262b6ae04c6c50801c1
+real,157,156,set;choose;not constraint;subset,problems/real/corpus.json,real/157.cfl,b5d475e88b34598ee2014717439996af6627500c753c8d84d3641f68d1a5afa9
+real,158,125,set;choose_replace_permute;tuple,problems/real/corpus.json,real/158.cfl,43b38ce43e3ea2749b904aa1bd10dbf30015dd5afe22a6fea993c1ca7056a569
+real,160,49,set;choose;multiple choosing;subset;or constraint,problems/real/corpus.json,real/160.cfl,5d38951f26a9ed9cfb9b390ca78abfeb7ac51ec7a25f40232edd9e68bb7a803c
+real,161,864,set;composition;index;in,problems/real/corpus.json,real/161.cfl,ad03177c6be75e85a637a113ea070ed85c4bcea8f58131c8055efc10cae1ec2a
+real,162,56,set;choose,problems/real/corpus.json,real/162.cfl,c026c506d62d48fcb46e0dfaf24d2c0c7f160c16170e865675dbcb02131aab59
+real,163,3003,set;choose,problems/real/corpus.json,real/163.cfl,e4cead0cc1951d4af7b21a4ac8432082065e125656b9bdf242d0bafc1bb2e11c
+real,164,968,set;composition;index;size constraint,problems/real/corpus.json,real/164.cfl,5991b60eae9252c9c4152f689f685963ebe249a52786b6d56169a8b220588c0d
+real,165,7,bag;choose,problems/real/corpus.json,real/165.cfl,d0c9b5d6be9810be221f73d79f7a5a5d84a25c71ebaa31dc8fc08d5efd2d152d
+real,166,58500,set;choose_permute;tuple;multiple choosing,problems/real/corpus.json,real/166.cfl,37cba90ec6620d0331d5716e86de4c1bcbad0be231caae96754c1ce970b4dc09
+real,167,48048,set;choose;multiple choosing,problems/real/corpus.json,real/167.cfl,b980ee616c3908551eee6be3e217b68eb99bc8bbecce251ca820bc5e1264dc89
+real,168,12,set;choose;multiple choosing;tuple;difference;subset,problems/real/corpus.json,real/168.cfl,aae8f84a159b9122166748681c3a279fffd8f98580bfd0cd45630b65bc61e744
+real,169,14,bag;composition;partition,problems/real/corpus.json,real/169.cfl,f05bb226ba9d27406d79f8e467acd06a7fecae5be8052b2c02931f6c3b3d5623
+real,170,325,set;choose;intersection;size constraint,problems/real/corpus.json,real/170.cfl,d49cba268ca6889ca13926f318c33de7561c265486321f71890b686f25891522
+real,171,60,set;choose;multiple choosing,problems/real/corpus.json,real/171.cfl,dd8484af8e5e99dafd87c1943cbeb3d3ba2f2f18e551166e54548de856d18d9c
+real,172,12441600,set;sequence;together;timeout,problems/real/corpus.json,real/172.cfl,379957304dde0744741fc6e04cb030b6eff90f6da734fb8c2bfea1a4bf09150b
+real,173,21,bag;composition,problems/real/corpus.json,real/173.cfl,be5aa4beb067804b7d545fb344494b6ebb197f361aa319d2353f50b719e43983
+real,175,3600,set;sequence;next_to;not constraint,problems/real/corpus.json,real/175.cfl,a2191bc2f86e48d5b844bd8d94b76ab6440ec15480f1d17e237c7311d2e2899c
+real,176,30,tuple;unknown length,problems/real/corpus.json,real/176.cfl,327537d96ff5e80acd687a2a6d8bbb8d78e1fa4f26fe38b4d5e2218cb584ecba
+real,178,560,bag;tuple,problems/real/corpus.json,real/178.cfl,5d30280efdc8ba3fde9e23b4c27a5c60e9b05ae6b7f1702a876ba3ae11c81f80
+real,179,12,set;choose;tuple;difference;index;in,problems/real/corpus.json,real/179.cfl,eeba20d8b772570dbc5236606d87ffd2d0dacbbe2269f38129487be2a7a7efe5
+real,180,37,set;choose_replace_permute;tuple;in,problems/real/corpus.json,real/180.cfl,cff1f407f434669ebc2ea6536e4bf2d86fdde0f18cb00e963777bd4a984f57f9
+real,181,1295,set;choose_replace_permute;tuple;count element;disjoint,problems/real/corpus.json,real/181.cfl,7323b501855f0eba7bd12297373ccdab6106dbaa54f4e2be3ba42fdcd25ad4ce
+real,182,90,bag;tuple,problems/real/corpus.json,real/182.cfl,60190c8755a87f13e4d0d878a702c3ba7a6402df3701263e17a3a58d0e0f53b7
+real,183,200,set;choose;tuple;intersection;difference;size constraint,problems/real/corpus.json,real/183.cfl,b3976b5fe01d8ac7ae6b9c28dc12c3d45adf4b09551db928dfb7008a9a456d1e
+real,184,70,set;choose,problems/real/corpus.json,real/184.cfl,2c0cb7fccb988efe1b991e081040a55eee8fa0dea41cf7d7d929ac9c204c6584
+real,185,56,set;choose,problems/real/corpus.json,real/185.cfl,fce0446ed1919b61a5411574a69d37e2fb99b0bf4d6a3c9351eb5e5803cca6a8
+real,186,504,set;choose;permute;tuple;index;in;compare element;or constraint;not constraint,problems/real/corpus.json,real/186.cfl,e1f1d80c541549ed8fbf211b21a4d8495a3172c79887bff97cfb3779204bf8a4
+real,187,990,set;choose;intersection;size constraint,problems/real/corpus.json,real/187.cfl,de4efc64144cfe662c2aa07c83b456371e137d3eb88a5be3c3467c930a60e076
+real,188,351,set;choose;choose_replace;additive union;size constraint,problems/real/corpus.json,real/188.cfl,b1e97d58bcd8469dec4ad54778a2fdc552f2e46f1c25b3cd5238884310f3735b
+real,189,81,set;composition,problems/real/corpus.json,real/189.cfl,0993b9bad30fb70e51402d91d5016d0e37975f11e066793ff8e332855c791ac6
+real,190,16,set;partition,problems/real/corpus.json,real/190.cfl,1c0c1d9fea406d4bb577b9c3ee81db88a50c648b4b565b694191c7b1f1e2f321
+real,191,36,bag;multiplicity constraint;over partitioned sets,problems/real/corpus.json,real/191.cfl,fb573355e55939134470a5a6c4abda30cfc674609f93e193b918f9fe3d428580
+real,192,31250,bag;sequence;TAG;timeout;pred;succ,problems/real/corpus.json,real/192.cfl,b58e27e78ed62de4dfec49db0f3604a36668895e4a68775ed4b7cfd9f42b197a
+real,193,2880,set;sequence;pred;succ,problems/real/corpus.json,real/193.cfl,08ab203f49d4c46c61e4e2f4d0b07e03c99632e05f98f6f22b5032a85cac1df5
+real,194,9,set;choose;intersection;in;size constraint,problems/real/corpus.json,real/194.cfl,8983a271ffa6c0f933756d3aafb1e2a9fd245989c866e536e97f97e5b5b7e233
+real,196,200,set;choose_replace_permute;not constraint;index;compare element;in,problems/real/corpus.json,real/196.cfl,2c0108c2c0385f8760fe50177bc5692e0e369f6114de7cd6bf6b0a85563dd964
+real,197,10080,set;choose;multiple choosing;tuple;unencodeable,problems/real/corpus.json,real/197.cfl,ea0e97b45f9c02ef8c7a9c2e7b7fbf729aad6ba32ee7ee8bc2658a2eff494a27
+real,199,180,bag;tuple,problems/real/corpus.json,real/199.cfl,fe4bc49283837639cad2cf503db1b599873aa57696d7647b7d5613775a20fd3f
+real,200,31,set;choose;size constraint,problems/real/corpus.json,real/200.cfl,95b4d4154a6af42c3fbf81075f4da162f80d9db2a689e9d93ee3632c35e7f1a3
+real,201,288,set;choose;multiple choosing;intersection;size constraint,problems/real/corpus.json,real/201.cfl,df3633c480d914bbf4d574a82fa59601c2eac6a6f4e0f078f3404324de71d076
+real,202,5,bag;partition,problems/real/corpus.json,real/202.cfl,3d91767b5a2739c32219c01fbc1424c0461864f881ddcc52ee9e9bde56c16eee
+real,203,8788,set;choose;subset;not constraint,problems/real/corpus.json,real/203.cfl,cdd7c02ab1b89f7b65f90c415deffe87651052fc5d76add1c35122622d5506d6
+real,204,56,set;choose,problems/real/corpus.json,real/204.cfl,75a5c84b5507578cba4794622ca5f4f042936bd22cf11b31297c6cc5b429b55a
+real,206,588,set;circle;pred;not constraint,problems/real/corpus.json,real/206.cfl,611f8ac4da1fdc2068764935ad35846eae946ff9dc9da502d6ddf38175b48c51
+real,207,3110400,set;sequence;together;timeout,problems/real/corpus.json,real/207.cfl,1a11fd7674b24667e2c9d225d939c89e3da127877208d17cdf9010467d5b5ae1
+real,208,520,set;tuple;index;in;counting quantifier,problems/real/corpus.json,real/208.cfl,5d95853bfb0be36cc989708c79cd615498cd7e6abd868019a9da7d1968bcf5fd
+real,209,210,bag;tuple,problems/real/corpus.json,real/209.cfl,c60f16adb87dbf3ed069753edd9d27ab98d9dcdac30266cbf178857cce332431
+real,210,24,set;circle,problems/real/corpus.json,real/210.cfl,cb90c921c8a12b4fb88b82ac79d0bdef3629ecf51178fc6b28240709a9b24654
+real,211,15,set;choose,problems/real/corpus.json,real/211.cfl,337c221d16713f6aec2b609cafc1c488532a9b005a4ff01e6624331cf9c1b2f8
+real,212,2250,set;choose;multiple choosing,problems/real/corpus.json,real/212.cfl,1b26919a38ab790d38958aab5f743f5219c961b8f0f596212df8767049af6da3
+real,214,10,circle;reflection,problems/real/corpus.json,real/214.cfl,99b2e1d046ec2b4024793d574ecb7a95a6e5c31c2de1ea58ea2b70757f5218fd
+real,215,12600,set;choose;multiple choosing,problems/real/corpus.json,real/215.cfl,f5c714ebc37033675ed86872ffae29469cc7725c78fb12761c514872f187f902
+real,216,448,set;choose;tuple;not constraint;in,problems/real/corpus.json,real/216.cfl,cc76aeca11eda4da94dbaffe9a494d6ed1fabf81de5d798d7bc7d49b334e6563
+real,217,5040,set;circle,problems/real/corpus.json,real/217.cfl,4c97e6ddff37f0dc547f3cd66ae1ba2254a6db85680224725268c11b654a24b3
+real,219,165,bag;composition,problems/real/corpus.json,real/219.cfl,7741e344ba9015d92186a6e292e543a67b362ace34ee7879fd5d493d7be6de55
+real,220,927,set;choose_replace;unencodeable;arithmetics;supp;multiplicity constraint;tuple;not constraint;size constraint;index;compare element,problems/real/corpus.json,real/220.cfl,3e981baa6c8f34be6296fb975b5a5937f320fc999d2ab6d1f5ba05d97e2d54f6
+real,221,18,set;tuple;not constraint;index;compare element,problems/real/corpus.json,real/221.cfl,afd37701a3ab77cd3b3dcca8c9dcc8e47f88d2b27506a66f6423ddb2cfe1e1b3
+real,222,111,set;choose;multiple choosing;subset;not constraint,problems/real/corpus.json,real/222.cfl,5118651a819df3351547036a5e01d28afe2a33f057d0f6dd29b05bfd82f6799c
+real,223,120,bag;tuple,problems/real/corpus.json,real/223.cfl,814b04876fb9f44477a25f876a58016ef69594231235578f17573bdc1be93b45
+real,225,28,set;choose,problems/real/corpus.json,real/225.cfl,cc5aba04d069f738bd2bf28a764eb00a5503b01837a350ddc00456b00674009c
+real,227,544,set;choose;tuple;intersection;size constraint,problems/real/corpus.json,real/227.cfl,9df4aeaceffb33e90fadfc357b570433df2b9c6fdb663b1ee061f57a867eacb8
+real,228,351,set;choose_replace_permute;sequence;TAG;count pred;count next_to;unencodeable;pred_of_pred,problems/real/corpus.json,real/228.cfl,64080a16ac00b21e308e87bf3a7c98adbaeddf78d3c13f219f91f2891a630aa6
+real,229,5,set;choose;multiple choosing;in;or constraint,problems/real/corpus.json,real/229.cfl,180d51af7fa09fe2ce2a3cc4cedfe70c7152b66f4b3f8d1eb361db9af7f37a49
+real,230,495,set;choose,problems/real/corpus.json,real/230.cfl,cedfcb0322e4ca1a1b74f3a562ff0c456cfdd5829968f1c1ab7cc4ed9a9d8ce4
+real,231,36000,set;sequence;not constraint;pred,problems/real/corpus.json,real/231.cfl,f7e4d2208d6e22d7f63e2b856425bcc13fc48e29eef181b6339fdf2991762743
+real,232,864000,set;choose;tuple;multiple choosing;index;in,problems/real/corpus.json,real/232.cfl,8ee116a4982370b11b959d7741d79e146efd08bfc11c6dd4a77ad45872506b20
+real,233,360,set;choose;multiple choosing,problems/real/corpus.json,real/233.cfl,794a4ebd36e3fa41a5eecf05d1f1817b4fde1735686642b77f7de635948e5114
+real,234,65,bag;choose;size constraint,problems/real/corpus.json,real/234.cfl,ec16ba0fd525eacccb37bc6cfe2b1eff02d3a2d53efa5b6198ad97545ad0c94f
+real,236,12,circle;reflection,problems/real/corpus.json,real/236.cfl,1a2698c9113269d05d47e3f3c0b1759be6725d77278f1a62c5bf65a14f74887e
+real,237,48,set;tuple;index;in,problems/real/corpus.json,real/237.cfl,966016d47ecf48fe602cb8ee7b3cebed4901e39ca3f616bb0e805e7360dd8acf
+real,238,6,bag;tuple,problems/real/corpus.json,real/238.cfl,6fe417dfc67f96dac17be7c045150bae148158a64223426998193b60f5083034
+real,239,10,set;choose_replace;multiplicity constraint,problems/real/corpus.json,real/239.cfl,0b26d75fb7e32f80ea01f66da271ea4a002766eee2a41c66ab9200027ed344f9
+real,240,576,set;circle;together,problems/real/corpus.json,real/240.cfl,d73deba20015b19bf113052031631abc5f9cc4b2e6f5fb2401d5f61f84707396
+real,241,6,set;tuple,problems/real/corpus.json,real/241.cfl,63d33248cb9a13fcc033340d19d7cc3e36dcd6175b7068c8589b7c3a9cb45071
+real,242,62,set;choose;multiple choosing;set equality;or constraint,problems/real/corpus.json,real/242.cfl,64a16c63a87d7f2e442efbf665344f1dbbb40a1b8072515d5600ec3757c56f83
+real,243,4896,set;sequence;count sequence,problems/real/corpus.json,real/243.cfl,b1579ce3231e6b1965259df70c4094c672e29182cdf288fabbb9f1362863732e
+real,244,480,set;choose;multiple choosing;subset;not constraint,problems/real/corpus.json,real/244.cfl,e7445e8a510c27dd7c4123b12b61dbd5b297696f8167cd27183f87096380a73c
+real,245,35,set;choose,problems/real/corpus.json,real/245.cfl,a89b01570b401bad3247be795d8397c2d9636bf15ad7d196c67019f1f4995a7f
+real,246,35,set;choose,problems/real/corpus.json,real/246.cfl,dc790bc2e4ce7be89562fcec99be0915fbbe485f0bd4093d8bd1ecd58ba1c11d
+real,248,6960,set;choose;multiple choosing;subset;difference;not constraint;or constraint,problems/real/corpus.json,real/248.cfl,6249264422363dd71a1c8daf8313161ab7f4c49606c0c87961efad8af7f5524a
+real,249,14,bag;partition,problems/real/corpus.json,real/249.cfl,6d639dd7f8d2662328a93cc9f65cdc0af66866b1c30bec585755ee5410f8a3eb
+real,250,29,set;choose;multiple choosing;intersection;size constraint,problems/real/corpus.json,real/250.cfl,e659e2a46b7146a67597d31b535f02c6b3ec07395fe1a432a2ca015c584979de
+real,252,48,bag;tuple;index;not constraint;compare element,problems/real/corpus.json,real/252.cfl,5ccbfdb543f6dd76978b98c98ae2f205a0cbde4e52234844ef6f177a47e34f7d
+real,253,1120,set;choose;intersection;size constraint,problems/real/corpus.json,real/253.cfl,291f86016365879a75535c9440c5ceb46ac617ad9a1edc2ae2ce57c6be0ac543
+real,254,36,set;choose;multiple choosing;tuple;not constraint;subset;difference;in,problems/real/corpus.json,real/254.cfl,3318132b5f3b38fe746aaef4e7776cd924fc51c3b7a7095997984b2e49a72bd2
+real,255,50,bag;tuple;index;not constraint;compare element,problems/real/corpus.json,real/255.cfl,acd0d30593362ebaf0ba093963fe1a5362959715cfc02a53d450d4df507828d7
+real,256,28,set;choose,problems/real/corpus.json,real/256.cfl,6938221a2088c69e09dbd427af6d655b63327aa6d146180da4b60b9ec476790f
+real,258,105,set;choose,problems/real/corpus.json,real/258.cfl,a4297ffb4075fdfdacaee033ecf6d10ab57de8bcee4cabcf56401f5b0f6425c5
+real,259,432,counting quantifier,problems/real/corpus.json,real/259.cfl,512c0a6348d2fb39145d125fad3b46b73c4e92ff6ea6ad7e48d1be0639908780
+real,260,720,set;circle,problems/real/corpus.json,real/260.cfl,bf33b7ea6913a327710fc091d3e84338d27508428d252acc10ca9dc41945e59b
+real,261,10,set;choose,problems/real/corpus.json,real/261.cfl,38551a2a609af9432ab91d2bcf380b67dbdf9efb87d08e2dae4d10660480c926
+real,262,9240,set;composition;size constraint;index;in,problems/real/corpus.json,real/262.cfl,cb8c2f50c1b71e7f063669ef3965c93031e592fded68b33d71801a0749416d25
+real,264,15,set;choose;subset,problems/real/corpus.json,real/264.cfl,e310c7f7f197b9f69bb6cf65383ca40d08ff48588d0ff96d80461721cc1ca918
+real,265,384,set;sequence;choose_replace_permute;not constraint;next_to,problems/real/corpus.json,real/265.cfl,7eaef495dde53026f6af901264400575a99a7e02abad05fd9cbcb91b804c7704
+real,266,210,set;choose,problems/real/corpus.json,real/266.cfl,bce702f6d3e90cbbaa0b4359c469ee00e700c09dc9b4230e4ff93788c4fe2e7b
+real,268,4,bag;partition,problems/real/corpus.json,real/268.cfl,a8927a2c6ad30725862245e5177b1598607b1c9c5b689bb5adf00d03915592ff
+real,269,240,set;circle;next_to,problems/real/corpus.json,real/269.cfl,a74bd83e82a9580daf7b2af9aea17001edd933c4cd1481028bb1f13aa817c44d
+real,271,6,bag;tuple,problems/real/corpus.json,real/271.cfl,5366d6e9456fa9a2bbf79ba7d148d1e0d150cc417bfc53b40ec4dfc939ecb337
+real,272,5416,set;choose_replace_permute;tuple;or constraint;in,problems/real/corpus.json,real/272.cfl,dc14c78137dc006a158eda3742e12a6ccdbc72dde07c5365f157b591efc2f326
+real,273,4,set;choose;size constraint,problems/real/corpus.json,real/273.cfl,7be74e04008e5337f3f913ed2dc984c98e10dad38869faf34f08f841b8ec6982
+real,274,2598960,set;choose,problems/real/corpus.json,real/274.cfl,0a2b528c311f0243ce731465ca144b6f8da005176a4e28e036e8ecdd2dc6a5d3
+real,275,768,set;choose;multiple choosing,problems/real/corpus.json,real/275.cfl,64eb9f9de83dbc84aba2b995edb33e7a2d3b03453ddb28aa1c08ea52aaf12f71
+real,277,100,set;tuple;choose_replace_permute;index;not constraint;compare element,problems/real/corpus.json,real/277.cfl,1151201b3781422c723c4c6ba3905bdadedc4183b8de11e1fe1a5581de9699c3
+real,278,1951,set;tuple;choose_replace_permute;in,problems/real/corpus.json,real/278.cfl,9df839393a1b032b7b323c260b47b9fbbe1f4424c7afe94dd9fb60410729342d
+real,279,210,set;choose;multiple choosing;subset;not constraint,problems/real/corpus.json,real/279.cfl,2e376adb0d90e6d79dfc0ee24de77cf705f4a67dd7c11f99167c237a3b6f8a80
+real,280,12,set;choose_replace_permute;tuple;index;in,problems/real/corpus.json,real/280.cfl,61e79689e90635d37e24ef5ac46996367a9f4ed4c68608b14f3b22ef6f785720
+real,281,75,set;bag;choose;multiple choosing,problems/real/corpus.json,real/281.cfl,1a205c19964db5d54ac6205723f607d5423e81a8700c78d33f9a91817d0d003d
+real,284,1440,set;circle;next_to;not constraint,problems/real/corpus.json,real/284.cfl,3754e44cb68c8a62154b8ee3b21c62a5e3a650cc603d211274568ef8372f865a
+real,285,14,set;partition,problems/real/corpus.json,real/285.cfl,600734afb92079c006e8e2889182d001d35d1ecc8f8d217c9610baf15aad027c
+real,286,4242,set;choose;intersection;size constraint,problems/real/corpus.json,real/286.cfl,ed1960093686c7d0b70f435011ff156568f463d9b79425e4826e853b2801af7e
+real,287,210,set;choose,problems/real/corpus.json,real/287.cfl,eb5f764f8deb18f13b5e1ec47a35b6e68c586f5446e2af8118fbde5bc1857cb1
+real,288,210,set;choose;multiple choosing,problems/real/corpus.json,real/288.cfl,43a800d1478a4aebb83ce12ad549e3a52617460da19c2758fb03b421aa8413a6
+real,290,60,bag;tuple,problems/real/corpus.json,real/290.cfl,6042046a15a86dfcbd23e5b649f54f0f843f0193b497099d9641e8e6c46d4071
+real,291,180,set;sequence;choose_replace_permute;pred;succ,problems/real/corpus.json,real/291.cfl,e4798dd009fa6c3473a4527c3514fc7762c6bbe9ebe60fb64b86f51a73eb3efc
+real,292,720,set;sequence;together,problems/real/corpus.json,real/292.cfl,c94154aa00df513a8256b4eea9810438a125d98bb7ea354d7f3bc342bdcbb526
+real,293,900,unencodeable;arithmetics,problems/real/corpus.json,real/293.cfl,a27fc02d400a220c5c6c08d2a526f931c411c9d1c8a7eedf24f9fc9068aaa0eb
+real,294,14,set;partition,problems/real/corpus.json,real/294.cfl,a070b01a49a0460106298e1f195b9c734eadc3aaf13b732f20d5a4bf40aafab2
+real,295,41,set;partition,problems/real/corpus.json,real/295.cfl,4b0e039250a9e07d4fcc04bf9918f052ed20ef9cfe3963fe6cbc5b79d0cb3566
+real,296,80,set;choose;multiple choosing,problems/real/corpus.json,real/296.cfl,fe386205815ba69c5c6f3dee3be60e2b9e72ecbf0a0725ec8161535ce5bb3f2b
+real,297,16,set;choose;difference;multiple choosing,problems/real/corpus.json,real/297.cfl,320f79cdd879cf796a55c32ca164e76a903fd8e95b203f3ad7ec876daa8990b6
+real,298,45,set;choose,problems/real/corpus.json,real/298.cfl,36fa83498bd88e9bfe73806b96650e3f48f0819278c5a6c4a863a96c8f7a916b
+real,299,420,set;composition;index;size constraint;in,problems/real/corpus.json,real/299.cfl,723b45d7a3afec78c5c9c83d4c5f418868a23c34fa18bd6cd5de38818758645b
+real,300,380,set;choose;multiple choosing,problems/real/corpus.json,real/300.cfl,f05fdbf9320fc09d3acd2aec4ff62a921abcd37a7fc35a19a1b8b0f3366cb19e
+real,301,48,set;tuple;composition,problems/real/corpus.json,real/301.cfl,3eae1872d998edff1129869b5b456e0ccfa3178651a33652c5e92304e9f2c793
+real,302,16,set;composition,problems/real/corpus.json,real/302.cfl,c770b59f507ab9212426f6193dd711b83073d25aa5cff34c9df2873aa0dcf379
+real,303,60,circle;reflection,problems/real/corpus.json,real/303.cfl,b69f4090d442053a4860fa3462607aa06fe9703a5bf892a86eac846f4df62390
+real,304,1848,set;choose;intersection;size constraint,problems/real/corpus.json,real/304.cfl,651b1a0e253545f52cb09caca4a45a913f1ec547ce5bdb957328a629cc874532
+real,305,1050,set;choose;intersection;size constraint,problems/real/corpus.json,real/305.cfl,777cb522097c2bfd8add6372f670bed521440f86c34dcf4b4e4cbbf4554efc9e
+real,306,6840,set;choose;multiple choosing;difference,problems/real/corpus.json,real/306.cfl,9e7ae187e7097999ca5e714010be212feaaf746cdfaae6e4c40f2036032f4e52
+real,307,192,set;sequence;choose_replace_permute;pred;not constraint,problems/real/corpus.json,real/307.cfl,ac514479758b6fb737c130c06b06b25c3913aab8b06daff7d32c257309ebc1c9
+real,308,33800000,set;sequence;TAG;choose_replace;next_to;timeout,problems/real/corpus.json,real/308.cfl,d88a308088f8cb3b4573a3d54d233660121f23f97043769c3b4d4caa3679a6a8
+real,309,6,set;circle;next_to;reflection,problems/real/corpus.json,real/309.cfl,1b815d5d622fffd8b64b90e19a2f4b812f2a30cfc8f6b092f9b89d767977a304
+real,313,112,counting quantifier;arithmetics;unencodeable,problems/real/corpus.json,real/313.cfl,ce98c5840997016c1b2b9c7c12df205659ebac657d2915f0bfee19deabc9f959
+real,317,195,set;tuple;choose_replace_permute;index;in;unencodeable;arithmetics,problems/real/corpus.json,real/317.cfl,8238de9ac9c02016dcd997dfdfe4094ec02a17199dcac2ddaffcdcfb4c9b7bc3
+real,325,452,set;choose_replace_permute;tuple;in;not constraint;compare element,problems/real/corpus.json,real/325.cfl,4f99470dd0074bdbb460bcc4bc623c6ac8c7df6d504031717c6be1e68552d6ae
+real,335,320,set;choose_replace_permute;tuple;index;in;supp,problems/real/corpus.json,real/335.cfl,f8285e606d2ae3b3b07878b08920271c1e88e4ab8161a8ce13b649a77f88590f
+real,371,26,set;choose_replace_permute;tuple;multiplicity constraint;not constraint,problems/real/corpus.json,real/371.cfl,213cf73c7bbf71541ec8c647792aeea5415b070069d4b28721b00c03a185d624
+real,375,728,set;choose_replace_permute;tuple;index;in;supp;size constraint,problems/real/corpus.json,real/375.cfl,2eaf8e99e914961ff10c7dd489a7278e97c43208e9a8c6f477dfb16f9672131b
+growing,mathcounts_00,100,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_00.cfl,00b0efbdfb48121d7d0f9894b1519bdd7392e1c8eb40d81c057cbc76c6d56366
+growing,mathcounts_01,214,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_01.cfl,d6b6e2dba8f0269a72ee4146a43962b9e5b88957e525e6b09360d9d728748bd6
+growing,mathcounts_02,406,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_02.cfl,6258ec9563cd57c3e76d873533c77322be3bcdde0a32132e8c6c579eea7f0f29
+growing,mathcounts_03,706,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_03.cfl,f03349b701128bcba6ed16bbd5bdda93e9805bb50909860af679a94600051736
+growing,mathcounts_04,1149,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_04.cfl,07a7c3d8bbccccad18fed91aac2697ff98ab63879fdcb78fe268949743d3254d
+growing,mathcounts_05,1775,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_05.cfl,2e6598867860f87474b7429bbb02726ab6d1905826de442d4c2a755849506336
+growing,mathcounts_06,2629,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_06.cfl,7e2b18266d112d57ba2a536d42abb305d25b88863039770c50fc79ac70ed8113
+growing,mathcounts_07,3761,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_07.cfl,952646d3f6f686d3d546b38354df891555ff9281e90962782b18201c8434f530
+growing,mathcounts_08,5226,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_08.cfl,de8e6e1d97a9a87c4efc52613ebf9689321bb32ad5e2c768892a46da617c7650
+growing,mathcounts_09,7084,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_09.cfl,05d4fee0d8b7b2e854d0ebae113922abcd2b10d25f675b5c07b87fa0d52ac454
+growing,mathcounts_10,9400,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_10.cfl,3863e2fddd8cf7b7ce5ad208d766fa2c465d315ef1a551b559f9d60e092cd7d2
+growing,fourletter_00,36,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_00.cfl,57acc8a1844f5c3e412ecbc79fe6d81f01974a1412d9b5af43d0a01c7b77d2c7
+growing,fourletter_01,60,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_01.cfl,c14ae30a04a4fc24805521f58ea623f37fc91288af2d8dc49f912391cf3f8225
+growing,fourletter_02,90,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_02.cfl,80daa37a210aea1390c0edc65839b2ce90797fe5551baa3fb7b1b5050b66a977
+growing,fourletter_03,126,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_03.cfl,8dd2772776f60d4e55db334663efe9f66d07380b5205a5941b85c05cec866dfe
+growing,fourletter_04,168,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_04.cfl,46fe3f9d0f6ce6978242d567e10e649fb354e84ed486da3e0a725b44ff2d5553
+growing,fourletter_05,216,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_05.cfl,42e14f2314fdb8bba8335842c53928d7fcdf5b47e6a169a87f9ace4b2e8cedfe
+growing,fourletter_06,270,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_06.cfl,29e06b5533058b7090ac12f8b212f7740e1a3ade9f4bac153856a35ef6166669
+growing,fourletter_07,330,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_07.cfl,ba0ef8a6771b88488564ff7c9a87cc1725951dd7cf242889ce358819a89c70a4
+growing,fourletter_08,396,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_08.cfl,82ae178127762a26e595f9497ff008a36ad2848f1ba83896b4ac97caa32979e2
+growing,fourletter_09,468,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_09.cfl,3348d4663975c8b1f7ce2d6f74e17e2ba60e9fa955f09efea44fe81df24279ec
+growing,fourletter_10,546,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_10.cfl,3514682349250b5d95ed505ea1e4fc988e006f897976a41b5acbcfe6943cda72
+growing,tvs_00,288,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_00.cfl,76b47258b9e03e0287adcf402602f1058a87506dfec9bb9cc1ca28dfcb95c4a9
+growing,tvs_01,910,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_01.cfl,1030caac0750c35de3276f85edbf23984c5eb8e5932c950968f4806f1f2bd1dc
+growing,tvs_02,2256,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_02.cfl,e790dbf7aa2915998757f431e117a341764ff3611e73ea050d23fa7c96a47048
+growing,tvs_03,4806,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_03.cfl,a850eb971464f3106b53bf6465a7a2c5a36c79cec62071647749a62504de4277
+growing,tvs_04,9212,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_04.cfl,19905cf42d63b06ff463433030bd3b75a8ffb5b77396e4f593f67c1c2dac867b
+growing,tvs_05,16324,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_05.cfl,bdeea1c66cbe1182b473915ecec5a331e4ba7edf4593a4834c524971b0d048ed
+growing,tvs_06,27216,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_06.cfl,d516552f6924834279a0ef2c2d9898e2d1171788a78bed45acd393dc9cbd18b4
+growing,tvs_07,43212,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_07.cfl,9c69a9f8f469c320d5f396103bc4bbdc0f51de5a65a10f5c1c215a7dfa1a58ed
+growing,tvs_08,65912,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_08.cfl,67ce0e0113d89381db5db2862b74a43cc8ba2c38a93c93ec5128669a732d9ca0
+growing,tvs_09,97218,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_09.cfl,7a88c225cf0e3965ba3acb503f689527706c98cc15a1ccaf123fe4efa7611a09
+growing,tvs_10,139360,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_10.cfl,b9607b77116136204dc840e725b47ddb86dc3350b9861b42ad4471f3eb450fb5
+growing,workers_00,72072,workers;set;composition;index;size;growing,workers composition,growing/workers_00.cfl,ce78fc3015c0d9e52e1f2e477f596da78973fd9952e6ec7d8496acc6023aaf0c
+growing,workers_01,135135,workers;set;composition;index;size;growing,workers composition,growing/workers_01.cfl,aa47618b3f7fa1a3601b8cbddb4ce0d7a24cca9ec34d2de8c8ce9b7466eae5a5
+growing,workers_02,360360,workers;set;composition;index;size;growing,workers composition,growing/workers_02.cfl,f8dd22832c9721336048e36ed8ffe7dfade57f5f33c4f5eb60dea0ee94716410
+growing,workers_03,2042040,workers;set;composition;index;size;growing,workers composition,growing/workers_03.cfl,671df624da9ca525dfdce6e17ca252f997cce85369a02064dc653426b33e0104
+growing,workers_04,4084080,workers;set;composition;index;size;growing,workers composition,growing/workers_04.cfl,aee3fce0c9e324ce9131ecc95a0f9bd0da2b40093b48e4f8c9f5bddb9b0c4446
+growing,workers_05,11085360,workers;set;composition;index;size;growing,workers composition,growing/workers_05.cfl,82a5a1ffa536756a52a468395ce762a77d7d0471d131327b30b9a759640068d5
+growing,workers_06,55426800,workers;set;composition;index;size;growing,workers composition,growing/workers_06.cfl,698ee7d66629e07fa76c1b5ca2dbbb4fbcf5e8425062e55d94313395ad2e83d1
+growing,workers_07,116396280,workers;set;composition;index;size;growing,workers composition,growing/workers_07.cfl,2da5c7b442a47764efc40746020f9a94d875684b44c95f2bbca6504261079da4
+growing,workers_08,320089770,workers;set;composition;index;size;growing,workers composition,growing/workers_08.cfl,f9f3c4f81a8a736b63cf3da9bb2c4e4004f3a353541520774bde4fcb78ca2761
+growing,workers_09,1472412942,workers;set;composition;index;size;growing,workers composition,growing/workers_09.cfl,055f9bfdcbfa98c736e7ef26b54edf2af794df96456e53c84d37103d8312e1d3
+growing,workers_10,3212537328,workers;set;composition;index;size;growing,workers composition,growing/workers_10.cfl,07b249655907882aca85d4d24b04292143bd4af226c9bc490f84e27a023d91d2
+growing,banana_02,9,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_02.cfl,af18c973c41165b696dcb375e3d9a21b3f6a63fcca3e14cfa572e5bea4974637
+growing,banana_03,26,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_03.cfl,59d66c37185e5e96e18b8ccbc620797f9667b531b121b4e6f1dde64ef601a07d
+growing,banana_04,72,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_04.cfl,6094756f9af58d9cfb856da9301c2d1786457edd6d24f2142a1d871dbfcf19ac
+growing,banana_05,191,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_05.cfl,0af40164d220f098f61681b1983a89e4f383ceeee53cbe5b4c5c1086b546c243
+growing,banana_06,483,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_06.cfl,3d41c197b13b4519aa735a8deb0e7047b24dc17b577f4732d21ce7dd3001f2ad
+growing,banana_07,1148,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_07.cfl,031b2db7543a6ce8487cffb1200c138cf09ba3eca010cb928208a108533cb942
+growing,banana_08,2534,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_08.cfl,eff5fbb0805f400af6156207015288bef9f16e43d60ac88dd8a6a7baa714e67f
+growing,banana_09,5124,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_09.cfl,8b86c9ca8ef33a776af6a51c76daa55b9d0ae2ecd8213d2c8f93f80c95c29bb5
+growing,banana_10,9240,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_10.cfl,7d8850f5fc8ccc62e2e2cd90fb5e3db3e97c29179bb0b966bddd3eb361ce954c
+growing,banana_11,13860,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_11.cfl,4ff550071dd336466bb642f7aa6b9db136f25d033e5ae1a0f1c35f94b7513868
+growing,banana_12,13860,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_12.cfl,a4516feac322a699c8bdb1bf287a9fd4113ef8be9f45e0c62bb15796256548bc
+synthetic,ss_10_5_seed0,,ss;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_10_5_seed0.cfl,df1c79a3c2796b0b0bc890a51f5fd00e82f4fdc488577cdcbbea0b34be273b8e
+synthetic,ss_10_10_seed0,,ss;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_10_10_seed0.cfl,c1a95eedf6eca3230febf6cafecd6529cbcce714a249863b3600eeaf5d5f9420
+synthetic,ss_10_15_seed0,,ss;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_10_15_seed0.cfl,c67751ef4374356ecc3e30d4ab96bd01967d42638fe62dada1384f4b880aae39
+synthetic,ss_15_5_seed0,,ss;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_15_5_seed0.cfl,9679b6be9e4923ef5902da4c4836100ff69a8d77435b7020fc29df47bf2c3013
+synthetic,ss_15_10_seed0,,ss;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_15_10_seed0.cfl,ff3b7a47356a882978b12ca31b65496a1cbf8ee265de61fc9d4b4adea67f056b
+synthetic,ss_15_15_seed0,,ss;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_15_15_seed0.cfl,9fd8292831365149a5b1483309f5b33dd2931340744880d768ef830530189318
+synthetic,ss_20_5_seed0,,ss;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_20_5_seed0.cfl,8a7f8e4f691f935cb547cd0b622167f7b8268e6e69ada7a739abbcc24512fa4a
+synthetic,ss_20_10_seed0,,ss;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_20_10_seed0.cfl,6a04f50f61cdcbe755108bedfe5723d28a241e6ccf3f678ac01df8280b9b84e8
+synthetic,ss_20_15_seed0,,ss;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_20_15_seed0.cfl,54881b77d47bbb88fc0ebf09c15a1645a8d0e7fc4c26440f89b30058096a07d7
+synthetic,sr_10_5_seed0,,sr;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_10_5_seed0.cfl,49f1d4b88f21b4bc340cb7879f1bc278247b35825869779b1751fa24683f0458
+synthetic,sr_10_10_seed0,,sr;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_10_10_seed0.cfl,723caa943155ab9f6a38d1f7f9d29e9a4a3b922ba844fe3e7392179718639454
+synthetic,sr_10_15_seed0,,sr;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_10_15_seed0.cfl,a386504ddb0d02074c207e7816cd2464af52da767281dadf0a9fb9f203e9879a
+synthetic,sr_15_5_seed0,,sr;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_15_5_seed0.cfl,36193d8acd8f1279b4d06a6792418847826f806d8c99d7185f8ade5fba4f7042
+synthetic,sr_15_10_seed0,,sr;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_15_10_seed0.cfl,9a959ad3af4ada04c164f1983fafa070b3eb0df8c2f28087e36f5b796ddff7c0
+synthetic,sr_15_15_seed0,,sr;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_15_15_seed0.cfl,119e80d4a51d1d32d8501c9cf915c9e0e86e6bb6e1316160fb7625b9ad12c29a
+synthetic,sr_20_5_seed0,,sr;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_20_5_seed0.cfl,8a2502edc8e0aaff8a4d72d8a81e58cf556a0f315ce6dbdce944cd8e8332775d
+synthetic,sr_20_10_seed0,,sr;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_20_10_seed0.cfl,035d417fb73df48662b2f1f9217eba63e0c64af7589992c05d052d4f966dcc8c
+synthetic,sr_20_15_seed0,,sr;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_20_15_seed0.cfl,4e58d2f95e5069014b621b2cf2dd6b1134b0e1402217c03f502c33bc52f26e83
+synthetic,ms_10_5_seed0,,ms;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_10_5_seed0.cfl,297c5d87f6b4d87e002e47043e8a3d81ce8712ee4ccd25780f9d888e90455cc2
+synthetic,ms_10_10_seed0,,ms;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_10_10_seed0.cfl,1be7861d5d87b30d5f42a50fbc620148b7403c1e7430379b229cb1382b1ad51b
+synthetic,ms_10_15_seed0,,ms;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_10_15_seed0.cfl,ca62613a45dfa72df3a758108c4fb8e6df039ac7150267cf29cee5a2ccdb35c6
+synthetic,ms_15_5_seed0,,ms;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_15_5_seed0.cfl,30fee37db0e5e4d4a5ed6ce966d46a341b0034837a76f99f9af22464531cd4cc
+synthetic,ms_15_10_seed0,,ms;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_15_10_seed0.cfl,f92983027a60954b01d6c3ecd61654c2c855f7ed81393d1037eab4841aa48beb
+synthetic,ms_15_15_seed0,,ms;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_15_15_seed0.cfl,d820a1f5f879e68185fa9c970485d8d6250c2b4f4dad8650d89e520c6271190c
+synthetic,ms_20_5_seed0,,ms;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_20_5_seed0.cfl,93db922850fd86378d3f034d60c815c9691dd0ef376cc13e3988764ab102b581
+synthetic,ms_20_10_seed0,,ms;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_20_10_seed0.cfl,112c857343ec3cbba64586fe4abdaefd21f31417f95d734a06aeb2f88f52d0a9
+synthetic,ms_20_15_seed0,,ms;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_20_15_seed0.cfl,6cd3574caa784f9b0da9c565082792c83650b5c230f26b169368f2a42d325e5b
+synthetic,pm_10_5_seed0,,pm;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_10_5_seed0.cfl,6249c5ab3268a7e0ad1def34a3bc64c688589993219137ca4b42099f0dc0f286
+synthetic,pm_10_10_seed0,,pm;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_10_10_seed0.cfl,e26fc93d52892866202ae5408788945559572a38fd34e0f4f3aa21b4ed804169
+synthetic,pm_10_15_seed0,,pm;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_10_15_seed0.cfl,479c30fbeb6437f21f08ddede3b2d94c0551a37aec1b540927595aa7a3b0c50f
+synthetic,pm_15_5_seed0,,pm;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_15_5_seed0.cfl,76ad3eb1e0cee176a3f36c66d59c314a36c015086fe15f443c366cbe44500383
+synthetic,pm_15_10_seed0,,pm;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_15_10_seed0.cfl,8b2218a76faa2df6a6bc02026656e769569162b7be8b2b39da6612a78f513b24
+synthetic,pm_15_15_seed0,,pm;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_15_15_seed0.cfl,980d3841f12859c77f8059f47f7084ddbeff8a9eda6e71fc4df969736b31f201
+synthetic,pm_20_5_seed0,,pm;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_20_5_seed0.cfl,83ee23d04813e0387fb198da5ceb51a1d3f141cae8a3ea849b6d1f56e35cef21
+synthetic,pm_20_10_seed0,,pm;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_20_10_seed0.cfl,a5bfca1d6b646c779ff42ac9d3cb94a4828efd612ca4a9630b802d7a4792eced
+synthetic,pm_20_15_seed0,,pm;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_20_15_seed0.cfl,e13b8a502738219ce2e408decf48bc9f260d9e4eff941c4f4e44bc4bd7f04272
+synthetic,bm_10_5_seed0,,bm;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_10_5_seed0.cfl,4215eb9f552f75c2b36841646ef15acb9fee56d79b4878bfebd680720dc7dab8
+synthetic,bm_10_10_seed0,,bm;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_10_10_seed0.cfl,cc1aa922637471f6203014059bbf462941bcbbf75dc8d62d3b25d5c120524034
+synthetic,bm_10_15_seed0,,bm;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_10_15_seed0.cfl,4a6197e3c1cca10535b25151694d4039dc28f07b342e5d4ef336fef2a1f477f0
+synthetic,bm_15_5_seed0,,bm;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_15_5_seed0.cfl,fb3987722a9bb2cb77b0d9a9315e27ac63cfccdb738ddd1a9d810b6f2cdd905a
+synthetic,bm_15_10_seed0,,bm;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_15_10_seed0.cfl,bd961eaa6e575fd524bedadcdcc2a136eca2f3a31d8b62a64398c04fc8267ccc
+synthetic,bm_15_15_seed0,,bm;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_15_15_seed0.cfl,20f06350bf4f656a16b6cd7f844140251869479c664ba43e48e5c0e2d9dd569b
+synthetic,bm_20_5_seed0,,bm;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_20_5_seed0.cfl,bea5748c956f5fa0acc9afb3a05206760db8090874e1d8e1153365e2be44a572
+synthetic,bm_20_10_seed0,,bm;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_20_10_seed0.cfl,1cfc498c0223f08240e004a56a1372d73e83809e4a95b91d3c8118f73feae212
+synthetic,bm_20_15_seed0,,bm;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_20_15_seed0.cfl,1a05ed6fd2428f255866dc5ef073eca34c61b26d6d8485b5726b8d1cdab89afc
+synthetic,sq_10_5_seed0,,sq;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_10_5_seed0.cfl,dae30a49fb2707e160dd5170e3d10c9c18a393e0c71c45c8ef572f29bc633674
+synthetic,sq_10_10_seed0,,sq;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_10_10_seed0.cfl,7aa918c7e0045ba905686a585481bafe2c61030d87afa1082a14feacdf5f6935
+synthetic,sq_10_15_seed0,,sq;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_10_15_seed0.cfl,09e3c8e5a22341fda82675a387ccddef3ea22c61154b808a6855da3bc46b583a
+synthetic,sq_15_5_seed0,,sq;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_15_5_seed0.cfl,b2f523a27660d022bde89607f95231ccd53e71da7908aa6087c110e41679783e
+synthetic,sq_15_10_seed0,,sq;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_15_10_seed0.cfl,a82b12639865880386ce686e5882a81c23a7472780abec79d6ce4445461d484f
+synthetic,sq_15_15_seed0,,sq;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_15_15_seed0.cfl,8100d226d586db475cdda99f23ee33a3bc922c4bb6bb0fa2d1ec7e93bd18de48
+synthetic,sq_20_5_seed0,,sq;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_20_5_seed0.cfl,adedb55c279e8a777e852223394c9adbb94bfaee1646a2fdedcb1625604482ec
+synthetic,sq_20_10_seed0,,sq;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_20_10_seed0.cfl,a296a25de2428d1e56b7e48b91a76f50a67e3caba4e246961874c1bc88757696
+synthetic,sq_20_15_seed0,,sq;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_20_15_seed0.cfl,698adb105461505c3c4e26e6170e6f72171f2c5ba442829187382a295cb36c4e
+synthetic,pt_10_5_seed0,,pt;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_10_5_seed0.cfl,ab4f43609c83c868a297168f2b2cef8dd2e5dcc97b07dfdf2e96762d1523cd59
+synthetic,pt_10_10_seed0,,pt;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_10_10_seed0.cfl,86e2e063b4db1543af74252bf4c355bcab3e28fd7132252e0960196ac7d93320
+synthetic,pt_10_15_seed0,,pt;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_10_15_seed0.cfl,f1a0fc23ad74a9fb73ebaabdf4058fa50a5cb22d89210bea41aa72cd9b7f0680
+synthetic,pt_15_5_seed0,,pt;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_15_5_seed0.cfl,509275685622132cf833d24983a44cfcb4c860dbb81b6dd746811273b6cbcc3a
+synthetic,pt_15_10_seed0,,pt;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_15_10_seed0.cfl,4cd6f40f7f934c7fb538f60a04260b8487b8236b0ab7b2227557d1ba7e262003
+synthetic,pt_15_15_seed0,,pt;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_15_15_seed0.cfl,a364b52ec996b293df679e9b010058a741d8fd0040416e492b061ded8308f33c
+synthetic,pt_20_5_seed0,,pt;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_20_5_seed0.cfl,c1e2257ff3bc57c1a80ee413e4ee2168cfbd78e14d5e2e7eb440eaef32773f82
+synthetic,pt_20_10_seed0,,pt;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_20_10_seed0.cfl,db1b21c166b64f3ebab2a780f9382bb08810239867d3f9c7af53fa5cd8970d02
+synthetic,pt_20_15_seed0,,pt;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_20_15_seed0.cfl,033cef283cd7d72eb8c041f02963edd9b27cef7464e940246077c3923efc8e22
+synthetic,cp_10_5_seed0,,cp;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_10_5_seed0.cfl,48ceed81e6107e0a7253a6ede8042ba1239dc3f13628b59b861e8157d5c1f788
+synthetic,cp_10_10_seed0,,cp;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_10_10_seed0.cfl,64075fc5d425657294b797d1a28553644ffdf57b2b220dd174d822cf9466d6ce
+synthetic,cp_10_15_seed0,,cp;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_10_15_seed0.cfl,768df98296a83d0f4feccc9bab9bac264a87194b57c6ce22e73fafd2618c86c5
+synthetic,cp_15_5_seed0,,cp;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_15_5_seed0.cfl,0d9097f8afde2595ec818cb21e2b4de0c68bef4c495904d10b25963440163506
+synthetic,cp_15_10_seed0,,cp;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_15_10_seed0.cfl,aee7ccaa984b129b4ca2341347ae81a2514406be90da4a45f117d11c24f8f89e
+synthetic,cp_15_15_seed0,,cp;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_15_15_seed0.cfl,2aee38f086a1feba961e260292b3440a2b7bd36f6b1b72751123186ab7ed1327
+synthetic,cp_20_5_seed0,,cp;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_20_5_seed0.cfl,dc5a86c0077ac15dcbdc533e70434c48b4317cd3703defdf51fb58014c0d5969
+synthetic,cp_20_10_seed0,,cp;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_20_10_seed0.cfl,2eb4cbc56a3213b8cefb3e9a92016306ce2a952a5ad379f3579f83ec80d66aa4
+synthetic,cp_20_15_seed0,,cp;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_20_15_seed0.cfl,6a3122468084a003df3c428b4dad6ddbe47b0894f33429bc380740c5b976ab1c

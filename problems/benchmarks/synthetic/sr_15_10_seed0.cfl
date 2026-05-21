@@ -1,0 +1,7 @@
+U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)
+P0 = set(e0, e1, e2, e3, e4, e7, e8, e9, e10, e12, e13)
+P1 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e12, e13, e14)
+P2 = set(e0, e2, e3, e5, e6, e9, e10, e11, e12)
+cfg = choose_replace(U, 10)
+cfg.count(e0) >= 9
+cfg.count(e0) <= 10

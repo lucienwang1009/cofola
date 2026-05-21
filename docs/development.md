@@ -18,8 +18,8 @@ add Pyright separately when type checking locally.
 ## Test Layout
 
 - `tests/test_all_problems.py` runs representative `.cfl` examples from
-  `problems/all.json`. By default it runs examples tagged `benchmark`; set
-  `COFOLA_ALL_TESTS=1` for the larger dataset.
+  `problems/real/corpus.json`. By default it runs examples tagged `benchmark`;
+  set `COFOLA_ALL_TESTS=1` for the larger dataset.
 - `tests/test_type_check.py` covers invalid user programs that should fail
   validation before solving.
 - `tests/test_parser_errors.py` covers parser and transformer diagnostics.

@@ -1,0 +1,4 @@
+teachers = set(teacher0...5)
+committee = teachers + set(other0...6)
+subcommittee = choose(committee, 4)
+|subcommittee & teachers| < 4

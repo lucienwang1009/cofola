@@ -1,0 +1,4 @@
+vowels = bag(A, E, I, A)
+consonants = bag(M, T, H, M, T, C, S)
+chosen_vowels = choose(vowels, 2)
+chosen_consonants = choose(consonants, 4)
