@@ -205,7 +205,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=1.26" },
     { name = "scipy", specifier = ">=1.13.1" },
     { name = "sympy", specifier = ">=1.12" },
-    { name = "wfomc", git = "https://github.com/yuanhong-wang/WFOMC.git?branch=for_cofola" },
+    { name = "wfomc", git = "https://github.com/yuanhong-wang/WFOMC.git?branch=for_cofola_aij" },
 ]
 provides-extras = ["coso"]
 
@@ -1573,7 +1573,7 @@ wheels = [
 [[package]]
 name = "wfomc"
 version = "0.1.0"
-source = { git = "https://github.com/yuanhong-wang/WFOMC.git?branch=for_cofola#3b92ce6ab667becd166cba2824b8aad8ddb3cd83" }
+source = { git = "https://github.com/yuanhong-wang/WFOMC.git?branch=for_cofola_aij#6b3b7a325c2373f254909e79d66b4e6fbf3edc65" }
 dependencies = [
     { name = "cmd2" },
     { name = "contexttimer" },
