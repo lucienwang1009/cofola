@@ -1,0 +1,2 @@
+bag_0 = bag(e_1: 1, e_2: 1, e_4: 2, e_6: 2)
+choose_tuple_0 = choose_tuple(bag_0, 2)

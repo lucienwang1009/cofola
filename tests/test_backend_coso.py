@@ -136,6 +136,28 @@ B = choose(A)
     }
 
 
+def test_encode_bag_choose_as_bounded_coso_subset() -> None:
+    problem, analysis = _single_component(
+        """
+vowels = bag(v0, v1, v2)
+consonants = bag(t: 2, c0, c1, c2, c3, c4)
+magnets = vowels ++ consonants
+chosen = choose(magnets, 4)
+|chosen & vowels| <= 1
+"""
+    )
+
+    program = encode(problem, analysis)
+
+    assert _lines(program.cola) == {
+        "universe u={c0,c1,c2,c3,c4,t,t,v0,v1,v2};",
+        "cfg in {u};",
+        "property p_0={v0,v1,v2};",
+        "#cfg=4;",
+        "#cfg&p_0<=1;",
+    }
+
+
 def test_encode_choose_tuple_as_coso_permutation() -> None:
     problem, analysis = _single_component(
         """
@@ -276,6 +298,64 @@ groups = compose(workers, 3)
     assert "#( #part=5 )=1;" in _lines(program.cola)
     assert "#( #part=2 )=1;" in _lines(program.cola)
     assert program.count_divisor == 6
+
+
+def test_coso_expands_for_all_part_constraints() -> None:
+    assert (
+        parse_and_solve(
+            """
+S = set(0...6)
+C = compose(S, 3)
+|part| > 0 for part in C
+""",
+            backend="coso",
+        )
+        == 540
+    )
+
+
+def test_coso_composition_allows_empty_groups() -> None:
+    assert (
+        parse_and_solve(
+            """
+group = set(friend0...6)
+C = compose(group, 3)
+""",
+            backend="coso",
+        )
+        == 729
+    )
+
+
+def test_coso_partition_allows_empty_groups() -> None:
+    assert (
+        parse_and_solve(
+            """
+B = bag(orange: 4)
+P = partition(B, 3)
+""",
+            backend="coso",
+        )
+        == 4
+    )
+
+
+def test_coso_for_all_part_intersection_constraints() -> None:
+    assert (
+        parse_and_solve(
+            """
+girls = set(girl0...6)
+boys = set(boy0...6)
+students = girls + boys
+teams = compose(students, 3)
+|part| == 4 for part in teams
+|part & girls| >= 1 for part in teams
+|part & boys| >= 1 for part in teams
+""",
+            backend="coso",
+        )
+        == 29700
+    )
 
 
 @pytest.mark.parametrize("problem_id", COSO_CORPUS_PROBLEM_IDS)

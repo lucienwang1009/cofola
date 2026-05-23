@@ -1,0 +1,5 @@
+set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)
+sequence_0 = sequence(set_0)
+choose_tuple_0 = choose_replace_tuple(set_0, 8)
+(e_3, e_6) in sequence_0
+choose_tuple_0.count(e_2) > 2

@@ -1,5 +1,0 @@
-vowels = bag(v0...11)
-consonants = bag(t: 2, c0...13)
-magnets = vowels ++ consonants
-chosen = choose(magnets, 4)
-|chosen & vowels| <= 1

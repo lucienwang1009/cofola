@@ -1,0 +1,6 @@
+suite,backend,total,expected_known,solved,solved_unchecked,wrong,errors,timeouts,unsolved,avg_solved_sec,max_solved_sec,avg_solved_or_unchecked_sec
+growing,asp,100,100,14,0,0,0,58,28,13.040761,80.037575,13.040761
+growing,coso,100,100,100,0,0,0,0,0,0.457449,1.796131,0.457449
+growing,essence,100,100,36,0,0,0,41,23,23.729800,77.991280,23.729800
+growing,propositionalwfomc,100,100,0,0,0,77,23,0,,,
+growing,wfomc,100,100,91,0,0,0,9,0,3.105561,72.644609,3.105561

@@ -19,10 +19,11 @@ from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
 
-STATUS_ORDER = ("solved", "solved_unchecked", "wrong", "error", "timeout")
+STATUS_ORDER = ("solved", "solved_unchecked", "unsolved", "wrong", "error", "timeout")
 STATUS_LABELS = {
     "solved": "Correct",
     "solved_unchecked": "Solved (unchecked)",
+    "unsolved": "Unsolved",
     "wrong": "Wrong",
     "error": "Error",
     "timeout": "Timeout",
@@ -30,6 +31,7 @@ STATUS_LABELS = {
 STATUS_COLORS = {
     "solved": "#2f6f4e",
     "solved_unchecked": "#88b04b",
+    "unsolved": "#9a8f6a",
     "wrong": "#c94c4c",
     "error": "#7a7a7a",
     "timeout": "#d08c2f",
@@ -37,10 +39,18 @@ STATUS_COLORS = {
 BACKEND_COLORS = {
     "coso": "#2a6fbb",
     "wfomc": "#b84a62",
+    "propositionalwfomc": "#8c5fbf",
+    "propostionalwfomc": "#8c5fbf",
+    "asp": "#4b8f8c",
+    "essence": "#b8843f",
 }
 BACKEND_MARKERS = {
     "coso": "o",
     "wfomc": "s",
+    "propositionalwfomc": "D",
+    "propostionalwfomc": "D",
+    "asp": "^",
+    "essence": "v",
 }
 SUITE_ORDER = ("real", "growing", "synthetic")
 

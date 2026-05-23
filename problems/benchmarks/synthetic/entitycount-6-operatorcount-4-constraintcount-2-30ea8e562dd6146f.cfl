@@ -1,0 +1,7 @@
+bag_0 = bag(e_2: 1, e_3: 2, e_4: 1, e_5: 1, e_6: 1)
+circle_0 = circle(bag_0, reflection=True)
+choose_0 = choose(bag_0, 2)
+bag_union_0 = bag_0 + choose_0
+choose_1 = choose(choose_0, 2)
+choose_0 disjoint bag_union_0
+e_4 in choose_1

@@ -1,8 +1,0 @@
-U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)
-P0 = set(e0, e1, e2, e3, e4, e5, e6, e7, e9)
-P1 = set(e1, e2, e4, e5, e7)
-P2 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)
-cfg = choose(U, 5)
-|cfg & P0| >= 2
-|cfg & P2| <= 4
-cfg disjoint P1

@@ -4,10 +4,10 @@ Three experiment families:
 
 - real-world combinatorics problems,
 - growing-domain variants (parameterised scaling families), and
-- random synthetic CoLa-style benchmarks.
+- fixed synthetic benchmarks.
 
 This module keeps those case definitions deterministic and independent from
-the runner so experiments can be reproduced with the same input JSON and seed.
+the runner so experiments can be reproduced with the same saved manifests.
 """
 from __future__ import annotations
 
@@ -131,6 +131,8 @@ def load_real_world_cases(path: Path = Path("problems/real/corpus.json")) -> lis
             continue
         expected = int(answer)
         tags = tuple(str(tag) for tag in item.get("tags", ()))
+        if "unencodeable" in tags:
+            continue
         cases.append(
             BenchmarkCase(
                 suite="real",
@@ -144,18 +146,32 @@ def load_real_world_cases(path: Path = Path("problems/real/corpus.json")) -> lis
     return cases
 
 
-def growing_domain_cases() -> list[BenchmarkCase]:
+DEFAULT_GROWING_MIN_DOMAIN = 5
+DEFAULT_GROWING_MAX_DOMAIN = 100
+DEFAULT_GROWING_DOMAIN_STEP = 5
+DEFAULT_SYNTHETIC_MANIFEST = Path("problems/benchmarks/synthetic/manifest.json")
+
+
+def growing_domain_cases(
+    *,
+    min_domain: int = DEFAULT_GROWING_MIN_DOMAIN,
+    max_domain: int = DEFAULT_GROWING_MAX_DOMAIN,
+    domain_step: int = DEFAULT_GROWING_DOMAIN_STEP,
+) -> list[BenchmarkCase]:
     """Generate deterministic growing-domain benchmark families."""
 
+    domains = list(_growing_domains(min_domain, max_domain, domain_step))
     cases: list[BenchmarkCase] = []
-    for i in range(11):
-        vowels = 3 + i
-        other_consonants = 5 + i
+    for domain in domains:
+        vowels = max(1, domain // 3)
+        other_consonants = domain - vowels - 2
+        if other_consonants < 0:
+            raise ValueError("mathcounts growing domains must be at least 3")
         choose_size = 4
         cases.append(
             BenchmarkCase(
                 suite="growing",
-                case_id=f"mathcounts_{i:02d}",
+                case_id=f"mathcounts_{domain:03d}",
                 program="\n".join(
                     (
                         f"vowels = bag(v0...{vowels})",
@@ -170,17 +186,25 @@ def growing_domain_cases() -> list[BenchmarkCase]:
                     other_consonants=other_consonants,
                     choose_size=choose_size,
                 ),
-                tags=("mathcounts", "bag", "choose", "count", "growing"),
+                tags=(
+                    "mathcounts",
+                    "bag",
+                    "choose",
+                    "count",
+                    "growing",
+                    f"family=mathcounts",
+                    f"domain={domain}",
+                ),
                 source="MATHCOUNTS bag choose",
             )
         )
 
-    for i in range(11):
-        n_letters = 6 + i
+    for domain in domains:
+        n_letters = domain
         cases.append(
             BenchmarkCase(
                 suite="growing",
-                case_id=f"fourletter_{i:02d}",
+                case_id=f"fourletter_{domain:03d}",
                 program="\n".join(
                     (
                         f"letters = set(a0...{n_letters})",
@@ -190,18 +214,27 @@ def growing_domain_cases() -> list[BenchmarkCase]:
                     )
                 ),
                 expected=3 * (n_letters - 2) * (n_letters - 3),
-                tags=("fourletter", "set", "tuple", "position", "count", "growing"),
+                tags=(
+                    "fourletter",
+                    "set",
+                    "tuple",
+                    "position",
+                    "count",
+                    "growing",
+                    f"family=fourletter",
+                    f"domain={domain}",
+                ),
                 source="four-letter arrangements",
             )
         )
 
-    for i in range(11):
-        defective = 3 + i
-        working = 9 + i
+    for domain in domains:
+        defective = max(2, domain // 4)
+        working = domain - defective
         cases.append(
             BenchmarkCase(
                 suite="growing",
-                case_id=f"tvs_{i:02d}",
+                case_id=f"tvs_{domain:03d}",
                 program="\n".join(
                     (
                         f"defective = set(d0...{defective})",
@@ -211,20 +244,26 @@ def growing_domain_cases() -> list[BenchmarkCase]:
                     )
                 ),
                 expected=_p3_expected(defective, working),
-                tags=("tvs", "set", "choose", "count", "growing"),
+                tags=(
+                    "tvs",
+                    "set",
+                    "choose",
+                    "count",
+                    "growing",
+                    f"family=tvs",
+                    f"domain={domain}",
+                ),
                 source="defective TVs purchase",
             )
         )
 
-    sizes = [7, 5, 2]
-    for i in range(11):
-        if i > 0:
-            sizes[(i - 1) % 3] += 1
-        n_workers = sum(sizes)
+    for domain in domains:
+        sizes = _worker_group_sizes(domain)
+        n_workers = domain
         cases.append(
             BenchmarkCase(
                 suite="growing",
-                case_id=f"workers_{i:02d}",
+                case_id=f"workers_{domain:03d}",
                 program="\n".join(
                     (
                         f"workers = set(w0...{n_workers})",
@@ -236,25 +275,45 @@ def growing_domain_cases() -> list[BenchmarkCase]:
                 ),
                 expected=math.factorial(n_workers)
                 // math.prod(math.factorial(size) for size in sizes),
-                tags=("workers", "set", "composition", "index", "size", "growing"),
+                tags=(
+                    "workers",
+                    "set",
+                    "composition",
+                    "index",
+                    "size",
+                    "growing",
+                    f"family=workers",
+                    f"domain={domain}",
+                ),
                 source="workers composition",
             )
         )
 
-    capacities = {"B": 2, "A": 6, "N": 4}
-    for k in range(2, 13):
+    for domain in domains:
+        capacities = _banana_capacities(domain)
         cases.append(
             BenchmarkCase(
                 suite="growing",
-                case_id=f"banana_{k:02d}",
+                case_id=f"banana_{domain:03d}",
                 program="\n".join(
                     (
-                        "letters = bag(B: 2, A: 6, N: 4)",
-                        f"word = choose_tuple(letters, {k})",
+                        (
+                            "letters = bag("
+                            f"B: {capacities['B']}, A: {capacities['A']}, "
+                            f"N: {capacities['N']})"
+                        ),
+                        f"word = choose_tuple(letters, {domain})",
                     )
                 ),
-                expected=_bounded_multiset_permutations(capacities.values(), k),
-                tags=("banana", "bag", "tuple", "growing"),
+                expected=_bounded_multiset_permutations(capacities.values(), domain),
+                tags=(
+                    "banana",
+                    "bag",
+                    "tuple",
+                    "growing",
+                    f"family=banana",
+                    f"domain={domain}",
+                ),
                 source="BANANA bag tuple",
             )
         )
@@ -262,8 +321,28 @@ def growing_domain_cases() -> list[BenchmarkCase]:
     return cases
 
 
-def synthetic_cases(seed: int = 0) -> list[BenchmarkCase]:
-    """Generate deterministic random synthetic benchmarks in the Sec. 6.2.2 style."""
+def synthetic_cases(manifest_path: Path = DEFAULT_SYNTHETIC_MANIFEST) -> list[BenchmarkCase]:
+    """Load the fixed materialized synthetic benchmark manifest."""
+
+    path = Path(manifest_path)
+    if not path.exists():
+        raise ValueError(f"Synthetic benchmark manifest {path} does not exist.")
+    return [_normalize_synthetic_case(case, path) for case in load_saved_cases(path)]
+
+
+def _normalize_synthetic_case(case: BenchmarkCase, manifest_path: Path) -> BenchmarkCase:
+    return BenchmarkCase(
+        suite="synthetic",
+        case_id=case.case_id,
+        program=case.program,
+        expected=case.expected,
+        tags=case.tags,
+        source=str(manifest_path),
+    )
+
+
+def old_synthetic_cases(seed: int = 0) -> list[BenchmarkCase]:
+    """Generate the previous deterministic random CoLa-style synthetic benchmarks."""
 
     rng = random.Random(seed)
     cases: list[BenchmarkCase] = []
@@ -290,6 +369,9 @@ def select_cases(
     real_path: Path = Path("problems/real/corpus.json"),
     ids: set[str] | None = None,
     synthetic_seed: int = 0,
+    growing_min_domain: int = DEFAULT_GROWING_MIN_DOMAIN,
+    growing_max_domain: int = DEFAULT_GROWING_MAX_DOMAIN,
+    growing_domain_step: int = DEFAULT_GROWING_DOMAIN_STEP,
 ) -> list[BenchmarkCase]:
     """Build the requested benchmark case list."""
 
@@ -298,9 +380,15 @@ def select_cases(
     if "all" in suite_set or "real" in suite_set:
         selected.extend(load_real_world_cases(Path(real_path)))
     if "all" in suite_set or "growing" in suite_set:
-        selected.extend(growing_domain_cases())
+        selected.extend(
+            growing_domain_cases(
+                min_domain=growing_min_domain,
+                max_domain=growing_max_domain,
+                domain_step=growing_domain_step,
+            )
+        )
     if "all" in suite_set or "synthetic" in suite_set:
-        selected.extend(synthetic_cases(seed=synthetic_seed))
+        selected.extend(synthetic_cases())
 
     if ids is not None:
         selected = [case for case in selected if case.case_id in ids]
@@ -313,6 +401,40 @@ def _p3_expected(defective: int, working: int) -> int:
         for d in range(2, min(defective, 5) + 1)
         if 0 <= 5 - d <= working
     )
+
+
+def _growing_domains(
+    min_domain: int,
+    max_domain: int,
+    domain_step: int,
+) -> Iterable[int]:
+    if domain_step <= 0:
+        raise ValueError("domain_step must be positive")
+    if min_domain < 5:
+        raise ValueError("min_domain must be at least 5 for the growing benchmark")
+    if max_domain < min_domain:
+        raise ValueError("max_domain must be at least min_domain")
+    return range(min_domain, max_domain + 1, domain_step)
+
+
+def _worker_group_sizes(domain: int) -> list[int]:
+    first = max(1, domain // 2)
+    second = max(1, domain // 3)
+    third = domain - first - second
+    if third < 1:
+        second -= 1 - third
+        third = 1
+    return [first, second, third]
+
+
+def _banana_capacities(domain: int) -> dict[str, int]:
+    b_count = max(1, domain // 6)
+    a_count = max(1, domain // 2)
+    n_count = domain - b_count - a_count
+    if n_count < 1:
+        a_count -= 1 - n_count
+        n_count = 1
+    return {"B": b_count, "A": a_count, "N": n_count}
 
 
 def _bounded_multiset_permutations(capacities: Iterable[int], size: int) -> int:

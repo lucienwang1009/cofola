@@ -1,0 +1,3 @@
+bag_0 = bag(e_2: 2, e_4: 1, e_6: 3)
+partition_0 = partition(bag_0, 3)
+choose_tuple_0 = choose_tuple(bag_0, 3)

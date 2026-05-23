@@ -1,0 +1,3 @@
+bag_0 = bag(e_1: 1, e_3: 2, e_6: 3)
+sequence_0 = sequence(bag_0)
+(e_6, e_3) in sequence_0

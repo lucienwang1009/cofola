@@ -1,7 +1,0 @@
-U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)
-P0 = set(e1, e2, e3, e4, e5, e7, e8)
-P1 = set(e2)
-P2 = set(e4, e5, e8)
-cfg = choose_replace(U, 5)
-cfg.count(e0) >= 5
-cfg.count(e1) <= 5

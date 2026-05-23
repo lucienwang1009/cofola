@@ -1,2 +1,0 @@
-digits = set(0...10)
-integer = choose_replace_tuple(digits, 4)

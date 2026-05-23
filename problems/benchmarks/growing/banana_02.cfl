@@ -1,2 +1,0 @@
-letters = bag(B: 2, A: 6, N: 4)
-word = choose_tuple(letters, 2)

@@ -1,0 +1,4 @@
+bag_0 = bag(e_1: 1, e_4: 2, e_6: 1, e_7: 2, e_8: 2)
+choose_0 = choose(bag_0, 5)
+bag_inter_0 = choose_0 & bag_0
+partition_0 = partition(bag_inter_0, 2)
