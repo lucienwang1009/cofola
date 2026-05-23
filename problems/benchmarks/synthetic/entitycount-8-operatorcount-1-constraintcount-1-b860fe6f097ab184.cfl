@@ -1,0 +1,3 @@
+bag_0 = bag(e_1: 1, e_3: 2, e_5: 1, e_7: 2, e_8: 2)
+partition_0 = partition(bag_0, 4)
+|part| == 2 for part in partition_0

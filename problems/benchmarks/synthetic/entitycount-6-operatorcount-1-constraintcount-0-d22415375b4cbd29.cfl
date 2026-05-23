@@ -1,0 +1,2 @@
+bag_0 = bag(e_1: 1, e_2: 1, e_6: 4)
+choose_0 = choose(bag_0, 2)

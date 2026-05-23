@@ -1,0 +1,7 @@
+bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_4: 1, e_6: 2)
+choose_0 = choose(bag_0, 5)
+choose_tuple_0 = choose_tuple(choose_0, 4)
+bag_inter_0 = choose_0 & bag_0
+bag_inter_1 = bag_inter_0 & choose_0
+choose_0.count(e_2) != 1
+choose_0 disjoint bag_inter_0

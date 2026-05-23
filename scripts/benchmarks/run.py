@@ -1,8 +1,8 @@
-"""Run Cofola/CoSo benchmark experiments.
+"""Run Cofola benchmark experiments.
 
 Examples:
     uv run python -m scripts.benchmarks.run --suite real --backends coso
-    uv run python -m scripts.benchmarks.run --suite all --backends wfomc coso --timeout 300
+    uv run python -m scripts.benchmarks.run --suite all --backends wfomc coso asp essence --timeout 300
 """
 from __future__ import annotations
 
@@ -23,7 +23,21 @@ from loguru import logger
 
 from cofola.log import setup_logging
 from cofola.solver import parse_and_solve
-from scripts.benchmarks.cases import BenchmarkCase, load_saved_cases, save_cases, select_cases
+from scripts.benchmarks.cases import (
+    DEFAULT_GROWING_DOMAIN_STEP,
+    DEFAULT_GROWING_MAX_DOMAIN,
+    DEFAULT_GROWING_MIN_DOMAIN,
+    BenchmarkCase,
+    load_saved_cases,
+    save_cases,
+    select_cases,
+)
+from scripts.benchmarks.coso_baselines import (
+    DEFAULT_CONJURE_DIR,
+    DEFAULT_JAVA_BIN,
+    ExternalBaselineConfig,
+    solve_external_baseline,
+)
 
 
 STATUS_SOLVED = "solved"
@@ -31,8 +45,18 @@ STATUS_SOLVED_UNCHECKED = "solved_unchecked"
 STATUS_WRONG = "wrong"
 STATUS_ERROR = "error"
 STATUS_TIMEOUT = "timeout"
+STATUS_UNSOLVED = "unsolved"
 DEFAULT_BENCHMARK_DIR = Path("problems/benchmarks")
 DEFAULT_OUTPUT_DIR = Path("check-points/coso")
+BACKEND_CHOICES = (
+    "wfomc",
+    "propositionalwfomc",
+    "propostionalwfomc",
+    "coso",
+    "asp",
+    "essence",
+)
+EXTERNAL_COSO_BASELINES = {"asp", "essence"}
 
 
 def parse_args() -> argparse.Namespace:
@@ -46,10 +70,14 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--backends",
-        choices=("wfomc", "coso"),
+        choices=BACKEND_CHOICES,
         nargs="+",
         default=("coso",),
-        help="Backends to compare. Use 'coso' for the CoSo-only run.",
+        help=(
+            "Backends to compare. 'propositionalwfomc' is WFOMC with "
+            "algo=propositional; the misspelled 'propostionalwfomc' alias is "
+            "also accepted."
+        ),
     )
     parser.add_argument(
         "--real-path",
@@ -98,7 +126,39 @@ def parse_args() -> argparse.Namespace:
         "--synthetic-seed",
         type=int,
         default=0,
-        help="Random seed for synthetic benchmark generation.",
+        help=(
+            "Deprecated; retained for CLI compatibility. The synthetic suite "
+            "now loads the fixed materialized manifest under "
+            "problems/benchmarks/synthetic/manifest.json."
+        ),
+    )
+    parser.add_argument(
+        "--growing-min-domain",
+        type=int,
+        default=DEFAULT_GROWING_MIN_DOMAIN,
+        help=f"Smallest domain size for generated growing benchmarks. Default: {DEFAULT_GROWING_MIN_DOMAIN}.",
+    )
+    parser.add_argument(
+        "--growing-max-domain",
+        type=int,
+        default=DEFAULT_GROWING_MAX_DOMAIN,
+        help=f"Largest domain size for generated growing benchmarks. Default: {DEFAULT_GROWING_MAX_DOMAIN}.",
+    )
+    parser.add_argument(
+        "--growing-domain-step",
+        type=int,
+        default=DEFAULT_GROWING_DOMAIN_STEP,
+        help=f"Domain-size interval for generated growing benchmarks. Default: {DEFAULT_GROWING_DOMAIN_STEP}.",
+    )
+    parser.add_argument(
+        "--no-skip-larger-growing-after-timeout",
+        action="store_true",
+        help=(
+            "Disable monotone timeout propagation for growing benchmarks. By "
+            "default, after one backend times out for a growing family at "
+            "domain n, larger domains for the same backend/family are recorded "
+            "as timeout without invoking the solver."
+        ),
     )
     parser.add_argument(
         "--output-dir",
@@ -133,6 +193,24 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Encoding for order axioms when --algo=propositional. Default: pin.",
     )
+    parser.add_argument(
+        "--conjure-dir",
+        type=Path,
+        default=DEFAULT_CONJURE_DIR,
+        help=(
+            "Directory containing the Conjure/Savile Row tools for the Essence "
+            f"baseline. Default: {DEFAULT_CONJURE_DIR}."
+        ),
+    )
+    parser.add_argument(
+        "--java-bin",
+        type=Path,
+        default=DEFAULT_JAVA_BIN,
+        help=(
+            "Java executable used by the Essence baseline. Its parent directory "
+            f"is prepended to PATH when it exists. Default: {DEFAULT_JAVA_BIN}."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -152,6 +230,9 @@ def main() -> None:
             real_path=args.real_path,
             ids=ids,
             synthetic_seed=args.synthetic_seed,
+            growing_min_domain=args.growing_min_domain,
+            growing_max_domain=args.growing_max_domain,
+            growing_domain_step=args.growing_domain_step,
         )
     args.output_dir.mkdir(parents=True, exist_ok=True)
     benchmark_dir = args.benchmark_dir or DEFAULT_BENCHMARK_DIR
@@ -183,8 +264,16 @@ def main() -> None:
             "ids": sorted(ids) if ids else None,
             "timeout": args.timeout,
             "synthetic_seed": args.synthetic_seed,
+            "growing_min_domain": args.growing_min_domain,
+            "growing_max_domain": args.growing_max_domain,
+            "growing_domain_step": args.growing_domain_step,
+            "skip_larger_growing_after_timeout": (
+                not args.no_skip_larger_growing_after_timeout
+            ),
             "algo": args.algo,
             "linear_order_encoding": args.linear_order_encoding,
+            "conjure_dir": str(args.conjure_dir),
+            "java_bin": str(args.java_bin) if args.java_bin is not None else None,
         },
         "num_cases": len(cases),
         "cases": [asdict(case) for case in cases],
@@ -193,22 +282,55 @@ def main() -> None:
 
     rows: list[dict[str, Any]] = []
     result_path = args.output_dir / "results.csv"
+    growing_timeout_cutoffs: dict[tuple[str, str], int] = {}
     for case in cases:
         for backend in args.backends:
-            row = run_case(
-                case,
-                backend=backend,
-                timeout=args.timeout,
-                debug=args.debug,
-                algo=args.algo,
-                linear_order_encoding=args.linear_order_encoding,
+            skip_key = _growing_skip_key(case, backend)
+            domain = _growing_domain(case)
+            cutoff = (
+                growing_timeout_cutoffs.get(skip_key)
+                if skip_key is not None
+                else None
             )
+            if (
+                not args.no_skip_larger_growing_after_timeout
+                and skip_key is not None
+                and domain is not None
+                and cutoff is not None
+                and domain > cutoff
+            ):
+                row = _skipped_timeout_row(
+                    case,
+                    backend=backend,
+                    timeout=args.timeout,
+                    cutoff=cutoff,
+                )
+            else:
+                row = run_case(
+                    case,
+                    backend=backend,
+                    timeout=args.timeout,
+                    debug=args.debug,
+                    algo=args.algo,
+                    linear_order_encoding=args.linear_order_encoding,
+                    conjure_dir=args.conjure_dir,
+                    java_bin=args.java_bin,
+                )
             if (
                 case.expected is None
                 and backend in set(args.trust_unchecked_backends)
                 and row["status"] == STATUS_SOLVED_UNCHECKED
             ):
                 row["status"] = STATUS_SOLVED
+            if (
+                not args.no_skip_larger_growing_after_timeout
+                and skip_key is not None
+                and domain is not None
+                and _is_timeout_row(row)
+            ):
+                previous = growing_timeout_cutoffs.get(skip_key)
+                if previous is None or domain < previous:
+                    growing_timeout_cutoffs[skip_key] = domain
             rows.append(row)
             write_csv(result_path, rows)
             print(
@@ -230,11 +352,27 @@ def run_case(
     debug: bool,
     algo: str = "fastv2",
     linear_order_encoding: str | None = None,
+    conjure_dir: Path = DEFAULT_CONJURE_DIR,
+    java_bin: Path | None = DEFAULT_JAVA_BIN,
 ) -> dict[str, Any]:
     queue: mp.Queue = mp.Queue()
+    worker_backend, worker_algo, worker_linear_order_encoding = _backend_worker_args(
+        backend,
+        argparse.Namespace(algo=algo, linear_order_encoding=linear_order_encoding),
+    )
     process = mp.Process(
         target=_solve_worker,
-        args=(queue, case.program, backend, debug, algo, linear_order_encoding),
+        args=(
+            queue,
+            case.program,
+            worker_backend,
+            debug,
+            worker_algo,
+            worker_linear_order_encoding,
+            conjure_dir,
+            java_bin,
+            timeout,
+        ),
     )
     started = time.perf_counter()
     process.start()
@@ -244,29 +382,111 @@ def run_case(
     if process.is_alive():
         process.terminate()
         process.join(2)
-        return _row(
+        return _row_from_payload(
             case,
             backend=backend,
-            status=STATUS_TIMEOUT,
-            result=None,
+            payload={
+                "ok": False,
+                "error_type": "TimeoutError",
+                "error_message": f"Timed out after {timeout:.3f}s",
+            },
             elapsed=elapsed,
-            error_type="TimeoutError",
-            error_message=f"Timed out after {timeout:.3f}s",
         )
 
     try:
         payload = queue.get_nowait()
     except Empty:
-        return _row(
+        return _row_from_payload(
             case,
             backend=backend,
-            status=STATUS_ERROR,
-            result=None,
+            payload={
+                "ok": False,
+                "error_type": "NoResult",
+                "error_message": (
+                    f"Worker exited with code {process.exitcode} without a result."
+                ),
+            },
             elapsed=elapsed,
-            error_type="NoResult",
-            error_message=f"Worker exited with code {process.exitcode} without a result.",
         )
 
+    return _row_from_payload(case, backend=backend, payload=payload, elapsed=elapsed)
+
+
+def _growing_skip_key(case: BenchmarkCase, backend: str) -> tuple[str, str] | None:
+    if case.suite != "growing":
+        return None
+    family = _tag_value(case, "family")
+    if family is None:
+        family = case.case_id.rsplit("_", maxsplit=1)[0]
+    return (backend, family)
+
+
+def _growing_domain(case: BenchmarkCase) -> int | None:
+    tagged = _tag_value(case, "domain")
+    if tagged is not None:
+        try:
+            return int(tagged)
+        except ValueError:
+            return None
+    try:
+        return int(case.case_id.rsplit("_", maxsplit=1)[1])
+    except (IndexError, ValueError):
+        return None
+
+
+def _tag_value(case: BenchmarkCase, key: str) -> str | None:
+    prefix = f"{key}="
+    for tag in case.tags:
+        if tag.startswith(prefix):
+            return tag[len(prefix) :]
+    return None
+
+
+def _is_timeout_row(row: dict[str, Any]) -> bool:
+    return row["status"] == STATUS_TIMEOUT or row["error_type"] == "TimeoutError"
+
+
+def _skipped_timeout_row(
+    case: BenchmarkCase,
+    *,
+    backend: str,
+    timeout: float,
+    cutoff: int,
+) -> dict[str, Any]:
+    return _row(
+        case,
+        backend=backend,
+        status=STATUS_TIMEOUT,
+        result=None,
+        elapsed=0.0,
+        error_type="SkippedAfterTimeout",
+        error_message=(
+            f"Skipped because {backend} already timed out for this growing "
+            f"family at domain {cutoff}; timeout budget was {timeout:.3f}s."
+        ),
+    )
+
+
+def _backend_worker_args(
+    backend: str,
+    args: argparse.Namespace,
+) -> tuple[str, str, str | None]:
+    if backend in {"propositionalwfomc", "propostionalwfomc"}:
+        return "wfomc", "propositional", args.linear_order_encoding
+    return backend, args.algo, args.linear_order_encoding
+
+
+def _is_external_baseline(backend: str) -> bool:
+    return backend in EXTERNAL_COSO_BASELINES
+
+
+def _row_from_payload(
+    case: BenchmarkCase,
+    *,
+    backend: str,
+    payload: dict[str, Any],
+    elapsed: float,
+) -> dict[str, Any]:
     if payload["ok"]:
         result = int(payload["result"])
         if case.expected is None:
@@ -277,6 +497,10 @@ def run_case(
             status = STATUS_SOLVED
             error_type = ""
             error_message = ""
+        elif _is_external_baseline(backend):
+            status = STATUS_UNSOLVED
+            error_type = "WrongAnswer"
+            error_message = f"expected {case.expected}, got {result}"
         else:
             status = STATUS_WRONG
             error_type = "WrongAnswer"
@@ -291,10 +515,13 @@ def run_case(
             error_message=error_message,
         )
 
+    status = STATUS_UNSOLVED if _is_external_baseline(backend) else STATUS_ERROR
+    if payload["error_type"] == "TimeoutError" and not _is_external_baseline(backend):
+        status = STATUS_TIMEOUT
     return _row(
         case,
         backend=backend,
-        status=STATUS_ERROR,
+        status=status,
         result=None,
         elapsed=elapsed,
         error_type=payload["error_type"],
@@ -309,16 +536,27 @@ def _solve_worker(
     debug: bool,
     algo: str = "fastv2",
     linear_order_encoding: str | None = None,
+    conjure_dir: Path = DEFAULT_CONJURE_DIR,
+    java_bin: Path | None = DEFAULT_JAVA_BIN,
+    timeout: float = 300.0,
 ) -> None:
     kwargs = dict(backend=backend, algo=algo, linear_order_encoding=linear_order_encoding)
     try:
-        if debug:
-            result = parse_and_solve(program, debug=True, **kwargs)
+        if backend in EXTERNAL_COSO_BASELINES:
+            result = solve_external_baseline(
+                program,
+                backend,
+                timeout=timeout,
+                config=ExternalBaselineConfig(conjure_dir=conjure_dir, java_bin=java_bin),
+            )
         else:
-            logger.remove()
-            with open(os.devnull, "w") as devnull:
-                with contextlib.redirect_stdout(devnull), contextlib.redirect_stderr(devnull):
-                    result = parse_and_solve(program, debug=False, **kwargs)
+            if debug:
+                result = parse_and_solve(program, debug=True, **kwargs)
+            else:
+                logger.remove()
+                with open(os.devnull, "w") as devnull:
+                    with contextlib.redirect_stdout(devnull), contextlib.redirect_stderr(devnull):
+                        result = parse_and_solve(program, debug=False, **kwargs)
     except Exception as exc:  # noqa: BLE001 - benchmark harness must classify all failures.
         queue.put(
             {
@@ -382,6 +620,7 @@ def summarize(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "wrong": sum(row["status"] == STATUS_WRONG for row in group),
                 "errors": sum(row["status"] == STATUS_ERROR for row in group),
                 "timeouts": sum(row["status"] == STATUS_TIMEOUT for row in group),
+                "unsolved": sum(row["status"] == STATUS_UNSOLVED for row in group),
                 "avg_solved_sec": (
                     f"{sum(elapsed_values) / len(elapsed_values):.6f}"
                     if elapsed_values else ""

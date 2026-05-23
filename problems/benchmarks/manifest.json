@@ -1,6 +1,6 @@
 {
   "format": "cofola-benchmark-manifest-v1",
-  "num_cases": 406,
+  "num_cases": 372,
   "cases": [
     {
       "suite": "real",
@@ -139,19 +139,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/8.cfl",
       "program_sha256": "7854183b428b5003ab30931718edafd583673c4ae00f87c5433ef120626d4d85"
-    },
-    {
-      "suite": "real",
-      "case_id": "9",
-      "program": "set circle_decks = {circle0:9}\nset square_decks = {square0:9}\nset triangle_decks = {triangle0:9}\nset red_decks = {circle0:3} + {square0:3} + {triangle0:3}\nset blue_decks = {circle3:6} + {square3:6} + {triangle3:6}\nset green_decks = {circle6:9} + {square6:9} + {triangle6:9}\nset light_decks = {circle0, square0, triangle0} + {circle3, square3, triangle3} + {circle6, square6, triangle6}\nset medium_decks = {circle1, square1, triangle1} + {circle4, square4, triangle4} + {circle7, square7, triangle7}\nset dark_decks = {circle2, square2, triangle2} + {circle5, square5, triangle5} + {circle8, square8, triangle8}\nset all_decks = circle_decks + square_decks + triangle_decks\nset chosen_decks = choose(all_decks, 3)\n|chosen_decks & circle_decks| = 1\n|chosen_decks & square_decks| = 1\n|chosen_decks & triangle_decks| = 1\n|chosen_decks & red_decks| = 1\n|chosen_decks & blue_decks| = 1\n|chosen_decks & green_decks| = 1\n|chosen_decks & light_decks| = 1\n|chosen_decks & medium_decks| = 1\n|chosen_decks & dark_decks| = 1",
-      "expected": 117,
-      "tags": [
-        "unencodeable",
-        "second order logic"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/9.cfl",
-      "program_sha256": "d6e1342d102948be85bd2dcac72b4797f88fcbd135f04eb885514c651257a64e"
     },
     {
       "suite": "real",
@@ -2553,22 +2540,6 @@
     },
     {
       "suite": "real",
-      "case_id": "197",
-      "program": "people = set(0...8)\nsides = compose(people, 4)\n|sides[0]| = 2\n|sides[1]| = 2\n|sides[2]| = 2\n|sides[3]| = 2\nside1_seat = tuple(sides[0])\nside2_seat = tuple(sides[1])\nside3_seat = tuple(sides[2])\nside4_seat = tuple(sides[3])",
-      "expected": 10080,
-      "tags": [
-        "set",
-        "choose",
-        "multiple choosing",
-        "tuple",
-        "unencodeable"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/197.cfl",
-      "program_sha256": "ea0e97b45f9c02ef8c7a9c2e7b7fbf729aad6ba32ee7ee8bc2658a2eff494a27"
-    },
-    {
-      "suite": "real",
       "case_id": "199",
       "program": "letters = bag(H, w, a: 2, i: 2)\nword = tuple(letters)",
       "expected": 180,
@@ -2821,28 +2792,6 @@
     },
     {
       "suite": "real",
-      "case_id": "220",
-      "program": "digits = set(0...10)\ninteger = choose_replace_tuple(digits, 4)",
-      "expected": 927,
-      "tags": [
-        "set",
-        "choose_replace",
-        "unencodeable",
-        "arithmetics",
-        "supp",
-        "multiplicity constraint",
-        "tuple",
-        "not constraint",
-        "size constraint",
-        "index",
-        "compare element"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/220.cfl",
-      "program_sha256": "3e981baa6c8f34be6296fb975b5a5937f320fc999d2ab6d1f5ba05d97e2d54f6"
-    },
-    {
-      "suite": "real",
       "case_id": "221",
       "program": "people = set(youngest, p1, p2, p3)\nline = tuple(people)\nline[1] != youngest",
       "expected": 18,
@@ -2914,25 +2863,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/227.cfl",
       "program_sha256": "9df4aeaceffb33e90fadfc357b570433df2b9c6fdb663b1ee061f57a867eacb8"
-    },
-    {
-      "suite": "real",
-      "case_id": "228",
-      "program": "state = set(mail, no_mail)\nhouse_mails = choose_replace(state, 19)\nrow = sequence(house_mails)\n(1, 1) not in row\n(0, 0, 0) not in row",
-      "expected": 351,
-      "tags": [
-        "set",
-        "choose_replace_permute",
-        "sequence",
-        "TAG",
-        "count pred",
-        "count next_to",
-        "unencodeable",
-        "pred_of_pred"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/228.cfl",
-      "program_sha256": "64080a16ac00b21e308e87bf3a7c98adbaeddf78d3c13f219f91f2891a630aa6"
     },
     {
       "suite": "real",
@@ -3704,19 +3634,6 @@
     },
     {
       "suite": "real",
-      "case_id": "293",
-      "program": "digits = set(0...10)\nnumber = choose_replace_tuple(digits, 3)\nnumber[1] != 0",
-      "expected": 900,
-      "tags": [
-        "unencodeable",
-        "arithmetics"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/293.cfl",
-      "program_sha256": "a27fc02d400a220c5c6c08d2a526f931c411c9d1c8a7eedf24f9fc9068aaa0eb"
-    },
-    {
-      "suite": "real",
       "case_id": "294",
       "program": "items = set(0...4)\nbags = partition(items, 3)",
       "expected": 14,
@@ -3948,38 +3865,6 @@
     },
     {
       "suite": "real",
-      "case_id": "313",
-      "program": "digits = set(0...10)\ninteger = choose_replace_tuple(digits, 3)\ninteger[0] in set(0...5)\ninteger.count(0) != 3\ninteger.dedup_count(digits) != 3",
-      "expected": 112,
-      "tags": [
-        "counting quantifier",
-        "arithmetics",
-        "unencodeable"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/313.cfl",
-      "program_sha256": "ce98c5840997016c1b2b9c7c12df205659ebac657d2915f0bfee19deabc9f959"
-    },
-    {
-      "suite": "real",
-      "case_id": "317",
-      "program": "digits = set(0...10)\nnumber = choose_replace_tuple(digits, 3)\nnumber[0] in set(0...7)\nnumber.count(0) != 3\n(number[0] != 6) or number.count(0) = 2\n5 in number",
-      "expected": 195,
-      "tags": [
-        "set",
-        "tuple",
-        "choose_replace_permute",
-        "index",
-        "in",
-        "unencodeable",
-        "arithmetics"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/317.cfl",
-      "program_sha256": "8238de9ac9c02016dcd997dfdfe4094ec02a17199dcac2ddaffcdcfb4c9b7bc3"
-    },
-    {
-      "suite": "real",
       "case_id": "325",
       "program": "digits = set(0...10)\nnumber = choose_replace_tuple(digits, 3)\nnumber[0] != 0\n(7 in number) or (9 in number)",
       "expected": 452,
@@ -4048,7 +3933,25 @@
     },
     {
       "suite": "growing",
-      "case_id": "mathcounts_00",
+      "case_id": "mathcounts_005",
+      "program": "vowels = bag(v0...1)\nconsonants = bag(t: 2, c0...2)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 4,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=5"
+      ],
+      "source": "MATHCOUNTS bag choose",
+      "program_path": "growing/mathcounts_005.cfl",
+      "program_sha256": "380cd85098783d4f229f89570e40968c2ac0aa662294b0314d01eedbdb9c076d"
+    },
+    {
+      "suite": "growing",
+      "case_id": "mathcounts_010",
       "program": "vowels = bag(v0...3)\nconsonants = bag(t: 2, c0...5)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
       "expected": 100,
       "tags": [
@@ -4056,243 +3959,360 @@
         "bag",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=mathcounts",
+        "domain=10"
       ],
       "source": "MATHCOUNTS bag choose",
-      "program_path": "growing/mathcounts_00.cfl",
+      "program_path": "growing/mathcounts_010.cfl",
       "program_sha256": "00b0efbdfb48121d7d0f9894b1519bdd7392e1c8eb40d81c057cbc76c6d56366"
     },
     {
       "suite": "growing",
-      "case_id": "mathcounts_01",
-      "program": "vowels = bag(v0...4)\nconsonants = bag(t: 2, c0...6)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
-      "expected": 214,
+      "case_id": "mathcounts_015",
+      "program": "vowels = bag(v0...5)\nconsonants = bag(t: 2, c0...8)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 614,
       "tags": [
         "mathcounts",
         "bag",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=mathcounts",
+        "domain=15"
       ],
       "source": "MATHCOUNTS bag choose",
-      "program_path": "growing/mathcounts_01.cfl",
-      "program_sha256": "d6b6e2dba8f0269a72ee4146a43962b9e5b88957e525e6b09360d9d728748bd6"
+      "program_path": "growing/mathcounts_015.cfl",
+      "program_sha256": "abc0cdb9e66aac4ff930aad333a392dd3abfab9bfa8115ba81cd38c8227bf8b0"
     },
     {
       "suite": "growing",
-      "case_id": "mathcounts_02",
-      "program": "vowels = bag(v0...5)\nconsonants = bag(t: 2, c0...7)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
-      "expected": 406,
+      "case_id": "mathcounts_020",
+      "program": "vowels = bag(v0...6)\nconsonants = bag(t: 2, c0...12)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 2569,
       "tags": [
         "mathcounts",
         "bag",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=mathcounts",
+        "domain=20"
       ],
       "source": "MATHCOUNTS bag choose",
-      "program_path": "growing/mathcounts_02.cfl",
-      "program_sha256": "6258ec9563cd57c3e76d873533c77322be3bcdde0a32132e8c6c579eea7f0f29"
+      "program_path": "growing/mathcounts_020.cfl",
+      "program_sha256": "fb87a2aedde8563f319690c68d6ba05111a79b2838080dedf6f996dfb7676cb9"
     },
     {
       "suite": "growing",
-      "case_id": "mathcounts_03",
-      "program": "vowels = bag(v0...6)\nconsonants = bag(t: 2, c0...8)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
-      "expected": 706,
+      "case_id": "mathcounts_025",
+      "program": "vowels = bag(v0...8)\nconsonants = bag(t: 2, c0...15)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 6525,
       "tags": [
         "mathcounts",
         "bag",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=mathcounts",
+        "domain=25"
       ],
       "source": "MATHCOUNTS bag choose",
-      "program_path": "growing/mathcounts_03.cfl",
-      "program_sha256": "f03349b701128bcba6ed16bbd5bdda93e9805bb50909860af679a94600051736"
+      "program_path": "growing/mathcounts_025.cfl",
+      "program_sha256": "e09e69c7e2955ddf517efed5fa8b90fdf43fcd4592c2d95670caf3d78ef10001"
     },
     {
       "suite": "growing",
-      "case_id": "mathcounts_04",
-      "program": "vowels = bag(v0...7)\nconsonants = bag(t: 2, c0...9)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
-      "expected": 1149,
+      "case_id": "mathcounts_030",
+      "program": "vowels = bag(v0...10)\nconsonants = bag(t: 2, c0...18)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 13899,
       "tags": [
         "mathcounts",
         "bag",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=mathcounts",
+        "domain=30"
       ],
       "source": "MATHCOUNTS bag choose",
-      "program_path": "growing/mathcounts_04.cfl",
-      "program_sha256": "07a7c3d8bbccccad18fed91aac2697ff98ab63879fdcb78fe268949743d3254d"
+      "program_path": "growing/mathcounts_030.cfl",
+      "program_sha256": "ff085349d2e3e8cb7ca1b3ec026c67292246e17ca103c3f676da7eb5982eb546"
     },
     {
       "suite": "growing",
-      "case_id": "mathcounts_05",
-      "program": "vowels = bag(v0...8)\nconsonants = bag(t: 2, c0...10)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
-      "expected": 1775,
+      "case_id": "mathcounts_035",
+      "program": "vowels = bag(v0...11)\nconsonants = bag(t: 2, c0...22)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 28809,
       "tags": [
         "mathcounts",
         "bag",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=mathcounts",
+        "domain=35"
       ],
       "source": "MATHCOUNTS bag choose",
-      "program_path": "growing/mathcounts_05.cfl",
-      "program_sha256": "2e6598867860f87474b7429bbb02726ab6d1905826de442d4c2a755849506336"
+      "program_path": "growing/mathcounts_035.cfl",
+      "program_sha256": "cd6873239b13c9de359ef4cb1c5414030cab922cf79a2ba8ee9b6f8f97252026"
     },
     {
       "suite": "growing",
-      "case_id": "mathcounts_06",
-      "program": "vowels = bag(v0...9)\nconsonants = bag(t: 2, c0...11)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
-      "expected": 2629,
+      "case_id": "mathcounts_040",
+      "program": "vowels = bag(v0...13)\nconsonants = bag(t: 2, c0...25)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 49375,
       "tags": [
         "mathcounts",
         "bag",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=mathcounts",
+        "domain=40"
       ],
       "source": "MATHCOUNTS bag choose",
-      "program_path": "growing/mathcounts_06.cfl",
-      "program_sha256": "7e2b18266d112d57ba2a536d42abb305d25b88863039770c50fc79ac70ed8113"
+      "program_path": "growing/mathcounts_040.cfl",
+      "program_sha256": "e59cd206acbd7e1801afd58b9c0821b1b6c11115869ea972a3502a0ed0b6371f"
     },
     {
       "suite": "growing",
-      "case_id": "mathcounts_07",
-      "program": "vowels = bag(v0...10)\nconsonants = bag(t: 2, c0...12)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
-      "expected": 3761,
+      "case_id": "mathcounts_045",
+      "program": "vowels = bag(v0...15)\nconsonants = bag(t: 2, c0...28)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 79359,
       "tags": [
         "mathcounts",
         "bag",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=mathcounts",
+        "domain=45"
       ],
       "source": "MATHCOUNTS bag choose",
-      "program_path": "growing/mathcounts_07.cfl",
-      "program_sha256": "952646d3f6f686d3d546b38354df891555ff9281e90962782b18201c8434f530"
+      "program_path": "growing/mathcounts_045.cfl",
+      "program_sha256": "bf8d30458b3a9414281f1785455bbf640d9f30b695e43e5642d410cbe3ee4368"
     },
     {
       "suite": "growing",
-      "case_id": "mathcounts_08",
-      "program": "vowels = bag(v0...11)\nconsonants = bag(t: 2, c0...13)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
-      "expected": 5226,
+      "case_id": "mathcounts_050",
+      "program": "vowels = bag(v0...16)\nconsonants = bag(t: 2, c0...32)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 129224,
       "tags": [
         "mathcounts",
         "bag",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=mathcounts",
+        "domain=50"
       ],
       "source": "MATHCOUNTS bag choose",
-      "program_path": "growing/mathcounts_08.cfl",
-      "program_sha256": "de8e6e1d97a9a87c4efc52613ebf9689321bb32ad5e2c768892a46da617c7650"
+      "program_path": "growing/mathcounts_050.cfl",
+      "program_sha256": "361e46f22d3e4f3f18170f07890074bbbf84c41c302d889ba5c4abca232547e2"
     },
     {
       "suite": "growing",
-      "case_id": "mathcounts_09",
-      "program": "vowels = bag(v0...12)\nconsonants = bag(t: 2, c0...14)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
-      "expected": 7084,
+      "case_id": "mathcounts_055",
+      "program": "vowels = bag(v0...18)\nconsonants = bag(t: 2, c0...35)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 188650,
       "tags": [
         "mathcounts",
         "bag",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=mathcounts",
+        "domain=55"
       ],
       "source": "MATHCOUNTS bag choose",
-      "program_path": "growing/mathcounts_09.cfl",
-      "program_sha256": "05d4fee0d8b7b2e854d0ebae113922abcd2b10d25f675b5c07b87fa0d52ac454"
+      "program_path": "growing/mathcounts_055.cfl",
+      "program_sha256": "8a96e2c6e5c1080738bb495343dc1640aa8ee4e2a09a5909ecc92c759b4bf33e"
     },
     {
       "suite": "growing",
-      "case_id": "mathcounts_10",
-      "program": "vowels = bag(v0...13)\nconsonants = bag(t: 2, c0...15)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
-      "expected": 9400,
+      "case_id": "mathcounts_060",
+      "program": "vowels = bag(v0...20)\nconsonants = bag(t: 2, c0...38)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 266494,
       "tags": [
         "mathcounts",
         "bag",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=mathcounts",
+        "domain=60"
       ],
       "source": "MATHCOUNTS bag choose",
-      "program_path": "growing/mathcounts_10.cfl",
-      "program_sha256": "3863e2fddd8cf7b7ce5ad208d766fa2c465d315ef1a551b559f9d60e092cd7d2"
+      "program_path": "growing/mathcounts_060.cfl",
+      "program_sha256": "fdba551f8753f3a107250e11dcbf99696d68e690c43054c3f7fa8b7c5d7eea04"
     },
     {
       "suite": "growing",
-      "case_id": "fourletter_00",
-      "program": "letters = set(a0...6)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
-      "expected": 36,
+      "case_id": "mathcounts_065",
+      "program": "vowels = bag(v0...21)\nconsonants = bag(t: 2, c0...42)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 384314,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=65"
+      ],
+      "source": "MATHCOUNTS bag choose",
+      "program_path": "growing/mathcounts_065.cfl",
+      "program_sha256": "cbc03de0d7f1b4e4d59d9cb1a2f06cb8e6243fb1126e543ac63927c0d07f0e75"
+    },
+    {
+      "suite": "growing",
+      "case_id": "mathcounts_070",
+      "program": "vowels = bag(v0...23)\nconsonants = bag(t: 2, c0...45)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 514350,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=70"
+      ],
+      "source": "MATHCOUNTS bag choose",
+      "program_path": "growing/mathcounts_070.cfl",
+      "program_sha256": "8c8a44d4f865c0160e0bc4c997da3a0b9d2e586f8424f4220035a44049c0c88b"
+    },
+    {
+      "suite": "growing",
+      "case_id": "mathcounts_075",
+      "program": "vowels = bag(v0...25)\nconsonants = bag(t: 2, c0...48)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 674804,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=75"
+      ],
+      "source": "MATHCOUNTS bag choose",
+      "program_path": "growing/mathcounts_075.cfl",
+      "program_sha256": "f55e0145056e5ba8e2a9820a4e60c801e4ca60a2a01986a695ff2b5441444494"
+    },
+    {
+      "suite": "growing",
+      "case_id": "mathcounts_080",
+      "program": "vowels = bag(v0...26)\nconsonants = bag(t: 2, c0...52)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 904579,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=80"
+      ],
+      "source": "MATHCOUNTS bag choose",
+      "program_path": "growing/mathcounts_080.cfl",
+      "program_sha256": "04fb8af11fd279e8214a270d31c084c470305aa7b4cbf2e796da8129da2d499f"
+    },
+    {
+      "suite": "growing",
+      "case_id": "mathcounts_085",
+      "program": "vowels = bag(v0...28)\nconsonants = bag(t: 2, c0...55)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 1146475,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=85"
+      ],
+      "source": "MATHCOUNTS bag choose",
+      "program_path": "growing/mathcounts_085.cfl",
+      "program_sha256": "162e1e095f203fd340eae6d824f66fc807abe6e12350a3e71bb02a8c8b4e6381"
+    },
+    {
+      "suite": "growing",
+      "case_id": "mathcounts_090",
+      "program": "vowels = bag(v0...30)\nconsonants = bag(t: 2, c0...58)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 1433789,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=90"
+      ],
+      "source": "MATHCOUNTS bag choose",
+      "program_path": "growing/mathcounts_090.cfl",
+      "program_sha256": "c28946bc7efdd6adcb42b6c936cfaf05af4e73bba3cb414d6454c24422ec6b90"
+    },
+    {
+      "suite": "growing",
+      "case_id": "mathcounts_095",
+      "program": "vowels = bag(v0...31)\nconsonants = bag(t: 2, c0...62)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 1830519,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=95"
+      ],
+      "source": "MATHCOUNTS bag choose",
+      "program_path": "growing/mathcounts_095.cfl",
+      "program_sha256": "43fb961ea6ebf2e2977586dad2abef1e4cba6b41b748f9209882d3cd1b5c322b"
+    },
+    {
+      "suite": "growing",
+      "case_id": "mathcounts_100",
+      "program": "vowels = bag(v0...33)\nconsonants = bag(t: 2, c0...65)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 2235025,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=100"
+      ],
+      "source": "MATHCOUNTS bag choose",
+      "program_path": "growing/mathcounts_100.cfl",
+      "program_sha256": "51ac2874ecd6a1d103d3025a1290a7618bfd1bc0335eeb81a1011cf51efe5f6f"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_005",
+      "program": "letters = set(a0...5)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 18,
       "tags": [
         "fourletter",
         "set",
         "tuple",
         "position",
         "count",
-        "growing"
+        "growing",
+        "family=fourletter",
+        "domain=5"
       ],
       "source": "four-letter arrangements",
-      "program_path": "growing/fourletter_00.cfl",
-      "program_sha256": "57acc8a1844f5c3e412ecbc79fe6d81f01974a1412d9b5af43d0a01c7b77d2c7"
+      "program_path": "growing/fourletter_005.cfl",
+      "program_sha256": "89fb488bcb1ceeb7a3aa4fde14b02873f280f4b5fac9fb6cf8b98c3f7bd9936d"
     },
     {
       "suite": "growing",
-      "case_id": "fourletter_01",
-      "program": "letters = set(a0...7)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
-      "expected": 60,
-      "tags": [
-        "fourletter",
-        "set",
-        "tuple",
-        "position",
-        "count",
-        "growing"
-      ],
-      "source": "four-letter arrangements",
-      "program_path": "growing/fourletter_01.cfl",
-      "program_sha256": "c14ae30a04a4fc24805521f58ea623f37fc91288af2d8dc49f912391cf3f8225"
-    },
-    {
-      "suite": "growing",
-      "case_id": "fourletter_02",
-      "program": "letters = set(a0...8)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
-      "expected": 90,
-      "tags": [
-        "fourletter",
-        "set",
-        "tuple",
-        "position",
-        "count",
-        "growing"
-      ],
-      "source": "four-letter arrangements",
-      "program_path": "growing/fourletter_02.cfl",
-      "program_sha256": "80daa37a210aea1390c0edc65839b2ce90797fe5551baa3fb7b1b5050b66a977"
-    },
-    {
-      "suite": "growing",
-      "case_id": "fourletter_03",
-      "program": "letters = set(a0...9)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
-      "expected": 126,
-      "tags": [
-        "fourletter",
-        "set",
-        "tuple",
-        "position",
-        "count",
-        "growing"
-      ],
-      "source": "four-letter arrangements",
-      "program_path": "growing/fourletter_03.cfl",
-      "program_sha256": "8dd2772776f60d4e55db334663efe9f66d07380b5205a5941b85c05cec866dfe"
-    },
-    {
-      "suite": "growing",
-      "case_id": "fourletter_04",
+      "case_id": "fourletter_010",
       "program": "letters = set(a0...10)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
       "expected": 168,
       "tags": [
@@ -4301,83 +4321,17 @@
         "tuple",
         "position",
         "count",
-        "growing"
+        "growing",
+        "family=fourletter",
+        "domain=10"
       ],
       "source": "four-letter arrangements",
-      "program_path": "growing/fourletter_04.cfl",
+      "program_path": "growing/fourletter_010.cfl",
       "program_sha256": "46fe3f9d0f6ce6978242d567e10e649fb354e84ed486da3e0a725b44ff2d5553"
     },
     {
       "suite": "growing",
-      "case_id": "fourletter_05",
-      "program": "letters = set(a0...11)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
-      "expected": 216,
-      "tags": [
-        "fourletter",
-        "set",
-        "tuple",
-        "position",
-        "count",
-        "growing"
-      ],
-      "source": "four-letter arrangements",
-      "program_path": "growing/fourletter_05.cfl",
-      "program_sha256": "42e14f2314fdb8bba8335842c53928d7fcdf5b47e6a169a87f9ace4b2e8cedfe"
-    },
-    {
-      "suite": "growing",
-      "case_id": "fourletter_06",
-      "program": "letters = set(a0...12)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
-      "expected": 270,
-      "tags": [
-        "fourletter",
-        "set",
-        "tuple",
-        "position",
-        "count",
-        "growing"
-      ],
-      "source": "four-letter arrangements",
-      "program_path": "growing/fourletter_06.cfl",
-      "program_sha256": "29e06b5533058b7090ac12f8b212f7740e1a3ade9f4bac153856a35ef6166669"
-    },
-    {
-      "suite": "growing",
-      "case_id": "fourletter_07",
-      "program": "letters = set(a0...13)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
-      "expected": 330,
-      "tags": [
-        "fourletter",
-        "set",
-        "tuple",
-        "position",
-        "count",
-        "growing"
-      ],
-      "source": "four-letter arrangements",
-      "program_path": "growing/fourletter_07.cfl",
-      "program_sha256": "ba0ef8a6771b88488564ff7c9a87cc1725951dd7cf242889ce358819a89c70a4"
-    },
-    {
-      "suite": "growing",
-      "case_id": "fourletter_08",
-      "program": "letters = set(a0...14)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
-      "expected": 396,
-      "tags": [
-        "fourletter",
-        "set",
-        "tuple",
-        "position",
-        "count",
-        "growing"
-      ],
-      "source": "four-letter arrangements",
-      "program_path": "growing/fourletter_08.cfl",
-      "program_sha256": "82ae178127762a26e595f9497ff008a36ad2848f1ba83896b4ac97caa32979e2"
-    },
-    {
-      "suite": "growing",
-      "case_id": "fourletter_09",
+      "case_id": "fourletter_015",
       "program": "letters = set(a0...15)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
       "expected": 468,
       "tags": [
@@ -4386,243 +4340,739 @@
         "tuple",
         "position",
         "count",
-        "growing"
+        "growing",
+        "family=fourletter",
+        "domain=15"
       ],
       "source": "four-letter arrangements",
-      "program_path": "growing/fourletter_09.cfl",
+      "program_path": "growing/fourletter_015.cfl",
       "program_sha256": "3348d4663975c8b1f7ce2d6f74e17e2ba60e9fa955f09efea44fe81df24279ec"
     },
     {
       "suite": "growing",
-      "case_id": "fourletter_10",
-      "program": "letters = set(a0...16)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
-      "expected": 546,
+      "case_id": "fourletter_020",
+      "program": "letters = set(a0...20)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 918,
       "tags": [
         "fourletter",
         "set",
         "tuple",
         "position",
         "count",
-        "growing"
+        "growing",
+        "family=fourletter",
+        "domain=20"
       ],
       "source": "four-letter arrangements",
-      "program_path": "growing/fourletter_10.cfl",
-      "program_sha256": "3514682349250b5d95ed505ea1e4fc988e006f897976a41b5acbcfe6943cda72"
+      "program_path": "growing/fourletter_020.cfl",
+      "program_sha256": "cc2afadbb582091a182a6a486b361e7d4ec271c49349aa72dbd7f35bcc329e8f"
     },
     {
       "suite": "growing",
-      "case_id": "tvs_00",
-      "program": "defective = set(d0...3)\nworking = set(w0...9)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
-      "expected": 288,
+      "case_id": "fourletter_025",
+      "program": "letters = set(a0...25)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 1518,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=25"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_025.cfl",
+      "program_sha256": "52c7d681e13875d94df606135a6ba102cbcf2c753dd5ee1587eb00ba27886807"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_030",
+      "program": "letters = set(a0...30)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 2268,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=30"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_030.cfl",
+      "program_sha256": "9573a5d485036cc3d9a097d82f24f9bbebfd4416c1f21a5e188639f92cf5bfe2"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_035",
+      "program": "letters = set(a0...35)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 3168,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=35"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_035.cfl",
+      "program_sha256": "3897cf56b81d9adbb9aeb0ccce0b90f2a177e59f5b7672dc8bc3bfa28c6f0f1f"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_040",
+      "program": "letters = set(a0...40)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 4218,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=40"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_040.cfl",
+      "program_sha256": "bb1e41a262f3562978caee57a3e2f700f2905dae7d57d14442f3685613c3beee"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_045",
+      "program": "letters = set(a0...45)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 5418,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=45"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_045.cfl",
+      "program_sha256": "15d5c380256ca26eb42e95062421fc547ece90ed041077c7100e134ca68021f4"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_050",
+      "program": "letters = set(a0...50)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 6768,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=50"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_050.cfl",
+      "program_sha256": "0d012da7ccc8b088847d0669989f96279d44e73ecb49706200d59ccfc7ac3d5c"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_055",
+      "program": "letters = set(a0...55)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 8268,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=55"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_055.cfl",
+      "program_sha256": "53d6f362b423bdec29e88aa2d11a4a12164e32653d975e449fe0edf878e253f7"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_060",
+      "program": "letters = set(a0...60)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 9918,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=60"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_060.cfl",
+      "program_sha256": "35e55f1e68e6385089a742a6b6d3f5f123706b8a0f04eff02acccc86d3565682"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_065",
+      "program": "letters = set(a0...65)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 11718,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=65"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_065.cfl",
+      "program_sha256": "a3831f9da8d13d803eb60125f9323f7399325e7239da24b24bb1797987bddb33"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_070",
+      "program": "letters = set(a0...70)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 13668,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=70"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_070.cfl",
+      "program_sha256": "713e6a45414462f46fb6d47af557ac461711ef85aed982f66b48afd85d0fe8db"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_075",
+      "program": "letters = set(a0...75)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 15768,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=75"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_075.cfl",
+      "program_sha256": "ce9e24eeae11197726f213fd983fed8dc77b2d6ba77929b2a941ddd50cfea6bb"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_080",
+      "program": "letters = set(a0...80)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 18018,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=80"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_080.cfl",
+      "program_sha256": "762572aad345d8f155af903b254163a033b2fd05f0a3c8f55e3b1a1134e9ef4c"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_085",
+      "program": "letters = set(a0...85)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 20418,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=85"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_085.cfl",
+      "program_sha256": "6b58c65b7223d8d5121c76210d68c7ad5a3c660a9902fdc0fcf5f3339ab777da"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_090",
+      "program": "letters = set(a0...90)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 22968,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=90"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_090.cfl",
+      "program_sha256": "0cff7eaacceff78781d6bda97d1476fdde28aa23aaad680d46bdc53c8a904428"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_095",
+      "program": "letters = set(a0...95)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 25668,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=95"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_095.cfl",
+      "program_sha256": "09a190db5d76722fd81c2400c932de5d34a4de9cf12b47c741d67fc8d2e821a7"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_100",
+      "program": "letters = set(a0...100)\narr = choose_tuple(letters, 4)\narr[0] == a0\narr.count(a1) > 0",
+      "expected": 28518,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=100"
+      ],
+      "source": "four-letter arrangements",
+      "program_path": "growing/fourletter_100.cfl",
+      "program_sha256": "bc44252ceb395ad6cba9bbfdf3aea533914150643a3e64cf8aaa160961393e2a"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_005",
+      "program": "defective = set(d0...2)\nworking = set(w0...3)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 1,
       "tags": [
         "tvs",
         "set",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=tvs",
+        "domain=5"
       ],
       "source": "defective TVs purchase",
-      "program_path": "growing/tvs_00.cfl",
-      "program_sha256": "76b47258b9e03e0287adcf402602f1058a87506dfec9bb9cc1ca28dfcb95c4a9"
+      "program_path": "growing/tvs_005.cfl",
+      "program_sha256": "033625df8c8f967d9e60bc3b2e549d19879707e335f9ce3009950ebc686e35af"
     },
     {
       "suite": "growing",
-      "case_id": "tvs_01",
-      "program": "defective = set(d0...4)\nworking = set(w0...10)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
-      "expected": 910,
+      "case_id": "tvs_010",
+      "program": "defective = set(d0...2)\nworking = set(w0...8)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 56,
       "tags": [
         "tvs",
         "set",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=tvs",
+        "domain=10"
       ],
       "source": "defective TVs purchase",
-      "program_path": "growing/tvs_01.cfl",
-      "program_sha256": "1030caac0750c35de3276f85edbf23984c5eb8e5932c950968f4806f1f2bd1dc"
+      "program_path": "growing/tvs_010.cfl",
+      "program_sha256": "c2397ae8898cf3b0ec01eeadf9cafa7229349db5fa5a3b4627015d677addf12b"
     },
     {
       "suite": "growing",
-      "case_id": "tvs_02",
-      "program": "defective = set(d0...5)\nworking = set(w0...11)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
-      "expected": 2256,
+      "case_id": "tvs_015",
+      "program": "defective = set(d0...3)\nworking = set(w0...12)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 726,
       "tags": [
         "tvs",
         "set",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=tvs",
+        "domain=15"
       ],
       "source": "defective TVs purchase",
-      "program_path": "growing/tvs_02.cfl",
-      "program_sha256": "e790dbf7aa2915998757f431e117a341764ff3611e73ea050d23fa7c96a47048"
+      "program_path": "growing/tvs_015.cfl",
+      "program_sha256": "63dd2acd8a7c8c1dd10c8213d83ba1b40404dfa0df52bfefebb4301724e0b81a"
     },
     {
       "suite": "growing",
-      "case_id": "tvs_03",
-      "program": "defective = set(d0...6)\nworking = set(w0...12)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
-      "expected": 4806,
+      "case_id": "tvs_020",
+      "program": "defective = set(d0...5)\nworking = set(w0...15)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 5676,
       "tags": [
         "tvs",
         "set",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=tvs",
+        "domain=20"
       ],
       "source": "defective TVs purchase",
-      "program_path": "growing/tvs_03.cfl",
-      "program_sha256": "a850eb971464f3106b53bf6465a7a2c5a36c79cec62071647749a62504de4277"
+      "program_path": "growing/tvs_020.cfl",
+      "program_sha256": "5cc5df101d2f5fd8c9d73b9385f14232a87854a96ebce8b778732d3933efed83"
     },
     {
       "suite": "growing",
-      "case_id": "tvs_04",
-      "program": "defective = set(d0...7)\nworking = set(w0...13)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
-      "expected": 9212,
+      "case_id": "tvs_025",
+      "program": "defective = set(d0...6)\nworking = set(w0...19)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 18246,
       "tags": [
         "tvs",
         "set",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=tvs",
+        "domain=25"
       ],
       "source": "defective TVs purchase",
-      "program_path": "growing/tvs_04.cfl",
-      "program_sha256": "19905cf42d63b06ff463433030bd3b75a8ffb5b77396e4f593f67c1c2dac867b"
+      "program_path": "growing/tvs_025.cfl",
+      "program_sha256": "02450453a11a119daad6b1a3ffd57536f3369324193dba7a24a2a863e815bcdd"
     },
     {
       "suite": "growing",
-      "case_id": "tvs_05",
-      "program": "defective = set(d0...8)\nworking = set(w0...14)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
-      "expected": 16324,
+      "case_id": "tvs_030",
+      "program": "defective = set(d0...7)\nworking = set(w0...23)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 46872,
       "tags": [
         "tvs",
         "set",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=tvs",
+        "domain=30"
       ],
       "source": "defective TVs purchase",
-      "program_path": "growing/tvs_05.cfl",
-      "program_sha256": "bdeea1c66cbe1182b473915ecec5a331e4ba7edf4593a4834c524971b0d048ed"
+      "program_path": "growing/tvs_030.cfl",
+      "program_sha256": "d282cc45dc9f9340b0911e3069be7d9a181f69071c0a776a0a0c42804ea8d91a"
     },
     {
       "suite": "growing",
-      "case_id": "tvs_06",
-      "program": "defective = set(d0...9)\nworking = set(w0...15)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
-      "expected": 27216,
+      "case_id": "tvs_035",
+      "program": "defective = set(d0...8)\nworking = set(w0...27)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 103502,
       "tags": [
         "tvs",
         "set",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=tvs",
+        "domain=35"
       ],
       "source": "defective TVs purchase",
-      "program_path": "growing/tvs_06.cfl",
-      "program_sha256": "d516552f6924834279a0ef2c2d9898e2d1171788a78bed45acd393dc9cbd18b4"
+      "program_path": "growing/tvs_035.cfl",
+      "program_sha256": "aed13e31737d228897aaf2db19ce3a4aec1f292f96f471d41c1f554aeebc5c65"
     },
     {
       "suite": "growing",
-      "case_id": "tvs_07",
-      "program": "defective = set(d0...10)\nworking = set(w0...16)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
-      "expected": 43212,
+      "case_id": "tvs_040",
+      "program": "defective = set(d0...10)\nworking = set(w0...30)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 241452,
       "tags": [
         "tvs",
         "set",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=tvs",
+        "domain=40"
       ],
       "source": "defective TVs purchase",
-      "program_path": "growing/tvs_07.cfl",
-      "program_sha256": "9c69a9f8f469c320d5f396103bc4bbdc0f51de5a65a10f5c1c215a7dfa1a58ed"
+      "program_path": "growing/tvs_040.cfl",
+      "program_sha256": "282dd77a69b6fcb41fc594539cd7813b26e6a5580bcc75ef9d020977a33d7e64"
     },
     {
       "suite": "growing",
-      "case_id": "tvs_08",
-      "program": "defective = set(d0...11)\nworking = set(w0...17)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
-      "expected": 65912,
+      "case_id": "tvs_045",
+      "program": "defective = set(d0...11)\nworking = set(w0...34)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 433367,
       "tags": [
         "tvs",
         "set",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=tvs",
+        "domain=45"
       ],
       "source": "defective TVs purchase",
-      "program_path": "growing/tvs_08.cfl",
-      "program_sha256": "67ce0e0113d89381db5db2862b74a43cc8ba2c38a93c93ec5128669a732d9ca0"
+      "program_path": "growing/tvs_045.cfl",
+      "program_sha256": "c280ba89bb3708e2e2bf0773a911d3a01dbd0d1266e95fef5165922f0910e2ec"
     },
     {
       "suite": "growing",
-      "case_id": "tvs_09",
-      "program": "defective = set(d0...12)\nworking = set(w0...18)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
-      "expected": 97218,
+      "case_id": "tvs_050",
+      "program": "defective = set(d0...12)\nworking = set(w0...38)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 731038,
       "tags": [
         "tvs",
         "set",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=tvs",
+        "domain=50"
       ],
       "source": "defective TVs purchase",
-      "program_path": "growing/tvs_09.cfl",
-      "program_sha256": "7a88c225cf0e3965ba3acb503f689527706c98cc15a1ccaf123fe4efa7611a09"
+      "program_path": "growing/tvs_050.cfl",
+      "program_sha256": "3090528dc2b898c8158c35967058dcf9c277d0c49c139d0ff1db72db61fbafd2"
     },
     {
       "suite": "growing",
-      "case_id": "tvs_10",
-      "program": "defective = set(d0...13)\nworking = set(w0...19)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
-      "expected": 139360,
+      "case_id": "tvs_055",
+      "program": "defective = set(d0...13)\nworking = set(w0...42)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 1173003,
       "tags": [
         "tvs",
         "set",
         "choose",
         "count",
-        "growing"
+        "growing",
+        "family=tvs",
+        "domain=55"
       ],
       "source": "defective TVs purchase",
-      "program_path": "growing/tvs_10.cfl",
-      "program_sha256": "b9607b77116136204dc840e725b47ddb86dc3350b9861b42ad4471f3eb450fb5"
+      "program_path": "growing/tvs_055.cfl",
+      "program_sha256": "7257824d48858bd6b3037e0f5a0a59d20f39168a1cecff51518961463dd584d2"
     },
     {
       "suite": "growing",
-      "case_id": "workers_00",
-      "program": "workers = set(w0...14)\ngroups = compose(workers, 3)\n|groups[0]| == 7\n|groups[1]| == 5\n|groups[2]| == 2",
-      "expected": 72072,
+      "case_id": "tvs_060",
+      "program": "defective = set(d0...15)\nworking = set(w0...45)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 2004828,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=60"
+      ],
+      "source": "defective TVs purchase",
+      "program_path": "growing/tvs_060.cfl",
+      "program_sha256": "b632532699b333e326e274c13db6261e762f784007db0d0ff68b076a6adb7b87"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_065",
+      "program": "defective = set(d0...16)\nworking = set(w0...49)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 2962988,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=65"
+      ],
+      "source": "defective TVs purchase",
+      "program_path": "growing/tvs_065.cfl",
+      "program_sha256": "9ba6537fb2394b0f68517f2b00250440865268598b0200ffcda800a8a0a8bf3e"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_070",
+      "program": "defective = set(d0...17)\nworking = set(w0...53)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 4255304,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=70"
+      ],
+      "source": "defective TVs purchase",
+      "program_path": "growing/tvs_070.cfl",
+      "program_sha256": "03f5b3b8d656ae6d078c2f259dc91283774a5e423f3195127e68c3ee73153713"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_075",
+      "program": "defective = set(d0...18)\nworking = set(w0...57)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 5962104,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=75"
+      ],
+      "source": "defective TVs purchase",
+      "program_path": "growing/tvs_075.cfl",
+      "program_sha256": "0b9d0679a4b156faca773a87a1ee67fe9f8d8232a7049c110bf5f642d6bbb50b"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_080",
+      "program": "defective = set(d0...20)\nworking = set(w0...60)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 8825804,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=80"
+      ],
+      "source": "defective TVs purchase",
+      "program_path": "growing/tvs_080.cfl",
+      "program_sha256": "d2cb7a9e3222f4f131ac90bbda87b9b0cece4eed534474fc388998757f4dd13b"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_085",
+      "program": "defective = set(d0...21)\nworking = set(w0...64)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 11834109,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=85"
+      ],
+      "source": "defective TVs purchase",
+      "program_path": "growing/tvs_085.cfl",
+      "program_sha256": "7f5b8f75b580f4f65b08bf569815bf8678c532234004bbab49a174f2a8adb79b"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_090",
+      "program": "defective = set(d0...22)\nworking = set(w0...68)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 15608670,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=90"
+      ],
+      "source": "defective TVs purchase",
+      "program_path": "growing/tvs_090.cfl",
+      "program_sha256": "b8a8362765f2503ddb013258243fca8fd235c76412d49dfa807945341ca0d8f0"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_095",
+      "program": "defective = set(d0...23)\nworking = set(w0...72)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 20286805,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=95"
+      ],
+      "source": "defective TVs purchase",
+      "program_path": "growing/tvs_095.cfl",
+      "program_sha256": "7d675b4d2fb4c9060bd6416b0c08070f7c8ed5d43fbbef5b607cef2f9c5fb149"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_100",
+      "program": "defective = set(d0...25)\nworking = set(w0...75)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 27641880,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=100"
+      ],
+      "source": "defective TVs purchase",
+      "program_path": "growing/tvs_100.cfl",
+      "program_sha256": "9bb7b93d357394c66a71b7f4cff5087a150301aef5270a685f007893ea9702e7"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_005",
+      "program": "workers = set(w0...5)\ngroups = compose(workers, 3)\n|groups[0]| == 2\n|groups[1]| == 1\n|groups[2]| == 2",
+      "expected": 30,
       "tags": [
         "workers",
         "set",
         "composition",
         "index",
         "size",
-        "growing"
+        "growing",
+        "family=workers",
+        "domain=5"
       ],
       "source": "workers composition",
-      "program_path": "growing/workers_00.cfl",
-      "program_sha256": "ce78fc3015c0d9e52e1f2e477f596da78973fd9952e6ec7d8496acc6023aaf0c"
+      "program_path": "growing/workers_005.cfl",
+      "program_sha256": "1a88372067630ae7dd4b593615ffe7c43c1964d13933069974a545838cbbb847"
     },
     {
       "suite": "growing",
-      "case_id": "workers_01",
-      "program": "workers = set(w0...15)\ngroups = compose(workers, 3)\n|groups[0]| == 8\n|groups[1]| == 5\n|groups[2]| == 2",
-      "expected": 135135,
+      "case_id": "workers_010",
+      "program": "workers = set(w0...10)\ngroups = compose(workers, 3)\n|groups[0]| == 5\n|groups[1]| == 3\n|groups[2]| == 2",
+      "expected": 2520,
       "tags": [
         "workers",
         "set",
         "composition",
         "index",
         "size",
-        "growing"
+        "growing",
+        "family=workers",
+        "domain=10"
       ],
       "source": "workers composition",
-      "program_path": "growing/workers_01.cfl",
-      "program_sha256": "aa47618b3f7fa1a3601b8cbddb4ce0d7a24cca9ec34d2de8c8ce9b7466eae5a5"
+      "program_path": "growing/workers_010.cfl",
+      "program_sha256": "728aa7901df60b17adf5b76a649607c38620dc8dc5761a1bcdbcfeec3a9196ea"
     },
     {
       "suite": "growing",
-      "case_id": "workers_02",
-      "program": "workers = set(w0...16)\ngroups = compose(workers, 3)\n|groups[0]| == 8\n|groups[1]| == 6\n|groups[2]| == 2",
+      "case_id": "workers_015",
+      "program": "workers = set(w0...15)\ngroups = compose(workers, 3)\n|groups[0]| == 7\n|groups[1]| == 5\n|groups[2]| == 3",
       "expected": 360360,
       "tags": [
         "workers",
@@ -4630,1392 +5080,676 @@
         "composition",
         "index",
         "size",
-        "growing"
+        "growing",
+        "family=workers",
+        "domain=15"
       ],
       "source": "workers composition",
-      "program_path": "growing/workers_02.cfl",
-      "program_sha256": "f8dd22832c9721336048e36ed8ffe7dfade57f5f33c4f5eb60dea0ee94716410"
+      "program_path": "growing/workers_015.cfl",
+      "program_sha256": "bd7d980f7c959d6ee28b4e3e09bc8a5b638caf5b8576169d62c31a882c6309e9"
     },
     {
       "suite": "growing",
-      "case_id": "workers_03",
-      "program": "workers = set(w0...17)\ngroups = compose(workers, 3)\n|groups[0]| == 8\n|groups[1]| == 6\n|groups[2]| == 3",
-      "expected": 2042040,
+      "case_id": "workers_020",
+      "program": "workers = set(w0...20)\ngroups = compose(workers, 3)\n|groups[0]| == 10\n|groups[1]| == 6\n|groups[2]| == 4",
+      "expected": 38798760,
       "tags": [
         "workers",
         "set",
         "composition",
         "index",
         "size",
-        "growing"
+        "growing",
+        "family=workers",
+        "domain=20"
       ],
       "source": "workers composition",
-      "program_path": "growing/workers_03.cfl",
-      "program_sha256": "671df624da9ca525dfdce6e17ca252f997cce85369a02064dc653426b33e0104"
+      "program_path": "growing/workers_020.cfl",
+      "program_sha256": "b00ef48b04cfd27bfaa00d9cd52ffd6730d4e9c509fd531092202bc3190fb9f3"
     },
     {
       "suite": "growing",
-      "case_id": "workers_04",
-      "program": "workers = set(w0...18)\ngroups = compose(workers, 3)\n|groups[0]| == 9\n|groups[1]| == 6\n|groups[2]| == 3",
-      "expected": 4084080,
+      "case_id": "workers_025",
+      "program": "workers = set(w0...25)\ngroups = compose(workers, 3)\n|groups[0]| == 12\n|groups[1]| == 8\n|groups[2]| == 5",
+      "expected": 6692786100,
       "tags": [
         "workers",
         "set",
         "composition",
         "index",
         "size",
-        "growing"
+        "growing",
+        "family=workers",
+        "domain=25"
       ],
       "source": "workers composition",
-      "program_path": "growing/workers_04.cfl",
-      "program_sha256": "aee3fce0c9e324ce9131ecc95a0f9bd0da2b40093b48e4f8c9f5bddb9b0c4446"
+      "program_path": "growing/workers_025.cfl",
+      "program_sha256": "77b3877413eaab14810ce226bb6845afe05c1065073042124cc812d2779d3bdc"
     },
     {
       "suite": "growing",
-      "case_id": "workers_05",
-      "program": "workers = set(w0...19)\ngroups = compose(workers, 3)\n|groups[0]| == 9\n|groups[1]| == 7\n|groups[2]| == 3",
-      "expected": 11085360,
+      "case_id": "workers_030",
+      "program": "workers = set(w0...30)\ngroups = compose(workers, 3)\n|groups[0]| == 15\n|groups[1]| == 10\n|groups[2]| == 5",
+      "expected": 465817912560,
       "tags": [
         "workers",
         "set",
         "composition",
         "index",
         "size",
-        "growing"
+        "growing",
+        "family=workers",
+        "domain=30"
       ],
       "source": "workers composition",
-      "program_path": "growing/workers_05.cfl",
-      "program_sha256": "82a5a1ffa536756a52a468395ce762a77d7d0471d131327b30b9a759640068d5"
+      "program_path": "growing/workers_030.cfl",
+      "program_sha256": "985b980d967afe37cb3d4b90ed221399606c120b0ccbba4917ceef4bb1b1eabb"
     },
     {
       "suite": "growing",
-      "case_id": "workers_06",
-      "program": "workers = set(w0...20)\ngroups = compose(workers, 3)\n|groups[0]| == 9\n|groups[1]| == 7\n|groups[2]| == 4",
-      "expected": 55426800,
+      "case_id": "workers_035",
+      "program": "workers = set(w0...35)\ngroups = compose(workers, 3)\n|groups[0]| == 17\n|groups[1]| == 11\n|groups[2]| == 7",
+      "expected": 144403552893600,
       "tags": [
         "workers",
         "set",
         "composition",
         "index",
         "size",
-        "growing"
+        "growing",
+        "family=workers",
+        "domain=35"
       ],
       "source": "workers composition",
-      "program_path": "growing/workers_06.cfl",
-      "program_sha256": "698ee7d66629e07fa76c1b5ca2dbbb4fbcf5e8425062e55d94313395ad2e83d1"
+      "program_path": "growing/workers_035.cfl",
+      "program_sha256": "e64594750b675612cbfebf8a2ba91f17d8c1a3dab542e2435b04f0c89d78d618"
     },
     {
       "suite": "growing",
-      "case_id": "workers_07",
-      "program": "workers = set(w0...21)\ngroups = compose(workers, 3)\n|groups[0]| == 10\n|groups[1]| == 7\n|groups[2]| == 4",
-      "expected": 116396280,
+      "case_id": "workers_040",
+      "program": "workers = set(w0...40)\ngroups = compose(workers, 3)\n|groups[0]| == 20\n|groups[1]| == 13\n|groups[2]| == 7",
+      "expected": 10685862914126400,
       "tags": [
         "workers",
         "set",
         "composition",
         "index",
         "size",
-        "growing"
+        "growing",
+        "family=workers",
+        "domain=40"
       ],
       "source": "workers composition",
-      "program_path": "growing/workers_07.cfl",
-      "program_sha256": "2da5c7b442a47764efc40746020f9a94d875684b44c95f2bbca6504261079da4"
+      "program_path": "growing/workers_040.cfl",
+      "program_sha256": "548a45aaa4aea11d2bb83b49de2d7e372d52758bad1433a33d4338917aa09501"
     },
     {
       "suite": "growing",
-      "case_id": "workers_08",
-      "program": "workers = set(w0...22)\ngroups = compose(workers, 3)\n|groups[0]| == 10\n|groups[1]| == 8\n|groups[2]| == 4",
-      "expected": 320089770,
+      "case_id": "workers_045",
+      "program": "workers = set(w0...45)\ngroups = compose(workers, 3)\n|groups[0]| == 22\n|groups[1]| == 15\n|groups[2]| == 8",
+      "expected": 2018483176886233200,
       "tags": [
         "workers",
         "set",
         "composition",
         "index",
         "size",
-        "growing"
+        "growing",
+        "family=workers",
+        "domain=45"
       ],
       "source": "workers composition",
-      "program_path": "growing/workers_08.cfl",
-      "program_sha256": "f9f3c4f81a8a736b63cf3da9bb2c4e4004f3a353541520774bde4fcb78ca2761"
+      "program_path": "growing/workers_045.cfl",
+      "program_sha256": "a341418c22b363681407f01df52d7b9a0b3bf5f2bb8a9c7cc05cf77f9f496740"
     },
     {
       "suite": "growing",
-      "case_id": "workers_09",
-      "program": "workers = set(w0...23)\ngroups = compose(workers, 3)\n|groups[0]| == 10\n|groups[1]| == 8\n|groups[2]| == 5",
-      "expected": 1472412942,
+      "case_id": "workers_050",
+      "program": "workers = set(w0...50)\ngroups = compose(workers, 3)\n|groups[0]| == 25\n|groups[1]| == 16\n|groups[2]| == 9",
+      "expected": 258253708687166392200,
       "tags": [
         "workers",
         "set",
         "composition",
         "index",
         "size",
-        "growing"
+        "growing",
+        "family=workers",
+        "domain=50"
       ],
       "source": "workers composition",
-      "program_path": "growing/workers_09.cfl",
-      "program_sha256": "055f9bfdcbfa98c736e7ef26b54edf2af794df96456e53c84d37103d8312e1d3"
+      "program_path": "growing/workers_050.cfl",
+      "program_sha256": "ca7d32ce01a12c2aba97cc5f0313cc8a94176b34a011fe9e31d14b52bc3df3ce"
     },
     {
       "suite": "growing",
-      "case_id": "workers_10",
-      "program": "workers = set(w0...24)\ngroups = compose(workers, 3)\n|groups[0]| == 11\n|groups[1]| == 8\n|groups[2]| == 5",
-      "expected": 3212537328,
+      "case_id": "workers_055",
+      "program": "workers = set(w0...55)\ngroups = compose(workers, 3)\n|groups[0]| == 27\n|groups[1]| == 18\n|groups[2]| == 10",
+      "expected": 50187304054872668884200,
       "tags": [
         "workers",
         "set",
         "composition",
         "index",
         "size",
-        "growing"
+        "growing",
+        "family=workers",
+        "domain=55"
       ],
       "source": "workers composition",
-      "program_path": "growing/workers_10.cfl",
-      "program_sha256": "07b249655907882aca85d4d24b04292143bd4af226c9bc490f84e27a023d91d2"
+      "program_path": "growing/workers_055.cfl",
+      "program_sha256": "2c179c00bd0645097dc991a6c1fc9732ffd4441695d6a5104f290e519b6eee27"
     },
     {
       "suite": "growing",
-      "case_id": "banana_02",
-      "program": "letters = bag(B: 2, A: 6, N: 4)\nword = choose_tuple(letters, 2)",
-      "expected": 9,
+      "case_id": "workers_060",
+      "program": "workers = set(w0...60)\ngroups = compose(workers, 3)\n|groups[0]| == 30\n|groups[1]| == 20\n|groups[2]| == 10",
+      "expected": 3553261127084984957001360,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=60"
+      ],
+      "source": "workers composition",
+      "program_path": "growing/workers_060.cfl",
+      "program_sha256": "8724ef84c5527d571756099201309ce7fde45fe675edf1c1520a9271c2691e99"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_065",
+      "program": "workers = set(w0...65)\ngroups = compose(workers, 3)\n|groups[0]| == 32\n|groups[1]| == 21\n|groups[2]| == 12",
+      "expected": 1280789124444724123137308400,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=65"
+      ],
+      "source": "workers composition",
+      "program_path": "growing/workers_065.cfl",
+      "program_sha256": "e4a4051ed40ef6bc6f41832757ba2153679ea4cc0f19584d9ed33b29a50f07bd"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_070",
+      "program": "workers = set(w0...70)\ngroups = compose(workers, 3)\n|groups[0]| == 35\n|groups[1]| == 23\n|groups[2]| == 12",
+      "expected": 93614041459414381363854177600,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=70"
+      ],
+      "source": "workers composition",
+      "program_path": "growing/workers_070.cfl",
+      "program_sha256": "ff165b08eba783459c2955871516f1ba89a176d0f0b680d3d78ea07de167278b"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_075",
+      "program": "workers = set(w0...75)\ngroups = compose(workers, 3)\n|groups[0]| == 37\n|groups[1]| == 25\n|groups[2]| == 13",
+      "expected": 18661599110928643792648315480800,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=75"
+      ],
+      "source": "workers composition",
+      "program_path": "growing/workers_075.cfl",
+      "program_sha256": "716543ff880e8a43db3e1525329357cbc4caac2b238c512f2b6208134a0a436c"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_080",
+      "program": "workers = set(w0...80)\ngroups = compose(workers, 3)\n|groups[0]| == 40\n|groups[1]| == 26\n|groups[2]| == 14",
+      "expected": 2494912250368767916278674792740800,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=80"
+      ],
+      "source": "workers composition",
+      "program_path": "growing/workers_080.cfl",
+      "program_sha256": "e5c5b3eba00fa84ab717b969a8673e2b91476161d843d9474e1819af4ed48c4c"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_085",
+      "program": "workers = set(w0...85)\ngroups = compose(workers, 3)\n|groups[0]| == 42\n|groups[1]| == 28\n|groups[2]| == 15",
+      "expected": 502903026467190218552744304651038400,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=85"
+      ],
+      "source": "workers composition",
+      "program_path": "growing/workers_085.cfl",
+      "program_sha256": "0c826deac69af273d980b1c087674a626601ceef550b5a3f22cb920c26d15290"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_090",
+      "program": "workers = set(w0...90)\ngroups = compose(workers, 3)\n|groups[0]| == 45\n|groups[1]| == 30\n|groups[2]| == 15",
+      "expected": 35806695484463943560955394491153934080,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=90"
+      ],
+      "source": "workers composition",
+      "program_path": "growing/workers_090.cfl",
+      "program_sha256": "b878ab4bd52a48d45ee30057583e5b8333b7b0d18e0ffeb860c4cf36ebb47453"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_095",
+      "program": "workers = set(w0...95)\ngroups = compose(workers, 3)\n|groups[0]| == 47\n|groups[1]| == 31\n|groups[2]| == 17",
+      "expected": 13656568343964299650784972884236430593600,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=95"
+      ],
+      "source": "workers composition",
+      "program_path": "growing/workers_095.cfl",
+      "program_sha256": "f4b77e89b90ae2456fe9dbe815cc098d6cec9cc69eaa68f339ba3919d7ec81ae"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_100",
+      "program": "workers = set(w0...100)\ngroups = compose(workers, 3)\n|groups[0]| == 50\n|groups[1]| == 33\n|groups[2]| == 17",
+      "expected": 993515347023402799594606777328200325684400,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=100"
+      ],
+      "source": "workers composition",
+      "program_path": "growing/workers_100.cfl",
+      "program_sha256": "dbce13fd03af9d488a1095cffb4a8e3aebd841ca2b17bbcdddf01b685c951cd3"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_005",
+      "program": "letters = bag(B: 1, A: 2, N: 2)\nword = choose_tuple(letters, 5)",
+      "expected": 30,
       "tags": [
         "banana",
         "bag",
         "tuple",
-        "growing"
+        "growing",
+        "family=banana",
+        "domain=5"
       ],
       "source": "BANANA bag tuple",
-      "program_path": "growing/banana_02.cfl",
-      "program_sha256": "af18c973c41165b696dcb375e3d9a21b3f6a63fcca3e14cfa572e5bea4974637"
+      "program_path": "growing/banana_005.cfl",
+      "program_sha256": "8e1baf74724e406115f8b3518cddcceeff1db7d1402bb48644e30c1cdabc0caf"
     },
     {
       "suite": "growing",
-      "case_id": "banana_03",
-      "program": "letters = bag(B: 2, A: 6, N: 4)\nword = choose_tuple(letters, 3)",
-      "expected": 26,
+      "case_id": "banana_010",
+      "program": "letters = bag(B: 1, A: 5, N: 4)\nword = choose_tuple(letters, 10)",
+      "expected": 1260,
       "tags": [
         "banana",
         "bag",
         "tuple",
-        "growing"
+        "growing",
+        "family=banana",
+        "domain=10"
       ],
       "source": "BANANA bag tuple",
-      "program_path": "growing/banana_03.cfl",
-      "program_sha256": "59d66c37185e5e96e18b8ccbc620797f9667b531b121b4e6f1dde64ef601a07d"
+      "program_path": "growing/banana_010.cfl",
+      "program_sha256": "4d2515f99996828b6b4d075a148bd7fd7f954ec8a8d05d8a06f093eab024e887"
     },
     {
       "suite": "growing",
-      "case_id": "banana_04",
-      "program": "letters = bag(B: 2, A: 6, N: 4)\nword = choose_tuple(letters, 4)",
-      "expected": 72,
+      "case_id": "banana_015",
+      "program": "letters = bag(B: 2, A: 7, N: 6)\nword = choose_tuple(letters, 15)",
+      "expected": 180180,
       "tags": [
         "banana",
         "bag",
         "tuple",
-        "growing"
+        "growing",
+        "family=banana",
+        "domain=15"
       ],
       "source": "BANANA bag tuple",
-      "program_path": "growing/banana_04.cfl",
-      "program_sha256": "6094756f9af58d9cfb856da9301c2d1786457edd6d24f2142a1d871dbfcf19ac"
+      "program_path": "growing/banana_015.cfl",
+      "program_sha256": "49afd8d68accf9eefc3555f8fb83be92249f84e7472144a9116e4d3f20fdf100"
     },
     {
       "suite": "growing",
-      "case_id": "banana_05",
-      "program": "letters = bag(B: 2, A: 6, N: 4)\nword = choose_tuple(letters, 5)",
-      "expected": 191,
+      "case_id": "banana_020",
+      "program": "letters = bag(B: 3, A: 10, N: 7)\nword = choose_tuple(letters, 20)",
+      "expected": 22170720,
       "tags": [
         "banana",
         "bag",
         "tuple",
-        "growing"
+        "growing",
+        "family=banana",
+        "domain=20"
       ],
       "source": "BANANA bag tuple",
-      "program_path": "growing/banana_05.cfl",
-      "program_sha256": "0af40164d220f098f61681b1983a89e4f383ceeee53cbe5b4c5c1086b546c243"
+      "program_path": "growing/banana_020.cfl",
+      "program_sha256": "8ba9ed8d7fdf0996be91861a1a7888e828570dc5d4dc9434b871005042661875"
     },
     {
       "suite": "growing",
-      "case_id": "banana_06",
-      "program": "letters = bag(B: 2, A: 6, N: 4)\nword = choose_tuple(letters, 6)",
-      "expected": 483,
+      "case_id": "banana_025",
+      "program": "letters = bag(B: 4, A: 12, N: 9)\nword = choose_tuple(letters, 25)",
+      "expected": 3718214500,
       "tags": [
         "banana",
         "bag",
         "tuple",
-        "growing"
+        "growing",
+        "family=banana",
+        "domain=25"
       ],
       "source": "BANANA bag tuple",
-      "program_path": "growing/banana_06.cfl",
-      "program_sha256": "3d41c197b13b4519aa735a8deb0e7047b24dc17b577f4732d21ce7dd3001f2ad"
+      "program_path": "growing/banana_025.cfl",
+      "program_sha256": "86da9f0a9796559e3879999ad07e35810e423813dc81b46a0bbeec9042f723b1"
     },
     {
       "suite": "growing",
-      "case_id": "banana_07",
-      "program": "letters = bag(B: 2, A: 6, N: 4)\nword = choose_tuple(letters, 7)",
-      "expected": 1148,
+      "case_id": "banana_030",
+      "program": "letters = bag(B: 5, A: 15, N: 10)\nword = choose_tuple(letters, 30)",
+      "expected": 465817912560,
       "tags": [
         "banana",
         "bag",
         "tuple",
-        "growing"
+        "growing",
+        "family=banana",
+        "domain=30"
       ],
       "source": "BANANA bag tuple",
-      "program_path": "growing/banana_07.cfl",
-      "program_sha256": "031b2db7543a6ce8487cffb1200c138cf09ba3eca010cb928208a108533cb942"
+      "program_path": "growing/banana_030.cfl",
+      "program_sha256": "fb73609045abf0a69f26270986664bc180b9262362f39e5d23b7ea964b679e57"
     },
     {
       "suite": "growing",
-      "case_id": "banana_08",
-      "program": "letters = bag(B: 2, A: 6, N: 4)\nword = choose_tuple(letters, 8)",
-      "expected": 2534,
+      "case_id": "banana_035",
+      "program": "letters = bag(B: 5, A: 17, N: 13)\nword = choose_tuple(letters, 35)",
+      "expected": 38877879625200,
       "tags": [
         "banana",
         "bag",
         "tuple",
-        "growing"
+        "growing",
+        "family=banana",
+        "domain=35"
       ],
       "source": "BANANA bag tuple",
-      "program_path": "growing/banana_08.cfl",
-      "program_sha256": "eff5fbb0805f400af6156207015288bef9f16e43d60ac88dd8a6a7baa714e67f"
+      "program_path": "growing/banana_035.cfl",
+      "program_sha256": "1e92436572b5c5b762b9e4a32246865bc1880857119e64c9224de232d8e4c4a4"
     },
     {
       "suite": "growing",
-      "case_id": "banana_09",
-      "program": "letters = bag(B: 2, A: 6, N: 4)\nword = choose_tuple(letters, 9)",
-      "expected": 5124,
+      "case_id": "banana_040",
+      "program": "letters = bag(B: 6, A: 20, N: 14)\nword = choose_tuple(letters, 40)",
+      "expected": 5342931457063200,
       "tags": [
         "banana",
         "bag",
         "tuple",
-        "growing"
+        "growing",
+        "family=banana",
+        "domain=40"
       ],
       "source": "BANANA bag tuple",
-      "program_path": "growing/banana_09.cfl",
-      "program_sha256": "8b86c9ca8ef33a776af6a51c76daa55b9d0ae2ecd8213d2c8f93f80c95c29bb5"
+      "program_path": "growing/banana_040.cfl",
+      "program_sha256": "ed883af82f38d540cf0c1a6a7a529513f387d266b0420011558fb3f9d744ba78"
     },
     {
       "suite": "growing",
-      "case_id": "banana_10",
-      "program": "letters = bag(B: 2, A: 6, N: 4)\nword = choose_tuple(letters, 10)",
-      "expected": 9240,
+      "case_id": "banana_045",
+      "program": "letters = bag(B: 7, A: 22, N: 16)\nword = choose_tuple(letters, 45)",
+      "expected": 1009241588443116600,
       "tags": [
         "banana",
         "bag",
         "tuple",
-        "growing"
+        "growing",
+        "family=banana",
+        "domain=45"
       ],
       "source": "BANANA bag tuple",
-      "program_path": "growing/banana_10.cfl",
-      "program_sha256": "7d8850f5fc8ccc62e2e2cd90fb5e3db3e97c29179bb0b966bddd3eb361ce954c"
+      "program_path": "growing/banana_045.cfl",
+      "program_sha256": "37e4e9de6a7e8af7828665a6ab1e545f0dda392db6cb5e1bb983642c018a8cd2"
     },
     {
       "suite": "growing",
-      "case_id": "banana_11",
-      "program": "letters = bag(B: 2, A: 6, N: 4)\nword = choose_tuple(letters, 11)",
-      "expected": 13860,
+      "case_id": "banana_050",
+      "program": "letters = bag(B: 8, A: 25, N: 17)\nword = choose_tuple(letters, 50)",
+      "expected": 136722551657911619400,
       "tags": [
         "banana",
         "bag",
         "tuple",
-        "growing"
+        "growing",
+        "family=banana",
+        "domain=50"
       ],
       "source": "BANANA bag tuple",
-      "program_path": "growing/banana_11.cfl",
-      "program_sha256": "4ff550071dd336466bb642f7aa6b9db136f25d033e5ae1a0f1c35f94b7513868"
+      "program_path": "growing/banana_050.cfl",
+      "program_sha256": "273cf7125f97a722fc115313ec21ea59a6da2c994855fd5fcb98d1ed9c8195c2"
     },
     {
       "suite": "growing",
-      "case_id": "banana_12",
-      "program": "letters = bag(B: 2, A: 6, N: 4)\nword = choose_tuple(letters, 12)",
-      "expected": 13860,
+      "case_id": "banana_055",
+      "program": "letters = bag(B: 9, A: 27, N: 19)\nword = choose_tuple(letters, 55)",
+      "expected": 26414370555196141518000,
       "tags": [
         "banana",
         "bag",
         "tuple",
-        "growing"
+        "growing",
+        "family=banana",
+        "domain=55"
       ],
       "source": "BANANA bag tuple",
-      "program_path": "growing/banana_12.cfl",
-      "program_sha256": "a4516feac322a699c8bdb1bf287a9fd4113ef8be9f45e0c62bb15796256548bc"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ss_10_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e0, e1, e2, e3, e4, e5, e6, e7, e9)\nP1 = set(e1, e2, e4, e5, e7)\nP2 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\ncfg = choose(U, 5)\n|cfg & P0| >= 2\n|cfg & P2| <= 4\ncfg disjoint P1",
-      "expected": null,
-      "tags": [
-        "ss",
-        "u=10",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ss_10_5_seed0.cfl",
-      "program_sha256": "df1c79a3c2796b0b0bc890a51f5fd00e82f4fdc488577cdcbbea0b34be273b8e"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ss_10_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8)\nP1 = set(e1, e3, e4, e5, e6, e7)\nP2 = set(e0, e2, e7, e8)\ncfg = choose(U, 10)\n|cfg & P0| >= 5\n|cfg & P2| <= 4\ncfg disjoint P1",
-      "expected": null,
-      "tags": [
-        "ss",
-        "u=10",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ss_10_10_seed0.cfl",
-      "program_sha256": "c1a95eedf6eca3230febf6cafecd6529cbcce714a249863b3600eeaf5d5f9420"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ss_10_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e5, e8)\nP1 = set(e0, e1, e3, e4, e5, e6, e7, e8, e9)\nP2 = set(e0, e2, e3, e4, e9)\ncfg = choose(U, 10)\n|cfg & P0| >= 1\n|cfg & P2| <= 3\ne0 in cfg",
-      "expected": null,
-      "tags": [
-        "ss",
-        "u=10",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ss_10_15_seed0.cfl",
-      "program_sha256": "c67751ef4374356ecc3e30d4ab96bd01967d42638fe62dada1384f4b880aae39"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ss_15_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP1 = set(e0, e1, e4, e11)\nP2 = set(e0, e1, e2, e3, e5, e6, e7, e8, e9, e10, e12, e13)\ncfg = choose(U, 5)\n|cfg & P0| >= 5\n|cfg & P2| <= 4\ncfg disjoint P1",
-      "expected": null,
-      "tags": [
-        "ss",
-        "u=15",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ss_15_5_seed0.cfl",
-      "program_sha256": "9679b6be9e4923ef5902da4c4836100ff69a8d77435b7020fc29df47bf2c3013"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ss_15_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e9)\nP1 = set(e3)\nP2 = set(e1, e7, e11)\ncfg = choose(U, 10)\n|cfg & P0| >= 0\n|cfg & P2| <= 0\ncfg disjoint P1",
-      "expected": null,
-      "tags": [
-        "ss",
-        "u=15",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ss_15_10_seed0.cfl",
-      "program_sha256": "ff3b7a47356a882978b12ca31b65496a1cbf8ee265de61fc9d4b4adea67f056b"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ss_15_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e0, e7, e8)\nP1 = set(e9)\nP2 = set(e6, e11)\ncfg = choose(U, 15)\n|cfg & P0| >= 2\n|cfg & P2| <= 1\ncfg disjoint P1",
-      "expected": null,
-      "tags": [
-        "ss",
-        "u=15",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ss_15_15_seed0.cfl",
-      "program_sha256": "9fd8292831365149a5b1483309f5b33dd2931340744880d768ef830530189318"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ss_20_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP1 = set(e8, e17)\nP2 = set(e7, e9, e11, e15, e17)\ncfg = choose(U, 5)\n|cfg & P0| >= 5\n|cfg & P2| <= 4\ne8 in cfg",
-      "expected": null,
-      "tags": [
-        "ss",
-        "u=20",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ss_20_5_seed0.cfl",
-      "program_sha256": "8a7f8e4f691f935cb547cd0b622167f7b8268e6e69ada7a739abbcc24512fa4a"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ss_20_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e1, e9, e11, e12, e13, e14, e17, e18)\nP1 = set(e0, e1, e2, e3, e5, e7, e8, e9, e11, e12, e14, e15, e16, e17)\nP2 = set(e0, e1, e2, e6, e8, e9, e10, e11, e13, e14, e17)\ncfg = choose(U, 10)\n|cfg & P0| >= 6\n|cfg & P2| <= 5\ne0 in cfg",
-      "expected": null,
-      "tags": [
-        "ss",
-        "u=20",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ss_20_10_seed0.cfl",
-      "program_sha256": "6a04f50f61cdcbe755108bedfe5723d28a241e6ccf3f678ac01df8280b9b84e8"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ss_20_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e0, e8, e14)\nP1 = set(e4, e8, e11, e16)\nP2 = set(e0, e1, e4, e8)\ncfg = choose(U, 15)\n|cfg & P0| >= 1\n|cfg & P2| <= 2\ncfg disjoint P1",
-      "expected": null,
-      "tags": [
-        "ss",
-        "u=20",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ss_20_15_seed0.cfl",
-      "program_sha256": "54881b77d47bbb88fc0ebf09c15a1645a8d0e7fc4c26440f89b30058096a07d7"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sr_10_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e1, e2, e3, e4, e5, e7, e8)\nP1 = set(e2)\nP2 = set(e4, e5, e8)\ncfg = choose_replace(U, 5)\ncfg.count(e0) >= 5\ncfg.count(e1) <= 5",
-      "expected": null,
-      "tags": [
-        "sr",
-        "u=10",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sr_10_5_seed0.cfl",
-      "program_sha256": "49f1d4b88f21b4bc340cb7879f1bc278247b35825869779b1751fa24683f0458"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sr_10_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e4, e5, e9)\nP1 = set(e0, e1, e2, e3, e4, e6, e8)\nP2 = set(e1, e2, e3, e8, e9)\ncfg = choose_replace(U, 10)\ncfg.count(e0) >= 4\ncfg.count(e4) <= 10",
-      "expected": null,
-      "tags": [
-        "sr",
-        "u=10",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sr_10_10_seed0.cfl",
-      "program_sha256": "723caa943155ab9f6a38d1f7f9d29e9a4a3b922ba844fe3e7392179718639454"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sr_10_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e0, e1, e3, e4, e5, e6, e8, e9)\nP1 = set(e2, e4, e5, e8, e9)\nP2 = set(e0, e1, e5, e6, e7, e8, e9)\ncfg = choose_replace(U, 15)\ncfg.count(e0) >= 0\ncfg.count(e0) <= 15",
-      "expected": null,
-      "tags": [
-        "sr",
-        "u=10",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sr_10_15_seed0.cfl",
-      "program_sha256": "a386504ddb0d02074c207e7816cd2464af52da767281dadf0a9fb9f203e9879a"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sr_15_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e1, e2, e3, e4, e5, e6, e9)\nP1 = set(e1, e5, e11, e13)\nP2 = set(e14)\ncfg = choose_replace(U, 5)\ncfg.count(e0) <= 3\ncfg.count(e1) <= 5",
-      "expected": null,
-      "tags": [
-        "sr",
-        "u=15",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sr_15_5_seed0.cfl",
-      "program_sha256": "36193d8acd8f1279b4d06a6792418847826f806d8c99d7185f8ade5fba4f7042"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sr_15_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e0, e1, e2, e3, e4, e7, e8, e9, e10, e12, e13)\nP1 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e12, e13, e14)\nP2 = set(e0, e2, e3, e5, e6, e9, e10, e11, e12)\ncfg = choose_replace(U, 10)\ncfg.count(e0) >= 9\ncfg.count(e0) <= 10",
-      "expected": null,
-      "tags": [
-        "sr",
-        "u=15",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sr_15_10_seed0.cfl",
-      "program_sha256": "9a959ad3af4ada04c164f1983fafa070b3eb0df8c2f28087e36f5b796ddff7c0"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sr_15_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e0, e1, e2, e3, e4, e6, e9, e13, e14)\nP1 = set(e0, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP2 = set(e1, e3, e4, e6, e7, e8, e9, e10, e11, e12, e13, e14)\ncfg = choose_replace(U, 15)\ncfg.count(e0) == 0\ncfg.count(e0) <= 15",
-      "expected": null,
-      "tags": [
-        "sr",
-        "u=15",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sr_15_15_seed0.cfl",
-      "program_sha256": "119e80d4a51d1d32d8501c9cf915c9e0e86e6bb6e1316160fb7625b9ad12c29a"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sr_20_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e0, e1, e3, e4, e5, e6, e7, e10, e11, e12, e15, e16, e17, e19)\nP1 = set(e0, e1, e2, e4, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e19)\nP2 = set(e4, e19)\ncfg = choose_replace(U, 5)\ncfg.count(e0) <= 2\ncfg.count(e0) <= 5",
-      "expected": null,
-      "tags": [
-        "sr",
-        "u=20",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sr_20_5_seed0.cfl",
-      "program_sha256": "8a2502edc8e0aaff8a4d72d8a81e58cf556a0f315ce6dbdce944cd8e8332775d"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sr_20_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP1 = set(e1, e15, e19)\nP2 = set(e0, e2, e6, e7, e8, e10, e12, e13, e16)\ncfg = choose_replace(U, 10)\ncfg.count(e0) <= 8\ncfg.count(e0) <= 10",
-      "expected": null,
-      "tags": [
-        "sr",
-        "u=20",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sr_20_10_seed0.cfl",
-      "program_sha256": "035d417fb73df48662b2f1f9217eba63e0c64af7589992c05d052d4f966dcc8c"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sr_20_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e0, e2, e3, e4, e5, e6, e7, e8, e10, e12, e13, e14, e15, e17)\nP1 = set(e0, e2, e3, e5, e11, e12, e15, e18, e19)\nP2 = set(e0, e2, e3, e4, e7, e11)\ncfg = choose_replace(U, 15)\ncfg.count(e0) == 6\ncfg.count(e0) <= 15",
-      "expected": null,
-      "tags": [
-        "sr",
-        "u=20",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sr_20_15_seed0.cfl",
-      "program_sha256": "4e58d2f95e5069014b621b2cf2dd6b1134b0e1402217c03f502c33bc52f26e83"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ms_10_5_seed0",
-      "program": "U = bag(e0, e1, e2: 3, e3: 3, e4, e5)\nP0 = set(e1, e3)\nP1 = set(e3)\nP2 = set(e1, e2, e5)\ncfg = choose(U)\n|cfg| == 5\ncfg.count(e0) == 0",
-      "expected": null,
-      "tags": [
-        "ms",
-        "u=10",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ms_10_5_seed0.cfl",
-      "program_sha256": "297c5d87f6b4d87e002e47043e8a3d81ce8712ee4ccd25780f9d888e90455cc2"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ms_10_10_seed0",
-      "program": "U = bag(e0: 3, e1: 3, e2: 4)\nP0 = set(e1, e2)\nP1 = set(e2)\nP2 = set(e0)\ncfg = choose(U)\n|cfg| == 10\ncfg.count(e0) <= 2",
-      "expected": null,
-      "tags": [
-        "ms",
-        "u=10",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ms_10_10_seed0.cfl",
-      "program_sha256": "1be7861d5d87b30d5f42a50fbc620148b7403c1e7430379b229cb1382b1ad51b"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ms_10_15_seed0",
-      "program": "U = bag(e0: 2, e1: 4, e2: 2, e3, e4)\nP0 = set(e0, e1, e4)\nP1 = set(e2, e4)\nP2 = set(e0, e1, e2, e4)\ncfg = choose(U)\n|cfg| == 15\ncfg.count(e0) >= 0",
-      "expected": null,
-      "tags": [
-        "ms",
-        "u=10",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ms_10_15_seed0.cfl",
-      "program_sha256": "ca62613a45dfa72df3a758108c4fb8e6df039ac7150267cf29cee5a2ccdb35c6"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ms_15_5_seed0",
-      "program": "U = bag(e0, e1: 2, e2: 4, e3: 3, e4: 4, e5)\nP0 = set(e0, e2, e3, e4, e5)\nP1 = set(e0, e1, e2, e5)\nP2 = set(e0, e1, e2, e3)\ncfg = choose(U)\n|cfg| == 5\ncfg.count(e0) == 1",
-      "expected": null,
-      "tags": [
-        "ms",
-        "u=15",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ms_15_5_seed0.cfl",
-      "program_sha256": "30fee37db0e5e4d4a5ed6ce966d46a341b0034837a76f99f9af22464531cd4cc"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ms_15_10_seed0",
-      "program": "U = bag(e0: 3, e1: 4, e2, e3: 2, e4, e5: 3, e6)\nP0 = set(e1, e3, e4, e5, e6)\nP1 = set(e3, e6)\nP2 = set(e1, e2, e3, e6)\ncfg = choose(U)\n|cfg| == 10\ncfg.count(e0) <= 1",
-      "expected": null,
-      "tags": [
-        "ms",
-        "u=15",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ms_15_10_seed0.cfl",
-      "program_sha256": "f92983027a60954b01d6c3ecd61654c2c855f7ed81393d1037eab4841aa48beb"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ms_15_15_seed0",
-      "program": "U = bag(e0: 3, e1: 4, e2, e3: 4, e4, e5: 2)\nP0 = set(e5)\nP1 = set(e0, e3, e4, e5)\nP2 = set(e0, e1, e2)\ncfg = choose(U)\n|cfg| == 15\ncfg.count(e0) >= 3",
-      "expected": null,
-      "tags": [
-        "ms",
-        "u=15",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ms_15_15_seed0.cfl",
-      "program_sha256": "d820a1f5f879e68185fa9c970485d8d6250c2b4f4dad8650d89e520c6271190c"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ms_20_5_seed0",
-      "program": "U = bag(e0, e1: 4, e2: 2, e3: 4, e4: 3, e5, e6, e7: 3, e8)\nP0 = set(e4)\nP1 = set(e0, e1, e2, e3, e4, e6, e8)\nP2 = set(e0, e1, e2, e7)\ncfg = choose(U)\n|cfg| == 5\ncfg.count(e0) >= 1",
-      "expected": null,
-      "tags": [
-        "ms",
-        "u=20",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ms_20_5_seed0.cfl",
-      "program_sha256": "93db922850fd86378d3f034d60c815c9691dd0ef376cc13e3988764ab102b581"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ms_20_10_seed0",
-      "program": "U = bag(e0, e1: 2, e2: 2, e3, e4: 4, e5: 3, e6: 3, e7: 2, e8, e9)\nP0 = set(e1, e2, e3, e4, e6, e8, e9)\nP1 = set(e1, e6, e9)\nP2 = set(e2, e4, e5, e6, e7, e8, e9)\ncfg = choose(U)\n|cfg| == 10\ncfg.count(e0) <= 1",
-      "expected": null,
-      "tags": [
-        "ms",
-        "u=20",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ms_20_10_seed0.cfl",
-      "program_sha256": "112c857343ec3cbba64586fe4abdaefd21f31417f95d734a06aeb2f88f52d0a9"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "ms_20_15_seed0",
-      "program": "U = bag(e0: 4, e1: 2, e2: 4, e3: 4, e4: 3, e5: 2, e6)\nP0 = set(e0, e1, e2, e3)\nP1 = set(e0, e1, e2, e3, e6)\nP2 = set(e6)\ncfg = choose(U)\n|cfg| == 15\ncfg.count(e0) <= 0",
-      "expected": null,
-      "tags": [
-        "ms",
-        "u=20",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/ms_20_15_seed0.cfl",
-      "program_sha256": "6cd3574caa784f9b0da9c565082792c83650b5c230f26b169368f2a42d325e5b"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pm_10_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e0, e9)\nP1 = set(e2, e3, e4, e6, e9)\nP2 = set(e1, e3, e5, e6, e9)\ncfg = choose_tuple(U, 5)\ncfg.count(P0) >= 1\ncfg[1] in P1",
-      "expected": null,
-      "tags": [
-        "pm",
-        "u=10",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pm_10_5_seed0.cfl",
-      "program_sha256": "6249c5ab3268a7e0ad1def34a3bc64c688589993219137ca4b42099f0dc0f286"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pm_10_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e1, e2, e4, e6, e7, e8, e9)\nP1 = set(e5, e6, e7)\nP2 = set(e1, e3, e5, e6, e7, e8, e9)\ncfg = choose_tuple(U, 10)\ncfg.count(P0) <= 0\ncfg[6] in P1",
-      "expected": null,
-      "tags": [
-        "pm",
-        "u=10",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pm_10_10_seed0.cfl",
-      "program_sha256": "e26fc93d52892866202ae5408788945559572a38fd34e0f4f3aa21b4ed804169"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pm_10_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e1, e3, e4)\nP1 = set(e0, e1, e2, e3, e4, e5, e6, e7, e9)\nP2 = set(e0, e2, e3, e4, e6, e7, e8, e9)\ncfg = choose_tuple(U, 10)\ncfg.count(P0) == 2\ncfg[0] in P1",
-      "expected": null,
-      "tags": [
-        "pm",
-        "u=10",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pm_10_15_seed0.cfl",
-      "program_sha256": "479c30fbeb6437f21f08ddede3b2d94c0551a37aec1b540927595aa7a3b0c50f"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pm_15_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e1, e3, e5, e6, e7, e8, e9, e13, e14)\nP1 = set(e0, e4, e5, e7, e8, e14)\nP2 = set(e0, e1, e3, e5, e6, e8, e10, e12, e13)\ncfg = choose_tuple(U, 5)\ncfg.count(P0) == 2\ncfg[2] in P1",
-      "expected": null,
-      "tags": [
-        "pm",
-        "u=15",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pm_15_5_seed0.cfl",
-      "program_sha256": "76ad3eb1e0cee176a3f36c66d59c314a36c015086fe15f443c366cbe44500383"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pm_15_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13)\nP1 = set(e1, e2, e3, e6, e7, e11, e12, e13)\nP2 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\ncfg = choose_tuple(U, 10)\ncfg.count(P0) >= 5\ncfg[6] in P1",
-      "expected": null,
-      "tags": [
-        "pm",
-        "u=15",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pm_15_10_seed0.cfl",
-      "program_sha256": "8b2218a76faa2df6a6bc02026656e769569162b7be8b2b39da6612a78f513b24"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pm_15_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e0, e1, e2, e3, e4, e5, e9, e10, e13)\nP1 = set(e0, e3, e4, e8, e10, e11, e14)\nP2 = set(e0, e1, e4, e5, e6, e8, e11, e13, e14)\ncfg = choose_tuple(U, 15)\ncfg.count(P0) <= 8\ncfg[10] in P1",
-      "expected": null,
-      "tags": [
-        "pm",
-        "u=15",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pm_15_15_seed0.cfl",
-      "program_sha256": "980d3841f12859c77f8059f47f7084ddbeff8a9eda6e71fc4df969736b31f201"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pm_20_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e0, e2, e4, e5, e9, e10, e15, e16, e18, e19)\nP1 = set(e2, e3, e4, e5, e7, e9, e10, e12, e13, e14, e16, e17, e19)\nP2 = set(e0, e3, e4, e9, e11, e12, e13, e15)\ncfg = choose_tuple(U, 5)\ncfg.count(P0) <= 4\ncfg[2] in P1",
-      "expected": null,
-      "tags": [
-        "pm",
-        "u=20",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pm_20_5_seed0.cfl",
-      "program_sha256": "83ee23d04813e0387fb198da5ceb51a1d3f141cae8a3ea849b6d1f56e35cef21"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pm_20_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e13, e15, e17, e19)\nP1 = set(e2, e4, e7, e8, e10, e11, e14, e19)\nP2 = set(e11)\ncfg = choose_tuple(U, 10)\ncfg.count(P0) <= 8\ncfg[0] in P1",
-      "expected": null,
-      "tags": [
-        "pm",
-        "u=20",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pm_20_10_seed0.cfl",
-      "program_sha256": "a5bfca1d6b646c779ff42ac9d3cb94a4828efd612ca4a9630b802d7a4792eced"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pm_20_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e1, e11, e13)\nP1 = set(e4, e6, e11, e13, e14)\nP2 = set(e0, e4, e5, e6, e8, e10, e12, e13, e16, e18)\ncfg = choose_tuple(U, 15)\ncfg.count(P0) <= 3\ncfg[12] in P1",
-      "expected": null,
-      "tags": [
-        "pm",
-        "u=20",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pm_20_15_seed0.cfl",
-      "program_sha256": "e13b8a502738219ce2e408decf48bc9f260d9e4eff941c4f4e44bc4bd7f04272"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "bm_10_5_seed0",
-      "program": "U = bag(e0: 2, e1: 2, e2, e3)\nP0 = set(e0, e2)\nP1 = set(e0, e1)\nP2 = set(e0, e1, e2)\ncfg = choose_tuple(U, 4)\ncfg.count(P0) == 0\ncfg[1] in P1",
-      "expected": null,
-      "tags": [
-        "bm",
-        "u=10",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/bm_10_5_seed0.cfl",
-      "program_sha256": "4215eb9f552f75c2b36841646ef15acb9fee56d79b4878bfebd680720dc7dab8"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "bm_10_10_seed0",
-      "program": "U = bag(e0: 2, e1: 2, e2, e3)\nP0 = set(e0, e1)\nP1 = set(e0, e2, e3)\nP2 = set(e0, e1, e2, e3)\ncfg = choose_tuple(U, 4)\ncfg.count(P0) >= 0\ncfg[2] in P1",
-      "expected": null,
-      "tags": [
-        "bm",
-        "u=10",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/bm_10_10_seed0.cfl",
-      "program_sha256": "cc1aa922637471f6203014059bbf462941bcbbf75dc8d62d3b25d5c120524034"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "bm_10_15_seed0",
-      "program": "U = bag(e0: 2, e1: 2, e2, e3)\nP0 = set(e0, e1, e2, e3)\nP1 = set(e0, e1, e2, e3)\nP2 = set(e0, e1, e2, e3)\ncfg = choose_tuple(U, 4)\ncfg.count(P0) >= 3\ncfg[0] in P1",
-      "expected": null,
-      "tags": [
-        "bm",
-        "u=10",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/bm_10_15_seed0.cfl",
-      "program_sha256": "4a6197e3c1cca10535b25151694d4039dc28f07b342e5d4ef336fef2a1f477f0"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "bm_15_5_seed0",
-      "program": "U = bag(e0: 2, e1: 2, e2, e3)\nP0 = set(e0, e1, e2, e3)\nP1 = set(e0, e2)\nP2 = set(e2, e3)\ncfg = choose_tuple(U, 4)\ncfg.count(P0) == 4\ncfg[0] in P1",
-      "expected": null,
-      "tags": [
-        "bm",
-        "u=15",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/bm_15_5_seed0.cfl",
-      "program_sha256": "fb3987722a9bb2cb77b0d9a9315e27ac63cfccdb738ddd1a9d810b6f2cdd905a"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "bm_15_10_seed0",
-      "program": "U = bag(e0: 2, e1: 2, e2, e3)\nP0 = set(e0, e1, e2, e3)\nP1 = set(e1)\nP2 = set(e3)\ncfg = choose_tuple(U, 4)\ncfg.count(P0) == 2\ncfg[0] in P1",
-      "expected": null,
-      "tags": [
-        "bm",
-        "u=15",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/bm_15_10_seed0.cfl",
-      "program_sha256": "bd961eaa6e575fd524bedadcdcc2a136eca2f3a31d8b62a64398c04fc8267ccc"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "bm_15_15_seed0",
-      "program": "U = bag(e0: 2, e1: 2, e2, e3)\nP0 = set(e0, e1)\nP1 = set(e0, e2)\nP2 = set(e0, e1, e2, e3)\ncfg = choose_tuple(U, 4)\ncfg.count(P0) == 1\ncfg[2] in P1",
-      "expected": null,
-      "tags": [
-        "bm",
-        "u=15",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/bm_15_15_seed0.cfl",
-      "program_sha256": "20f06350bf4f656a16b6cd7f844140251869479c664ba43e48e5c0e2d9dd569b"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "bm_20_5_seed0",
-      "program": "U = bag(e0: 2, e1: 2, e2, e3)\nP0 = set(e0, e1, e3)\nP1 = set(e0, e1)\nP2 = set(e1, e2)\ncfg = choose_tuple(U, 4)\ncfg.count(P0) >= 3\ncfg[0] in P1",
-      "expected": null,
-      "tags": [
-        "bm",
-        "u=20",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/bm_20_5_seed0.cfl",
-      "program_sha256": "bea5748c956f5fa0acc9afb3a05206760db8090874e1d8e1153365e2be44a572"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "bm_20_10_seed0",
-      "program": "U = bag(e0: 2, e1: 2, e2, e3)\nP0 = set(e1)\nP1 = set(e0, e3)\nP2 = set(e0, e1, e2, e3)\ncfg = choose_tuple(U, 4)\ncfg.count(P0) >= 1\ncfg[0] in P1",
-      "expected": null,
-      "tags": [
-        "bm",
-        "u=20",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/bm_20_10_seed0.cfl",
-      "program_sha256": "1cfc498c0223f08240e004a56a1372d73e83809e4a95b91d3c8118f73feae212"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "bm_20_15_seed0",
-      "program": "U = bag(e0: 2, e1: 2, e2, e3)\nP0 = set(e0, e1, e2, e3)\nP1 = set(e1, e2, e3)\nP2 = set(e0, e1, e2)\ncfg = choose_tuple(U, 4)\ncfg.count(P0) <= 1\ncfg[0] in P1",
-      "expected": null,
-      "tags": [
-        "bm",
-        "u=20",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/bm_20_15_seed0.cfl",
-      "program_sha256": "1a05ed6fd2428f255866dc5ef073eca34c61b26d6d8485b5726b8d1cdab89afc"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sq_10_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e7, e8)\nP1 = set(e5)\nP2 = set(e5)\ncfg = choose_replace_tuple(U, 5)\ncfg.count(P0) >= 1\ncfg[2] in P1",
-      "expected": null,
-      "tags": [
-        "sq",
-        "u=10",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sq_10_5_seed0.cfl",
-      "program_sha256": "dae30a49fb2707e160dd5170e3d10c9c18a393e0c71c45c8ef572f29bc633674"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sq_10_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e0, e1, e2, e6, e8)\nP1 = set(e0, e1, e3, e4, e5, e6, e8, e9)\nP2 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\ncfg = choose_replace_tuple(U, 10)\ncfg.count(P0) <= 7\ncfg[2] in P1",
-      "expected": null,
-      "tags": [
-        "sq",
-        "u=10",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sq_10_10_seed0.cfl",
-      "program_sha256": "7aa918c7e0045ba905686a585481bafe2c61030d87afa1082a14feacdf5f6935"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sq_10_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP1 = set(e0, e1, e2, e3, e5, e7, e8, e9)\nP2 = set(e5, e8)\ncfg = choose_replace_tuple(U, 15)\ncfg.count(P0) == 2\ncfg[1] in P1",
-      "expected": null,
-      "tags": [
-        "sq",
-        "u=10",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sq_10_15_seed0.cfl",
-      "program_sha256": "09e3c8e5a22341fda82675a387ccddef3ea22c61154b808a6855da3bc46b583a"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sq_15_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e0, e1, e2, e5, e9, e10, e12, e13, e14)\nP1 = set(e0, e5, e9)\nP2 = set(e0, e6, e10, e14)\ncfg = choose_replace_tuple(U, 5)\ncfg.count(P0) <= 2\ncfg[3] in P1",
-      "expected": null,
-      "tags": [
-        "sq",
-        "u=15",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sq_15_5_seed0.cfl",
-      "program_sha256": "b2f523a27660d022bde89607f95231ccd53e71da7908aa6087c110e41679783e"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sq_15_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e0, e1, e4, e6, e7, e9, e10, e11, e12, e14)\nP1 = set(e1, e3, e4, e5, e6, e8, e10, e12)\nP2 = set(e5)\ncfg = choose_replace_tuple(U, 10)\ncfg.count(P0) == 2\ncfg[6] in P1",
-      "expected": null,
-      "tags": [
-        "sq",
-        "u=15",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sq_15_10_seed0.cfl",
-      "program_sha256": "a82b12639865880386ce686e5882a81c23a7472780abec79d6ce4445461d484f"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sq_15_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e0, e1, e2, e3, e4, e5, e6, e8, e9, e10, e11, e12, e13, e14)\nP1 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP2 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\ncfg = choose_replace_tuple(U, 15)\ncfg.count(P0) == 5\ncfg[14] in P1",
-      "expected": null,
-      "tags": [
-        "sq",
-        "u=15",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sq_15_15_seed0.cfl",
-      "program_sha256": "8100d226d586db475cdda99f23ee33a3bc922c4bb6bb0fa2d1ec7e93bd18de48"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sq_20_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e5)\nP1 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e12, e13, e14, e15, e16, e17, e18, e19)\nP2 = set(e13)\ncfg = choose_replace_tuple(U, 5)\ncfg.count(P0) >= 4\ncfg[2] in P1",
-      "expected": null,
-      "tags": [
-        "sq",
-        "u=20",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sq_20_5_seed0.cfl",
-      "program_sha256": "adedb55c279e8a777e852223394c9adbb94bfaee1646a2fdedcb1625604482ec"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sq_20_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP1 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP2 = set(e5, e14, e17, e19)\ncfg = choose_replace_tuple(U, 10)\ncfg.count(P0) >= 7\ncfg[6] in P1",
-      "expected": null,
-      "tags": [
-        "sq",
-        "u=20",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sq_20_10_seed0.cfl",
-      "program_sha256": "a296a25de2428d1e56b7e48b91a76f50a67e3caba4e246961874c1bc88757696"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "sq_20_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e0, e5, e8, e9, e10, e12, e17)\nP1 = set(e1, e2, e3, e5, e6, e8, e11, e13, e17, e18)\nP2 = set(e0, e3, e5, e11, e13)\ncfg = choose_replace_tuple(U, 15)\ncfg.count(P0) <= 12\ncfg[7] in P1",
-      "expected": null,
-      "tags": [
-        "sq",
-        "u=20",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/sq_20_15_seed0.cfl",
-      "program_sha256": "698adb105461505c3c4e26e6170e6f72171f2c5ba442829187382a295cb36c4e"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pt_10_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e0, e2, e3, e4)\nP1 = set(e4, e5, e7)\nP2 = set(e1, e2, e4, e6, e7, e9)\ncfg = partition(U, 5)",
-      "expected": null,
-      "tags": [
-        "pt",
-        "u=10",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pt_10_5_seed0.cfl",
-      "program_sha256": "ab4f43609c83c868a297168f2b2cef8dd2e5dcc97b07dfdf2e96762d1523cd59"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pt_10_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e2, e3, e4, e5, e6, e7, e8)\nP1 = set(e2, e9)\nP2 = set(e9)\ncfg = partition(U, 5)",
-      "expected": null,
-      "tags": [
-        "pt",
-        "u=10",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pt_10_10_seed0.cfl",
-      "program_sha256": "86e2e063b4db1543af74252bf4c355bcab3e28fd7132252e0960196ac7d93320"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pt_10_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP1 = set(e5, e7)\nP2 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\ncfg = partition(U, 5)",
-      "expected": null,
-      "tags": [
-        "pt",
-        "u=10",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pt_10_15_seed0.cfl",
-      "program_sha256": "f1a0fc23ad74a9fb73ebaabdf4058fa50a5cb22d89210bea41aa72cd9b7f0680"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pt_15_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e0, e2, e3, e4, e6, e7, e9, e10, e12, e13, e14)\nP1 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP2 = set(e2, e3, e4, e5, e8, e9, e13, e14)\ncfg = partition(U, 5)",
-      "expected": null,
-      "tags": [
-        "pt",
-        "u=15",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pt_15_5_seed0.cfl",
-      "program_sha256": "509275685622132cf833d24983a44cfcb4c860dbb81b6dd746811273b6cbcc3a"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pt_15_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e1, e2, e3, e4, e7)\nP1 = set(e0, e1, e2, e10, e12, e14)\nP2 = set(e0, e1, e3, e4, e6, e7, e8, e12, e13, e14)\ncfg = partition(U, 5)",
-      "expected": null,
-      "tags": [
-        "pt",
-        "u=15",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pt_15_10_seed0.cfl",
-      "program_sha256": "4cd6f40f7f934c7fb538f60a04260b8487b8236b0ab7b2227557d1ba7e262003"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pt_15_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e0, e3, e5, e7, e8)\nP1 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP2 = set(e1, e2, e6, e9, e14)\ncfg = partition(U, 5)",
-      "expected": null,
-      "tags": [
-        "pt",
-        "u=15",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pt_15_15_seed0.cfl",
-      "program_sha256": "a364b52ec996b293df679e9b010058a741d8fd0040416e492b061ded8308f33c"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pt_20_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e2, e3, e5, e7, e9, e11, e12, e13, e14, e15, e17, e18, e19)\nP1 = set(e12, e14, e16, e19)\nP2 = set(e0, e1, e2, e3, e5, e7, e8, e9, e10, e12, e13, e14, e16, e18, e19)\ncfg = partition(U, 5)",
-      "expected": null,
-      "tags": [
-        "pt",
-        "u=20",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pt_20_5_seed0.cfl",
-      "program_sha256": "c1e2257ff3bc57c1a80ee413e4ee2168cfbd78e14d5e2e7eb440eaef32773f82"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pt_20_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e0, e5, e7, e11)\nP1 = set(e0, e12)\nP2 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e16, e17, e18, e19)\ncfg = partition(U, 5)",
-      "expected": null,
-      "tags": [
-        "pt",
-        "u=20",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pt_20_10_seed0.cfl",
-      "program_sha256": "db1b21c166b64f3ebab2a780f9382bb08810239867d3f9c7af53fa5cd8970d02"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "pt_20_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e0, e1, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP1 = set(e0, e1, e2, e3, e4, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP2 = set(e2, e3, e5, e7, e10, e12, e14, e15, e16)\ncfg = partition(U, 5)",
-      "expected": null,
-      "tags": [
-        "pt",
-        "u=20",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/pt_20_15_seed0.cfl",
-      "program_sha256": "033cef283cd7d72eb8c041f02963edd9b27cef7464e940246077c3923efc8e22"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "cp_10_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e0, e1, e2, e3, e5, e6, e7, e9)\nP1 = set(e0, e1, e3, e4, e5, e6, e7, e9)\nP2 = set(e0, e1, e2, e8, e9)\ncfg = compose(U, 5)\n|cfg[0]| == 3\n|cfg[1]| == 1\n|cfg[2]| == 2\n|cfg[3]| == 1\n|cfg[4]| == 3",
-      "expected": null,
-      "tags": [
-        "cp",
-        "u=10",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/cp_10_5_seed0.cfl",
-      "program_sha256": "48ceed81e6107e0a7253a6ede8042ba1239dc3f13628b59b861e8157d5c1f788"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "cp_10_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e0, e1, e2, e3, e4, e5, e6, e8)\nP1 = set(e1, e2, e4, e5, e6, e8)\nP2 = set(e0, e1, e2, e3, e4, e7, e8, e9)\ncfg = compose(U, 5)\n|cfg[0]| == 1\n|cfg[1]| == 3\n|cfg[2]| == 3\n|cfg[3]| == 1\n|cfg[4]| == 2",
-      "expected": null,
-      "tags": [
-        "cp",
-        "u=10",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/cp_10_10_seed0.cfl",
-      "program_sha256": "64075fc5d425657294b797d1a28553644ffdf57b2b220dd174d822cf9466d6ce"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "cp_10_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP0 = set(e1, e2, e3, e4, e5, e6, e7, e8, e9)\nP1 = set(e0, e1, e3, e4, e5, e6, e7, e9)\nP2 = set(e2, e6)\ncfg = compose(U, 5)\n|cfg[0]| == 3\n|cfg[1]| == 1\n|cfg[2]| == 2\n|cfg[3]| == 3\n|cfg[4]| == 1",
-      "expected": null,
-      "tags": [
-        "cp",
-        "u=10",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/cp_10_15_seed0.cfl",
-      "program_sha256": "768df98296a83d0f4feccc9bab9bac264a87194b57c6ce22e73fafd2618c86c5"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "cp_15_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e0, e2, e3, e4, e7, e8, e10, e13, e14)\nP1 = set(e0, e1, e3, e4, e6, e7, e8, e9, e13)\nP2 = set(e0, e1, e2, e3, e4, e5, e8, e9, e10, e11, e12, e13, e14)\ncfg = compose(U, 5)\n|cfg[0]| == 4\n|cfg[1]| == 1\n|cfg[2]| == 2\n|cfg[3]| == 5\n|cfg[4]| == 3",
-      "expected": null,
-      "tags": [
-        "cp",
-        "u=15",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/cp_15_5_seed0.cfl",
-      "program_sha256": "0d9097f8afde2595ec818cb21e2b4de0c68bef4c495904d10b25963440163506"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "cp_15_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e7, e8)\nP1 = set(e0, e1, e2, e5, e6, e11, e13)\nP2 = set(e0, e1, e2, e3, e4, e6, e8, e9, e10, e11, e12, e13, e14)\ncfg = compose(U, 5)\n|cfg[0]| == 4\n|cfg[1]| == 6\n|cfg[2]| == 1\n|cfg[3]| == 2\n|cfg[4]| == 2",
-      "expected": null,
-      "tags": [
-        "cp",
-        "u=15",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/cp_15_10_seed0.cfl",
-      "program_sha256": "aee7ccaa984b129b4ca2341347ae81a2514406be90da4a45f117d11c24f8f89e"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "cp_15_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\nP0 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e11, e12, e13, e14)\nP1 = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13)\nP2 = set(e2, e3, e5, e7, e9, e11, e12)\ncfg = compose(U, 5)\n|cfg[0]| == 4\n|cfg[1]| == 2\n|cfg[2]| == 3\n|cfg[3]| == 3\n|cfg[4]| == 3",
-      "expected": null,
-      "tags": [
-        "cp",
-        "u=15",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/cp_15_15_seed0.cfl",
-      "program_sha256": "2aee38f086a1feba961e260292b3440a2b7bd36f6b1b72751123186ab7ed1327"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "cp_20_5_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e0, e1, e2, e3, e4, e8, e9, e10, e11, e15, e18)\nP1 = set(e1, e2, e4, e5, e7, e9, e13, e14, e16, e17, e18, e19)\nP2 = set(e0, e1, e4, e9, e10, e13, e16, e19)\ncfg = compose(U, 5)\n|cfg[0]| == 2\n|cfg[1]| == 8\n|cfg[2]| == 1\n|cfg[3]| == 8\n|cfg[4]| == 1",
-      "expected": null,
-      "tags": [
-        "cp",
-        "u=20",
-        "s=5",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/cp_20_5_seed0.cfl",
-      "program_sha256": "dc5a86c0077ac15dcbdc533e70434c48b4317cd3703defdf51fb58014c0d5969"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "cp_20_10_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e2, e3, e5, e6, e8, e10, e14, e15, e17)\nP1 = set(e7, e15)\nP2 = set(e0, e2, e3, e5, e6, e7, e8, e9, e13, e14, e17, e18, e19)\ncfg = compose(U, 5)\n|cfg[0]| == 8\n|cfg[1]| == 2\n|cfg[2]| == 6\n|cfg[3]| == 1\n|cfg[4]| == 3",
-      "expected": null,
-      "tags": [
-        "cp",
-        "u=20",
-        "s=10",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/cp_20_10_seed0.cfl",
-      "program_sha256": "2eb4cbc56a3213b8cefb3e9a92016306ce2a952a5ad379f3579f83ec80d66aa4"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "cp_20_15_seed0",
-      "program": "U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19)\nP0 = set(e2, e4, e7, e8, e9, e18, e19)\nP1 = set(e0, e2, e3, e5, e7, e11, e13, e14, e17)\nP2 = set(e0, e1, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e18, e19)\ncfg = compose(U, 5)\n|cfg[0]| == 4\n|cfg[1]| == 12\n|cfg[2]| == 1\n|cfg[3]| == 1\n|cfg[4]| == 2",
-      "expected": null,
-      "tags": [
-        "cp",
-        "u=20",
-        "s=15",
-        "synthetic"
-      ],
-      "source": "Sec. 6.2.2 synthetic generator",
-      "program_path": "synthetic/cp_20_15_seed0.cfl",
-      "program_sha256": "6a3122468084a003df3c428b4dad6ddbe47b0894f33429bc380740c5b976ab1c"
+      "program_path": "growing/banana_055.cfl",
+      "program_sha256": "e5cd6aaa0f205e4ee6ec3aa282b243c3353974a941c2fa57d0a9ed93788f8a7b"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_060",
+      "program": "letters = bag(B: 10, A: 30, N: 20)\nword = choose_tuple(letters, 60)",
+      "expected": 3553261127084984957001360,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=60"
+      ],
+      "source": "BANANA bag tuple",
+      "program_path": "growing/banana_060.cfl",
+      "program_sha256": "aaa23f4392b736b3c84721b0fa0477b6528b2c44dbd910d7dd53f28a0140cc11"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_065",
+      "program": "letters = bag(B: 10, A: 32, N: 23)\nword = choose_tuple(letters, 65)",
+      "expected": 334118902029058466905384800,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=65"
+      ],
+      "source": "BANANA bag tuple",
+      "program_path": "growing/banana_065.cfl",
+      "program_sha256": "9d7a87c01a5ab356f7c164c51d68f00c6caaf62e745bd3de19e502698bb24ff8"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_070",
+      "program": "letters = bag(B: 11, A: 35, N: 24)\nword = choose_tuple(letters, 70)",
+      "expected": 46807020729707190681927088800,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=70"
+      ],
+      "source": "BANANA bag tuple",
+      "program_path": "growing/banana_070.cfl",
+      "program_sha256": "2d8d4a6d644ad44d614c84f8d983eef6710679f3bb1a3917a522a649b3cafb2c"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_075",
+      "program": "letters = bag(B: 12, A: 37, N: 26)\nword = choose_tuple(letters, 75)",
+      "expected": 9330799555464321896324157740400,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=75"
+      ],
+      "source": "BANANA bag tuple",
+      "program_path": "growing/banana_075.cfl",
+      "program_sha256": "2d267798380fdca3cce04f22bd54d0d31c953ddccd225b4d6c35d0c05a0e4278"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_080",
+      "program": "letters = bag(B: 13, A: 40, N: 27)\nword = choose_tuple(letters, 80)",
+      "expected": 1293658203894916697329683225865600,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=80"
+      ],
+      "source": "BANANA bag tuple",
+      "program_path": "growing/banana_080.cfl",
+      "program_sha256": "4e1a3d51964586db7b977bf49332563e1ee631cfa17ff6b37641d41ff370d7fc"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_085",
+      "program": "letters = bag(B: 14, A: 42, N: 29)\nword = choose_tuple(letters, 85)",
+      "expected": 260122255069236319941074640336744000,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=85"
+      ],
+      "source": "BANANA bag tuple",
+      "program_path": "growing/banana_085.cfl",
+      "program_sha256": "40368e1e1206d747620eb68d1fba051a9ed4d2d0031eb45edefc21a0bfef5081"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_090",
+      "program": "letters = bag(B: 15, A: 45, N: 30)\nword = choose_tuple(letters, 90)",
+      "expected": 35806695484463943560955394491153934080,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=90"
+      ],
+      "source": "BANANA bag tuple",
+      "program_path": "growing/banana_090.cfl",
+      "program_sha256": "ddc83890538ad796669d59038c0482e8842ae3a298e450ad2c85ed57adbdef84"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_095",
+      "program": "letters = bag(B: 15, A: 47, N: 33)\nword = choose_tuple(letters, 95)",
+      "expected": 3517600937081713546414311197454838183200,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=95"
+      ],
+      "source": "BANANA bag tuple",
+      "program_path": "growing/banana_095.cfl",
+      "program_sha256": "699544ac32f4655661c76d2a653b0bcb92298376fd0915d77e8184e33ad97c85"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_100",
+      "program": "letters = bag(B: 16, A: 50, N: 34)\nword = choose_tuple(letters, 100)",
+      "expected": 496757673511701399797303388664100162842200,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=100"
+      ],
+      "source": "BANANA bag tuple",
+      "program_path": "growing/banana_100.cfl",
+      "program_sha256": "9e834778f8ea9244f615efa20a5a9ab18e6e9b6a63f0d84b54b570ff868099a4"
     }
   ]
 }

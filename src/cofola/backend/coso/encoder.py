@@ -181,7 +181,11 @@ def _config_spec(ref: ObjRef, problem: Problem, analysis: AnalysisResult) -> _Co
     if isinstance(defn, SetChooseReplace):
         return _ConfigSpec(ref, "multisubset", defn.source, _exact_size(ref, analysis, defn.size))
     if isinstance(defn, BagChoose):
-        return _ConfigSpec(ref, "multisubset", defn.source, _exact_size(ref, analysis, defn.size))
+        # CoSo represents bounded bag selection as an ordinary subset over a
+        # universe that may contain repeated indistinguishable labels. Its
+        # ``{repeated u}`` multisubset form is unbounded choose-with-replacement
+        # and is not the semantics of Cofola's choose(Bag, k).
+        return _ConfigSpec(ref, "subset", defn.source, _exact_size(ref, analysis, defn.size))
     if isinstance(defn, TupleDef):
         kind = "sequence" if defn.replace else "permutation"
         return _ConfigSpec(ref, kind, defn.source, _exact_size(ref, analysis, defn.size))
@@ -227,7 +231,7 @@ def _constraint_lines(
     state: _EncodingState,
     spec: _ConfigSpec,
 ) -> tuple[list[str], int]:
-    part_sizes, skip = _indexed_part_size_constraints(constraints, state)
+    part_sizes, grouped_part_lines, skip = _indexed_part_size_constraints(constraints, state)
     count_divisor = 1
     lines: list[str] = []
 
@@ -236,6 +240,7 @@ def _constraint_lines(
             lines.append(f"#( #part={size} )={count};")
         if spec.kind == "composition" and sum(part_sizes.values()) == spec.size:
             count_divisor = _part_size_permutation_count(part_sizes)
+    lines.extend(grouped_part_lines)
 
     for idx, c in enumerate(constraints):
         if idx in skip:
@@ -250,8 +255,9 @@ def _constraint_lines(
 def _indexed_part_size_constraints(
     constraints: Sequence[Constraint],
     state: _EncodingState,
-) -> tuple[dict[int, int], set[int]]:
+) -> tuple[dict[int, int], list[str], set[int]]:
     sizes: dict[int, int] = {}
+    grouped: dict[tuple[str, int], int] = {}
     skip: set[int] = set()
     for idx, c in enumerate(constraints):
         if not isinstance(c, SizeConstraint):
@@ -263,12 +269,16 @@ def _indexed_part_size_constraints(
         if not isinstance(part_defn, (SetPartDef, BagPartDef)) or part_defn.partition != state.target:
             continue
         if c.comparator != "==":
-            raise CoSoEncodingError(
-                "CoSo backend supports indexed part size constraints only when they are exact."
-            )
+            grouped[(c.comparator, c.rhs)] = grouped.get((c.comparator, c.rhs), 0) + 1
+            skip.add(idx)
+            continue
         sizes[c.rhs] = sizes.get(c.rhs, 0) + 1
         skip.add(idx)
-    return sizes, skip
+    grouped_lines = [
+        f"#( #part{_comparator(comparator)}{rhs} )={count};"
+        for (comparator, rhs), count in sorted(grouped.items())
+    ]
+    return sizes, grouped_lines, skip
 
 
 def _part_size_permutation_count(part_sizes: dict[int, int]) -> int:
@@ -338,10 +348,16 @@ def _counted_ref_expr(ref: ObjRef, state: _EncodingState) -> str:
         other = _binary_ref_other_side(defn.left, defn.right, state.target)
         if other is not None:
             return f"cfg&{_property(other, state)}"
+        part_other = _binary_ref_part_other_side(defn.left, defn.right, state)
+        if part_other is not None:
+            return f"part&{_property(part_other, state)}"
     if isinstance(defn, BagIntersection):
         other = _binary_ref_other_side(defn.left, defn.right, state.target)
         if other is not None:
             return f"cfg&{_property(other, state)}"
+        part_other = _binary_ref_part_other_side(defn.left, defn.right, state)
+        if part_other is not None:
+            return f"part&{_property(part_other, state)}"
     if isinstance(defn, SetDifference) and defn.left == state.target:
         return f"cfg&{_complement_property(defn.right, state)}"
     if isinstance(defn, BagDifference) and defn.left == state.target:
@@ -358,6 +374,20 @@ def _binary_ref_other_side(left: ObjRef, right: ObjRef, target: ObjRef) -> ObjRe
     if left == target and right != target:
         return right
     if right == target and left != target:
+        return left
+    return None
+
+
+def _binary_ref_part_other_side(
+    left: ObjRef,
+    right: ObjRef,
+    state: _EncodingState,
+) -> ObjRef | None:
+    left_defn = state.problem.get_object(left)
+    if isinstance(left_defn, (SetPartDef, BagPartDef)) and left_defn.partition == state.target:
+        return right
+    right_defn = state.problem.get_object(right)
+    if isinstance(right_defn, (SetPartDef, BagPartDef)) and right_defn.partition == state.target:
         return left
     return None
 

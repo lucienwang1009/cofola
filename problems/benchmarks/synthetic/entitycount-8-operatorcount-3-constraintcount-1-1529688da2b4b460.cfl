@@ -1,0 +1,5 @@
+bag_0 = bag(e_3: 1, e_4: 2, e_5: 1, e_8: 4)
+choose_0 = choose(bag_0, 3)
+choose_1 = choose(choose_0, 2)
+bag_inter_0 = choose_0 & choose_1
+choose_1.count(e_3) > 1

@@ -1,0 +1,6 @@
+set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)
+choose_0 = choose(set_0, 8)
+compose_0 = compose(choose_0, 4)
+choose_tuple_0 = choose_replace_tuple(compose_0[2], 6)
+compose_1 = compose(compose_0[2], 4)
+compose_1[2] subset compose_1[0]

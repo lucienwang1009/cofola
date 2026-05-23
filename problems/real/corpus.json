@@ -139,7 +139,7 @@
       "unencodeable",
       "second order logic"
     ],
-    "program": "set circle_decks = {circle0:9}\nset square_decks = {square0:9}\nset triangle_decks = {triangle0:9}\nset red_decks = {circle0:3} + {square0:3} + {triangle0:3}\nset blue_decks = {circle3:6} + {square3:6} + {triangle3:6}\nset green_decks = {circle6:9} + {square6:9} + {triangle6:9}\nset light_decks = {circle0, square0, triangle0} + {circle3, square3, triangle3} + {circle6, square6, triangle6}\nset medium_decks = {circle1, square1, triangle1} + {circle4, square4, triangle4} + {circle7, square7, triangle7}\nset dark_decks = {circle2, square2, triangle2} + {circle5, square5, triangle5} + {circle8, square8, triangle8}\nset all_decks = circle_decks + square_decks + triangle_decks\nset chosen_decks = choose(all_decks, 3)\n|chosen_decks & circle_decks| = 1\n|chosen_decks & square_decks| = 1\n|chosen_decks & triangle_decks| = 1\n|chosen_decks & red_decks| = 1\n|chosen_decks & blue_decks| = 1\n|chosen_decks & green_decks| = 1\n|chosen_decks & light_decks| = 1\n|chosen_decks & medium_decks| = 1\n|chosen_decks & dark_decks| = 1"
+    "program": "circle_decks = set(circle0...9)\nsquare_decks = set(square0...9)\ntriangle_decks = set(triangle0...9)\nred_decks = set(circle0...3) + set(square0...3) + set(triangle0...3)\nblue_decks = set(circle3...6) + set(square3...6) + set(triangle3...6)\ngreen_decks = set(circle6...9) + set(square6...9) + set(triangle6...9)\nlight_decks = set(circle0, square0, triangle0) + set(circle3, square3, triangle3) + set(circle6, square6, triangle6)\nmedium_decks = set(circle1, square1, triangle1) + set(circle4, square4, triangle4) + set(circle7, square7, triangle7)\ndark_decks = set(circle2, square2, triangle2) + set(circle5, square5, triangle5) + set(circle8, square8, triangle8)\nall_decks = circle_decks + square_decks + triangle_decks\nchosen_decks = choose(all_decks, 3)\n|chosen_decks & circle_decks| == 1\n|chosen_decks & square_decks| == 1\n|chosen_decks & triangle_decks| == 1\n|chosen_decks & red_decks| == 1\n|chosen_decks & blue_decks| == 1\n|chosen_decks & green_decks| == 1\n|chosen_decks & light_decks| == 1\n|chosen_decks & medium_decks| == 1\n|chosen_decks & dark_decks| == 1"
   },
   "10": {
     "problem": "At the Gooddog Obedience School, dogs can learn to do three tricks: sit, stay, and roll over. Of the dogs at the school: \\begin{tabular}{l@{\\qquad}l}\n50 dogs can sit & 17 dogs can sit and stay \\\\\n29 dogs can stay & 12 dogs can stay and roll over \\\\\n34 dogs can roll over & 18 dogs can sit and roll over \\\\\n9 dogs can do all three & 9 dogs can do none\n\\end{tabular} How many dogs are in the school?",
@@ -2639,7 +2639,7 @@
       "tuple",
       "unencodeable"
     ],
-    "program": "people = set(0...8)\nsides = compose(people, 4)\n|sides[0]| = 2\n|sides[1]| = 2\n|sides[2]| = 2\n|sides[3]| = 2\nside1_seat = tuple(sides[0])\nside2_seat = tuple(sides[1])\nside3_seat = tuple(sides[2])\nside4_seat = tuple(sides[3])"
+    "program": "people = set(0...8)\nsides = compose(people, 4)\n|sides[0]| == 2\n|sides[1]| == 2\n|sides[2]| == 2\n|sides[3]| == 2\nside1_seat = tuple(sides[0])\nside2_seat = tuple(sides[1])\nside3_seat = tuple(sides[2])\nside4_seat = tuple(sides[3])"
   },
   "198": {
     "problem": "Julie baked cupcakes for her family at home and for a party at school. She iced 4 cupcakes with red frosting, 2 cupcakes with orange frosting, 2 with yellow, 2 with green, 3 with blue and the last 3 with violet frosting. Each cupcake is iced with exactly one color of frosting. Julie plans to take exactly 10 of the cupcakes to her party, and will take either all of the cupcakes of a particular color or none of the cupcakes of that color. How many different combinations of cupcakes could she take to her party?",
@@ -3058,7 +3058,7 @@
       "unencodeable",
       "pred_of_pred"
     ],
-    "program": "state = set(mail, no_mail)\nhouse_mails = choose_replace(state, 19)\nrow = sequence(house_mails)\n(1, 1) not in row\n(0, 0, 0) not in row"
+    "program": "state = set(mail, no_mail)\nhouse_mails = choose_replace(state, 19)\nrow = sequence(house_mails)\n(mail, mail) not in row\n# Cofola cannot encode the original length-3 pattern constraint: (no_mail, no_mail, no_mail) not in row"
   },
   "229": {
     "problem": "How many ordered pairs $(x, y)$ satisfy BOTH conditions below?\n\n$\\bullet$  Condition I: $x = 1$ or $y = 0$ or $y = 2$\n\n$\\bullet$  Condition II: $x = 0$ or $x = 2$ or $y = 1$",
@@ -4243,7 +4243,7 @@
       "arithmetics"
     ],
     "answer": "195",
-    "program": "digits = set(0...10)\nnumber = choose_replace_tuple(digits, 3)\nnumber[0] in set(0...7)\nnumber.count(0) != 3\n(number[0] != 6) or number.count(0) = 2\n5 in number"
+    "program": "digits = set(0...10)\nnumber = choose_replace_tuple(digits, 3)\nnumber[0] in set(0...7)\nnumber.count(0) != 3\n(number[0] != 6) or number.count(0) == 2\n5 in number"
   },
   "318": {
     "problem": "The product of the digits of 3214 is 24. How many distinct four-digit positive integers are such that the product of their digits equals 12?",

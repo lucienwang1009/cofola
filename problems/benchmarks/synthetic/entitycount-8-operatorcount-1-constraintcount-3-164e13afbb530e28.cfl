@@ -1,0 +1,5 @@
+set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)
+choose_replace_0 = choose_replace(set_0, 12)
+supp(choose_replace_0) disjoint set_0
+e_3 in choose_replace_0
+choose_replace_0.count(e_8) < 2

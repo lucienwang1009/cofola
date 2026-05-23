@@ -1,0 +1,2 @@
+bag_0 = bag(e_2: 2, e_4: 1, e_5: 2, e_6: 1)
+circle_0 = circle(bag_0)

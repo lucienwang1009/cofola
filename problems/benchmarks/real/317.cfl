@@ -1,6 +1,0 @@
-digits = set(0...10)
-number = choose_replace_tuple(digits, 3)
-number[0] in set(0...7)
-number.count(0) != 3
-(number[0] != 6) or number.count(0) = 2
-5 in number

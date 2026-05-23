@@ -1,0 +1,3 @@
+bag_0 = bag(e_1: 1, e_10: 2, e_2: 1, e_3: 1, e_5: 1, e_6: 2, e_8: 1, e_9: 1)
+partition_0 = partition(bag_0, 3)
+|part| < 1 for part in partition_0

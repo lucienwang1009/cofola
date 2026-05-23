@@ -1,0 +1,4 @@
+set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)
+choose_tuple_0 = choose_replace_tuple(set_0, 6)
+partition_0 = partition(set_0, 6)
+|part| == 2 for part in partition_0
