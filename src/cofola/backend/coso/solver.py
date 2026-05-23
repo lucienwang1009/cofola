@@ -55,6 +55,10 @@ def _install_coso_compat_patches() -> None:
     count_module = import_module("coso.count")
     logger_module = import_module("coso.logger")
     sharp_csp_module = import_module("coso.sharpCSP")
+    solver_module = import_module("coso.solver")
+    level_2_module = import_module("coso.level_2")
+    configuration_module = import_module("coso.configuration")
+    portion_module = import_module("portion")
 
     solution_cls = count_module.Solution
     if not getattr(solution_cls, "_cofola_compat_patched", False):
@@ -92,3 +96,40 @@ def _install_coso_compat_patches() -> None:
 
         sharp_csp_cls.split_on_constraints = split_on_constraints_compat
         sharp_csp_cls._cofola_compat_patched = True
+
+    solver_cls = solver_module.Solver
+    if not getattr(solver_cls, "_cofola_empty_level2_patched", False):
+        zero_cls = count_module.Zero
+        lifted_set_cls = level_2_module.LiftedSet
+        csize_cls = configuration_module.CSize
+        sharp_csp_cls = sharp_csp_module.SharpCSP
+
+        def solve_allowing_empty_level2_groups(self):  # type: ignore[no-untyped-def]
+            unsat, msg = self.trivial_unsat()
+            if unsat:
+                return solution_cls(zero_cls(tip=msg), self.log)
+
+            count = zero_cls()
+            for n in self.size:
+                if self.config.lvl1():
+                    variables = [self.universe] * n
+                else:
+                    size = csize_cls("universe", portion_module.closed(0, self.universe.size()))
+                    variables = [lifted_set_cls(self.universe, size)] * n
+                csp = sharp_csp_cls(
+                    variables,
+                    self.config,
+                    self.problem.pos_constraints,
+                    self.problem.constraints,
+                    self.universe,
+                    caption=f"Configuration of size {n}",
+                    lvl=1,
+                    debug=self.debug,
+                )
+                size_solution = csp.solve()
+                count += size_solution.count
+                self.log.add_subproblem("add", size_solution.log)
+            return solution_cls(count, self.log)
+
+        solver_cls.solve = solve_allowing_empty_level2_groups
+        solver_cls._cofola_empty_level2_patched = True

@@ -1,0 +1,4 @@
+bag_0 = bag(e_1: 1, e_4: 1, e_5: 3, e_6: 1)
+choose_0 = choose(bag_0, 3)
+bag_union_0 = bag_0 + choose_0
+bag_inter_0 = bag_union_0 & choose_0

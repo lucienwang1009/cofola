@@ -1,0 +1,5 @@
+set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)
+compose_0 = compose(set_0, 3)
+compose_0[1] disjoint compose_0[2]
+set_0 subset compose_0[0]
+compose_0[1] subset compose_0[2]

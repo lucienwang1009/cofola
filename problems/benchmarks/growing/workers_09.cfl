@@ -1,5 +1,0 @@
-workers = set(w0...23)
-groups = compose(workers, 3)
-|groups[0]| == 10
-|groups[1]| == 8
-|groups[2]| == 5

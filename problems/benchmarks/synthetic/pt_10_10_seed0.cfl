@@ -1,5 +1,0 @@
-U = set(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)
-P0 = set(e2, e3, e4, e5, e6, e7, e8)
-P1 = set(e2, e9)
-P2 = set(e9)
-cfg = partition(U, 5)

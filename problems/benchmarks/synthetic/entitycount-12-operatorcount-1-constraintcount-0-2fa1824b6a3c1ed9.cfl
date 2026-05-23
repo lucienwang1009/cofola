@@ -1,0 +1,2 @@
+bag_0 = bag(e_1: 1, e_10: 1, e_12: 4, e_2: 1, e_4: 2, e_7: 3)
+compose_0 = compose(bag_0, 3)

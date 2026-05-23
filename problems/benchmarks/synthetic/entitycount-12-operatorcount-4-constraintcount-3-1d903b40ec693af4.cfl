@@ -1,0 +1,8 @@
+set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)
+choose_0 = choose(set_0, 10)
+choose_1 = choose(choose_0, 8)
+partition_0 = partition(choose_0, 6)
+tuple_0 = tuple(choose_1)
+choose_1 disjoint choose_0
+e_8 in choose_1
+|part| <= 3 for part in partition_0

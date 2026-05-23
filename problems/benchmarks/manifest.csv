@@ -8,7 +8,6 @@ real,5,36,set;choose;tuple;index;count;benchmark,problems/real/corpus.json,real/
 real,6,200,bag;composition;index;size constraint;benchmark,problems/real/corpus.json,real/6.cfl,085a7f248fe090ca12b53eaa45b774ac907812fe832a7c5abb0d9f50c498ef13
 real,7,1440,set;sequence;together;benchmark,problems/real/corpus.json,real/7.cfl,02302154e7d2aada36395671127d9dea1f2e6db071d2ec345f03bb021c81c8f9
 real,8,14400,set;circle;together;benchmark,problems/real/corpus.json,real/8.cfl,7854183b428b5003ab30931718edafd583673c4ae00f87c5433ef120626d4d85
-real,9,117,unencodeable;second order logic,problems/real/corpus.json,real/9.cfl,d6e1342d102948be85bd2dcac72b4797f88fcbd135f04eb885514c651257a64e
 real,11,28,bag;composition;benchmark,problems/real/corpus.json,real/11.cfl,5b41440fc4df29c6f852f15011eacc17f4b7743a85feb44c95726999bd7698f5
 real,12,540,set;composition;none_empty,problems/real/corpus.json,real/12.cfl,24fbc41bc7023b4e3b199ddb9cef6acf5fd6507fabcbe68a392f8c779061bd9d
 real,13,6,bag;composition,problems/real/corpus.json,real/13.cfl,4b99cebd289d40f210503e3e3e9a0bf0f6b1e3a826799a066e2335a8c2b7591d
@@ -176,7 +175,6 @@ real,192,31250,bag;sequence;TAG;timeout;pred;succ,problems/real/corpus.json,real
 real,193,2880,set;sequence;pred;succ,problems/real/corpus.json,real/193.cfl,08ab203f49d4c46c61e4e2f4d0b07e03c99632e05f98f6f22b5032a85cac1df5
 real,194,9,set;choose;intersection;in;size constraint,problems/real/corpus.json,real/194.cfl,8983a271ffa6c0f933756d3aafb1e2a9fd245989c866e536e97f97e5b5b7e233
 real,196,200,set;choose_replace_permute;not constraint;index;compare element;in,problems/real/corpus.json,real/196.cfl,2c0108c2c0385f8760fe50177bc5692e0e369f6114de7cd6bf6b0a85563dd964
-real,197,10080,set;choose;multiple choosing;tuple;unencodeable,problems/real/corpus.json,real/197.cfl,ea0e97b45f9c02ef8c7a9c2e7b7fbf729aad6ba32ee7ee8bc2658a2eff494a27
 real,199,180,bag;tuple,problems/real/corpus.json,real/199.cfl,fe4bc49283837639cad2cf503db1b599873aa57696d7647b7d5613775a20fd3f
 real,200,31,set;choose;size constraint,problems/real/corpus.json,real/200.cfl,95b4d4154a6af42c3fbf81075f4da162f80d9db2a689e9d93ee3632c35e7f1a3
 real,201,288,set;choose;multiple choosing;intersection;size constraint,problems/real/corpus.json,real/201.cfl,df3633c480d914bbf4d574a82fa59601c2eac6a6f4e0f078f3404324de71d076
@@ -195,13 +193,11 @@ real,215,12600,set;choose;multiple choosing,problems/real/corpus.json,real/215.c
 real,216,448,set;choose;tuple;not constraint;in,problems/real/corpus.json,real/216.cfl,cc76aeca11eda4da94dbaffe9a494d6ed1fabf81de5d798d7bc7d49b334e6563
 real,217,5040,set;circle,problems/real/corpus.json,real/217.cfl,4c97e6ddff37f0dc547f3cd66ae1ba2254a6db85680224725268c11b654a24b3
 real,219,165,bag;composition,problems/real/corpus.json,real/219.cfl,7741e344ba9015d92186a6e292e543a67b362ace34ee7879fd5d493d7be6de55
-real,220,927,set;choose_replace;unencodeable;arithmetics;supp;multiplicity constraint;tuple;not constraint;size constraint;index;compare element,problems/real/corpus.json,real/220.cfl,3e981baa6c8f34be6296fb975b5a5937f320fc999d2ab6d1f5ba05d97e2d54f6
 real,221,18,set;tuple;not constraint;index;compare element,problems/real/corpus.json,real/221.cfl,afd37701a3ab77cd3b3dcca8c9dcc8e47f88d2b27506a66f6423ddb2cfe1e1b3
 real,222,111,set;choose;multiple choosing;subset;not constraint,problems/real/corpus.json,real/222.cfl,5118651a819df3351547036a5e01d28afe2a33f057d0f6dd29b05bfd82f6799c
 real,223,120,bag;tuple,problems/real/corpus.json,real/223.cfl,814b04876fb9f44477a25f876a58016ef69594231235578f17573bdc1be93b45
 real,225,28,set;choose,problems/real/corpus.json,real/225.cfl,cc5aba04d069f738bd2bf28a764eb00a5503b01837a350ddc00456b00674009c
 real,227,544,set;choose;tuple;intersection;size constraint,problems/real/corpus.json,real/227.cfl,9df4aeaceffb33e90fadfc357b570433df2b9c6fdb663b1ee061f57a867eacb8
-real,228,351,set;choose_replace_permute;sequence;TAG;count pred;count next_to;unencodeable;pred_of_pred,problems/real/corpus.json,real/228.cfl,64080a16ac00b21e308e87bf3a7c98adbaeddf78d3c13f219f91f2891a630aa6
 real,229,5,set;choose;multiple choosing;in;or constraint,problems/real/corpus.json,real/229.cfl,180d51af7fa09fe2ce2a3cc4cedfe70c7152b66f4b3f8d1eb361db9af7f37a49
 real,230,495,set;choose,problems/real/corpus.json,real/230.cfl,cedfcb0322e4ca1a1b74f3a562ff0c456cfdd5829968f1c1ab7cc4ed9a9d8ce4
 real,231,36000,set;sequence;not constraint;pred,problems/real/corpus.json,real/231.cfl,f7e4d2208d6e22d7f63e2b856425bcc13fc48e29eef181b6339fdf2991762743
@@ -255,7 +251,6 @@ real,288,210,set;choose;multiple choosing,problems/real/corpus.json,real/288.cfl
 real,290,60,bag;tuple,problems/real/corpus.json,real/290.cfl,6042046a15a86dfcbd23e5b649f54f0f843f0193b497099d9641e8e6c46d4071
 real,291,180,set;sequence;choose_replace_permute;pred;succ,problems/real/corpus.json,real/291.cfl,e4798dd009fa6c3473a4527c3514fc7762c6bbe9ebe60fb64b86f51a73eb3efc
 real,292,720,set;sequence;together,problems/real/corpus.json,real/292.cfl,c94154aa00df513a8256b4eea9810438a125d98bb7ea354d7f3bc342bdcbb526
-real,293,900,unencodeable;arithmetics,problems/real/corpus.json,real/293.cfl,a27fc02d400a220c5c6c08d2a526f931c411c9d1c8a7eedf24f9fc9068aaa0eb
 real,294,14,set;partition,problems/real/corpus.json,real/294.cfl,a070b01a49a0460106298e1f195b9c734eadc3aaf13b732f20d5a4bf40aafab2
 real,295,41,set;partition,problems/real/corpus.json,real/295.cfl,4b0e039250a9e07d4fcc04bf9918f052ed20ef9cfe3963fe6cbc5b79d0cb3566
 real,296,80,set;choose;multiple choosing,problems/real/corpus.json,real/296.cfl,fe386205815ba69c5c6f3dee3be60e2b9e72ecbf0a0725ec8161535ce5bb3f2b
@@ -272,136 +267,107 @@ real,306,6840,set;choose;multiple choosing;difference,problems/real/corpus.json,
 real,307,192,set;sequence;choose_replace_permute;pred;not constraint,problems/real/corpus.json,real/307.cfl,ac514479758b6fb737c130c06b06b25c3913aab8b06daff7d32c257309ebc1c9
 real,308,33800000,set;sequence;TAG;choose_replace;next_to;timeout,problems/real/corpus.json,real/308.cfl,d88a308088f8cb3b4573a3d54d233660121f23f97043769c3b4d4caa3679a6a8
 real,309,6,set;circle;next_to;reflection,problems/real/corpus.json,real/309.cfl,1b815d5d622fffd8b64b90e19a2f4b812f2a30cfc8f6b092f9b89d767977a304
-real,313,112,counting quantifier;arithmetics;unencodeable,problems/real/corpus.json,real/313.cfl,ce98c5840997016c1b2b9c7c12df205659ebac657d2915f0bfee19deabc9f959
-real,317,195,set;tuple;choose_replace_permute;index;in;unencodeable;arithmetics,problems/real/corpus.json,real/317.cfl,8238de9ac9c02016dcd997dfdfe4094ec02a17199dcac2ddaffcdcfb4c9b7bc3
 real,325,452,set;choose_replace_permute;tuple;in;not constraint;compare element,problems/real/corpus.json,real/325.cfl,4f99470dd0074bdbb460bcc4bc623c6ac8c7df6d504031717c6be1e68552d6ae
 real,335,320,set;choose_replace_permute;tuple;index;in;supp,problems/real/corpus.json,real/335.cfl,f8285e606d2ae3b3b07878b08920271c1e88e4ab8161a8ce13b649a77f88590f
 real,371,26,set;choose_replace_permute;tuple;multiplicity constraint;not constraint,problems/real/corpus.json,real/371.cfl,213cf73c7bbf71541ec8c647792aeea5415b070069d4b28721b00c03a185d624
 real,375,728,set;choose_replace_permute;tuple;index;in;supp;size constraint,problems/real/corpus.json,real/375.cfl,2eaf8e99e914961ff10c7dd489a7278e97c43208e9a8c6f477dfb16f9672131b
-growing,mathcounts_00,100,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_00.cfl,00b0efbdfb48121d7d0f9894b1519bdd7392e1c8eb40d81c057cbc76c6d56366
-growing,mathcounts_01,214,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_01.cfl,d6b6e2dba8f0269a72ee4146a43962b9e5b88957e525e6b09360d9d728748bd6
-growing,mathcounts_02,406,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_02.cfl,6258ec9563cd57c3e76d873533c77322be3bcdde0a32132e8c6c579eea7f0f29
-growing,mathcounts_03,706,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_03.cfl,f03349b701128bcba6ed16bbd5bdda93e9805bb50909860af679a94600051736
-growing,mathcounts_04,1149,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_04.cfl,07a7c3d8bbccccad18fed91aac2697ff98ab63879fdcb78fe268949743d3254d
-growing,mathcounts_05,1775,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_05.cfl,2e6598867860f87474b7429bbb02726ab6d1905826de442d4c2a755849506336
-growing,mathcounts_06,2629,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_06.cfl,7e2b18266d112d57ba2a536d42abb305d25b88863039770c50fc79ac70ed8113
-growing,mathcounts_07,3761,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_07.cfl,952646d3f6f686d3d546b38354df891555ff9281e90962782b18201c8434f530
-growing,mathcounts_08,5226,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_08.cfl,de8e6e1d97a9a87c4efc52613ebf9689321bb32ad5e2c768892a46da617c7650
-growing,mathcounts_09,7084,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_09.cfl,05d4fee0d8b7b2e854d0ebae113922abcd2b10d25f675b5c07b87fa0d52ac454
-growing,mathcounts_10,9400,mathcounts;bag;choose;count;growing,MATHCOUNTS bag choose,growing/mathcounts_10.cfl,3863e2fddd8cf7b7ce5ad208d766fa2c465d315ef1a551b559f9d60e092cd7d2
-growing,fourletter_00,36,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_00.cfl,57acc8a1844f5c3e412ecbc79fe6d81f01974a1412d9b5af43d0a01c7b77d2c7
-growing,fourletter_01,60,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_01.cfl,c14ae30a04a4fc24805521f58ea623f37fc91288af2d8dc49f912391cf3f8225
-growing,fourletter_02,90,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_02.cfl,80daa37a210aea1390c0edc65839b2ce90797fe5551baa3fb7b1b5050b66a977
-growing,fourletter_03,126,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_03.cfl,8dd2772776f60d4e55db334663efe9f66d07380b5205a5941b85c05cec866dfe
-growing,fourletter_04,168,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_04.cfl,46fe3f9d0f6ce6978242d567e10e649fb354e84ed486da3e0a725b44ff2d5553
-growing,fourletter_05,216,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_05.cfl,42e14f2314fdb8bba8335842c53928d7fcdf5b47e6a169a87f9ace4b2e8cedfe
-growing,fourletter_06,270,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_06.cfl,29e06b5533058b7090ac12f8b212f7740e1a3ade9f4bac153856a35ef6166669
-growing,fourletter_07,330,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_07.cfl,ba0ef8a6771b88488564ff7c9a87cc1725951dd7cf242889ce358819a89c70a4
-growing,fourletter_08,396,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_08.cfl,82ae178127762a26e595f9497ff008a36ad2848f1ba83896b4ac97caa32979e2
-growing,fourletter_09,468,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_09.cfl,3348d4663975c8b1f7ce2d6f74e17e2ba60e9fa955f09efea44fe81df24279ec
-growing,fourletter_10,546,fourletter;set;tuple;position;count;growing,four-letter arrangements,growing/fourletter_10.cfl,3514682349250b5d95ed505ea1e4fc988e006f897976a41b5acbcfe6943cda72
-growing,tvs_00,288,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_00.cfl,76b47258b9e03e0287adcf402602f1058a87506dfec9bb9cc1ca28dfcb95c4a9
-growing,tvs_01,910,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_01.cfl,1030caac0750c35de3276f85edbf23984c5eb8e5932c950968f4806f1f2bd1dc
-growing,tvs_02,2256,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_02.cfl,e790dbf7aa2915998757f431e117a341764ff3611e73ea050d23fa7c96a47048
-growing,tvs_03,4806,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_03.cfl,a850eb971464f3106b53bf6465a7a2c5a36c79cec62071647749a62504de4277
-growing,tvs_04,9212,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_04.cfl,19905cf42d63b06ff463433030bd3b75a8ffb5b77396e4f593f67c1c2dac867b
-growing,tvs_05,16324,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_05.cfl,bdeea1c66cbe1182b473915ecec5a331e4ba7edf4593a4834c524971b0d048ed
-growing,tvs_06,27216,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_06.cfl,d516552f6924834279a0ef2c2d9898e2d1171788a78bed45acd393dc9cbd18b4
-growing,tvs_07,43212,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_07.cfl,9c69a9f8f469c320d5f396103bc4bbdc0f51de5a65a10f5c1c215a7dfa1a58ed
-growing,tvs_08,65912,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_08.cfl,67ce0e0113d89381db5db2862b74a43cc8ba2c38a93c93ec5128669a732d9ca0
-growing,tvs_09,97218,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_09.cfl,7a88c225cf0e3965ba3acb503f689527706c98cc15a1ccaf123fe4efa7611a09
-growing,tvs_10,139360,tvs;set;choose;count;growing,defective TVs purchase,growing/tvs_10.cfl,b9607b77116136204dc840e725b47ddb86dc3350b9861b42ad4471f3eb450fb5
-growing,workers_00,72072,workers;set;composition;index;size;growing,workers composition,growing/workers_00.cfl,ce78fc3015c0d9e52e1f2e477f596da78973fd9952e6ec7d8496acc6023aaf0c
-growing,workers_01,135135,workers;set;composition;index;size;growing,workers composition,growing/workers_01.cfl,aa47618b3f7fa1a3601b8cbddb4ce0d7a24cca9ec34d2de8c8ce9b7466eae5a5
-growing,workers_02,360360,workers;set;composition;index;size;growing,workers composition,growing/workers_02.cfl,f8dd22832c9721336048e36ed8ffe7dfade57f5f33c4f5eb60dea0ee94716410
-growing,workers_03,2042040,workers;set;composition;index;size;growing,workers composition,growing/workers_03.cfl,671df624da9ca525dfdce6e17ca252f997cce85369a02064dc653426b33e0104
-growing,workers_04,4084080,workers;set;composition;index;size;growing,workers composition,growing/workers_04.cfl,aee3fce0c9e324ce9131ecc95a0f9bd0da2b40093b48e4f8c9f5bddb9b0c4446
-growing,workers_05,11085360,workers;set;composition;index;size;growing,workers composition,growing/workers_05.cfl,82a5a1ffa536756a52a468395ce762a77d7d0471d131327b30b9a759640068d5
-growing,workers_06,55426800,workers;set;composition;index;size;growing,workers composition,growing/workers_06.cfl,698ee7d66629e07fa76c1b5ca2dbbb4fbcf5e8425062e55d94313395ad2e83d1
-growing,workers_07,116396280,workers;set;composition;index;size;growing,workers composition,growing/workers_07.cfl,2da5c7b442a47764efc40746020f9a94d875684b44c95f2bbca6504261079da4
-growing,workers_08,320089770,workers;set;composition;index;size;growing,workers composition,growing/workers_08.cfl,f9f3c4f81a8a736b63cf3da9bb2c4e4004f3a353541520774bde4fcb78ca2761
-growing,workers_09,1472412942,workers;set;composition;index;size;growing,workers composition,growing/workers_09.cfl,055f9bfdcbfa98c736e7ef26b54edf2af794df96456e53c84d37103d8312e1d3
-growing,workers_10,3212537328,workers;set;composition;index;size;growing,workers composition,growing/workers_10.cfl,07b249655907882aca85d4d24b04292143bd4af226c9bc490f84e27a023d91d2
-growing,banana_02,9,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_02.cfl,af18c973c41165b696dcb375e3d9a21b3f6a63fcca3e14cfa572e5bea4974637
-growing,banana_03,26,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_03.cfl,59d66c37185e5e96e18b8ccbc620797f9667b531b121b4e6f1dde64ef601a07d
-growing,banana_04,72,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_04.cfl,6094756f9af58d9cfb856da9301c2d1786457edd6d24f2142a1d871dbfcf19ac
-growing,banana_05,191,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_05.cfl,0af40164d220f098f61681b1983a89e4f383ceeee53cbe5b4c5c1086b546c243
-growing,banana_06,483,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_06.cfl,3d41c197b13b4519aa735a8deb0e7047b24dc17b577f4732d21ce7dd3001f2ad
-growing,banana_07,1148,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_07.cfl,031b2db7543a6ce8487cffb1200c138cf09ba3eca010cb928208a108533cb942
-growing,banana_08,2534,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_08.cfl,eff5fbb0805f400af6156207015288bef9f16e43d60ac88dd8a6a7baa714e67f
-growing,banana_09,5124,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_09.cfl,8b86c9ca8ef33a776af6a51c76daa55b9d0ae2ecd8213d2c8f93f80c95c29bb5
-growing,banana_10,9240,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_10.cfl,7d8850f5fc8ccc62e2e2cd90fb5e3db3e97c29179bb0b966bddd3eb361ce954c
-growing,banana_11,13860,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_11.cfl,4ff550071dd336466bb642f7aa6b9db136f25d033e5ae1a0f1c35f94b7513868
-growing,banana_12,13860,banana;bag;tuple;growing,BANANA bag tuple,growing/banana_12.cfl,a4516feac322a699c8bdb1bf287a9fd4113ef8be9f45e0c62bb15796256548bc
-synthetic,ss_10_5_seed0,,ss;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_10_5_seed0.cfl,df1c79a3c2796b0b0bc890a51f5fd00e82f4fdc488577cdcbbea0b34be273b8e
-synthetic,ss_10_10_seed0,,ss;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_10_10_seed0.cfl,c1a95eedf6eca3230febf6cafecd6529cbcce714a249863b3600eeaf5d5f9420
-synthetic,ss_10_15_seed0,,ss;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_10_15_seed0.cfl,c67751ef4374356ecc3e30d4ab96bd01967d42638fe62dada1384f4b880aae39
-synthetic,ss_15_5_seed0,,ss;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_15_5_seed0.cfl,9679b6be9e4923ef5902da4c4836100ff69a8d77435b7020fc29df47bf2c3013
-synthetic,ss_15_10_seed0,,ss;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_15_10_seed0.cfl,ff3b7a47356a882978b12ca31b65496a1cbf8ee265de61fc9d4b4adea67f056b
-synthetic,ss_15_15_seed0,,ss;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_15_15_seed0.cfl,9fd8292831365149a5b1483309f5b33dd2931340744880d768ef830530189318
-synthetic,ss_20_5_seed0,,ss;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_20_5_seed0.cfl,8a7f8e4f691f935cb547cd0b622167f7b8268e6e69ada7a739abbcc24512fa4a
-synthetic,ss_20_10_seed0,,ss;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_20_10_seed0.cfl,6a04f50f61cdcbe755108bedfe5723d28a241e6ccf3f678ac01df8280b9b84e8
-synthetic,ss_20_15_seed0,,ss;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ss_20_15_seed0.cfl,54881b77d47bbb88fc0ebf09c15a1645a8d0e7fc4c26440f89b30058096a07d7
-synthetic,sr_10_5_seed0,,sr;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_10_5_seed0.cfl,49f1d4b88f21b4bc340cb7879f1bc278247b35825869779b1751fa24683f0458
-synthetic,sr_10_10_seed0,,sr;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_10_10_seed0.cfl,723caa943155ab9f6a38d1f7f9d29e9a4a3b922ba844fe3e7392179718639454
-synthetic,sr_10_15_seed0,,sr;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_10_15_seed0.cfl,a386504ddb0d02074c207e7816cd2464af52da767281dadf0a9fb9f203e9879a
-synthetic,sr_15_5_seed0,,sr;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_15_5_seed0.cfl,36193d8acd8f1279b4d06a6792418847826f806d8c99d7185f8ade5fba4f7042
-synthetic,sr_15_10_seed0,,sr;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_15_10_seed0.cfl,9a959ad3af4ada04c164f1983fafa070b3eb0df8c2f28087e36f5b796ddff7c0
-synthetic,sr_15_15_seed0,,sr;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_15_15_seed0.cfl,119e80d4a51d1d32d8501c9cf915c9e0e86e6bb6e1316160fb7625b9ad12c29a
-synthetic,sr_20_5_seed0,,sr;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_20_5_seed0.cfl,8a2502edc8e0aaff8a4d72d8a81e58cf556a0f315ce6dbdce944cd8e8332775d
-synthetic,sr_20_10_seed0,,sr;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_20_10_seed0.cfl,035d417fb73df48662b2f1f9217eba63e0c64af7589992c05d052d4f966dcc8c
-synthetic,sr_20_15_seed0,,sr;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sr_20_15_seed0.cfl,4e58d2f95e5069014b621b2cf2dd6b1134b0e1402217c03f502c33bc52f26e83
-synthetic,ms_10_5_seed0,,ms;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_10_5_seed0.cfl,297c5d87f6b4d87e002e47043e8a3d81ce8712ee4ccd25780f9d888e90455cc2
-synthetic,ms_10_10_seed0,,ms;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_10_10_seed0.cfl,1be7861d5d87b30d5f42a50fbc620148b7403c1e7430379b229cb1382b1ad51b
-synthetic,ms_10_15_seed0,,ms;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_10_15_seed0.cfl,ca62613a45dfa72df3a758108c4fb8e6df039ac7150267cf29cee5a2ccdb35c6
-synthetic,ms_15_5_seed0,,ms;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_15_5_seed0.cfl,30fee37db0e5e4d4a5ed6ce966d46a341b0034837a76f99f9af22464531cd4cc
-synthetic,ms_15_10_seed0,,ms;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_15_10_seed0.cfl,f92983027a60954b01d6c3ecd61654c2c855f7ed81393d1037eab4841aa48beb
-synthetic,ms_15_15_seed0,,ms;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_15_15_seed0.cfl,d820a1f5f879e68185fa9c970485d8d6250c2b4f4dad8650d89e520c6271190c
-synthetic,ms_20_5_seed0,,ms;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_20_5_seed0.cfl,93db922850fd86378d3f034d60c815c9691dd0ef376cc13e3988764ab102b581
-synthetic,ms_20_10_seed0,,ms;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_20_10_seed0.cfl,112c857343ec3cbba64586fe4abdaefd21f31417f95d734a06aeb2f88f52d0a9
-synthetic,ms_20_15_seed0,,ms;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/ms_20_15_seed0.cfl,6cd3574caa784f9b0da9c565082792c83650b5c230f26b169368f2a42d325e5b
-synthetic,pm_10_5_seed0,,pm;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_10_5_seed0.cfl,6249c5ab3268a7e0ad1def34a3bc64c688589993219137ca4b42099f0dc0f286
-synthetic,pm_10_10_seed0,,pm;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_10_10_seed0.cfl,e26fc93d52892866202ae5408788945559572a38fd34e0f4f3aa21b4ed804169
-synthetic,pm_10_15_seed0,,pm;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_10_15_seed0.cfl,479c30fbeb6437f21f08ddede3b2d94c0551a37aec1b540927595aa7a3b0c50f
-synthetic,pm_15_5_seed0,,pm;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_15_5_seed0.cfl,76ad3eb1e0cee176a3f36c66d59c314a36c015086fe15f443c366cbe44500383
-synthetic,pm_15_10_seed0,,pm;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_15_10_seed0.cfl,8b2218a76faa2df6a6bc02026656e769569162b7be8b2b39da6612a78f513b24
-synthetic,pm_15_15_seed0,,pm;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_15_15_seed0.cfl,980d3841f12859c77f8059f47f7084ddbeff8a9eda6e71fc4df969736b31f201
-synthetic,pm_20_5_seed0,,pm;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_20_5_seed0.cfl,83ee23d04813e0387fb198da5ceb51a1d3f141cae8a3ea849b6d1f56e35cef21
-synthetic,pm_20_10_seed0,,pm;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_20_10_seed0.cfl,a5bfca1d6b646c779ff42ac9d3cb94a4828efd612ca4a9630b802d7a4792eced
-synthetic,pm_20_15_seed0,,pm;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pm_20_15_seed0.cfl,e13b8a502738219ce2e408decf48bc9f260d9e4eff941c4f4e44bc4bd7f04272
-synthetic,bm_10_5_seed0,,bm;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_10_5_seed0.cfl,4215eb9f552f75c2b36841646ef15acb9fee56d79b4878bfebd680720dc7dab8
-synthetic,bm_10_10_seed0,,bm;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_10_10_seed0.cfl,cc1aa922637471f6203014059bbf462941bcbbf75dc8d62d3b25d5c120524034
-synthetic,bm_10_15_seed0,,bm;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_10_15_seed0.cfl,4a6197e3c1cca10535b25151694d4039dc28f07b342e5d4ef336fef2a1f477f0
-synthetic,bm_15_5_seed0,,bm;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_15_5_seed0.cfl,fb3987722a9bb2cb77b0d9a9315e27ac63cfccdb738ddd1a9d810b6f2cdd905a
-synthetic,bm_15_10_seed0,,bm;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_15_10_seed0.cfl,bd961eaa6e575fd524bedadcdcc2a136eca2f3a31d8b62a64398c04fc8267ccc
-synthetic,bm_15_15_seed0,,bm;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_15_15_seed0.cfl,20f06350bf4f656a16b6cd7f844140251869479c664ba43e48e5c0e2d9dd569b
-synthetic,bm_20_5_seed0,,bm;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_20_5_seed0.cfl,bea5748c956f5fa0acc9afb3a05206760db8090874e1d8e1153365e2be44a572
-synthetic,bm_20_10_seed0,,bm;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_20_10_seed0.cfl,1cfc498c0223f08240e004a56a1372d73e83809e4a95b91d3c8118f73feae212
-synthetic,bm_20_15_seed0,,bm;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/bm_20_15_seed0.cfl,1a05ed6fd2428f255866dc5ef073eca34c61b26d6d8485b5726b8d1cdab89afc
-synthetic,sq_10_5_seed0,,sq;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_10_5_seed0.cfl,dae30a49fb2707e160dd5170e3d10c9c18a393e0c71c45c8ef572f29bc633674
-synthetic,sq_10_10_seed0,,sq;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_10_10_seed0.cfl,7aa918c7e0045ba905686a585481bafe2c61030d87afa1082a14feacdf5f6935
-synthetic,sq_10_15_seed0,,sq;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_10_15_seed0.cfl,09e3c8e5a22341fda82675a387ccddef3ea22c61154b808a6855da3bc46b583a
-synthetic,sq_15_5_seed0,,sq;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_15_5_seed0.cfl,b2f523a27660d022bde89607f95231ccd53e71da7908aa6087c110e41679783e
-synthetic,sq_15_10_seed0,,sq;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_15_10_seed0.cfl,a82b12639865880386ce686e5882a81c23a7472780abec79d6ce4445461d484f
-synthetic,sq_15_15_seed0,,sq;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_15_15_seed0.cfl,8100d226d586db475cdda99f23ee33a3bc922c4bb6bb0fa2d1ec7e93bd18de48
-synthetic,sq_20_5_seed0,,sq;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_20_5_seed0.cfl,adedb55c279e8a777e852223394c9adbb94bfaee1646a2fdedcb1625604482ec
-synthetic,sq_20_10_seed0,,sq;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_20_10_seed0.cfl,a296a25de2428d1e56b7e48b91a76f50a67e3caba4e246961874c1bc88757696
-synthetic,sq_20_15_seed0,,sq;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/sq_20_15_seed0.cfl,698adb105461505c3c4e26e6170e6f72171f2c5ba442829187382a295cb36c4e
-synthetic,pt_10_5_seed0,,pt;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_10_5_seed0.cfl,ab4f43609c83c868a297168f2b2cef8dd2e5dcc97b07dfdf2e96762d1523cd59
-synthetic,pt_10_10_seed0,,pt;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_10_10_seed0.cfl,86e2e063b4db1543af74252bf4c355bcab3e28fd7132252e0960196ac7d93320
-synthetic,pt_10_15_seed0,,pt;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_10_15_seed0.cfl,f1a0fc23ad74a9fb73ebaabdf4058fa50a5cb22d89210bea41aa72cd9b7f0680
-synthetic,pt_15_5_seed0,,pt;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_15_5_seed0.cfl,509275685622132cf833d24983a44cfcb4c860dbb81b6dd746811273b6cbcc3a
-synthetic,pt_15_10_seed0,,pt;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_15_10_seed0.cfl,4cd6f40f7f934c7fb538f60a04260b8487b8236b0ab7b2227557d1ba7e262003
-synthetic,pt_15_15_seed0,,pt;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_15_15_seed0.cfl,a364b52ec996b293df679e9b010058a741d8fd0040416e492b061ded8308f33c
-synthetic,pt_20_5_seed0,,pt;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_20_5_seed0.cfl,c1e2257ff3bc57c1a80ee413e4ee2168cfbd78e14d5e2e7eb440eaef32773f82
-synthetic,pt_20_10_seed0,,pt;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_20_10_seed0.cfl,db1b21c166b64f3ebab2a780f9382bb08810239867d3f9c7af53fa5cd8970d02
-synthetic,pt_20_15_seed0,,pt;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/pt_20_15_seed0.cfl,033cef283cd7d72eb8c041f02963edd9b27cef7464e940246077c3923efc8e22
-synthetic,cp_10_5_seed0,,cp;u=10;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_10_5_seed0.cfl,48ceed81e6107e0a7253a6ede8042ba1239dc3f13628b59b861e8157d5c1f788
-synthetic,cp_10_10_seed0,,cp;u=10;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_10_10_seed0.cfl,64075fc5d425657294b797d1a28553644ffdf57b2b220dd174d822cf9466d6ce
-synthetic,cp_10_15_seed0,,cp;u=10;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_10_15_seed0.cfl,768df98296a83d0f4feccc9bab9bac264a87194b57c6ce22e73fafd2618c86c5
-synthetic,cp_15_5_seed0,,cp;u=15;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_15_5_seed0.cfl,0d9097f8afde2595ec818cb21e2b4de0c68bef4c495904d10b25963440163506
-synthetic,cp_15_10_seed0,,cp;u=15;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_15_10_seed0.cfl,aee7ccaa984b129b4ca2341347ae81a2514406be90da4a45f117d11c24f8f89e
-synthetic,cp_15_15_seed0,,cp;u=15;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_15_15_seed0.cfl,2aee38f086a1feba961e260292b3440a2b7bd36f6b1b72751123186ab7ed1327
-synthetic,cp_20_5_seed0,,cp;u=20;s=5;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_20_5_seed0.cfl,dc5a86c0077ac15dcbdc533e70434c48b4317cd3703defdf51fb58014c0d5969
-synthetic,cp_20_10_seed0,,cp;u=20;s=10;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_20_10_seed0.cfl,2eb4cbc56a3213b8cefb3e9a92016306ce2a952a5ad379f3579f83ec80d66aa4
-synthetic,cp_20_15_seed0,,cp;u=20;s=15;synthetic,Sec. 6.2.2 synthetic generator,synthetic/cp_20_15_seed0.cfl,6a3122468084a003df3c428b4dad6ddbe47b0894f33429bc380740c5b976ab1c
+growing,mathcounts_005,4,mathcounts;bag;choose;count;growing;family=mathcounts;domain=5,MATHCOUNTS bag choose,growing/mathcounts_005.cfl,380cd85098783d4f229f89570e40968c2ac0aa662294b0314d01eedbdb9c076d
+growing,mathcounts_010,100,mathcounts;bag;choose;count;growing;family=mathcounts;domain=10,MATHCOUNTS bag choose,growing/mathcounts_010.cfl,00b0efbdfb48121d7d0f9894b1519bdd7392e1c8eb40d81c057cbc76c6d56366
+growing,mathcounts_015,614,mathcounts;bag;choose;count;growing;family=mathcounts;domain=15,MATHCOUNTS bag choose,growing/mathcounts_015.cfl,abc0cdb9e66aac4ff930aad333a392dd3abfab9bfa8115ba81cd38c8227bf8b0
+growing,mathcounts_020,2569,mathcounts;bag;choose;count;growing;family=mathcounts;domain=20,MATHCOUNTS bag choose,growing/mathcounts_020.cfl,fb87a2aedde8563f319690c68d6ba05111a79b2838080dedf6f996dfb7676cb9
+growing,mathcounts_025,6525,mathcounts;bag;choose;count;growing;family=mathcounts;domain=25,MATHCOUNTS bag choose,growing/mathcounts_025.cfl,e09e69c7e2955ddf517efed5fa8b90fdf43fcd4592c2d95670caf3d78ef10001
+growing,mathcounts_030,13899,mathcounts;bag;choose;count;growing;family=mathcounts;domain=30,MATHCOUNTS bag choose,growing/mathcounts_030.cfl,ff085349d2e3e8cb7ca1b3ec026c67292246e17ca103c3f676da7eb5982eb546
+growing,mathcounts_035,28809,mathcounts;bag;choose;count;growing;family=mathcounts;domain=35,MATHCOUNTS bag choose,growing/mathcounts_035.cfl,cd6873239b13c9de359ef4cb1c5414030cab922cf79a2ba8ee9b6f8f97252026
+growing,mathcounts_040,49375,mathcounts;bag;choose;count;growing;family=mathcounts;domain=40,MATHCOUNTS bag choose,growing/mathcounts_040.cfl,e59cd206acbd7e1801afd58b9c0821b1b6c11115869ea972a3502a0ed0b6371f
+growing,mathcounts_045,79359,mathcounts;bag;choose;count;growing;family=mathcounts;domain=45,MATHCOUNTS bag choose,growing/mathcounts_045.cfl,bf8d30458b3a9414281f1785455bbf640d9f30b695e43e5642d410cbe3ee4368
+growing,mathcounts_050,129224,mathcounts;bag;choose;count;growing;family=mathcounts;domain=50,MATHCOUNTS bag choose,growing/mathcounts_050.cfl,361e46f22d3e4f3f18170f07890074bbbf84c41c302d889ba5c4abca232547e2
+growing,mathcounts_055,188650,mathcounts;bag;choose;count;growing;family=mathcounts;domain=55,MATHCOUNTS bag choose,growing/mathcounts_055.cfl,8a96e2c6e5c1080738bb495343dc1640aa8ee4e2a09a5909ecc92c759b4bf33e
+growing,mathcounts_060,266494,mathcounts;bag;choose;count;growing;family=mathcounts;domain=60,MATHCOUNTS bag choose,growing/mathcounts_060.cfl,fdba551f8753f3a107250e11dcbf99696d68e690c43054c3f7fa8b7c5d7eea04
+growing,mathcounts_065,384314,mathcounts;bag;choose;count;growing;family=mathcounts;domain=65,MATHCOUNTS bag choose,growing/mathcounts_065.cfl,cbc03de0d7f1b4e4d59d9cb1a2f06cb8e6243fb1126e543ac63927c0d07f0e75
+growing,mathcounts_070,514350,mathcounts;bag;choose;count;growing;family=mathcounts;domain=70,MATHCOUNTS bag choose,growing/mathcounts_070.cfl,8c8a44d4f865c0160e0bc4c997da3a0b9d2e586f8424f4220035a44049c0c88b
+growing,mathcounts_075,674804,mathcounts;bag;choose;count;growing;family=mathcounts;domain=75,MATHCOUNTS bag choose,growing/mathcounts_075.cfl,f55e0145056e5ba8e2a9820a4e60c801e4ca60a2a01986a695ff2b5441444494
+growing,mathcounts_080,904579,mathcounts;bag;choose;count;growing;family=mathcounts;domain=80,MATHCOUNTS bag choose,growing/mathcounts_080.cfl,04fb8af11fd279e8214a270d31c084c470305aa7b4cbf2e796da8129da2d499f
+growing,mathcounts_085,1146475,mathcounts;bag;choose;count;growing;family=mathcounts;domain=85,MATHCOUNTS bag choose,growing/mathcounts_085.cfl,162e1e095f203fd340eae6d824f66fc807abe6e12350a3e71bb02a8c8b4e6381
+growing,mathcounts_090,1433789,mathcounts;bag;choose;count;growing;family=mathcounts;domain=90,MATHCOUNTS bag choose,growing/mathcounts_090.cfl,c28946bc7efdd6adcb42b6c936cfaf05af4e73bba3cb414d6454c24422ec6b90
+growing,mathcounts_095,1830519,mathcounts;bag;choose;count;growing;family=mathcounts;domain=95,MATHCOUNTS bag choose,growing/mathcounts_095.cfl,43fb961ea6ebf2e2977586dad2abef1e4cba6b41b748f9209882d3cd1b5c322b
+growing,mathcounts_100,2235025,mathcounts;bag;choose;count;growing;family=mathcounts;domain=100,MATHCOUNTS bag choose,growing/mathcounts_100.cfl,51ac2874ecd6a1d103d3025a1290a7618bfd1bc0335eeb81a1011cf51efe5f6f
+growing,fourletter_005,18,fourletter;set;tuple;position;count;growing;family=fourletter;domain=5,four-letter arrangements,growing/fourletter_005.cfl,89fb488bcb1ceeb7a3aa4fde14b02873f280f4b5fac9fb6cf8b98c3f7bd9936d
+growing,fourletter_010,168,fourletter;set;tuple;position;count;growing;family=fourletter;domain=10,four-letter arrangements,growing/fourletter_010.cfl,46fe3f9d0f6ce6978242d567e10e649fb354e84ed486da3e0a725b44ff2d5553
+growing,fourletter_015,468,fourletter;set;tuple;position;count;growing;family=fourletter;domain=15,four-letter arrangements,growing/fourletter_015.cfl,3348d4663975c8b1f7ce2d6f74e17e2ba60e9fa955f09efea44fe81df24279ec
+growing,fourletter_020,918,fourletter;set;tuple;position;count;growing;family=fourletter;domain=20,four-letter arrangements,growing/fourletter_020.cfl,cc2afadbb582091a182a6a486b361e7d4ec271c49349aa72dbd7f35bcc329e8f
+growing,fourletter_025,1518,fourletter;set;tuple;position;count;growing;family=fourletter;domain=25,four-letter arrangements,growing/fourletter_025.cfl,52c7d681e13875d94df606135a6ba102cbcf2c753dd5ee1587eb00ba27886807
+growing,fourletter_030,2268,fourletter;set;tuple;position;count;growing;family=fourletter;domain=30,four-letter arrangements,growing/fourletter_030.cfl,9573a5d485036cc3d9a097d82f24f9bbebfd4416c1f21a5e188639f92cf5bfe2
+growing,fourletter_035,3168,fourletter;set;tuple;position;count;growing;family=fourletter;domain=35,four-letter arrangements,growing/fourletter_035.cfl,3897cf56b81d9adbb9aeb0ccce0b90f2a177e59f5b7672dc8bc3bfa28c6f0f1f
+growing,fourletter_040,4218,fourletter;set;tuple;position;count;growing;family=fourletter;domain=40,four-letter arrangements,growing/fourletter_040.cfl,bb1e41a262f3562978caee57a3e2f700f2905dae7d57d14442f3685613c3beee
+growing,fourletter_045,5418,fourletter;set;tuple;position;count;growing;family=fourletter;domain=45,four-letter arrangements,growing/fourletter_045.cfl,15d5c380256ca26eb42e95062421fc547ece90ed041077c7100e134ca68021f4
+growing,fourletter_050,6768,fourletter;set;tuple;position;count;growing;family=fourletter;domain=50,four-letter arrangements,growing/fourletter_050.cfl,0d012da7ccc8b088847d0669989f96279d44e73ecb49706200d59ccfc7ac3d5c
+growing,fourletter_055,8268,fourletter;set;tuple;position;count;growing;family=fourletter;domain=55,four-letter arrangements,growing/fourletter_055.cfl,53d6f362b423bdec29e88aa2d11a4a12164e32653d975e449fe0edf878e253f7
+growing,fourletter_060,9918,fourletter;set;tuple;position;count;growing;family=fourletter;domain=60,four-letter arrangements,growing/fourletter_060.cfl,35e55f1e68e6385089a742a6b6d3f5f123706b8a0f04eff02acccc86d3565682
+growing,fourletter_065,11718,fourletter;set;tuple;position;count;growing;family=fourletter;domain=65,four-letter arrangements,growing/fourletter_065.cfl,a3831f9da8d13d803eb60125f9323f7399325e7239da24b24bb1797987bddb33
+growing,fourletter_070,13668,fourletter;set;tuple;position;count;growing;family=fourletter;domain=70,four-letter arrangements,growing/fourletter_070.cfl,713e6a45414462f46fb6d47af557ac461711ef85aed982f66b48afd85d0fe8db
+growing,fourletter_075,15768,fourletter;set;tuple;position;count;growing;family=fourletter;domain=75,four-letter arrangements,growing/fourletter_075.cfl,ce9e24eeae11197726f213fd983fed8dc77b2d6ba77929b2a941ddd50cfea6bb
+growing,fourletter_080,18018,fourletter;set;tuple;position;count;growing;family=fourletter;domain=80,four-letter arrangements,growing/fourletter_080.cfl,762572aad345d8f155af903b254163a033b2fd05f0a3c8f55e3b1a1134e9ef4c
+growing,fourletter_085,20418,fourletter;set;tuple;position;count;growing;family=fourletter;domain=85,four-letter arrangements,growing/fourletter_085.cfl,6b58c65b7223d8d5121c76210d68c7ad5a3c660a9902fdc0fcf5f3339ab777da
+growing,fourletter_090,22968,fourletter;set;tuple;position;count;growing;family=fourletter;domain=90,four-letter arrangements,growing/fourletter_090.cfl,0cff7eaacceff78781d6bda97d1476fdde28aa23aaad680d46bdc53c8a904428
+growing,fourletter_095,25668,fourletter;set;tuple;position;count;growing;family=fourletter;domain=95,four-letter arrangements,growing/fourletter_095.cfl,09a190db5d76722fd81c2400c932de5d34a4de9cf12b47c741d67fc8d2e821a7
+growing,fourletter_100,28518,fourletter;set;tuple;position;count;growing;family=fourletter;domain=100,four-letter arrangements,growing/fourletter_100.cfl,bc44252ceb395ad6cba9bbfdf3aea533914150643a3e64cf8aaa160961393e2a
+growing,tvs_005,1,tvs;set;choose;count;growing;family=tvs;domain=5,defective TVs purchase,growing/tvs_005.cfl,033625df8c8f967d9e60bc3b2e549d19879707e335f9ce3009950ebc686e35af
+growing,tvs_010,56,tvs;set;choose;count;growing;family=tvs;domain=10,defective TVs purchase,growing/tvs_010.cfl,c2397ae8898cf3b0ec01eeadf9cafa7229349db5fa5a3b4627015d677addf12b
+growing,tvs_015,726,tvs;set;choose;count;growing;family=tvs;domain=15,defective TVs purchase,growing/tvs_015.cfl,63dd2acd8a7c8c1dd10c8213d83ba1b40404dfa0df52bfefebb4301724e0b81a
+growing,tvs_020,5676,tvs;set;choose;count;growing;family=tvs;domain=20,defective TVs purchase,growing/tvs_020.cfl,5cc5df101d2f5fd8c9d73b9385f14232a87854a96ebce8b778732d3933efed83
+growing,tvs_025,18246,tvs;set;choose;count;growing;family=tvs;domain=25,defective TVs purchase,growing/tvs_025.cfl,02450453a11a119daad6b1a3ffd57536f3369324193dba7a24a2a863e815bcdd
+growing,tvs_030,46872,tvs;set;choose;count;growing;family=tvs;domain=30,defective TVs purchase,growing/tvs_030.cfl,d282cc45dc9f9340b0911e3069be7d9a181f69071c0a776a0a0c42804ea8d91a
+growing,tvs_035,103502,tvs;set;choose;count;growing;family=tvs;domain=35,defective TVs purchase,growing/tvs_035.cfl,aed13e31737d228897aaf2db19ce3a4aec1f292f96f471d41c1f554aeebc5c65
+growing,tvs_040,241452,tvs;set;choose;count;growing;family=tvs;domain=40,defective TVs purchase,growing/tvs_040.cfl,282dd77a69b6fcb41fc594539cd7813b26e6a5580bcc75ef9d020977a33d7e64
+growing,tvs_045,433367,tvs;set;choose;count;growing;family=tvs;domain=45,defective TVs purchase,growing/tvs_045.cfl,c280ba89bb3708e2e2bf0773a911d3a01dbd0d1266e95fef5165922f0910e2ec
+growing,tvs_050,731038,tvs;set;choose;count;growing;family=tvs;domain=50,defective TVs purchase,growing/tvs_050.cfl,3090528dc2b898c8158c35967058dcf9c277d0c49c139d0ff1db72db61fbafd2
+growing,tvs_055,1173003,tvs;set;choose;count;growing;family=tvs;domain=55,defective TVs purchase,growing/tvs_055.cfl,7257824d48858bd6b3037e0f5a0a59d20f39168a1cecff51518961463dd584d2
+growing,tvs_060,2004828,tvs;set;choose;count;growing;family=tvs;domain=60,defective TVs purchase,growing/tvs_060.cfl,b632532699b333e326e274c13db6261e762f784007db0d0ff68b076a6adb7b87
+growing,tvs_065,2962988,tvs;set;choose;count;growing;family=tvs;domain=65,defective TVs purchase,growing/tvs_065.cfl,9ba6537fb2394b0f68517f2b00250440865268598b0200ffcda800a8a0a8bf3e
+growing,tvs_070,4255304,tvs;set;choose;count;growing;family=tvs;domain=70,defective TVs purchase,growing/tvs_070.cfl,03f5b3b8d656ae6d078c2f259dc91283774a5e423f3195127e68c3ee73153713
+growing,tvs_075,5962104,tvs;set;choose;count;growing;family=tvs;domain=75,defective TVs purchase,growing/tvs_075.cfl,0b9d0679a4b156faca773a87a1ee67fe9f8d8232a7049c110bf5f642d6bbb50b
+growing,tvs_080,8825804,tvs;set;choose;count;growing;family=tvs;domain=80,defective TVs purchase,growing/tvs_080.cfl,d2cb7a9e3222f4f131ac90bbda87b9b0cece4eed534474fc388998757f4dd13b
+growing,tvs_085,11834109,tvs;set;choose;count;growing;family=tvs;domain=85,defective TVs purchase,growing/tvs_085.cfl,7f5b8f75b580f4f65b08bf569815bf8678c532234004bbab49a174f2a8adb79b
+growing,tvs_090,15608670,tvs;set;choose;count;growing;family=tvs;domain=90,defective TVs purchase,growing/tvs_090.cfl,b8a8362765f2503ddb013258243fca8fd235c76412d49dfa807945341ca0d8f0
+growing,tvs_095,20286805,tvs;set;choose;count;growing;family=tvs;domain=95,defective TVs purchase,growing/tvs_095.cfl,7d675b4d2fb4c9060bd6416b0c08070f7c8ed5d43fbbef5b607cef2f9c5fb149
+growing,tvs_100,27641880,tvs;set;choose;count;growing;family=tvs;domain=100,defective TVs purchase,growing/tvs_100.cfl,9bb7b93d357394c66a71b7f4cff5087a150301aef5270a685f007893ea9702e7
+growing,workers_005,30,workers;set;composition;index;size;growing;family=workers;domain=5,workers composition,growing/workers_005.cfl,1a88372067630ae7dd4b593615ffe7c43c1964d13933069974a545838cbbb847
+growing,workers_010,2520,workers;set;composition;index;size;growing;family=workers;domain=10,workers composition,growing/workers_010.cfl,728aa7901df60b17adf5b76a649607c38620dc8dc5761a1bcdbcfeec3a9196ea
+growing,workers_015,360360,workers;set;composition;index;size;growing;family=workers;domain=15,workers composition,growing/workers_015.cfl,bd7d980f7c959d6ee28b4e3e09bc8a5b638caf5b8576169d62c31a882c6309e9
+growing,workers_020,38798760,workers;set;composition;index;size;growing;family=workers;domain=20,workers composition,growing/workers_020.cfl,b00ef48b04cfd27bfaa00d9cd52ffd6730d4e9c509fd531092202bc3190fb9f3
+growing,workers_025,6692786100,workers;set;composition;index;size;growing;family=workers;domain=25,workers composition,growing/workers_025.cfl,77b3877413eaab14810ce226bb6845afe05c1065073042124cc812d2779d3bdc
+growing,workers_030,465817912560,workers;set;composition;index;size;growing;family=workers;domain=30,workers composition,growing/workers_030.cfl,985b980d967afe37cb3d4b90ed221399606c120b0ccbba4917ceef4bb1b1eabb
+growing,workers_035,144403552893600,workers;set;composition;index;size;growing;family=workers;domain=35,workers composition,growing/workers_035.cfl,e64594750b675612cbfebf8a2ba91f17d8c1a3dab542e2435b04f0c89d78d618
+growing,workers_040,10685862914126400,workers;set;composition;index;size;growing;family=workers;domain=40,workers composition,growing/workers_040.cfl,548a45aaa4aea11d2bb83b49de2d7e372d52758bad1433a33d4338917aa09501
+growing,workers_045,2018483176886233200,workers;set;composition;index;size;growing;family=workers;domain=45,workers composition,growing/workers_045.cfl,a341418c22b363681407f01df52d7b9a0b3bf5f2bb8a9c7cc05cf77f9f496740
+growing,workers_050,258253708687166392200,workers;set;composition;index;size;growing;family=workers;domain=50,workers composition,growing/workers_050.cfl,ca7d32ce01a12c2aba97cc5f0313cc8a94176b34a011fe9e31d14b52bc3df3ce
+growing,workers_055,50187304054872668884200,workers;set;composition;index;size;growing;family=workers;domain=55,workers composition,growing/workers_055.cfl,2c179c00bd0645097dc991a6c1fc9732ffd4441695d6a5104f290e519b6eee27
+growing,workers_060,3553261127084984957001360,workers;set;composition;index;size;growing;family=workers;domain=60,workers composition,growing/workers_060.cfl,8724ef84c5527d571756099201309ce7fde45fe675edf1c1520a9271c2691e99
+growing,workers_065,1280789124444724123137308400,workers;set;composition;index;size;growing;family=workers;domain=65,workers composition,growing/workers_065.cfl,e4a4051ed40ef6bc6f41832757ba2153679ea4cc0f19584d9ed33b29a50f07bd
+growing,workers_070,93614041459414381363854177600,workers;set;composition;index;size;growing;family=workers;domain=70,workers composition,growing/workers_070.cfl,ff165b08eba783459c2955871516f1ba89a176d0f0b680d3d78ea07de167278b
+growing,workers_075,18661599110928643792648315480800,workers;set;composition;index;size;growing;family=workers;domain=75,workers composition,growing/workers_075.cfl,716543ff880e8a43db3e1525329357cbc4caac2b238c512f2b6208134a0a436c
+growing,workers_080,2494912250368767916278674792740800,workers;set;composition;index;size;growing;family=workers;domain=80,workers composition,growing/workers_080.cfl,e5c5b3eba00fa84ab717b969a8673e2b91476161d843d9474e1819af4ed48c4c
+growing,workers_085,502903026467190218552744304651038400,workers;set;composition;index;size;growing;family=workers;domain=85,workers composition,growing/workers_085.cfl,0c826deac69af273d980b1c087674a626601ceef550b5a3f22cb920c26d15290
+growing,workers_090,35806695484463943560955394491153934080,workers;set;composition;index;size;growing;family=workers;domain=90,workers composition,growing/workers_090.cfl,b878ab4bd52a48d45ee30057583e5b8333b7b0d18e0ffeb860c4cf36ebb47453
+growing,workers_095,13656568343964299650784972884236430593600,workers;set;composition;index;size;growing;family=workers;domain=95,workers composition,growing/workers_095.cfl,f4b77e89b90ae2456fe9dbe815cc098d6cec9cc69eaa68f339ba3919d7ec81ae
+growing,workers_100,993515347023402799594606777328200325684400,workers;set;composition;index;size;growing;family=workers;domain=100,workers composition,growing/workers_100.cfl,dbce13fd03af9d488a1095cffb4a8e3aebd841ca2b17bbcdddf01b685c951cd3
+growing,banana_005,30,banana;bag;tuple;growing;family=banana;domain=5,BANANA bag tuple,growing/banana_005.cfl,8e1baf74724e406115f8b3518cddcceeff1db7d1402bb48644e30c1cdabc0caf
+growing,banana_010,1260,banana;bag;tuple;growing;family=banana;domain=10,BANANA bag tuple,growing/banana_010.cfl,4d2515f99996828b6b4d075a148bd7fd7f954ec8a8d05d8a06f093eab024e887
+growing,banana_015,180180,banana;bag;tuple;growing;family=banana;domain=15,BANANA bag tuple,growing/banana_015.cfl,49afd8d68accf9eefc3555f8fb83be92249f84e7472144a9116e4d3f20fdf100
+growing,banana_020,22170720,banana;bag;tuple;growing;family=banana;domain=20,BANANA bag tuple,growing/banana_020.cfl,8ba9ed8d7fdf0996be91861a1a7888e828570dc5d4dc9434b871005042661875
+growing,banana_025,3718214500,banana;bag;tuple;growing;family=banana;domain=25,BANANA bag tuple,growing/banana_025.cfl,86da9f0a9796559e3879999ad07e35810e423813dc81b46a0bbeec9042f723b1
+growing,banana_030,465817912560,banana;bag;tuple;growing;family=banana;domain=30,BANANA bag tuple,growing/banana_030.cfl,fb73609045abf0a69f26270986664bc180b9262362f39e5d23b7ea964b679e57
+growing,banana_035,38877879625200,banana;bag;tuple;growing;family=banana;domain=35,BANANA bag tuple,growing/banana_035.cfl,1e92436572b5c5b762b9e4a32246865bc1880857119e64c9224de232d8e4c4a4
+growing,banana_040,5342931457063200,banana;bag;tuple;growing;family=banana;domain=40,BANANA bag tuple,growing/banana_040.cfl,ed883af82f38d540cf0c1a6a7a529513f387d266b0420011558fb3f9d744ba78
+growing,banana_045,1009241588443116600,banana;bag;tuple;growing;family=banana;domain=45,BANANA bag tuple,growing/banana_045.cfl,37e4e9de6a7e8af7828665a6ab1e545f0dda392db6cb5e1bb983642c018a8cd2
+growing,banana_050,136722551657911619400,banana;bag;tuple;growing;family=banana;domain=50,BANANA bag tuple,growing/banana_050.cfl,273cf7125f97a722fc115313ec21ea59a6da2c994855fd5fcb98d1ed9c8195c2
+growing,banana_055,26414370555196141518000,banana;bag;tuple;growing;family=banana;domain=55,BANANA bag tuple,growing/banana_055.cfl,e5cd6aaa0f205e4ee6ec3aa282b243c3353974a941c2fa57d0a9ed93788f8a7b
+growing,banana_060,3553261127084984957001360,banana;bag;tuple;growing;family=banana;domain=60,BANANA bag tuple,growing/banana_060.cfl,aaa23f4392b736b3c84721b0fa0477b6528b2c44dbd910d7dd53f28a0140cc11
+growing,banana_065,334118902029058466905384800,banana;bag;tuple;growing;family=banana;domain=65,BANANA bag tuple,growing/banana_065.cfl,9d7a87c01a5ab356f7c164c51d68f00c6caaf62e745bd3de19e502698bb24ff8
+growing,banana_070,46807020729707190681927088800,banana;bag;tuple;growing;family=banana;domain=70,BANANA bag tuple,growing/banana_070.cfl,2d8d4a6d644ad44d614c84f8d983eef6710679f3bb1a3917a522a649b3cafb2c
+growing,banana_075,9330799555464321896324157740400,banana;bag;tuple;growing;family=banana;domain=75,BANANA bag tuple,growing/banana_075.cfl,2d267798380fdca3cce04f22bd54d0d31c953ddccd225b4d6c35d0c05a0e4278
+growing,banana_080,1293658203894916697329683225865600,banana;bag;tuple;growing;family=banana;domain=80,BANANA bag tuple,growing/banana_080.cfl,4e1a3d51964586db7b977bf49332563e1ee631cfa17ff6b37641d41ff370d7fc
+growing,banana_085,260122255069236319941074640336744000,banana;bag;tuple;growing;family=banana;domain=85,BANANA bag tuple,growing/banana_085.cfl,40368e1e1206d747620eb68d1fba051a9ed4d2d0031eb45edefc21a0bfef5081
+growing,banana_090,35806695484463943560955394491153934080,banana;bag;tuple;growing;family=banana;domain=90,BANANA bag tuple,growing/banana_090.cfl,ddc83890538ad796669d59038c0482e8842ae3a298e450ad2c85ed57adbdef84
+growing,banana_095,3517600937081713546414311197454838183200,banana;bag;tuple;growing;family=banana;domain=95,BANANA bag tuple,growing/banana_095.cfl,699544ac32f4655661c76d2a653b0bcb92298376fd0915d77e8184e33ad97c85
+growing,banana_100,496757673511701399797303388664100162842200,banana;bag;tuple;growing;family=banana;domain=100,BANANA bag tuple,growing/banana_100.cfl,9e834778f8ea9244f615efa20a5a9ab18e6e9b6a63f0d84b54b570ff868099a4

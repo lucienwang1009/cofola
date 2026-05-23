@@ -1,4 +1,0 @@
-letters = set(a0...14)
-arr = choose_tuple(letters, 4)
-arr[0] == a0
-arr.count(a1) > 0

@@ -1,0 +1,4 @@
+bag_0 = bag(e_10: 3, e_2: 2, e_4: 1, e_7: 3, e_8: 1)
+sequence_0 = sequence(bag_0)
+e_4 < e_2 in sequence_0
+next_to(e_2, e_10) in sequence_0

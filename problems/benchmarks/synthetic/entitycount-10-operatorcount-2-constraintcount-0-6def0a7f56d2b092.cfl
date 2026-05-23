@@ -1,0 +1,3 @@
+set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)
+choose_replace_sequence_0 = choose_replace_sequence(set_0, 4)
+partition_0 = partition(set_0, 3)

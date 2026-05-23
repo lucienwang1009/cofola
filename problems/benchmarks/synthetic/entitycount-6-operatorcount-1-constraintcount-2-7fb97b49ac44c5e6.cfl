@@ -1,0 +1,4 @@
+bag_0 = bag(e_2: 2, e_3: 1, e_5: 1, e_6: 2)
+circle_0 = circle(bag_0, reflection=True)
+together(set(e_3, e_2, e_5)) not in circle_0
+next_to(e_3, e_2) in circle_0

@@ -1,3 +1,0 @@
-digits = set(0...10)
-number = choose_replace_tuple(digits, 3)
-number[1] != 0

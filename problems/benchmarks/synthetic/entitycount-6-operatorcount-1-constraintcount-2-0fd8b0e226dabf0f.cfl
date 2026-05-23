@@ -1,0 +1,4 @@
+bag_0 = bag(e_1: 1, e_2: 1, e_4: 2, e_5: 1, e_6: 1)
+sequence_0 = sequence(bag_0)
+next_to(e_6, e_1) not in sequence_0
+together(set(e_4, e_5, e_2)) in sequence_0

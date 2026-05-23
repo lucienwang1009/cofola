@@ -1,5 +1,0 @@
-state = set(mail, no_mail)
-house_mails = choose_replace(state, 19)
-row = sequence(house_mails)
-(1, 1) not in row
-(0, 0, 0) not in row

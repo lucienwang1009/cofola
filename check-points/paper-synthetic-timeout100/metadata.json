@@ -1,0 +1,1531 @@
+{
+  "args": {
+    "suite": [
+      "all"
+    ],
+    "backends": [
+      "wfomc",
+      "propositionalwfomc",
+      "coso",
+      "asp",
+      "essence"
+    ],
+    "real_path": "problems/real/corpus.json",
+    "benchmark_manifest": "problems/benchmarks/synthetic/manifest.json",
+    "benchmark_dir": null,
+    "ids": null,
+    "timeout": 100.0,
+    "synthetic_seed": 0,
+    "growing_min_domain": 5,
+    "growing_max_domain": 100,
+    "growing_domain_step": 5,
+    "skip_larger_growing_after_timeout": true,
+    "algo": "fastv2",
+    "linear_order_encoding": null,
+    "conjure_dir": "/home/sunshixin/lucien/CoSo/tools/conjure",
+    "java_bin": "/home/sunshixin/lucien/tools/java/bin/java"
+  },
+  "num_cases": 100,
+  "cases": [
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-1-constraintcount-0-0d34b0a7cd86b50e",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_0 = choose(set_0, 7)",
+      "expected": 120,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-1-constraintcount-0",
+        "entitycount=10",
+        "operatorcount=1",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-1-constraintcount-0-d4483e8ad18aedcd",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0, reflection=True)",
+      "expected": 181440,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-1-constraintcount-0",
+        "entitycount=10",
+        "operatorcount=1",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-1-constraintcount-1-086334d2e41765e0",
+      "program": "bag_0 = bag(e_1: 1, e_10: 2, e_2: 1, e_3: 1, e_5: 1, e_6: 2, e_8: 1, e_9: 1)\npartition_0 = partition(bag_0, 3)\n|part| < 1 for part in partition_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-1-constraintcount-1",
+        "entitycount=10",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-1-constraintcount-2-0e826c127e923b9f",
+      "program": "bag_0 = bag(e_10: 3, e_2: 2, e_4: 1, e_7: 3, e_8: 1)\nsequence_0 = sequence(bag_0)\ne_4 < e_2 in sequence_0\nnext_to(e_2, e_10) in sequence_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-1-constraintcount-2",
+        "entitycount=10",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-1-constraintcount-2-548d090cc7d3ca13",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_0 = choose(set_0, 5)\nset_0 subset choose_0\nchoose_0 disjoint set_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-1-constraintcount-2",
+        "entitycount=10",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-1-constraintcount-2-72cc68ec10a74a9d",
+      "program": "bag_0 = bag(e_10: 4, e_2: 1, e_3: 2, e_4: 1, e_6: 2)\npartition_0 = partition(bag_0, 3)\n|part| >= 3 for part in partition_0\n|part| > 2 for part in partition_0",
+      "expected": 120,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-1-constraintcount-2",
+        "entitycount=10",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-1-constraintcount-3-cbc3f81af23a8a58",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ntuple_0 = tuple(set_0)\ntuple_0[1] != e_2\ntuple_0[8] == e_9\ntuple_0[4] != e_1",
+      "expected": 287280,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-1-constraintcount-3",
+        "entitycount=10",
+        "operatorcount=1",
+        "constraintcount=3",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-1-constraintcount-3-d04ee9577fe15b87",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ntuple_0 = tuple(set_0)\ntuple_0[1] != e_7\ntuple_0[7] != e_10\ntuple_0[9] != e_8",
+      "expected": 2656080,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-1-constraintcount-3",
+        "entitycount=10",
+        "operatorcount=1",
+        "constraintcount=3",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-2-constraintcount-0-6def0a7f56d2b092",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_replace_sequence_0 = choose_replace_sequence(set_0, 4)\npartition_0 = partition(set_0, 3)",
+      "expected": 98420000,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-2-constraintcount-0",
+        "entitycount=10",
+        "operatorcount=2",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-2-constraintcount-1-186ea0802266995e",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0)\nchoose_tuple_0 = choose_replace_tuple(set_0, 11)\nchoose_tuple_0.count(e_4) > 9",
+      "expected": 1448500838400000,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-2-constraintcount-1",
+        "entitycount=10",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-2-constraintcount-1-c82180be14e8bc6b",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_0 = choose(set_0, 4)\nchoose_tuple_0 = choose_replace_tuple(choose_0, 8)\nset_0 subset choose_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-2-constraintcount-1",
+        "entitycount=10",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-2-constraintcount-1-e5e01e85a55f43ae",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\npartition_0 = partition(set_0, 9)\nsequence_0 = sequence(set_0)\n|part| > 3 for part in partition_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-2-constraintcount-1",
+        "entitycount=10",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-2-constraintcount-2-31681e42853edb27",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\npartition_0 = partition(set_0, 4)\nchoose_tuple_0 = choose_replace_tuple(set_0, 17)\n|part| > 3 for part in partition_0\n|part| != 1 for part in partition_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-2-constraintcount-2",
+        "entitycount=10",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-2-constraintcount-2-fd03ab679f3d7732",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0)\nchoose_0 = choose(set_0, 5)\ntogether(set(e_5, e_7, e_4)) in circle_0\ne_3 in choose_0",
+      "expected": 3810240,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-2-constraintcount-2",
+        "entitycount=10",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-2-constraintcount-3-3c103cd215f398b2",
+      "program": "bag_0 = bag(e_1: 1, e_10: 1, e_3: 1, e_4: 2, e_6: 1, e_7: 2, e_8: 1, e_9: 1)\nchoose_0 = choose(bag_0, 7)\nsequence_0 = sequence(choose_0)\ne_9 in choose_0\nchoose_0 disjoint bag_0\ne_6 < e_10 not in sequence_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-2-constraintcount-3",
+        "entitycount=10",
+        "operatorcount=2",
+        "constraintcount=3",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-2-constraintcount-3-4309512fbfae2de7",
+      "program": "bag_0 = bag(e_1: 1, e_10: 1, e_3: 2, e_4: 1, e_5: 1, e_6: 1, e_7: 1, e_8: 1, e_9: 1)\nchoose_0 = choose(bag_0, 7)\nsequence_0 = sequence(choose_0)\nbag_0 subset choose_0\nchoose_0 disjoint bag_0\n(e_9, e_6) in sequence_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-2-constraintcount-3",
+        "entitycount=10",
+        "operatorcount=2",
+        "constraintcount=3",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-2-constraintcount-3-7ddc28da1d240467",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\npartition_0 = partition(set_0, 5)\ncompose_0 = compose(set_0, 4)\n|part| <= 3 for part in partition_0\ne_5 in compose_0[3]\n|compose_0[3]| >= 3",
+      "expected": 6464355940,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-2-constraintcount-3",
+        "entitycount=10",
+        "operatorcount=2",
+        "constraintcount=3",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-2-constraintcount-3-ac2bc99b7cd482df",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_replace_0 = choose_replace(set_0, 6)\ntuple_0 = tuple(set_0)\nchoose_replace_0.count(e_5) < 5\nsupp(choose_replace_0) disjoint set_0\ntuple_0[2] != e_3",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-2-constraintcount-3",
+        "entitycount=10",
+        "operatorcount=2",
+        "constraintcount=3",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-3-constraintcount-0-da813c6e10c6bc0c",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ntuple_0 = tuple(set_0)\nchoose_tuple_0 = choose_replace_tuple(set_0, 13)\nchoose_0 = choose(set_0, 4)",
+      "expected": 7620480000000000000000,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-3-constraintcount-0",
+        "entitycount=10",
+        "operatorcount=3",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-3-constraintcount-1-21a5c4d4b04f0edc",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_0 = choose(set_0, 8)\npartition_0 = partition(choose_0, 2)\nchoose_tuple_0 = choose_tuple(choose_0, 6)\ne_9 in choose_tuple_0",
+      "expected": 69672960,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-3-constraintcount-1",
+        "entitycount=10",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-10-operatorcount-4-constraintcount-0-1d55d57c9bc62c08",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\npartition_0 = partition(set_0, 10)\nchoose_0 = choose(set_0, 8)\nchoose_1 = choose(choose_0, 5)\nset_union_0 = choose_1 + choose_0",
+      "expected": 292257000,
+      "tags": [
+        "synthetic",
+        "family=entitycount-10-operatorcount-4-constraintcount-0",
+        "entitycount=10",
+        "operatorcount=4",
+        "constraintcount=0",
+        "depth=3"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-1-constraintcount-0-0e214022b5c74f79",
+      "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncompose_0 = compose(set_0, 9)",
+      "expected": 282429536481,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-1-constraintcount-0",
+        "entitycount=12",
+        "operatorcount=1",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-1-constraintcount-0-2fa1824b6a3c1ed9",
+      "program": "bag_0 = bag(e_1: 1, e_10: 1, e_12: 4, e_2: 1, e_4: 2, e_7: 3)\ncompose_0 = compose(bag_0, 3)",
+      "expected": 24300,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-1-constraintcount-0",
+        "entitycount=12",
+        "operatorcount=1",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-1-constraintcount-0-ce7572d4f8850d38",
+      "program": "bag_0 = bag(e_11: 1, e_12: 2, e_3: 1, e_5: 4, e_8: 3, e_9: 1)\ncircle_0 = circle(bag_0)",
+      "expected": 138600,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-1-constraintcount-0",
+        "entitycount=12",
+        "operatorcount=1",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-1-constraintcount-1-08fe511b37ff8c8b",
+      "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_tuple_0 = choose_replace_tuple(set_0, 6)\nchoose_tuple_0.count(e_2) <= 6",
+      "expected": 2985984,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-1-constraintcount-1",
+        "entitycount=12",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-1-constraintcount-1-b076445cdbd23ad9",
+      "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_tuple_0 = choose_replace_tuple(set_0, 3)\nchoose_tuple_0[0] == e_3",
+      "expected": 144,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-1-constraintcount-1",
+        "entitycount=12",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-1-constraintcount-1-ba9466d0907590a1",
+      "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\npartition_0 = partition(set_0, 7)\n|part| == 3 for part in partition_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-1-constraintcount-1",
+        "entitycount=12",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-1-constraintcount-1-ea4d1d2d0e0c9989",
+      "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_0 = choose(set_0, 12)\nset_0 subset choose_0",
+      "expected": 1,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-1-constraintcount-1",
+        "entitycount=12",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-1-constraintcount-2-51bc0a7fa356cdda",
+      "program": "bag_0 = bag(e_10: 2, e_12: 2, e_2: 2, e_4: 1, e_6: 2, e_7: 1, e_8: 2)\nchoose_0 = choose(bag_0, 7)\nbag_0 subset choose_0\nchoose_0.count(e_10) > 1",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-1-constraintcount-2",
+        "entitycount=12",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-1-constraintcount-2-8a245475e7f46331",
+      "program": "bag_0 = bag(e_1: 1, e_10: 1, e_11: 1, e_12: 2, e_3: 1, e_4: 1, e_6: 1, e_8: 2, e_9: 2)\nchoose_0 = choose(bag_0, 3)\nchoose_0.count(e_9) <= 1\nchoose_0 disjoint bag_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-1-constraintcount-2",
+        "entitycount=12",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-2-constraintcount-1-e92b0c267ac36aa3",
+      "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0, reflection=True)\ntuple_0 = tuple(set_0)\ntuple_0[10] == e_4",
+      "expected": 381608820557217792000000,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-2-constraintcount-1",
+        "entitycount=12",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-2-constraintcount-2-1e1d2cca7ccda018",
+      "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\npartition_0 = partition(set_0, 10)\ncompose_0 = compose(set_0, 9)\n|part| > 2 for part in partition_0\n|part| == 3 for part in partition_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-2-constraintcount-2",
+        "entitycount=12",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-2-constraintcount-2-c78cb8b649394a2c",
+      "program": "bag_0 = bag(e_10: 1, e_11: 1, e_12: 1, e_2: 2, e_3: 1, e_4: 1, e_5: 1, e_6: 1, e_9: 3)\nchoose_0 = choose(bag_0, 5)\nchoose_1 = choose(choose_0, 4)\ne_4 in choose_1\ne_12 in choose_1",
+      "expected": 130,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-2-constraintcount-2",
+        "entitycount=12",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-2-constraintcount-2-fa1dc20238ac9c90",
+      "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_tuple_0 = choose_replace_tuple(set_0, 21)\nchoose_0 = choose(set_0, 9)\nchoose_tuple_0.count(e_4) == 2\ne_4 in choose_0",
+      "expected": 2119162484037564028983150,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-2-constraintcount-2",
+        "entitycount=12",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-2-constraintcount-3-249459aa535b2cc5",
+      "program": "bag_0 = bag(e_10: 2, e_11: 1, e_12: 1, e_4: 3, e_5: 1, e_6: 1, e_7: 2, e_8: 1)\npartition_0 = partition(bag_0, 6)\npartition_1 = partition(bag_0, 7)\n|part| > 2 for part in partition_0\n|part| < 1 for part in partition_1\n|part| > 2 for part in partition_1",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-2-constraintcount-3",
+        "entitycount=12",
+        "operatorcount=2",
+        "constraintcount=3",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-12-operatorcount-4-constraintcount-3-1d903b40ec693af4",
+      "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_0 = choose(set_0, 10)\nchoose_1 = choose(choose_0, 8)\npartition_0 = partition(choose_0, 6)\ntuple_0 = tuple(choose_1)\nchoose_1 disjoint choose_0\ne_8 in choose_1\n|part| <= 3 for part in partition_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-12-operatorcount-4-constraintcount-3",
+        "entitycount=12",
+        "operatorcount=4",
+        "constraintcount=3",
+        "depth=3"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-0-098d21d70942f3f1",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 2, e_6: 2)\nchoose_tuple_0 = choose_tuple(bag_0, 2)",
+      "expected": 14,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-0",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-0-7ad4b1641ce06da7",
+      "program": "bag_0 = bag(e_1: 1, e_3: 1, e_4: 2, e_6: 2)\ncompose_0 = compose(bag_0, 2)",
+      "expected": 36,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-0",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-0-a5a3a6aefe6d08e4",
+      "program": "bag_0 = bag(e_2: 2, e_4: 1, e_5: 2, e_6: 1)\ncircle_0 = circle(bag_0)",
+      "expected": 30,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-0",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-0-bbf49737f1c1e12b",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nchoose_replace_0 = choose_replace(set_0, 9)",
+      "expected": 2002,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-0",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-0-d22415375b4cbd29",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_6: 4)\nchoose_0 = choose(bag_0, 2)",
+      "expected": 4,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-0",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-1-61023f0a4782cc24",
+      "program": "bag_0 = bag(e_1: 1, e_3: 2, e_6: 3)\nsequence_0 = sequence(bag_0)\n(e_6, e_3) in sequence_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-1",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-1-6fcc7ccb5a4d6a03",
+      "program": "bag_0 = bag(e_2: 1, e_3: 1, e_5: 1, e_6: 3)\ncompose_0 = compose(bag_0, 2)\ne_5 in compose_0[1]",
+      "expected": 16,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-1",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-1-aefbdbf0a1df8620",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_5: 2, e_6: 1)\nsequence_0 = sequence(bag_0)\ne_6 < e_5 in sequence_0",
+      "expected": 120,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-1",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-1-b7a233dc133c0a8c",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nsequence_0 = sequence(set_0)\nnext_to(e_6, e_3) in sequence_0",
+      "expected": 240,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-1",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-1-c2e6ac1d7d372886",
+      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 1, e_6: 3)\ncircle_0 = circle(bag_0, reflection=True)\nnext_to(e_5, e_1) not in circle_0",
+      "expected": 6,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-1",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-2-0fd8b0e226dabf0f",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 2, e_5: 1, e_6: 1)\nsequence_0 = sequence(bag_0)\nnext_to(e_6, e_1) not in sequence_0\ntogether(set(e_4, e_5, e_2)) in sequence_0",
+      "expected": 24,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-2",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-2-699b0cadc6e5bcdd",
+      "program": "bag_0 = bag(e_1: 1, e_3: 2, e_4: 1, e_5: 1, e_6: 1)\nsequence_0 = sequence(bag_0)\nnext_to(e_6, e_4) not in sequence_0\ne_1 < e_5 in sequence_0",
+      "expected": 120,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-2",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-2-7e57ff6a67665b60",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\ntuple_0 = tuple(set_0)\ntuple_0[2] == e_1\ntuple_0[4] == e_2",
+      "expected": 24,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-2",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-2-7fb97b49ac44c5e6",
+      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_5: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\ntogether(set(e_3, e_2, e_5)) not in circle_0\nnext_to(e_3, e_2) in circle_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-2",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-2-f218600467904c90",
+      "program": "bag_0 = bag(e_4: 2, e_5: 1, e_6: 3)\npartition_0 = partition(bag_0, 3)\n|part| < 3 for part in partition_0\n|part| >= 3 for part in partition_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-2",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-3-40a9594b9d68bb1a",
+      "program": "bag_0 = bag(e_1: 1, e_3: 2, e_5: 2, e_6: 1)\nchoose_0 = choose(bag_0, 2)\nchoose_0.count(e_1) > 1\ne_3 in choose_0\ne_6 in choose_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-3",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=3",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-3-4103ef963e4c3b33",
+      "program": "bag_0 = bag(e_3: 2, e_4: 1, e_6: 3)\npartition_0 = partition(bag_0, 2)\n|part| < 1 for part in partition_0\n|part| > 3 for part in partition_0\n|part| != 2 for part in partition_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-3",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=3",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-3-7d10335329ac6184",
+      "program": "bag_0 = bag(e_3: 3, e_5: 2, e_6: 1)\nchoose_0 = choose(bag_0, 3)\nchoose_0.count(e_6) >= 1\nbag_0 subset choose_0\ne_6 in choose_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-3",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=3",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-3-ae6115d84e6b3da5",
+      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_4: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\ntogether(set(e_6, e_2)) in circle_0\nnext_to(e_2, e_6) not in circle_0\nnext_to(e_6, e_4) in circle_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-3",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=3",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-3-d52ce2f6630783d1",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\ncompose_0 = compose(set_0, 3)\ncompose_0[1] disjoint compose_0[2]\nset_0 subset compose_0[0]\ncompose_0[1] subset compose_0[2]",
+      "expected": 1,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-3",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=3",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-1-constraintcount-3-db1b4e6207a976a9",
+      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_5: 1, e_6: 2)\nchoose_0 = choose(bag_0, 3)\ne_5 in choose_0\nbag_0 subset choose_0\nchoose_0.count(e_2) != 1",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-1-constraintcount-3",
+        "entitycount=6",
+        "operatorcount=1",
+        "constraintcount=3",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-2-constraintcount-0-7b7123ffc129aed7",
+      "program": "bag_0 = bag(e_2: 2, e_4: 1, e_6: 3)\npartition_0 = partition(bag_0, 3)\nchoose_tuple_0 = choose_tuple(bag_0, 3)",
+      "expected": 608,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-2-constraintcount-0",
+        "entitycount=6",
+        "operatorcount=2",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-2-constraintcount-0-a6c415e0db3545b3",
+      "program": "bag_0 = bag(e_2: 1, e_3: 2, e_4: 1, e_6: 2)\npartition_0 = partition(bag_0, 2)\ncircle_0 = circle(bag_0, reflection=True)",
+      "expected": 270,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-2-constraintcount-0",
+        "entitycount=6",
+        "operatorcount=2",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-2-constraintcount-0-f9d555185b457f25",
+      "program": "bag_0 = bag(e_1: 1, e_3: 2, e_4: 1, e_5: 1, e_6: 1)\nchoose_tuple_0 = choose_tuple(bag_0, 5)\ncompose_0 = compose(bag_0, 2)",
+      "expected": 17280,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-2-constraintcount-0",
+        "entitycount=6",
+        "operatorcount=2",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-2-constraintcount-1-6d21800f730e41ab",
+      "program": "bag_0 = bag(e_3: 3, e_4: 1, e_6: 2)\nchoose_tuple_0 = choose_tuple(bag_0, 2)\ncompose_0 = compose(bag_0, 3)\ne_6 in choose_tuple_0",
+      "expected": 900,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-2-constraintcount-1",
+        "entitycount=6",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-2-constraintcount-1-7e32fcdedd12fef6",
+      "program": "bag_0 = bag(e_2: 1, e_4: 1, e_5: 1, e_6: 3)\ncompose_0 = compose(bag_0, 3)\ncompose_1 = compose(compose_0[2], 4)\ncompose_1[0] disjoint compose_1[0]",
+      "expected": 4375,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-2-constraintcount-1",
+        "entitycount=6",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-2-constraintcount-1-c89ae16b778ff092",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\ntuple_0 = tuple(set_0)\ntuple_1 = tuple(set_0)\ntuple_0[5] == e_5",
+      "expected": 86400,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-2-constraintcount-1",
+        "entitycount=6",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-2-constraintcount-2-0a376cf70be918d0",
+      "program": "bag_0 = bag(e_1: 1, e_3: 2, e_4: 1, e_6: 2)\nchoose_0 = choose(bag_0, 4)\nchoose_1 = choose(choose_0, 2)\nchoose_0 disjoint choose_1\nchoose_0 subset choose_1",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-2-constraintcount-2",
+        "entitycount=6",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-2-constraintcount-2-37af4128d1b00394",
+      "program": "bag_0 = bag(e_1: 1, e_3: 1, e_4: 1, e_5: 1, e_6: 2)\nchoose_0 = choose(bag_0, 2)\nchoose_tuple_0 = choose_tuple(choose_0, 2)\nbag_0 subset choose_0\ne_5 in choose_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-2-constraintcount-2",
+        "entitycount=6",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-2-constraintcount-2-69b536410283e6d4",
+      "program": "bag_0 = bag(e_2: 1, e_3: 1, e_4: 1, e_6: 3)\ncompose_0 = compose(bag_0, 3)\nchoose_tuple_0 = choose_tuple(bag_0, 3)\nchoose_tuple_0[1] in compose_0[2]\nchoose_tuple_0.count(e_4) == 1",
+      "expected": 2322,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-2-constraintcount-2",
+        "entitycount=6",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-2-constraintcount-2-8b61a11318f3a02e",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nsequence_0 = sequence(set_0)\nchoose_tuple_0 = choose_replace_tuple(set_0, 8)\n(e_3, e_6) in sequence_0\nchoose_tuple_0.count(e_2) > 2",
+      "expected": 1095854054400,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-2-constraintcount-2",
+        "entitycount=6",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-2-constraintcount-2-9222f8b87ab8c7e1",
+      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 3, e_6: 1)\ncircle_0 = circle(bag_0)\nchoose_0 = choose(bag_0, 4)\nnext_to(e_6, e_4) not in circle_0\nnext_to(e_1, e_4) in circle_0",
+      "expected": 42,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-2-constraintcount-2",
+        "entitycount=6",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-2-constraintcount-2-cec10f42ac958b3a",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nsequence_0 = sequence(set_0)\ntuple_0 = tuple(set_0)\ne_2 < e_3 in sequence_0\n(e_1, e_2) in sequence_0",
+      "expected": 31104000,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-2-constraintcount-2",
+        "entitycount=6",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-3-constraintcount-0-43200cd4614758dc",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\npartition_0 = partition(set_0, 5)\nchoose_tuple_0 = choose_replace_tuple(set_0, 9)\nchoose_tuple_1 = choose_replace_tuple(set_0, 2)",
+      "expected": 73285005312,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-3-constraintcount-0",
+        "entitycount=6",
+        "operatorcount=3",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-3-constraintcount-0-c31517ec875ce649",
+      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 3, e_6: 1)\nchoose_0 = choose(bag_0, 3)\nbag_union_0 = bag_0 + choose_0\nbag_inter_0 = bag_union_0 & choose_0",
+      "expected": 8,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-3-constraintcount-0",
+        "entitycount=6",
+        "operatorcount=3",
+        "constraintcount=0",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-3-constraintcount-0-e454fd4da6fcdcd9",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nchoose_tuple_0 = choose_replace_tuple(set_0, 2)\nchoose_replace_0 = choose_replace(set_0, 3)\nchoose_0 = choose(set_0, 6)",
+      "expected": 2016,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-3-constraintcount-0",
+        "entitycount=6",
+        "operatorcount=3",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-3-constraintcount-3-3231f166594d7e8c",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\npartition_0 = partition(set_0, 2)\nchoose_0 = choose(set_0, 4)\ncompose_0 = compose(choose_0, 3)\ncompose_0[0] subset choose_0\n|compose_0[0]| == 1\ne_6 in compose_0[0]",
+      "expected": 2560,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-3-constraintcount-3",
+        "entitycount=6",
+        "operatorcount=3",
+        "constraintcount=3",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-4-constraintcount-2-2a3bc365b5f360e2",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_4: 1, e_6: 2)\nchoose_0 = choose(bag_0, 5)\nchoose_tuple_0 = choose_tuple(choose_0, 4)\nbag_inter_0 = choose_0 & bag_0\nbag_inter_1 = bag_inter_0 & choose_0\nchoose_0.count(e_2) != 1\nchoose_0 disjoint bag_inter_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-4-constraintcount-2",
+        "entitycount=6",
+        "operatorcount=4",
+        "constraintcount=2",
+        "depth=3"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-6-operatorcount-4-constraintcount-2-30ea8e562dd6146f",
+      "program": "bag_0 = bag(e_2: 1, e_3: 2, e_4: 1, e_5: 1, e_6: 1)\ncircle_0 = circle(bag_0, reflection=True)\nchoose_0 = choose(bag_0, 2)\nbag_union_0 = bag_0 + choose_0\nchoose_1 = choose(choose_0, 2)\nchoose_0 disjoint bag_union_0\ne_4 in choose_1",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-6-operatorcount-4-constraintcount-2",
+        "entitycount=6",
+        "operatorcount=4",
+        "constraintcount=2",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-1-constraintcount-0-17c2b29ba83a4d1e",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 2, e_5: 1, e_7: 2, e_8: 1)\nsequence_0 = sequence(bag_0)",
+      "expected": 10080,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-1-constraintcount-0",
+        "entitycount=8",
+        "operatorcount=1",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-1-constraintcount-0-84fd1376369d28ad",
+      "program": "bag_0 = bag(e_1: 1, e_3: 1, e_4: 2, e_7: 3, e_8: 1)\nsequence_0 = sequence(bag_0)",
+      "expected": 3360,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-1-constraintcount-0",
+        "entitycount=8",
+        "operatorcount=1",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-1-constraintcount-0-cb607d8a7ff16521",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\nchoose_replace_0 = choose_replace(set_0, 2)",
+      "expected": 36,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-1-constraintcount-0",
+        "entitycount=8",
+        "operatorcount=1",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-1-constraintcount-1-b860fe6f097ab184",
+      "program": "bag_0 = bag(e_1: 1, e_3: 2, e_5: 1, e_7: 2, e_8: 2)\npartition_0 = partition(bag_0, 4)\n|part| == 2 for part in partition_0",
+      "expected": 23,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-1-constraintcount-1",
+        "entitycount=8",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-1-constraintcount-1-c4a14615f8719fc3",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ntuple_0 = tuple(set_0)\ntuple_0[7] == e_3",
+      "expected": 5040,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-1-constraintcount-1",
+        "entitycount=8",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-1-constraintcount-2-591bc70cdd6e86ca",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ntuple_0 = tuple(set_0)\ntuple_0[0] == e_8\ntuple_0[3] != e_2",
+      "expected": 4320,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-1-constraintcount-2",
+        "entitycount=8",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-1-constraintcount-2-db03d03a3ac2b0cb",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\nnext_to(e_7, e_2) not in circle_0\ntogether(set(e_2, e_5)) not in circle_0",
+      "expected": 1200,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-1-constraintcount-2",
+        "entitycount=8",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-1-constraintcount-2-eec0c01b36b41b1f",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 1, e_7: 4, e_8: 1)\ncircle_0 = circle(bag_0)\nnext_to(e_8, e_7) not in circle_0\nnext_to(e_4, e_1) not in circle_0",
+      "expected": 26,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-1-constraintcount-2",
+        "entitycount=8",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-1-constraintcount-3-164e13afbb530e28",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\nchoose_replace_0 = choose_replace(set_0, 12)\nsupp(choose_replace_0) disjoint set_0\ne_3 in choose_replace_0\nchoose_replace_0.count(e_8) < 2",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-1-constraintcount-3",
+        "entitycount=8",
+        "operatorcount=1",
+        "constraintcount=3",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-1-constraintcount-3-3aa3bc2e6e53fdfc",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncompose_0 = compose(set_0, 2)\n|compose_0[1]| > 1\n|compose_0[0]| > 0\n|compose_0[1]| >= 1",
+      "expected": 246,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-1-constraintcount-3",
+        "entitycount=8",
+        "operatorcount=1",
+        "constraintcount=3",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-2-constraintcount-0-9f8cd64698bc8227",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\ntuple_0 = tuple(set_0)",
+      "expected": 4096770048000,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-2-constraintcount-0",
+        "entitycount=8",
+        "operatorcount=2",
+        "constraintcount=0",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-2-constraintcount-1-1d19f76201f86b76",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ntuple_0 = tuple(set_0)\nchoose_tuple_0 = choose_replace_tuple(set_0, 10)\ntuple_0[1] != e_8",
+      "expected": 37881611550720,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-2-constraintcount-1",
+        "entitycount=8",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-2-constraintcount-1-2c0c89dcbd025ca2",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\nchoose_tuple_0 = choose_replace_tuple(set_0, 6)\npartition_0 = partition(set_0, 6)\n|part| == 2 for part in partition_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-2-constraintcount-1",
+        "entitycount=8",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-2-constraintcount-1-2e82d0d4845aec4f",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ntuple_0 = tuple(set_0)\npartition_0 = partition(set_0, 7)\ntuple_0[5] == e_8",
+      "expected": 20860560,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-2-constraintcount-1",
+        "entitycount=8",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-2-constraintcount-2-1649e8673463cac7",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\nchoose_tuple_0 = choose_tuple(set_0, 3)\ncompose_0 = compose(set_0, 2)\nchoose_tuple_0[0] != e_5\n|compose_0[0]| > 0",
+      "expected": 74970,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-2-constraintcount-2",
+        "entitycount=8",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-2-constraintcount-2-20dc9f0b942528ae",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ntuple_0 = tuple(set_0)\nchoose_tuple_0 = choose_tuple(set_0, 7)\ntuple_0[6] == e_5\ntuple_0[7] == e_5",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-2-constraintcount-2",
+        "entitycount=8",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-2-constraintcount-2-63932c1283bda3af",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncompose_0 = compose(set_0, 3)\nsequence_0 = sequence(compose_0[2])\n|compose_0[2]| > 0\n(e_8, e_6) in sequence_0",
+      "expected": 483418,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-2-constraintcount-2",
+        "entitycount=8",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-2-constraintcount-2-b12cf609fc4486f4",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\ncompose_0 = compose(set_0, 7)\ncompose_0[3] subset compose_0[6]\n|compose_0[2]| < 4",
+      "expected": 4102875000,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-2-constraintcount-2",
+        "entitycount=8",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-2-constraintcount-2-c10eeaa09f64764d",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_5: 1, e_7: 4, e_8: 1)\nsequence_0 = sequence(bag_0)\nchoose_0 = choose(bag_0, 3)\nnext_to(e_2, e_5) in sequence_0\nchoose_0 disjoint bag_0",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-2-constraintcount-2",
+        "entitycount=8",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=1"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-3-constraintcount-0-0f188b7d69167556",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\nchoose_0 = choose(set_0, 6)\ntuple_0 = tuple(choose_0)\nset_union_0 = choose_0 + set_0",
+      "expected": 20160,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-3-constraintcount-0",
+        "entitycount=8",
+        "operatorcount=3",
+        "constraintcount=0",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-3-constraintcount-0-72dc9c872895f815",
+      "program": "bag_0 = bag(e_1: 1, e_4: 2, e_6: 1, e_7: 2, e_8: 2)\nchoose_0 = choose(bag_0, 5)\nbag_inter_0 = choose_0 & bag_0\npartition_0 = partition(bag_inter_0, 2)",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-3-constraintcount-0",
+        "entitycount=8",
+        "operatorcount=3",
+        "constraintcount=0",
+        "depth=3"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-3-constraintcount-1-1529688da2b4b460",
+      "program": "bag_0 = bag(e_3: 1, e_4: 2, e_5: 1, e_8: 4)\nchoose_0 = choose(bag_0, 3)\nchoose_1 = choose(choose_0, 2)\nbag_inter_0 = choose_0 & choose_1\nchoose_1.count(e_3) > 1",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-3-constraintcount-1",
+        "entitycount=8",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-4-constraintcount-1-779bc0f3453144e6",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0)\nchoose_0 = choose(set_0, 7)\nchoose_1 = choose(choose_0, 7)\nset_union_0 = choose_1 + set_0\nchoose_0 subset choose_1",
+      "expected": 40320,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-4-constraintcount-1",
+        "entitycount=8",
+        "operatorcount=4",
+        "constraintcount=1",
+        "depth=3"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-4-constraintcount-1-a7c2eb240bb648b6",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\nchoose_0 = choose(set_0, 8)\ncompose_0 = compose(choose_0, 4)\nchoose_tuple_0 = choose_replace_tuple(compose_0[2], 6)\ncompose_1 = compose(compose_0[2], 4)\ncompose_1[2] subset compose_1[0]",
+      "expected": 24367868928,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-4-constraintcount-1",
+        "entitycount=8",
+        "operatorcount=4",
+        "constraintcount=1",
+        "depth=3"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "entitycount-8-operatorcount-4-constraintcount-3-3fc73f82e58ffbfd",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_4: 1, e_5: 1, e_7: 1, e_8: 2)\nchoose_0 = choose(bag_0, 4)\ncircle_0 = circle(choose_0)\ncompose_0 = compose(choose_0, 3)\ncircle_1 = circle(compose_0[0])\ntogether(set(e_5, e_1, e_2)) not in circle_0\n|compose_0[1]| + |choose_0| == 1\ntogether(set(e_2, e_3, e_5)) in circle_1",
+      "expected": 0,
+      "tags": [
+        "synthetic",
+        "family=entitycount-8-operatorcount-4-constraintcount-3",
+        "entitycount=8",
+        "operatorcount=4",
+        "constraintcount=3",
+        "depth=3"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    }
+  ]
+}
