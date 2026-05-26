@@ -1,166 +1,166 @@
 suite,case_id,backend,status,result,expected,elapsed_sec,error_type,error_message,tags,source
 growing,mathcounts_005,wfomc,solved,4,4,0.609639,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=5,MATHCOUNTS bag choose
-growing,mathcounts_005,propositionalwfomc,error,,4,0.672106,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=5,MATHCOUNTS bag choose
+growing,mathcounts_005,propositionalwfomc,solved,4,4,0.676698,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=5,MATHCOUNTS bag choose
 growing,mathcounts_005,coso,solved,4,4,0.376328,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=5,MATHCOUNTS bag choose
 growing,mathcounts_005,asp,unsolved,11,4,0.195438,WrongAnswer,"expected 4, got 11",mathcounts;bag;choose;count;growing;family=mathcounts;domain=5,MATHCOUNTS bag choose
 growing,mathcounts_005,essence,solved,4,4,2.026230,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=5,MATHCOUNTS bag choose
 growing,mathcounts_010,wfomc,solved,100,100,0.610502,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=10,MATHCOUNTS bag choose
-growing,mathcounts_010,propositionalwfomc,error,,100,1.363348,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=10,MATHCOUNTS bag choose
+growing,mathcounts_010,propositionalwfomc,solved,100,100,1.349693,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=10,MATHCOUNTS bag choose
 growing,mathcounts_010,coso,solved,100,100,0.509618,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=10,MATHCOUNTS bag choose
 growing,mathcounts_010,asp,unsolved,430,100,0.290398,WrongAnswer,"expected 100, got 430",mathcounts;bag;choose;count;growing;family=mathcounts;domain=10,MATHCOUNTS bag choose
 growing,mathcounts_010,essence,solved,100,100,2.952113,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=10,MATHCOUNTS bag choose
 growing,mathcounts_015,wfomc,solved,614,614,0.624106,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=15,MATHCOUNTS bag choose
-growing,mathcounts_015,propositionalwfomc,error,,614,2.683752,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=15,MATHCOUNTS bag choose
+growing,mathcounts_015,propositionalwfomc,solved,614,614,2.538294,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=15,MATHCOUNTS bag choose
 growing,mathcounts_015,coso,solved,614,614,0.598908,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=15,MATHCOUNTS bag choose
 growing,mathcounts_015,asp,unsolved,2964,614,3.632245,WrongAnswer,"expected 614, got 2964",mathcounts;bag;choose;count;growing;family=mathcounts;domain=15,MATHCOUNTS bag choose
 growing,mathcounts_015,essence,solved,614,614,4.213448,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=15,MATHCOUNTS bag choose
 growing,mathcounts_020,wfomc,solved,2569,2569,0.630800,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=20,MATHCOUNTS bag choose
-growing,mathcounts_020,propositionalwfomc,error,,2569,4.410825,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=20,MATHCOUNTS bag choose
+growing,mathcounts_020,propositionalwfomc,solved,2569,2569,4.152197,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=20,MATHCOUNTS bag choose
 growing,mathcounts_020,coso,solved,2569,2569,0.633804,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=20,MATHCOUNTS bag choose
 growing,mathcounts_020,asp,unsolved,9951,2569,37.786546,WrongAnswer,"expected 2569, got 9951",mathcounts;bag;choose;count;growing;family=mathcounts;domain=20,MATHCOUNTS bag choose
 growing,mathcounts_020,essence,solved,2569,2569,7.239547,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=20,MATHCOUNTS bag choose
 growing,mathcounts_025,wfomc,solved,6525,6525,0.620468,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=25,MATHCOUNTS bag choose
-growing,mathcounts_025,propositionalwfomc,error,,6525,6.819642,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=25,MATHCOUNTS bag choose
+growing,mathcounts_025,propositionalwfomc,solved,6525,6525,6.287393,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=25,MATHCOUNTS bag choose
 growing,mathcounts_025,coso,solved,6525,6525,0.714251,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=25,MATHCOUNTS bag choose
 growing,mathcounts_025,asp,unsolved,,6525,100.105746,TimeoutError,Timed out after 100.000s,mathcounts;bag;choose;count;growing;family=mathcounts;domain=25,MATHCOUNTS bag choose
 growing,mathcounts_025,essence,solved,6525,6525,15.890807,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=25,MATHCOUNTS bag choose
 growing,mathcounts_030,wfomc,solved,13899,13899,0.817937,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=30,MATHCOUNTS bag choose
-growing,mathcounts_030,propositionalwfomc,error,,13899,13.132086,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=30,MATHCOUNTS bag choose
+growing,mathcounts_030,propositionalwfomc,solved,13899,13899,9.409438,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=30,MATHCOUNTS bag choose
 growing,mathcounts_030,coso,solved,13899,13899,1.047244,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=30,MATHCOUNTS bag choose
 growing,mathcounts_030,asp,timeout,,13899,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=30,MATHCOUNTS bag choose
 growing,mathcounts_030,essence,solved,13899,13899,28.647401,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=30,MATHCOUNTS bag choose
 growing,mathcounts_035,wfomc,solved,28809,28809,1.081311,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=35,MATHCOUNTS bag choose
-growing,mathcounts_035,propositionalwfomc,error,,28809,13.761884,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=35,MATHCOUNTS bag choose
+growing,mathcounts_035,propositionalwfomc,solved,28809,28809,12.657288,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=35,MATHCOUNTS bag choose
 growing,mathcounts_035,coso,solved,28809,28809,0.862218,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=35,MATHCOUNTS bag choose
 growing,mathcounts_035,asp,timeout,,28809,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=35,MATHCOUNTS bag choose
 growing,mathcounts_035,essence,solved,28809,28809,40.213598,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=35,MATHCOUNTS bag choose
 growing,mathcounts_040,wfomc,solved,49375,49375,0.761945,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=40,MATHCOUNTS bag choose
-growing,mathcounts_040,propositionalwfomc,error,,49375,16.852347,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=40,MATHCOUNTS bag choose
+growing,mathcounts_040,propositionalwfomc,solved,49375,49375,16.458842,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=40,MATHCOUNTS bag choose
 growing,mathcounts_040,coso,solved,49375,49375,0.954312,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=40,MATHCOUNTS bag choose
 growing,mathcounts_040,asp,timeout,,49375,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=40,MATHCOUNTS bag choose
 growing,mathcounts_040,essence,solved,49375,49375,68.222085,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=40,MATHCOUNTS bag choose
 growing,mathcounts_045,wfomc,solved,79359,79359,0.741473,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=45,MATHCOUNTS bag choose
-growing,mathcounts_045,propositionalwfomc,error,,79359,21.556220,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=45,MATHCOUNTS bag choose
+growing,mathcounts_045,propositionalwfomc,solved,79359,79359,20.405746,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=45,MATHCOUNTS bag choose
 growing,mathcounts_045,coso,solved,79359,79359,1.008358,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=45,MATHCOUNTS bag choose
 growing,mathcounts_045,asp,timeout,,79359,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=45,MATHCOUNTS bag choose
 growing,mathcounts_045,essence,unsolved,,79359,100.082857,TimeoutError,Timed out after 100.000s,mathcounts;bag;choose;count;growing;family=mathcounts;domain=45,MATHCOUNTS bag choose
 growing,mathcounts_050,wfomc,solved,129224,129224,0.780149,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=50,MATHCOUNTS bag choose
-growing,mathcounts_050,propositionalwfomc,error,,129224,27.604335,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=50,MATHCOUNTS bag choose
+growing,mathcounts_050,propositionalwfomc,solved,129224,129224,24.983341,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=50,MATHCOUNTS bag choose
 growing,mathcounts_050,coso,solved,129224,129224,1.057531,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=50,MATHCOUNTS bag choose
 growing,mathcounts_050,asp,timeout,,129224,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=50,MATHCOUNTS bag choose
 growing,mathcounts_050,essence,timeout,,129224,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 45; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=50,MATHCOUNTS bag choose
 growing,mathcounts_055,wfomc,solved,188650,188650,0.747970,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=55,MATHCOUNTS bag choose
-growing,mathcounts_055,propositionalwfomc,error,,188650,32.397810,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=55,MATHCOUNTS bag choose
+growing,mathcounts_055,propositionalwfomc,solved,188650,188650,30.133914,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=55,MATHCOUNTS bag choose
 growing,mathcounts_055,coso,solved,188650,188650,1.130862,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=55,MATHCOUNTS bag choose
 growing,mathcounts_055,asp,timeout,,188650,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=55,MATHCOUNTS bag choose
 growing,mathcounts_055,essence,timeout,,188650,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 45; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=55,MATHCOUNTS bag choose
 growing,mathcounts_060,wfomc,solved,266494,266494,0.734971,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=60,MATHCOUNTS bag choose
-growing,mathcounts_060,propositionalwfomc,error,,266494,38.931247,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=60,MATHCOUNTS bag choose
+growing,mathcounts_060,propositionalwfomc,solved,266494,266494,36.262940,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=60,MATHCOUNTS bag choose
 growing,mathcounts_060,coso,solved,266494,266494,1.223730,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=60,MATHCOUNTS bag choose
 growing,mathcounts_060,asp,timeout,,266494,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=60,MATHCOUNTS bag choose
 growing,mathcounts_060,essence,timeout,,266494,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 45; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=60,MATHCOUNTS bag choose
 growing,mathcounts_065,wfomc,solved,384314,384314,0.752726,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=65,MATHCOUNTS bag choose
-growing,mathcounts_065,propositionalwfomc,error,,384314,46.397516,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=65,MATHCOUNTS bag choose
+growing,mathcounts_065,propositionalwfomc,solved,384314,384314,43.085582,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=65,MATHCOUNTS bag choose
 growing,mathcounts_065,coso,solved,384314,384314,1.307552,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=65,MATHCOUNTS bag choose
 growing,mathcounts_065,asp,timeout,,384314,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=65,MATHCOUNTS bag choose
 growing,mathcounts_065,essence,timeout,,384314,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 45; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=65,MATHCOUNTS bag choose
 growing,mathcounts_070,wfomc,solved,514350,514350,0.766498,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=70,MATHCOUNTS bag choose
-growing,mathcounts_070,propositionalwfomc,error,,514350,62.824465,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=70,MATHCOUNTS bag choose
+growing,mathcounts_070,propositionalwfomc,solved,514350,514350,48.832359,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=70,MATHCOUNTS bag choose
 growing,mathcounts_070,coso,solved,514350,514350,1.770271,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=70,MATHCOUNTS bag choose
 growing,mathcounts_070,asp,timeout,,514350,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=70,MATHCOUNTS bag choose
 growing,mathcounts_070,essence,timeout,,514350,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 45; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=70,MATHCOUNTS bag choose
 growing,mathcounts_075,wfomc,solved,674804,674804,1.122973,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=75,MATHCOUNTS bag choose
-growing,mathcounts_075,propositionalwfomc,error,,674804,60.046844,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=75,MATHCOUNTS bag choose
+growing,mathcounts_075,propositionalwfomc,solved,674804,674804,57.658543,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=75,MATHCOUNTS bag choose
 growing,mathcounts_075,coso,solved,674804,674804,1.431489,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=75,MATHCOUNTS bag choose
 growing,mathcounts_075,asp,timeout,,674804,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=75,MATHCOUNTS bag choose
 growing,mathcounts_075,essence,timeout,,674804,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 45; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=75,MATHCOUNTS bag choose
 growing,mathcounts_080,wfomc,solved,904579,904579,0.762036,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=80,MATHCOUNTS bag choose
-growing,mathcounts_080,propositionalwfomc,error,,904579,69.175420,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=80,MATHCOUNTS bag choose
+growing,mathcounts_080,propositionalwfomc,solved,904579,904579,63.418303,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=80,MATHCOUNTS bag choose
 growing,mathcounts_080,coso,solved,904579,904579,1.722070,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=80,MATHCOUNTS bag choose
 growing,mathcounts_080,asp,timeout,,904579,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=80,MATHCOUNTS bag choose
 growing,mathcounts_080,essence,timeout,,904579,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 45; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=80,MATHCOUNTS bag choose
 growing,mathcounts_085,wfomc,solved,1146475,1146475,1.156449,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=85,MATHCOUNTS bag choose
-growing,mathcounts_085,propositionalwfomc,error,,1146475,82.552719,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=85,MATHCOUNTS bag choose
+growing,mathcounts_085,propositionalwfomc,solved,1146475,1146475,71.841560,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=85,MATHCOUNTS bag choose
 growing,mathcounts_085,coso,solved,1146475,1146475,1.568912,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=85,MATHCOUNTS bag choose
 growing,mathcounts_085,asp,timeout,,1146475,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=85,MATHCOUNTS bag choose
 growing,mathcounts_085,essence,timeout,,1146475,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 45; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=85,MATHCOUNTS bag choose
 growing,mathcounts_090,wfomc,solved,1433789,1433789,0.783511,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=90,MATHCOUNTS bag choose
-growing,mathcounts_090,propositionalwfomc,error,,1433789,92.974705,GanakError,ganak exited with code 255,mathcounts;bag;choose;count;growing;family=mathcounts;domain=90,MATHCOUNTS bag choose
+growing,mathcounts_090,propositionalwfomc,solved,1433789,1433789,82.382351,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=90,MATHCOUNTS bag choose
 growing,mathcounts_090,coso,solved,1433789,1433789,1.647499,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=90,MATHCOUNTS bag choose
 growing,mathcounts_090,asp,timeout,,1433789,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=90,MATHCOUNTS bag choose
 growing,mathcounts_090,essence,timeout,,1433789,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 45; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=90,MATHCOUNTS bag choose
 growing,mathcounts_095,wfomc,solved,1830519,1830519,0.768965,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=95,MATHCOUNTS bag choose
-growing,mathcounts_095,propositionalwfomc,timeout,,1830519,100.105852,TimeoutError,Timed out after 100.000s,mathcounts;bag;choose;count;growing;family=mathcounts;domain=95,MATHCOUNTS bag choose
+growing,mathcounts_095,propositionalwfomc,solved,1830519,1830519,88.850430,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=95,MATHCOUNTS bag choose
 growing,mathcounts_095,coso,solved,1830519,1830519,1.728292,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=95,MATHCOUNTS bag choose
 growing,mathcounts_095,asp,timeout,,1830519,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=95,MATHCOUNTS bag choose
 growing,mathcounts_095,essence,timeout,,1830519,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 45; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=95,MATHCOUNTS bag choose
 growing,mathcounts_100,wfomc,solved,2235025,2235025,0.967733,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=100,MATHCOUNTS bag choose
-growing,mathcounts_100,propositionalwfomc,timeout,,2235025,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 95; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=100,MATHCOUNTS bag choose
+growing,mathcounts_100,propositionalwfomc,solved,2235025,2235025,99.536794,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=100,MATHCOUNTS bag choose
 growing,mathcounts_100,coso,solved,2235025,2235025,1.796131,,,mathcounts;bag;choose;count;growing;family=mathcounts;domain=100,MATHCOUNTS bag choose
 growing,mathcounts_100,asp,timeout,,2235025,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=100,MATHCOUNTS bag choose
 growing,mathcounts_100,essence,timeout,,2235025,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 45; timeout budget was 100.000s.,mathcounts;bag;choose;count;growing;family=mathcounts;domain=100,MATHCOUNTS bag choose
 growing,fourletter_005,wfomc,solved,18,18,1.041996,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=5,four-letter arrangements
-growing,fourletter_005,propositionalwfomc,error,,18,2.220622,GanakError,ganak exited with code 255,fourletter;set;tuple;position;count;growing;family=fourletter;domain=5,four-letter arrangements
+growing,fourletter_005,propositionalwfomc,solved,18,18,2.121972,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=5,four-letter arrangements
 growing,fourletter_005,coso,solved,18,18,0.215677,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=5,four-letter arrangements
 growing,fourletter_005,asp,solved,18,18,0.147448,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=5,four-letter arrangements
 growing,fourletter_005,essence,solved,18,18,2.068327,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=5,four-letter arrangements
 growing,fourletter_010,wfomc,solved,168,168,1.002601,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=10,four-letter arrangements
-growing,fourletter_010,propositionalwfomc,error,,168,5.077675,GanakError,ganak exited with code 255,fourletter;set;tuple;position;count;growing;family=fourletter;domain=10,four-letter arrangements
+growing,fourletter_010,propositionalwfomc,solved,168,168,4.725529,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=10,four-letter arrangements
 growing,fourletter_010,coso,solved,168,168,0.213548,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=10,four-letter arrangements
 growing,fourletter_010,asp,solved,168,168,0.168104,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=10,four-letter arrangements
 growing,fourletter_010,essence,solved,168,168,2.828457,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=10,four-letter arrangements
 growing,fourletter_015,wfomc,solved,468,468,1.021706,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=15,four-letter arrangements
-growing,fourletter_015,propositionalwfomc,error,,468,8.984719,GanakError,ganak exited with code 255,fourletter;set;tuple;position;count;growing;family=fourletter;domain=15,four-letter arrangements
+growing,fourletter_015,propositionalwfomc,solved,468,468,8.284541,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=15,four-letter arrangements
 growing,fourletter_015,coso,solved,468,468,0.206279,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=15,four-letter arrangements
 growing,fourletter_015,asp,solved,468,468,0.273441,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=15,four-letter arrangements
 growing,fourletter_015,essence,solved,468,468,3.608877,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=15,four-letter arrangements
 growing,fourletter_020,wfomc,solved,918,918,1.257789,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=20,four-letter arrangements
-growing,fourletter_020,propositionalwfomc,error,,918,13.629583,GanakError,ganak exited with code 255,fourletter;set;tuple;position;count;growing;family=fourletter;domain=20,four-letter arrangements
+growing,fourletter_020,propositionalwfomc,solved,918,918,13.201542,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=20,four-letter arrangements
 growing,fourletter_020,coso,solved,918,918,0.206871,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=20,four-letter arrangements
 growing,fourletter_020,asp,solved,918,918,0.714427,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=20,four-letter arrangements
 growing,fourletter_020,essence,solved,918,918,5.005377,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=20,four-letter arrangements
 growing,fourletter_025,wfomc,solved,1518,1518,1.212779,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=25,four-letter arrangements
-growing,fourletter_025,propositionalwfomc,error,,1518,19.290256,GanakError,ganak exited with code 255,fourletter;set;tuple;position;count;growing;family=fourletter;domain=25,four-letter arrangements
+growing,fourletter_025,propositionalwfomc,solved,1518,1518,18.942886,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=25,four-letter arrangements
 growing,fourletter_025,coso,solved,1518,1518,0.201620,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=25,four-letter arrangements
 growing,fourletter_025,asp,solved,1518,1518,2.780068,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=25,four-letter arrangements
 growing,fourletter_025,essence,solved,1518,1518,6.255137,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=25,four-letter arrangements
 growing,fourletter_030,wfomc,solved,2268,2268,1.334284,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=30,four-letter arrangements
-growing,fourletter_030,propositionalwfomc,error,,2268,26.682197,GanakError,ganak exited with code 255,fourletter;set;tuple;position;count;growing;family=fourletter;domain=30,four-letter arrangements
+growing,fourletter_030,propositionalwfomc,solved,2268,2268,25.532135,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=30,four-letter arrangements
 growing,fourletter_030,coso,solved,2268,2268,0.192009,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=30,four-letter arrangements
 growing,fourletter_030,asp,solved,2268,2268,8.467827,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=30,four-letter arrangements
 growing,fourletter_030,essence,solved,2268,2268,10.205031,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=30,four-letter arrangements
 growing,fourletter_035,wfomc,solved,3168,3168,1.824235,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=35,four-letter arrangements
-growing,fourletter_035,propositionalwfomc,error,,3168,36.639503,GanakError,ganak exited with code 255,fourletter;set;tuple;position;count;growing;family=fourletter;domain=35,four-letter arrangements
+growing,fourletter_035,propositionalwfomc,solved,3168,3168,34.064053,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=35,four-letter arrangements
 growing,fourletter_035,coso,solved,3168,3168,0.214495,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=35,four-letter arrangements
 growing,fourletter_035,asp,solved,3168,3168,21.455777,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=35,four-letter arrangements
 growing,fourletter_035,essence,solved,3168,3168,11.277879,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=35,four-letter arrangements
 growing,fourletter_040,wfomc,solved,4218,4218,1.777618,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=40,four-letter arrangements
-growing,fourletter_040,propositionalwfomc,error,,4218,46.010701,GanakError,ganak exited with code 255,fourletter;set;tuple;position;count;growing;family=fourletter;domain=40,four-letter arrangements
+growing,fourletter_040,propositionalwfomc,solved,4218,4218,42.900249,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=40,four-letter arrangements
 growing,fourletter_040,coso,solved,4218,4218,0.202911,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=40,four-letter arrangements
 growing,fourletter_040,asp,solved,4218,4218,51.547384,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=40,four-letter arrangements
 growing,fourletter_040,essence,solved,4218,4218,13.402182,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=40,four-letter arrangements
 growing,fourletter_045,wfomc,solved,5418,5418,2.166560,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=45,four-letter arrangements
-growing,fourletter_045,propositionalwfomc,error,,5418,58.209339,GanakError,ganak exited with code 255,fourletter;set;tuple;position;count;growing;family=fourletter;domain=45,four-letter arrangements
+growing,fourletter_045,propositionalwfomc,solved,5418,5418,52.493203,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=45,four-letter arrangements
 growing,fourletter_045,coso,solved,5418,5418,0.200186,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=45,four-letter arrangements
 growing,fourletter_045,asp,unsolved,,5418,100.106393,TimeoutError,Timed out after 100.000s,fourletter;set;tuple;position;count;growing;family=fourletter;domain=45,four-letter arrangements
 growing,fourletter_045,essence,solved,5418,5418,16.477506,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=45,four-letter arrangements
 growing,fourletter_050,wfomc,solved,6768,6768,2.665115,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=50,four-letter arrangements
-growing,fourletter_050,propositionalwfomc,error,,6768,72.111940,GanakError,ganak exited with code 255,fourletter;set;tuple;position;count;growing;family=fourletter;domain=50,four-letter arrangements
+growing,fourletter_050,propositionalwfomc,solved,6768,6768,64.563675,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=50,four-letter arrangements
 growing,fourletter_050,coso,solved,6768,6768,0.203062,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=50,four-letter arrangements
 growing,fourletter_050,asp,timeout,,6768,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 45; timeout budget was 100.000s.,fourletter;set;tuple;position;count;growing;family=fourletter;domain=50,four-letter arrangements
 growing,fourletter_050,essence,solved,6768,6768,19.927695,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=50,four-letter arrangements
 growing,fourletter_055,wfomc,solved,8268,8268,3.135625,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=55,four-letter arrangements
-growing,fourletter_055,propositionalwfomc,error,,8268,80.411855,GanakError,ganak exited with code 255,fourletter;set;tuple;position;count;growing;family=fourletter;domain=55,four-letter arrangements
+growing,fourletter_055,propositionalwfomc,solved,8268,8268,75.660172,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=55,four-letter arrangements
 growing,fourletter_055,coso,solved,8268,8268,0.204409,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=55,four-letter arrangements
 growing,fourletter_055,asp,timeout,,8268,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 45; timeout budget was 100.000s.,fourletter;set;tuple;position;count;growing;family=fourletter;domain=55,four-letter arrangements
 growing,fourletter_055,essence,solved,8268,8268,23.045801,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=55,four-letter arrangements
 growing,fourletter_060,wfomc,solved,9918,9918,3.946223,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=60,four-letter arrangements
-growing,fourletter_060,propositionalwfomc,error,,9918,95.232437,GanakError,ganak exited with code 255,fourletter;set;tuple;position;count;growing;family=fourletter;domain=60,four-letter arrangements
+growing,fourletter_060,propositionalwfomc,solved,9918,9918,91.619409,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=60,four-letter arrangements
 growing,fourletter_060,coso,solved,9918,9918,0.192593,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=60,four-letter arrangements
 growing,fourletter_060,asp,timeout,,9918,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 45; timeout budget was 100.000s.,fourletter;set;tuple;position;count;growing;family=fourletter;domain=60,four-letter arrangements
 growing,fourletter_060,essence,solved,9918,9918,27.815158,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=60,four-letter arrangements
 growing,fourletter_065,wfomc,solved,11718,11718,6.756893,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=65,four-letter arrangements
-growing,fourletter_065,propositionalwfomc,timeout,,11718,100.011453,TimeoutError,Timed out after 100.000s,fourletter;set;tuple;position;count;growing;family=fourletter;domain=65,four-letter arrangements
+growing,fourletter_065,propositionalwfomc,timeout,,11718,100.034759,TimeoutError,Timed out after 100.000s,fourletter;set;tuple;position;count;growing;family=fourletter;domain=65,four-letter arrangements
 growing,fourletter_065,coso,solved,11718,11718,0.220388,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=65,four-letter arrangements
 growing,fourletter_065,asp,timeout,,11718,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 45; timeout budget was 100.000s.,fourletter;set;tuple;position;count;growing;family=fourletter;domain=65,four-letter arrangements
 growing,fourletter_065,essence,solved,11718,11718,32.374718,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=65,four-letter arrangements
@@ -200,302 +200,302 @@ growing,fourletter_100,coso,solved,28518,28518,0.201304,,,fourletter;set;tuple;p
 growing,fourletter_100,asp,timeout,,28518,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 45; timeout budget was 100.000s.,fourletter;set;tuple;position;count;growing;family=fourletter;domain=100,four-letter arrangements
 growing,fourletter_100,essence,solved,28518,28518,77.991280,,,fourletter;set;tuple;position;count;growing;family=fourletter;domain=100,four-letter arrangements
 growing,tvs_005,wfomc,solved,1,1,0.342538,,,tvs;set;choose;count;growing;family=tvs;domain=5,defective TVs purchase
-growing,tvs_005,propositionalwfomc,error,,1,0.359767,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=5,defective TVs purchase
+growing,tvs_005,propositionalwfomc,solved,1,1,0.363041,,,tvs;set;choose;count;growing;family=tvs;domain=5,defective TVs purchase
 growing,tvs_005,coso,solved,1,1,0.244404,,,tvs;set;choose;count;growing;family=tvs;domain=5,defective TVs purchase
 growing,tvs_005,asp,solved,1,1,0.182784,,,tvs;set;choose;count;growing;family=tvs;domain=5,defective TVs purchase
 growing,tvs_005,essence,solved,1,1,2.741418,,,tvs;set;choose;count;growing;family=tvs;domain=5,defective TVs purchase
 growing,tvs_010,wfomc,solved,56,56,0.339756,,,tvs;set;choose;count;growing;family=tvs;domain=10,defective TVs purchase
-growing,tvs_010,propositionalwfomc,error,,56,0.513583,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=10,defective TVs purchase
+growing,tvs_010,propositionalwfomc,solved,56,56,0.519687,,,tvs;set;choose;count;growing;family=tvs;domain=10,defective TVs purchase
 growing,tvs_010,coso,solved,56,56,0.244210,,,tvs;set;choose;count;growing;family=tvs;domain=10,defective TVs purchase
 growing,tvs_010,asp,solved,56,56,0.191604,,,tvs;set;choose;count;growing;family=tvs;domain=10,defective TVs purchase
 growing,tvs_010,essence,solved,56,56,3.289757,,,tvs;set;choose;count;growing;family=tvs;domain=10,defective TVs purchase
 growing,tvs_015,wfomc,solved,726,726,0.361308,,,tvs;set;choose;count;growing;family=tvs;domain=15,defective TVs purchase
-growing,tvs_015,propositionalwfomc,error,,726,0.787880,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=15,defective TVs purchase
+growing,tvs_015,propositionalwfomc,solved,726,726,0.788664,,,tvs;set;choose;count;growing;family=tvs;domain=15,defective TVs purchase
 growing,tvs_015,coso,solved,726,726,0.276390,,,tvs;set;choose;count;growing;family=tvs;domain=15,defective TVs purchase
 growing,tvs_015,asp,solved,726,726,0.434434,,,tvs;set;choose;count;growing;family=tvs;domain=15,defective TVs purchase
 growing,tvs_015,essence,solved,726,726,4.806337,,,tvs;set;choose;count;growing;family=tvs;domain=15,defective TVs purchase
 growing,tvs_020,wfomc,solved,5676,5676,0.346273,,,tvs;set;choose;count;growing;family=tvs;domain=20,defective TVs purchase
-growing,tvs_020,propositionalwfomc,error,,5676,1.155269,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=20,defective TVs purchase
+growing,tvs_020,propositionalwfomc,solved,5676,5676,1.177247,,,tvs;set;choose;count;growing;family=tvs;domain=20,defective TVs purchase
 growing,tvs_020,coso,solved,5676,5676,0.366797,,,tvs;set;choose;count;growing;family=tvs;domain=20,defective TVs purchase
 growing,tvs_020,asp,solved,5676,5676,16.028029,,,tvs;set;choose;count;growing;family=tvs;domain=20,defective TVs purchase
 growing,tvs_020,essence,solved,5676,5676,11.315001,,,tvs;set;choose;count;growing;family=tvs;domain=20,defective TVs purchase
 growing,tvs_025,wfomc,solved,18246,18246,0.354895,,,tvs;set;choose;count;growing;family=tvs;domain=25,defective TVs purchase
-growing,tvs_025,propositionalwfomc,error,,18246,1.637780,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=25,defective TVs purchase
+growing,tvs_025,propositionalwfomc,solved,18246,18246,1.641340,,,tvs;set;choose;count;growing;family=tvs;domain=25,defective TVs purchase
 growing,tvs_025,coso,solved,18246,18246,0.397314,,,tvs;set;choose;count;growing;family=tvs;domain=25,defective TVs purchase
 growing,tvs_025,asp,unsolved,,18246,100.027988,TimeoutError,Timed out after 100.000s,tvs;set;choose;count;growing;family=tvs;domain=25,defective TVs purchase
 growing,tvs_025,essence,solved,18246,18246,26.515868,,,tvs;set;choose;count;growing;family=tvs;domain=25,defective TVs purchase
 growing,tvs_030,wfomc,solved,46872,46872,0.355074,,,tvs;set;choose;count;growing;family=tvs;domain=30,defective TVs purchase
-growing,tvs_030,propositionalwfomc,error,,46872,2.256985,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=30,defective TVs purchase
+growing,tvs_030,propositionalwfomc,solved,46872,46872,2.238353,,,tvs;set;choose;count;growing;family=tvs;domain=30,defective TVs purchase
 growing,tvs_030,coso,solved,46872,46872,0.425715,,,tvs;set;choose;count;growing;family=tvs;domain=30,defective TVs purchase
 growing,tvs_030,asp,timeout,,46872,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=30,defective TVs purchase
 growing,tvs_030,essence,solved,46872,46872,59.163918,,,tvs;set;choose;count;growing;family=tvs;domain=30,defective TVs purchase
 growing,tvs_035,wfomc,solved,103502,103502,0.356229,,,tvs;set;choose;count;growing;family=tvs;domain=35,defective TVs purchase
-growing,tvs_035,propositionalwfomc,error,,103502,2.887147,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=35,defective TVs purchase
+growing,tvs_035,propositionalwfomc,solved,103502,103502,2.909487,,,tvs;set;choose;count;growing;family=tvs;domain=35,defective TVs purchase
 growing,tvs_035,coso,solved,103502,103502,0.441735,,,tvs;set;choose;count;growing;family=tvs;domain=35,defective TVs purchase
 growing,tvs_035,asp,timeout,,103502,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=35,defective TVs purchase
 growing,tvs_035,essence,unsolved,,103502,100.104214,TimeoutError,Timed out after 100.000s,tvs;set;choose;count;growing;family=tvs;domain=35,defective TVs purchase
 growing,tvs_040,wfomc,solved,241452,241452,0.355779,,,tvs;set;choose;count;growing;family=tvs;domain=40,defective TVs purchase
-growing,tvs_040,propositionalwfomc,error,,241452,3.703955,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=40,defective TVs purchase
+growing,tvs_040,propositionalwfomc,solved,241452,241452,3.721152,,,tvs;set;choose;count;growing;family=tvs;domain=40,defective TVs purchase
 growing,tvs_040,coso,solved,241452,241452,0.481861,,,tvs;set;choose;count;growing;family=tvs;domain=40,defective TVs purchase
 growing,tvs_040,asp,timeout,,241452,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=40,defective TVs purchase
 growing,tvs_040,essence,timeout,,241452,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 35; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=40,defective TVs purchase
 growing,tvs_045,wfomc,solved,433367,433367,0.349157,,,tvs;set;choose;count;growing;family=tvs;domain=45,defective TVs purchase
-growing,tvs_045,propositionalwfomc,error,,433367,4.650160,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=45,defective TVs purchase
+growing,tvs_045,propositionalwfomc,solved,433367,433367,4.624808,,,tvs;set;choose;count;growing;family=tvs;domain=45,defective TVs purchase
 growing,tvs_045,coso,solved,433367,433367,0.515747,,,tvs;set;choose;count;growing;family=tvs;domain=45,defective TVs purchase
 growing,tvs_045,asp,timeout,,433367,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=45,defective TVs purchase
 growing,tvs_045,essence,timeout,,433367,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 35; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=45,defective TVs purchase
 growing,tvs_050,wfomc,solved,731038,731038,0.363041,,,tvs;set;choose;count;growing;family=tvs;domain=50,defective TVs purchase
-growing,tvs_050,propositionalwfomc,error,,731038,5.802188,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=50,defective TVs purchase
+growing,tvs_050,propositionalwfomc,solved,731038,731038,5.832583,,,tvs;set;choose;count;growing;family=tvs;domain=50,defective TVs purchase
 growing,tvs_050,coso,solved,731038,731038,0.530895,,,tvs;set;choose;count;growing;family=tvs;domain=50,defective TVs purchase
 growing,tvs_050,asp,timeout,,731038,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=50,defective TVs purchase
 growing,tvs_050,essence,timeout,,731038,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 35; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=50,defective TVs purchase
 growing,tvs_055,wfomc,solved,1173003,1173003,0.348601,,,tvs;set;choose;count;growing;family=tvs;domain=55,defective TVs purchase
-growing,tvs_055,propositionalwfomc,error,,1173003,7.059008,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=55,defective TVs purchase
+growing,tvs_055,propositionalwfomc,solved,1173003,1173003,6.994612,,,tvs;set;choose;count;growing;family=tvs;domain=55,defective TVs purchase
 growing,tvs_055,coso,solved,1173003,1173003,0.553121,,,tvs;set;choose;count;growing;family=tvs;domain=55,defective TVs purchase
 growing,tvs_055,asp,timeout,,1173003,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=55,defective TVs purchase
 growing,tvs_055,essence,timeout,,1173003,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 35; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=55,defective TVs purchase
 growing,tvs_060,wfomc,solved,2004828,2004828,0.356688,,,tvs;set;choose;count;growing;family=tvs;domain=60,defective TVs purchase
-growing,tvs_060,propositionalwfomc,error,,2004828,8.330540,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=60,defective TVs purchase
+growing,tvs_060,propositionalwfomc,solved,2004828,2004828,8.284432,,,tvs;set;choose;count;growing;family=tvs;domain=60,defective TVs purchase
 growing,tvs_060,coso,solved,2004828,2004828,0.602642,,,tvs;set;choose;count;growing;family=tvs;domain=60,defective TVs purchase
 growing,tvs_060,asp,timeout,,2004828,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=60,defective TVs purchase
 growing,tvs_060,essence,timeout,,2004828,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 35; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=60,defective TVs purchase
 growing,tvs_065,wfomc,solved,2962988,2962988,0.358793,,,tvs;set;choose;count;growing;family=tvs;domain=65,defective TVs purchase
-growing,tvs_065,propositionalwfomc,error,,2962988,9.790047,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=65,defective TVs purchase
+growing,tvs_065,propositionalwfomc,solved,2962988,2962988,9.678311,,,tvs;set;choose;count;growing;family=tvs;domain=65,defective TVs purchase
 growing,tvs_065,coso,solved,2962988,2962988,0.629054,,,tvs;set;choose;count;growing;family=tvs;domain=65,defective TVs purchase
 growing,tvs_065,asp,timeout,,2962988,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=65,defective TVs purchase
 growing,tvs_065,essence,timeout,,2962988,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 35; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=65,defective TVs purchase
 growing,tvs_070,wfomc,solved,4255304,4255304,0.368703,,,tvs;set;choose;count;growing;family=tvs;domain=70,defective TVs purchase
-growing,tvs_070,propositionalwfomc,error,,4255304,11.380401,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=70,defective TVs purchase
+growing,tvs_070,propositionalwfomc,solved,4255304,4255304,11.281321,,,tvs;set;choose;count;growing;family=tvs;domain=70,defective TVs purchase
 growing,tvs_070,coso,solved,4255304,4255304,0.650878,,,tvs;set;choose;count;growing;family=tvs;domain=70,defective TVs purchase
 growing,tvs_070,asp,timeout,,4255304,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=70,defective TVs purchase
 growing,tvs_070,essence,timeout,,4255304,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 35; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=70,defective TVs purchase
 growing,tvs_075,wfomc,solved,5962104,5962104,0.355725,,,tvs;set;choose;count;growing;family=tvs;domain=75,defective TVs purchase
-growing,tvs_075,propositionalwfomc,error,,5962104,12.917362,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=75,defective TVs purchase
+growing,tvs_075,propositionalwfomc,solved,5962104,5962104,12.608418,,,tvs;set;choose;count;growing;family=tvs;domain=75,defective TVs purchase
 growing,tvs_075,coso,solved,5962104,5962104,0.669351,,,tvs;set;choose;count;growing;family=tvs;domain=75,defective TVs purchase
 growing,tvs_075,asp,timeout,,5962104,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=75,defective TVs purchase
 growing,tvs_075,essence,timeout,,5962104,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 35; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=75,defective TVs purchase
 growing,tvs_080,wfomc,solved,8825804,8825804,0.358556,,,tvs;set;choose;count;growing;family=tvs;domain=80,defective TVs purchase
-growing,tvs_080,propositionalwfomc,error,,8825804,14.853860,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=80,defective TVs purchase
+growing,tvs_080,propositionalwfomc,solved,8825804,8825804,14.608114,,,tvs;set;choose;count;growing;family=tvs;domain=80,defective TVs purchase
 growing,tvs_080,coso,solved,8825804,8825804,0.716206,,,tvs;set;choose;count;growing;family=tvs;domain=80,defective TVs purchase
 growing,tvs_080,asp,timeout,,8825804,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=80,defective TVs purchase
 growing,tvs_080,essence,timeout,,8825804,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 35; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=80,defective TVs purchase
 growing,tvs_085,wfomc,solved,11834109,11834109,0.361339,,,tvs;set;choose;count;growing;family=tvs;domain=85,defective TVs purchase
-growing,tvs_085,propositionalwfomc,error,,11834109,16.551127,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=85,defective TVs purchase
+growing,tvs_085,propositionalwfomc,solved,11834109,11834109,15.927630,,,tvs;set;choose;count;growing;family=tvs;domain=85,defective TVs purchase
 growing,tvs_085,coso,solved,11834109,11834109,0.745859,,,tvs;set;choose;count;growing;family=tvs;domain=85,defective TVs purchase
 growing,tvs_085,asp,timeout,,11834109,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=85,defective TVs purchase
 growing,tvs_085,essence,timeout,,11834109,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 35; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=85,defective TVs purchase
 growing,tvs_090,wfomc,solved,15608670,15608670,0.356208,,,tvs;set;choose;count;growing;family=tvs;domain=90,defective TVs purchase
-growing,tvs_090,propositionalwfomc,error,,15608670,18.900719,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=90,defective TVs purchase
+growing,tvs_090,propositionalwfomc,solved,15608670,15608670,18.243807,,,tvs;set;choose;count;growing;family=tvs;domain=90,defective TVs purchase
 growing,tvs_090,coso,solved,15608670,15608670,0.760103,,,tvs;set;choose;count;growing;family=tvs;domain=90,defective TVs purchase
 growing,tvs_090,asp,timeout,,15608670,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=90,defective TVs purchase
 growing,tvs_090,essence,timeout,,15608670,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 35; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=90,defective TVs purchase
 growing,tvs_095,wfomc,solved,20286805,20286805,0.371187,,,tvs;set;choose;count;growing;family=tvs;domain=95,defective TVs purchase
-growing,tvs_095,propositionalwfomc,error,,20286805,21.173783,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=95,defective TVs purchase
+growing,tvs_095,propositionalwfomc,solved,20286805,20286805,20.383479,,,tvs;set;choose;count;growing;family=tvs;domain=95,defective TVs purchase
 growing,tvs_095,coso,solved,20286805,20286805,0.788431,,,tvs;set;choose;count;growing;family=tvs;domain=95,defective TVs purchase
 growing,tvs_095,asp,timeout,,20286805,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=95,defective TVs purchase
 growing,tvs_095,essence,timeout,,20286805,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 35; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=95,defective TVs purchase
 growing,tvs_100,wfomc,solved,27641880,27641880,0.368444,,,tvs;set;choose;count;growing;family=tvs;domain=100,defective TVs purchase
-growing,tvs_100,propositionalwfomc,error,,27641880,23.253234,GanakError,ganak exited with code 255,tvs;set;choose;count;growing;family=tvs;domain=100,defective TVs purchase
+growing,tvs_100,propositionalwfomc,solved,27641880,27641880,21.966850,,,tvs;set;choose;count;growing;family=tvs;domain=100,defective TVs purchase
 growing,tvs_100,coso,solved,27641880,27641880,0.833507,,,tvs;set;choose;count;growing;family=tvs;domain=100,defective TVs purchase
 growing,tvs_100,asp,timeout,,27641880,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 25; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=100,defective TVs purchase
 growing,tvs_100,essence,timeout,,27641880,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 35; timeout budget was 100.000s.,tvs;set;choose;count;growing;family=tvs;domain=100,defective TVs purchase
 growing,workers_005,wfomc,solved,30,30,0.419514,,,workers;set;composition;index;size;growing;family=workers;domain=5,workers composition
-growing,workers_005,propositionalwfomc,error,,30,0.481690,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=5,workers composition
+growing,workers_005,propositionalwfomc,solved,30,30,0.508857,,,workers;set;composition;index;size;growing;family=workers;domain=5,workers composition
 growing,workers_005,coso,solved,30,30,0.214191,,,workers;set;composition;index;size;growing;family=workers;domain=5,workers composition
 growing,workers_005,asp,unsolved,0,30,0.202217,WrongAnswer,"expected 30, got 0",workers;set;composition;index;size;growing;family=workers;domain=5,workers composition
 growing,workers_005,essence,unsolved,,30,0.462093,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=5,workers composition
 growing,workers_010,wfomc,solved,2520,2520,0.418726,,,workers;set;composition;index;size;growing;family=workers;domain=10,workers composition
-growing,workers_010,propositionalwfomc,error,,2520,0.786847,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=10,workers composition
+growing,workers_010,propositionalwfomc,solved,2520,2520,0.827085,,,workers;set;composition;index;size;growing;family=workers;domain=10,workers composition
 growing,workers_010,coso,solved,2520,2520,0.500905,,,workers;set;composition;index;size;growing;family=workers;domain=10,workers composition
 growing,workers_010,asp,unsolved,0,2520,0.202102,WrongAnswer,"expected 2520, got 0",workers;set;composition;index;size;growing;family=workers;domain=10,workers composition
 growing,workers_010,essence,unsolved,,2520,0.466119,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=10,workers composition
 growing,workers_015,wfomc,solved,360360,360360,0.418442,,,workers;set;composition;index;size;growing;family=workers;domain=15,workers composition
-growing,workers_015,propositionalwfomc,error,,360360,1.302928,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=15,workers composition
+growing,workers_015,propositionalwfomc,solved,360360,360360,1.365043,,,workers;set;composition;index;size;growing;family=workers;domain=15,workers composition
 growing,workers_015,coso,solved,360360,360360,0.224856,,,workers;set;composition;index;size;growing;family=workers;domain=15,workers composition
 growing,workers_015,asp,unsolved,0,360360,0.205886,WrongAnswer,"expected 360360, got 0",workers;set;composition;index;size;growing;family=workers;domain=15,workers composition
 growing,workers_015,essence,unsolved,,360360,0.466379,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=15,workers composition
 growing,workers_020,wfomc,solved,38798760,38798760,0.436365,,,workers;set;composition;index;size;growing;family=workers;domain=20,workers composition
-growing,workers_020,propositionalwfomc,error,,38798760,2.084657,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=20,workers composition
+growing,workers_020,propositionalwfomc,solved,38798760,38798760,2.064458,,,workers;set;composition;index;size;growing;family=workers;domain=20,workers composition
 growing,workers_020,coso,solved,38798760,38798760,0.229353,,,workers;set;composition;index;size;growing;family=workers;domain=20,workers composition
 growing,workers_020,asp,unsolved,0,38798760,0.203001,WrongAnswer,"expected 38798760, got 0",workers;set;composition;index;size;growing;family=workers;domain=20,workers composition
 growing,workers_020,essence,unsolved,,38798760,0.486502,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=20,workers composition
 growing,workers_025,wfomc,solved,6692786100,6692786100,0.457452,,,workers;set;composition;index;size;growing;family=workers;domain=25,workers composition
-growing,workers_025,propositionalwfomc,error,,6692786100,3.014575,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=25,workers composition
+growing,workers_025,propositionalwfomc,solved,6692786100,6692786100,2.956032,,,workers;set;composition;index;size;growing;family=workers;domain=25,workers composition
 growing,workers_025,coso,solved,6692786100,6692786100,0.230119,,,workers;set;composition;index;size;growing;family=workers;domain=25,workers composition
 growing,workers_025,asp,unsolved,0,6692786100,0.209518,WrongAnswer,"expected 6692786100, got 0",workers;set;composition;index;size;growing;family=workers;domain=25,workers composition
 growing,workers_025,essence,unsolved,,6692786100,0.486962,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=25,workers composition
 growing,workers_030,wfomc,solved,465817912560,465817912560,0.423105,,,workers;set;composition;index;size;growing;family=workers;domain=30,workers composition
-growing,workers_030,propositionalwfomc,error,,465817912560,4.281419,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=30,workers composition
+growing,workers_030,propositionalwfomc,solved,465817912560,465817912560,4.151561,,,workers;set;composition;index;size;growing;family=workers;domain=30,workers composition
 growing,workers_030,coso,solved,465817912560,465817912560,0.217191,,,workers;set;composition;index;size;growing;family=workers;domain=30,workers composition
 growing,workers_030,asp,unsolved,0,465817912560,0.205703,WrongAnswer,"expected 465817912560, got 0",workers;set;composition;index;size;growing;family=workers;domain=30,workers composition
 growing,workers_030,essence,unsolved,,465817912560,0.475794,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=30,workers composition
 growing,workers_035,wfomc,solved,144403552893600,144403552893600,0.424893,,,workers;set;composition;index;size;growing;family=workers;domain=35,workers composition
-growing,workers_035,propositionalwfomc,error,,144403552893600,5.586482,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=35,workers composition
+growing,workers_035,propositionalwfomc,solved,144403552893600,144403552893600,5.554323,,,workers;set;composition;index;size;growing;family=workers;domain=35,workers composition
 growing,workers_035,coso,solved,144403552893600,144403552893600,0.233966,,,workers;set;composition;index;size;growing;family=workers;domain=35,workers composition
 growing,workers_035,asp,unsolved,0,144403552893600,0.221968,WrongAnswer,"expected 144403552893600, got 0",workers;set;composition;index;size;growing;family=workers;domain=35,workers composition
 growing,workers_035,essence,unsolved,,144403552893600,0.501745,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=35,workers composition
 growing,workers_040,wfomc,solved,10685862914126400,10685862914126400,0.430196,,,workers;set;composition;index;size;growing;family=workers;domain=40,workers composition
-growing,workers_040,propositionalwfomc,error,,10685862914126400,7.214672,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=40,workers composition
+growing,workers_040,propositionalwfomc,solved,10685862914126400,10685862914126400,7.203888,,,workers;set;composition;index;size;growing;family=workers;domain=40,workers composition
 growing,workers_040,coso,solved,10685862914126400,10685862914126400,0.224970,,,workers;set;composition;index;size;growing;family=workers;domain=40,workers composition
 growing,workers_040,asp,unsolved,0,10685862914126400,0.202641,WrongAnswer,"expected 10685862914126400, got 0",workers;set;composition;index;size;growing;family=workers;domain=40,workers composition
 growing,workers_040,essence,unsolved,,10685862914126400,0.472663,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=40,workers composition
 growing,workers_045,wfomc,solved,2018483176886233200,2018483176886233200,0.420358,,,workers;set;composition;index;size;growing;family=workers;domain=45,workers composition
-growing,workers_045,propositionalwfomc,error,,2018483176886233200,9.204748,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=45,workers composition
+growing,workers_045,propositionalwfomc,solved,2018483176886233200,2018483176886233200,9.135616,,,workers;set;composition;index;size;growing;family=workers;domain=45,workers composition
 growing,workers_045,coso,solved,2018483176886233200,2018483176886233200,0.226834,,,workers;set;composition;index;size;growing;family=workers;domain=45,workers composition
 growing,workers_045,asp,unsolved,0,2018483176886233200,0.211492,WrongAnswer,"expected 2018483176886233200, got 0",workers;set;composition;index;size;growing;family=workers;domain=45,workers composition
 growing,workers_045,essence,unsolved,,2018483176886233200,0.469034,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=45,workers composition
 growing,workers_050,wfomc,solved,258253708687166392200,258253708687166392200,0.431436,,,workers;set;composition;index;size;growing;family=workers;domain=50,workers composition
-growing,workers_050,propositionalwfomc,error,,258253708687166392200,11.339598,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=50,workers composition
+growing,workers_050,propositionalwfomc,solved,258253708687166392200,258253708687166392200,11.193448,,,workers;set;composition;index;size;growing;family=workers;domain=50,workers composition
 growing,workers_050,coso,solved,258253708687166392200,258253708687166392200,0.225848,,,workers;set;composition;index;size;growing;family=workers;domain=50,workers composition
 growing,workers_050,asp,unsolved,0,258253708687166392200,0.208148,WrongAnswer,"expected 258253708687166392200, got 0",workers;set;composition;index;size;growing;family=workers;domain=50,workers composition
 growing,workers_050,essence,unsolved,,258253708687166392200,0.486784,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=50,workers composition
 growing,workers_055,wfomc,solved,50187304054872668884200,50187304054872668884200,0.426861,,,workers;set;composition;index;size;growing;family=workers;domain=55,workers composition
-growing,workers_055,propositionalwfomc,error,,50187304054872668884200,13.603530,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=55,workers composition
+growing,workers_055,propositionalwfomc,solved,50187304054872668884200,50187304054872668884200,13.304951,,,workers;set;composition;index;size;growing;family=workers;domain=55,workers composition
 growing,workers_055,coso,solved,50187304054872668884200,50187304054872668884200,0.227510,,,workers;set;composition;index;size;growing;family=workers;domain=55,workers composition
 growing,workers_055,asp,unsolved,0,50187304054872668884200,0.207696,WrongAnswer,"expected 50187304054872668884200, got 0",workers;set;composition;index;size;growing;family=workers;domain=55,workers composition
 growing,workers_055,essence,unsolved,,50187304054872668884200,0.487088,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=55,workers composition
 growing,workers_060,wfomc,solved,3553261127084984957001360,3553261127084984957001360,0.431948,,,workers;set;composition;index;size;growing;family=workers;domain=60,workers composition
-growing,workers_060,propositionalwfomc,error,,3553261127084984957001360,16.171757,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=60,workers composition
+growing,workers_060,propositionalwfomc,solved,3553261127084984957001360,3553261127084984957001360,15.510036,,,workers;set;composition;index;size;growing;family=workers;domain=60,workers composition
 growing,workers_060,coso,solved,3553261127084984957001360,3553261127084984957001360,0.232428,,,workers;set;composition;index;size;growing;family=workers;domain=60,workers composition
 growing,workers_060,asp,unsolved,0,3553261127084984957001360,0.206378,WrongAnswer,"expected 3553261127084984957001360, got 0",workers;set;composition;index;size;growing;family=workers;domain=60,workers composition
 growing,workers_060,essence,unsolved,,3553261127084984957001360,0.477329,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=60,workers composition
 growing,workers_065,wfomc,solved,1280789124444724123137308400,1280789124444724123137308400,0.432503,,,workers;set;composition;index;size;growing;family=workers;domain=65,workers composition
-growing,workers_065,propositionalwfomc,error,,1280789124444724123137308400,19.397140,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=65,workers composition
+growing,workers_065,propositionalwfomc,solved,1280789124444724123137308400,1280789124444724123137308400,18.368292,,,workers;set;composition;index;size;growing;family=workers;domain=65,workers composition
 growing,workers_065,coso,solved,1280789124444724123137308400,1280789124444724123137308400,0.232930,,,workers;set;composition;index;size;growing;family=workers;domain=65,workers composition
 growing,workers_065,asp,unsolved,0,1280789124444724123137308400,0.202584,WrongAnswer,"expected 1280789124444724123137308400, got 0",workers;set;composition;index;size;growing;family=workers;domain=65,workers composition
 growing,workers_065,essence,unsolved,,1280789124444724123137308400,0.473251,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=65,workers composition
 growing,workers_070,wfomc,solved,93614041459414381363854177600,93614041459414381363854177600,0.435289,,,workers;set;composition;index;size;growing;family=workers;domain=70,workers composition
-growing,workers_070,propositionalwfomc,error,,93614041459414381363854177600,21.551579,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=70,workers composition
+growing,workers_070,propositionalwfomc,solved,93614041459414381363854177600,93614041459414381363854177600,21.119813,,,workers;set;composition;index;size;growing;family=workers;domain=70,workers composition
 growing,workers_070,coso,solved,93614041459414381363854177600,93614041459414381363854177600,0.227102,,,workers;set;composition;index;size;growing;family=workers;domain=70,workers composition
 growing,workers_070,asp,unsolved,0,93614041459414381363854177600,0.210226,WrongAnswer,"expected 93614041459414381363854177600, got 0",workers;set;composition;index;size;growing;family=workers;domain=70,workers composition
 growing,workers_070,essence,unsolved,,93614041459414381363854177600,0.491459,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=70,workers composition
 growing,workers_075,wfomc,solved,18661599110928643792648315480800,18661599110928643792648315480800,0.441866,,,workers;set;composition;index;size;growing;family=workers;domain=75,workers composition
-growing,workers_075,propositionalwfomc,error,,18661599110928643792648315480800,24.499234,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=75,workers composition
+growing,workers_075,propositionalwfomc,solved,18661599110928643792648315480800,18661599110928643792648315480800,24.147030,,,workers;set;composition;index;size;growing;family=workers;domain=75,workers composition
 growing,workers_075,coso,solved,18661599110928643792648315480800,18661599110928643792648315480800,0.228715,,,workers;set;composition;index;size;growing;family=workers;domain=75,workers composition
 growing,workers_075,asp,unsolved,0,18661599110928643792648315480800,0.214107,WrongAnswer,"expected 18661599110928643792648315480800, got 0",workers;set;composition;index;size;growing;family=workers;domain=75,workers composition
 growing,workers_075,essence,unsolved,,18661599110928643792648315480800,0.487863,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=75,workers composition
 growing,workers_080,wfomc,solved,2494912250368767916278674792740800,2494912250368767916278674792740800,0.441991,,,workers;set;composition;index;size;growing;family=workers;domain=80,workers composition
-growing,workers_080,propositionalwfomc,error,,2494912250368767916278674792740800,28.133714,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=80,workers composition
+growing,workers_080,propositionalwfomc,solved,2494912250368767916278674792740800,2494912250368767916278674792740800,27.539088,,,workers;set;composition;index;size;growing;family=workers;domain=80,workers composition
 growing,workers_080,coso,solved,2494912250368767916278674792740800,2494912250368767916278674792740800,0.235973,,,workers;set;composition;index;size;growing;family=workers;domain=80,workers composition
 growing,workers_080,asp,unsolved,0,2494912250368767916278674792740800,0.206785,WrongAnswer,"expected 2494912250368767916278674792740800, got 0",workers;set;composition;index;size;growing;family=workers;domain=80,workers composition
 growing,workers_080,essence,unsolved,,2494912250368767916278674792740800,0.504543,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=80,workers composition
 growing,workers_085,wfomc,solved,502903026467190218552744304651038400,502903026467190218552744304651038400,0.449643,,,workers;set;composition;index;size;growing;family=workers;domain=85,workers composition
-growing,workers_085,propositionalwfomc,error,,502903026467190218552744304651038400,31.711031,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=85,workers composition
+growing,workers_085,propositionalwfomc,solved,502903026467190218552744304651038400,502903026467190218552744304651038400,30.576873,,,workers;set;composition;index;size;growing;family=workers;domain=85,workers composition
 growing,workers_085,coso,solved,502903026467190218552744304651038400,502903026467190218552744304651038400,0.230216,,,workers;set;composition;index;size;growing;family=workers;domain=85,workers composition
 growing,workers_085,asp,unsolved,0,502903026467190218552744304651038400,0.207473,WrongAnswer,"expected 502903026467190218552744304651038400, got 0",workers;set;composition;index;size;growing;family=workers;domain=85,workers composition
 growing,workers_085,essence,unsolved,,502903026467190218552744304651038400,0.502708,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=85,workers composition
 growing,workers_090,wfomc,solved,35806695484463943560955394491153934080,35806695484463943560955394491153934080,0.435923,,,workers;set;composition;index;size;growing;family=workers;domain=90,workers composition
-growing,workers_090,propositionalwfomc,error,,35806695484463943560955394491153934080,35.722499,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=90,workers composition
+growing,workers_090,propositionalwfomc,solved,35806695484463943560955394491153934080,35806695484463943560955394491153934080,34.496025,,,workers;set;composition;index;size;growing;family=workers;domain=90,workers composition
 growing,workers_090,coso,solved,35806695484463943560955394491153934080,35806695484463943560955394491153934080,0.229942,,,workers;set;composition;index;size;growing;family=workers;domain=90,workers composition
 growing,workers_090,asp,unsolved,0,35806695484463943560955394491153934080,0.209441,WrongAnswer,"expected 35806695484463943560955394491153934080, got 0",workers;set;composition;index;size;growing;family=workers;domain=90,workers composition
 growing,workers_090,essence,unsolved,,35806695484463943560955394491153934080,0.489048,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=90,workers composition
 growing,workers_095,wfomc,solved,13656568343964299650784972884236430593600,13656568343964299650784972884236430593600,0.442283,,,workers;set;composition;index;size;growing;family=workers;domain=95,workers composition
-growing,workers_095,propositionalwfomc,error,,13656568343964299650784972884236430593600,39.391494,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=95,workers composition
+growing,workers_095,propositionalwfomc,solved,13656568343964299650784972884236430593600,13656568343964299650784972884236430593600,38.332966,,,workers;set;composition;index;size;growing;family=workers;domain=95,workers composition
 growing,workers_095,coso,solved,13656568343964299650784972884236430593600,13656568343964299650784972884236430593600,0.235075,,,workers;set;composition;index;size;growing;family=workers;domain=95,workers composition
 growing,workers_095,asp,unsolved,0,13656568343964299650784972884236430593600,0.211716,WrongAnswer,"expected 13656568343964299650784972884236430593600, got 0",workers;set;composition;index;size;growing;family=workers;domain=95,workers composition
 growing,workers_095,essence,unsolved,,13656568343964299650784972884236430593600,0.499507,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=95,workers composition
 growing,workers_100,wfomc,solved,993515347023402799594606777328200325684400,993515347023402799594606777328200325684400,0.450476,,,workers;set;composition;index;size;growing;family=workers;domain=100,workers composition
-growing,workers_100,propositionalwfomc,error,,993515347023402799594606777328200325684400,43.447622,GanakError,ganak exited with code 255,workers;set;composition;index;size;growing;family=workers;domain=100,workers composition
+growing,workers_100,propositionalwfomc,solved,993515347023402799594606777328200325684400,993515347023402799594606777328200325684400,40.953954,,,workers;set;composition;index;size;growing;family=workers;domain=100,workers composition
 growing,workers_100,coso,solved,993515347023402799594606777328200325684400,993515347023402799594606777328200325684400,0.235716,,,workers;set;composition;index;size;growing;family=workers;domain=100,workers composition
 growing,workers_100,asp,unsolved,0,993515347023402799594606777328200325684400,0.211876,WrongAnswer,"expected 993515347023402799594606777328200325684400, got 0",workers;set;composition;index;size;growing;family=workers;domain=100,workers composition
 growing,workers_100,essence,unsolved,,993515347023402799594606777328200325684400,0.501885,RuntimeError,Error:,workers;set;composition;index;size;growing;family=workers;domain=100,workers composition
 growing,banana_005,wfomc,solved,30,30,1.252220,,,banana;bag;tuple;growing;family=banana;domain=5,BANANA bag tuple
-growing,banana_005,propositionalwfomc,error,,30,3.477737,GanakError,ganak exited with code 255,banana;bag;tuple;growing;family=banana;domain=5,BANANA bag tuple
+growing,banana_005,propositionalwfomc,solved,30,30,3.470770,,,banana;bag;tuple;growing;family=banana;domain=5,BANANA bag tuple
 growing,banana_005,coso,solved,30,30,0.143853,,,banana;bag;tuple;growing;family=banana;domain=5,BANANA bag tuple
 growing,banana_005,asp,solved,30,30,0.141752,,,banana;bag;tuple;growing;family=banana;domain=5,BANANA bag tuple
 growing,banana_005,essence,solved,30,30,1.005374,,,banana;bag;tuple;growing;family=banana;domain=5,BANANA bag tuple
 growing,banana_010,wfomc,solved,1260,1260,1.270007,,,banana;bag;tuple;growing;family=banana;domain=10,BANANA bag tuple
-growing,banana_010,propositionalwfomc,error,,1260,7.992607,GanakError,ganak exited with code 255,banana;bag;tuple;growing;family=banana;domain=10,BANANA bag tuple
+growing,banana_010,propositionalwfomc,solved,1260,1260,7.894391,,,banana;bag;tuple;growing;family=banana;domain=10,BANANA bag tuple
 growing,banana_010,coso,solved,1260,1260,0.147838,,,banana;bag;tuple;growing;family=banana;domain=10,BANANA bag tuple
 growing,banana_010,asp,solved,1260,1260,80.037575,,,banana;bag;tuple;growing;family=banana;domain=10,BANANA bag tuple
 growing,banana_010,essence,solved,1260,1260,2.128070,,,banana;bag;tuple;growing;family=banana;domain=10,BANANA bag tuple
 growing,banana_015,wfomc,solved,180180,180180,1.773889,,,banana;bag;tuple;growing;family=banana;domain=15,BANANA bag tuple
-growing,banana_015,propositionalwfomc,error,,180180,24.932579,GanakError,ganak exited with code 255,banana;bag;tuple;growing;family=banana;domain=15,BANANA bag tuple
+growing,banana_015,propositionalwfomc,solved,180180,180180,26.514547,,,banana;bag;tuple;growing;family=banana;domain=15,BANANA bag tuple
 growing,banana_015,coso,solved,180180,180180,0.141034,,,banana;bag;tuple;growing;family=banana;domain=15,BANANA bag tuple
 growing,banana_015,asp,unsolved,,180180,100.102927,TimeoutError,Timed out after 100.000s,banana;bag;tuple;growing;family=banana;domain=15,BANANA bag tuple
 growing,banana_015,essence,unsolved,,180180,100.067554,TimeoutError,Timed out after 100.000s,banana;bag;tuple;growing;family=banana;domain=15,BANANA bag tuple
 growing,banana_020,wfomc,solved,22170720,22170720,1.934345,,,banana;bag;tuple;growing;family=banana;domain=20,BANANA bag tuple
-growing,banana_020,propositionalwfomc,error,,22170720,40.292520,GanakError,ganak exited with code 255,banana;bag;tuple;growing;family=banana;domain=20,BANANA bag tuple
+growing,banana_020,propositionalwfomc,solved,22170720,22170720,38.791362,,,banana;bag;tuple;growing;family=banana;domain=20,BANANA bag tuple
 growing,banana_020,coso,solved,22170720,22170720,0.141117,,,banana;bag;tuple;growing;family=banana;domain=20,BANANA bag tuple
 growing,banana_020,asp,timeout,,22170720,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=20,BANANA bag tuple
 growing,banana_020,essence,timeout,,22170720,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=20,BANANA bag tuple
 growing,banana_025,wfomc,solved,3718214500,3718214500,2.171864,,,banana;bag;tuple;growing;family=banana;domain=25,BANANA bag tuple
-growing,banana_025,propositionalwfomc,error,,3718214500,53.449875,GanakError,ganak exited with code 255,banana;bag;tuple;growing;family=banana;domain=25,BANANA bag tuple
+growing,banana_025,propositionalwfomc,solved,3718214500,3718214500,58.711111,,,banana;bag;tuple;growing;family=banana;domain=25,BANANA bag tuple
 growing,banana_025,coso,solved,3718214500,3718214500,0.140407,,,banana;bag;tuple;growing;family=banana;domain=25,BANANA bag tuple
 growing,banana_025,asp,timeout,,3718214500,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=25,BANANA bag tuple
 growing,banana_025,essence,timeout,,3718214500,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=25,BANANA bag tuple
 growing,banana_030,wfomc,solved,465817912560,465817912560,2.842187,,,banana;bag;tuple;growing;family=banana;domain=30,BANANA bag tuple
-growing,banana_030,propositionalwfomc,error,,465817912560,74.716369,GanakError,ganak exited with code 255,banana;bag;tuple;growing;family=banana;domain=30,BANANA bag tuple
+growing,banana_030,propositionalwfomc,solved,465817912560,465817912560,81.429648,,,banana;bag;tuple;growing;family=banana;domain=30,BANANA bag tuple
 growing,banana_030,coso,solved,465817912560,465817912560,0.139682,,,banana;bag;tuple;growing;family=banana;domain=30,BANANA bag tuple
 growing,banana_030,asp,timeout,,465817912560,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=30,BANANA bag tuple
 growing,banana_030,essence,timeout,,465817912560,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=30,BANANA bag tuple
 growing,banana_035,wfomc,solved,38877879625200,38877879625200,4.141451,,,banana;bag;tuple;growing;family=banana;domain=35,BANANA bag tuple
-growing,banana_035,propositionalwfomc,error,,38877879625200,99.756504,GanakError,ganak exited with code 255,banana;bag;tuple;growing;family=banana;domain=35,BANANA bag tuple
+growing,banana_035,propositionalwfomc,timeout,,38877879625200,100.022795,TimeoutError,Timed out after 100.000s,banana;bag;tuple;growing;family=banana;domain=35,BANANA bag tuple
 growing,banana_035,coso,solved,38877879625200,38877879625200,0.140596,,,banana;bag;tuple;growing;family=banana;domain=35,BANANA bag tuple
 growing,banana_035,asp,timeout,,38877879625200,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=35,BANANA bag tuple
 growing,banana_035,essence,timeout,,38877879625200,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=35,BANANA bag tuple
 growing,banana_040,wfomc,solved,5342931457063200,5342931457063200,6.798689,,,banana;bag;tuple;growing;family=banana;domain=40,BANANA bag tuple
-growing,banana_040,propositionalwfomc,timeout,,5342931457063200,100.105845,TimeoutError,Timed out after 100.000s,banana;bag;tuple;growing;family=banana;domain=40,BANANA bag tuple
+growing,banana_040,propositionalwfomc,timeout,,5342931457063200,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 35; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=40,BANANA bag tuple
 growing,banana_040,coso,solved,5342931457063200,5342931457063200,0.142258,,,banana;bag;tuple;growing;family=banana;domain=40,BANANA bag tuple
 growing,banana_040,asp,timeout,,5342931457063200,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=40,BANANA bag tuple
 growing,banana_040,essence,timeout,,5342931457063200,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=40,BANANA bag tuple
 growing,banana_045,wfomc,solved,1009241588443116600,1009241588443116600,14.448292,,,banana;bag;tuple;growing;family=banana;domain=45,BANANA bag tuple
-growing,banana_045,propositionalwfomc,timeout,,1009241588443116600,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 40; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=45,BANANA bag tuple
+growing,banana_045,propositionalwfomc,timeout,,1009241588443116600,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 35; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=45,BANANA bag tuple
 growing,banana_045,coso,solved,1009241588443116600,1009241588443116600,0.143211,,,banana;bag;tuple;growing;family=banana;domain=45,BANANA bag tuple
 growing,banana_045,asp,timeout,,1009241588443116600,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=45,BANANA bag tuple
 growing,banana_045,essence,timeout,,1009241588443116600,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=45,BANANA bag tuple
 growing,banana_050,wfomc,solved,136722551657911619400,136722551657911619400,31.180925,,,banana;bag;tuple;growing;family=banana;domain=50,BANANA bag tuple
-growing,banana_050,propositionalwfomc,timeout,,136722551657911619400,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 40; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=50,BANANA bag tuple
+growing,banana_050,propositionalwfomc,timeout,,136722551657911619400,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 35; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=50,BANANA bag tuple
 growing,banana_050,coso,solved,136722551657911619400,136722551657911619400,0.148070,,,banana;bag;tuple;growing;family=banana;domain=50,BANANA bag tuple
 growing,banana_050,asp,timeout,,136722551657911619400,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=50,BANANA bag tuple
 growing,banana_050,essence,timeout,,136722551657911619400,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=50,BANANA bag tuple
 growing,banana_055,wfomc,solved,26414370555196141518000,26414370555196141518000,72.644609,,,banana;bag;tuple;growing;family=banana;domain=55,BANANA bag tuple
-growing,banana_055,propositionalwfomc,timeout,,26414370555196141518000,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 40; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=55,BANANA bag tuple
+growing,banana_055,propositionalwfomc,timeout,,26414370555196141518000,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 35; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=55,BANANA bag tuple
 growing,banana_055,coso,solved,26414370555196141518000,26414370555196141518000,0.142186,,,banana;bag;tuple;growing;family=banana;domain=55,BANANA bag tuple
 growing,banana_055,asp,timeout,,26414370555196141518000,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=55,BANANA bag tuple
 growing,banana_055,essence,timeout,,26414370555196141518000,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=55,BANANA bag tuple
 growing,banana_060,wfomc,timeout,,3553261127084984957001360,100.103277,TimeoutError,Timed out after 100.000s,banana;bag;tuple;growing;family=banana;domain=60,BANANA bag tuple
-growing,banana_060,propositionalwfomc,timeout,,3553261127084984957001360,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 40; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=60,BANANA bag tuple
+growing,banana_060,propositionalwfomc,timeout,,3553261127084984957001360,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 35; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=60,BANANA bag tuple
 growing,banana_060,coso,solved,3553261127084984957001360,3553261127084984957001360,0.142590,,,banana;bag;tuple;growing;family=banana;domain=60,BANANA bag tuple
 growing,banana_060,asp,timeout,,3553261127084984957001360,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=60,BANANA bag tuple
 growing,banana_060,essence,timeout,,3553261127084984957001360,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=60,BANANA bag tuple
 growing,banana_065,wfomc,timeout,,334118902029058466905384800,0.000000,SkippedAfterTimeout,Skipped because wfomc already timed out for this growing family at domain 60; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=65,BANANA bag tuple
-growing,banana_065,propositionalwfomc,timeout,,334118902029058466905384800,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 40; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=65,BANANA bag tuple
+growing,banana_065,propositionalwfomc,timeout,,334118902029058466905384800,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 35; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=65,BANANA bag tuple
 growing,banana_065,coso,solved,334118902029058466905384800,334118902029058466905384800,0.137923,,,banana;bag;tuple;growing;family=banana;domain=65,BANANA bag tuple
 growing,banana_065,asp,timeout,,334118902029058466905384800,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=65,BANANA bag tuple
 growing,banana_065,essence,timeout,,334118902029058466905384800,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=65,BANANA bag tuple
 growing,banana_070,wfomc,timeout,,46807020729707190681927088800,0.000000,SkippedAfterTimeout,Skipped because wfomc already timed out for this growing family at domain 60; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=70,BANANA bag tuple
-growing,banana_070,propositionalwfomc,timeout,,46807020729707190681927088800,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 40; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=70,BANANA bag tuple
+growing,banana_070,propositionalwfomc,timeout,,46807020729707190681927088800,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 35; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=70,BANANA bag tuple
 growing,banana_070,coso,solved,46807020729707190681927088800,46807020729707190681927088800,0.136371,,,banana;bag;tuple;growing;family=banana;domain=70,BANANA bag tuple
 growing,banana_070,asp,timeout,,46807020729707190681927088800,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=70,BANANA bag tuple
 growing,banana_070,essence,timeout,,46807020729707190681927088800,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=70,BANANA bag tuple
 growing,banana_075,wfomc,timeout,,9330799555464321896324157740400,0.000000,SkippedAfterTimeout,Skipped because wfomc already timed out for this growing family at domain 60; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=75,BANANA bag tuple
-growing,banana_075,propositionalwfomc,timeout,,9330799555464321896324157740400,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 40; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=75,BANANA bag tuple
+growing,banana_075,propositionalwfomc,timeout,,9330799555464321896324157740400,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 35; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=75,BANANA bag tuple
 growing,banana_075,coso,solved,9330799555464321896324157740400,9330799555464321896324157740400,0.142004,,,banana;bag;tuple;growing;family=banana;domain=75,BANANA bag tuple
 growing,banana_075,asp,timeout,,9330799555464321896324157740400,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=75,BANANA bag tuple
 growing,banana_075,essence,timeout,,9330799555464321896324157740400,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=75,BANANA bag tuple
 growing,banana_080,wfomc,timeout,,1293658203894916697329683225865600,0.000000,SkippedAfterTimeout,Skipped because wfomc already timed out for this growing family at domain 60; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=80,BANANA bag tuple
-growing,banana_080,propositionalwfomc,timeout,,1293658203894916697329683225865600,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 40; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=80,BANANA bag tuple
+growing,banana_080,propositionalwfomc,timeout,,1293658203894916697329683225865600,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 35; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=80,BANANA bag tuple
 growing,banana_080,coso,solved,1293658203894916697329683225865600,1293658203894916697329683225865600,0.139410,,,banana;bag;tuple;growing;family=banana;domain=80,BANANA bag tuple
 growing,banana_080,asp,timeout,,1293658203894916697329683225865600,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=80,BANANA bag tuple
 growing,banana_080,essence,timeout,,1293658203894916697329683225865600,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=80,BANANA bag tuple
 growing,banana_085,wfomc,timeout,,260122255069236319941074640336744000,0.000000,SkippedAfterTimeout,Skipped because wfomc already timed out for this growing family at domain 60; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=85,BANANA bag tuple
-growing,banana_085,propositionalwfomc,timeout,,260122255069236319941074640336744000,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 40; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=85,BANANA bag tuple
+growing,banana_085,propositionalwfomc,timeout,,260122255069236319941074640336744000,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 35; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=85,BANANA bag tuple
 growing,banana_085,coso,solved,260122255069236319941074640336744000,260122255069236319941074640336744000,0.138854,,,banana;bag;tuple;growing;family=banana;domain=85,BANANA bag tuple
 growing,banana_085,asp,timeout,,260122255069236319941074640336744000,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=85,BANANA bag tuple
 growing,banana_085,essence,timeout,,260122255069236319941074640336744000,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=85,BANANA bag tuple
 growing,banana_090,wfomc,timeout,,35806695484463943560955394491153934080,0.000000,SkippedAfterTimeout,Skipped because wfomc already timed out for this growing family at domain 60; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=90,BANANA bag tuple
-growing,banana_090,propositionalwfomc,timeout,,35806695484463943560955394491153934080,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 40; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=90,BANANA bag tuple
+growing,banana_090,propositionalwfomc,timeout,,35806695484463943560955394491153934080,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 35; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=90,BANANA bag tuple
 growing,banana_090,coso,solved,35806695484463943560955394491153934080,35806695484463943560955394491153934080,0.138412,,,banana;bag;tuple;growing;family=banana;domain=90,BANANA bag tuple
 growing,banana_090,asp,timeout,,35806695484463943560955394491153934080,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=90,BANANA bag tuple
 growing,banana_090,essence,timeout,,35806695484463943560955394491153934080,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=90,BANANA bag tuple
 growing,banana_095,wfomc,timeout,,3517600937081713546414311197454838183200,0.000000,SkippedAfterTimeout,Skipped because wfomc already timed out for this growing family at domain 60; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=95,BANANA bag tuple
-growing,banana_095,propositionalwfomc,timeout,,3517600937081713546414311197454838183200,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 40; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=95,BANANA bag tuple
+growing,banana_095,propositionalwfomc,timeout,,3517600937081713546414311197454838183200,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 35; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=95,BANANA bag tuple
 growing,banana_095,coso,solved,3517600937081713546414311197454838183200,3517600937081713546414311197454838183200,0.141131,,,banana;bag;tuple;growing;family=banana;domain=95,BANANA bag tuple
 growing,banana_095,asp,timeout,,3517600937081713546414311197454838183200,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=95,BANANA bag tuple
 growing,banana_095,essence,timeout,,3517600937081713546414311197454838183200,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=95,BANANA bag tuple
 growing,banana_100,wfomc,timeout,,496757673511701399797303388664100162842200,0.000000,SkippedAfterTimeout,Skipped because wfomc already timed out for this growing family at domain 60; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=100,BANANA bag tuple
-growing,banana_100,propositionalwfomc,timeout,,496757673511701399797303388664100162842200,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 40; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=100,BANANA bag tuple
+growing,banana_100,propositionalwfomc,timeout,,496757673511701399797303388664100162842200,0.000000,SkippedAfterTimeout,Skipped because propositionalwfomc already timed out for this growing family at domain 35; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=100,BANANA bag tuple
 growing,banana_100,coso,solved,496757673511701399797303388664100162842200,496757673511701399797303388664100162842200,0.132669,,,banana;bag;tuple;growing;family=banana;domain=100,BANANA bag tuple
 growing,banana_100,asp,timeout,,496757673511701399797303388664100162842200,0.000000,SkippedAfterTimeout,Skipped because asp already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=100,BANANA bag tuple
 growing,banana_100,essence,timeout,,496757673511701399797303388664100162842200,0.000000,SkippedAfterTimeout,Skipped because essence already timed out for this growing family at domain 15; timeout budget was 100.000s.,banana;bag;tuple;growing;family=banana;domain=100,BANANA bag tuple
