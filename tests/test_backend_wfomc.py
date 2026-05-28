@@ -277,6 +277,31 @@ C = choose(B, 3)
     ) == 1
 
 
+def test_tuple_membership_uses_tuple_image_semantics() -> None:
+    """Tuple membership should constrain whether an entity appears anywhere."""
+    assert parse_and_solve(
+        """
+S = set(a, b)
+T = choose_tuple(S, 1)
+a in T
+"""
+    ) == 1
+    assert parse_and_solve(
+        """
+S = set(a, b)
+T = choose_tuple(S, 1)
+a not in T
+"""
+    ) == 1
+    assert parse_and_solve(
+        """
+S = set(a, b)
+T = tuple(S)
+b not in T
+"""
+    ) == 0
+
+
 def test_encode_does_not_mutate_analysis_for_unlifted_mode() -> None:
     """Encoding should not rewrite cached analysis facts in-place."""
     a = Entity("a")

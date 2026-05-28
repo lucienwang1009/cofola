@@ -455,6 +455,30 @@ T.count(a) == 1
     )
 
 
+def test_lowering_tuple_membership_uses_tuple_image() -> None:
+    """Tuple membership should lower through the tuple function image."""
+    problem = parse("""
+S = set(a, b)
+T = tuple(S)
+a in T
+b not in T
+""")
+
+    am = PlaningPipeline.run_passes(problem, [FixedPointPass(LoweringPass)])
+    image_ref = _first_def_ref(am.problem, FuncImage)
+
+    assert not any(
+        isinstance(atom, TupleCountAtom)
+        for constraint in am.problem.constraints
+        if isinstance(constraint, SizeConstraint)
+        for atom, _coef in constraint.terms
+    )
+    assert am.problem.constraints[-2:] == (
+        MembershipConstraint(entity=Entity("a"), container=image_ref, positive=True),
+        MembershipConstraint(entity=Entity("b"), container=image_ref, positive=False),
+    )
+
+
 def test_lowering_rejects_for_all_parts_placeholder_partition_mismatch() -> None:
     """Malformed builder input should not silently rewrite with the wrong part."""
     a = Entity("a")
