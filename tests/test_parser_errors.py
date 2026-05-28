@@ -6,7 +6,7 @@ from lark.exceptions import VisitError
 
 from cofola.parser import CofolaParsingError
 from cofola.parser.parser import parse
-from cofola.frontend import Entity, SizeConstraint, TupleCountAtom
+from cofola.frontend import Entity, MembershipConstraint
 
 
 PARSING_ERROR_CASES: list[tuple[str, str, str]] = [
@@ -112,8 +112,8 @@ P = partition(S, 2)
     parse(program)
 
 
-def test_tuple_membership_workaround_uses_tuple_count() -> None:
-    """Tuple membership syntax is parsed as tuple count constraints."""
+def test_tuple_membership_parses_as_membership_constraint() -> None:
+    """Tuple membership syntax should lower directly instead of using count atoms."""
     problem = parse("""
 S = set(a, b)
 T = tuple(S)
@@ -123,14 +123,14 @@ b not in T
     tuple_ref = next(ref for ref, name in problem.names if name == "T")
 
     assert problem.constraints == (
-        SizeConstraint(
-            terms=((TupleCountAtom(tuple_ref=tuple_ref, count_obj=Entity("a")), 1),),
-            comparator=">",
-            rhs=0,
+        MembershipConstraint(
+            entity=Entity("a"),
+            container=tuple_ref,
+            positive=True,
         ),
-        SizeConstraint(
-            terms=((TupleCountAtom(tuple_ref=tuple_ref, count_obj=Entity("b")), 1),),
-            comparator="==",
-            rhs=0,
+        MembershipConstraint(
+            entity=Entity("b"),
+            container=tuple_ref,
+            positive=False,
         ),
     )

@@ -18,12 +18,11 @@ from cofola.frontend.constraints import (
     SizeConstraint,
     SubsetConstraint,
     TogetherPattern,
-    TupleCountAtom,
     TupleIndexEq,
     TupleIndexMembership,
 )
 from cofola.frontend.objects import BagObjDef, ObjDef
-from cofola.frontend.objects import Entity, ObjRef, TupleDef
+from cofola.frontend.objects import Entity, ObjRef
 from cofola.parser.utils import CofolaParsingError, TupleIndexSentinel
 
 
@@ -71,21 +70,13 @@ def _resolve_membership_constraint(
     member: object,
     positive: bool,
     container: ObjRef,
-    container_defn: ObjDef | None,
-) -> TupleIndexMembership | SizeConstraint | MembershipConstraint:
+) -> TupleIndexMembership | MembershipConstraint:
     if isinstance(member, TupleIndexSentinel):
         return TupleIndexMembership(
             tuple_ref=member.tuple_ref,
             index=member.index,
             container=container,
             positive=positive,
-        )
-    if isinstance(container_defn, TupleDef) and isinstance(member, Entity):
-        # Workaround: parse `a in T` for tuples as `T.count(a) > 0`.
-        return SizeConstraint(
-            terms=((TupleCountAtom(container, member, False), 1),),
-            comparator=">" if positive else "==",
-            rhs=0,
         )
     if isinstance(member, Entity):
         return MembershipConstraint(
@@ -138,7 +129,6 @@ class ConstraintTransformerMixin:
             member=entity_or_index,
             positive=in_or_not,
             container=obj,
-            container_defn=self._defn_of(obj),
         )
 
     def subset_constraint(self, args):
