@@ -640,6 +640,7 @@ class LoweringPass(TransformPass):
         indices_ref: ObjRef,
         size: int,
         extra_defs: list,
+        image_cache: dict[tuple[ObjRef, ObjRef], ObjRef],
     ) -> object | None:
         """Lower a single atomic constraint that may reference tuple_ref.
 
@@ -662,8 +663,14 @@ class LoweringPass(TransformPass):
                 positive=c.positive,
             )
         elif isinstance(c, MembershipConstraint) and c.container == tuple_ref:
-            new_image_ref = self._new_ref()
-            extra_defs.append((new_image_ref, FuncImage(func=mapping_ref, argument=indices_ref)))
+            image_key = (mapping_ref, indices_ref)
+            new_image_ref = image_cache.get(image_key)
+            if new_image_ref is None:
+                new_image_ref = self._new_ref()
+                image_cache[image_key] = new_image_ref
+                extra_defs.append(
+                    (new_image_ref, FuncImage(func=mapping_ref, argument=indices_ref))
+                )
             return MembershipConstraint(
                 entity=c.entity,
                 container=new_image_ref,
@@ -721,18 +728,25 @@ class LoweringPass(TransformPass):
         runs inside LOCAL_PASSES, after Shannon expansion has flattened all
         compound constraints to atomic form.
 
-        Duplicate FuncImage defs created here are later merged by
-        MergeIdenticalObjects, which runs after LoweringPass in LOCAL_PASSES.
+        Tuple membership constraints that share the same tuple are routed
+        through one FuncImage object.
 
         Returns:
             (new_constraints, extra_defs_to_add)
         """
         extra_defs: list = []
+        image_cache: dict[tuple[ObjRef, ObjRef], ObjRef] = {}
 
         new_constraints = tuple(
             lowered for c in constraints
             if (lowered := self._lower_one_constraint(
-                c, tuple_ref, mapping_ref, indices_ref, size, extra_defs
+                c,
+                tuple_ref,
+                mapping_ref,
+                indices_ref,
+                size,
+                extra_defs,
+                image_cache,
             )) is not None
         )
         return new_constraints, extra_defs

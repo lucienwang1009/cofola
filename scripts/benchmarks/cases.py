@@ -210,7 +210,7 @@ def growing_domain_cases(
                         f"letters = set(a0...{n_letters})",
                         "arr = choose_tuple(letters, 4)",
                         "arr[0] == a0",
-                        "arr.count(a1) > 0",
+                        "a1 in arr",
                     )
                 ),
                 expected=3 * (n_letters - 2) * (n_letters - 3),
