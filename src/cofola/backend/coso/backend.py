@@ -25,7 +25,11 @@ from cofola.planing.analysis.entities import AnalysisResult
 from cofola.planing.pass_manager import FixedPointPass
 from cofola.planing.passes.lowering import ForAllPartsExpansionStep, LoweringPass
 from cofola.planing.passes.merge_identical import MergeIdenticalObjects
-from cofola.planing.passes.optimize import ConstantFolder, SizeConstraintFolder
+from cofola.planing.passes.optimize import (
+    ConstantFolder,
+    FullChoiceOptimizer,
+    SizeConstraintFolder,
+)
 from cofola.planing.passes.simplify import SimplifyPass
 from cofola.planing.pipeline import PlanningProfile
 
@@ -34,6 +38,7 @@ __all__ = ["COSO_GLOBAL_PASSES", "COSO_LOCAL_PASSES", "CoSoBackend"]
 
 COSO_GLOBAL_PASSES = (
     FixedPointPass(ConstantFolder),
+    FixedPointPass(FullChoiceOptimizer),
     MergeIdenticalObjects,
 )
 

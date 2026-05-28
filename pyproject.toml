@@ -54,7 +54,7 @@ override-dependencies = [
 ]
 
 [tool.uv.sources]
-wfomc = { git = "https://github.com/yuanhong-wang/WFOMC.git", branch = "for_cofola_aij" }
+wfomc = { git = "https://github.com/yuanhong-wang/WFOMC.git", branch = "devel" }
 coso = { git = "https://github.com/PietroTotis/CoSo.git" }
 
 [build-system]

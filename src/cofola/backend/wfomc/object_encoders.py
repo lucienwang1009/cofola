@@ -21,6 +21,26 @@ from cofola.planing.analysis.entities import AnalysisResult
 from loguru import logger
 
 
+def _analysis_exact_size(ref: ObjRef, analysis: AnalysisResult) -> int | None:
+    """Return an analysis-resolved exact size, if one is known."""
+
+    info = analysis.set_info.get(ref) or analysis.bag_info.get(ref)
+    if info is None:
+        return None
+    return info.exact_size
+
+
+def _actual_size(
+    ref: ObjRef,
+    defn_size: int | None,
+    analysis: AnalysisResult,
+) -> int | None:
+    """Prefer the analysis exact size over the raw definition size."""
+
+    exact_size = _analysis_exact_size(ref, analysis)
+    return exact_size if exact_size is not None else defn_size
+
+
 # Object encoding dispatcher
 # =============================================================================
 
@@ -174,9 +194,10 @@ def _encode_set_choose(
     context.sentence = context.sentence & parse(
         f"\\forall X: ({obj_pred}(X) -> {from_pred}(X))"
     )
-    if defn.size is not None:
+    actual_size = _actual_size(ref, defn.size, analysis)
+    if actual_size is not None:
         var = context.get_obj_var(ref)
-        context.validator.append(Eq(var, defn.size))
+        context.validator.append(Eq(var, actual_size))
 
 
 def _encode_set_choose_replace(
@@ -223,9 +244,10 @@ def _encode_set_choose_replace(
             1,
         )
 
-    if defn.size is not None:
+    actual_size = _actual_size(ref, defn.size, analysis)
+    if actual_size is not None:
         size_expr = _get_bag_size_expr(ref, analysis, context)
-        context.validator.append(Eq(size_expr, defn.size))
+        context.validator.append(Eq(size_expr, actual_size))
 
 
 def _encode_set_union(
@@ -357,9 +379,10 @@ def _encode_bag_choose(
     # Enforce the exact bag size when choose(bag, k) was written.
     # Uses the full size expression (entity vars + singletons + indis) so
     # that singletons are counted correctly via bag_singletons_pred.
-    if defn.size is not None:
+    actual_size = _actual_size(ref, defn.size, analysis)
+    if actual_size is not None:
         size_expr = _get_bag_size_expr(ref, analysis, context)
-        context.validator.append(Eq(size_expr, defn.size))
+        context.validator.append(Eq(size_expr, actual_size))
 
 
 def _encode_bag_union(
@@ -625,7 +648,7 @@ def _encode_func_inverse_image(
 
 def _encode_sequence(
     ref: ObjRef,
-    defn: ir_obj.SequenceDef,
+    defn: ir_obj.SequenceDef | ir_obj.CircleDef,
     analysis: AnalysisResult,
     context: Context,
 ) -> None:
@@ -655,6 +678,7 @@ def _encode_sequence(
         is_circle and defn.reflection,
     )
     domain_size = len(context.domain)
+    actual_size = _actual_size(ref, defn.size, analysis)
     # Check if source is a set or bag
     set_info = analysis.set_info.get(defn.source)
     bag_info = analysis.bag_info.get(defn.source)
@@ -683,11 +707,11 @@ def _encode_sequence(
             context.sentence = context.sentence & exclusive(entity_preds)
         # Overcount correction: idx positions can be permuted freely (factorial(size))
         # plus non-flatten elements have factorial(domain_size - size) orderings
-        if defn.size is not None:
+        if actual_size is not None:
             context.overcount = (
                 context.overcount
-                * math.factorial(domain_size - defn.size)
-                * math.factorial(defn.size)
+                * math.factorial(domain_size - actual_size)
+                * math.factorial(actual_size)
             )
     elif set_info is not None:
         logger.debug("_encode_sequence: source is a Set")
@@ -697,8 +721,8 @@ def _encode_sequence(
             f"\\forall X: (\\forall Y: (({source_pred}(X) & ~{source_pred}(Y)) -> {context.leq_pred}(X,Y)))"
         )
         # Overcount correction: (domain_size - size)!
-        if defn.size is not None:
-            context.overcount = context.overcount * math.factorial(domain_size - defn.size)
+        if actual_size is not None:
+            context.overcount = context.overcount * math.factorial(domain_size - actual_size)
     elif bag_info is not None:
         logger.debug(
             "_encode_sequence: source is a Bag, dis_entities={}, flatten={}",
@@ -761,11 +785,11 @@ def _encode_sequence(
             if entity_preds:
                 context.sentence = context.sentence & exclusive(entity_preds)
         # Overcount correction for bag sequences
-        if defn.size is not None:
+        if actual_size is not None:
             context.overcount = (
                 context.overcount
-                * math.factorial(domain_size - defn.size)
-                * math.factorial(defn.size)
+                * math.factorial(domain_size - actual_size)
+                * math.factorial(actual_size)
             )
     else:
         raise ValueError(f"Sequence source {defn.source} is neither a set nor a bag")
@@ -777,7 +801,13 @@ def _encode_sequence(
             source_exact = set_info.exact_size
         elif bag_info is not None and bag_info.exact_size is not None:
             source_exact = bag_info.exact_size
-        circle_size = defn.size or source_exact or domain_size
+        circle_size = (
+            actual_size
+            if actual_size is not None
+            else source_exact
+            if source_exact is not None
+            else domain_size
+        )
         context.circle_len = circle_size
         context.overcount = context.overcount * circle_size
         if defn.reflection and circle_size > 2:

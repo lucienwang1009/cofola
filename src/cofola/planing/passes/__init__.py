@@ -7,7 +7,7 @@ This module provides the rewriter framework for IR-to-IR transformations:
 - LoweringPass: Runs fine-grained lowering steps under one fixed-point driver
 """
 
-from .optimize import ConstantFolder
+from .optimize import ConstantFolder, FullChoiceOptimizer
 from .simplify import SimplifyPass
 from .lowering import (
     ForAllPartsExpansionStep,
@@ -22,6 +22,7 @@ from .merge_identical import MergeIdenticalObjects
 
 __all__ = [
     "ConstantFolder",
+    "FullChoiceOptimizer",
     "ForAllPartsExpansionStep",
     "InjectiveFunctionLoweringStep",
     "LinearDefLoweringStep",

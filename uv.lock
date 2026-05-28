@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 2
 requires-python = ">=3.11"
 resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'win32'",
@@ -205,7 +205,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=1.26" },
     { name = "scipy", specifier = ">=1.13.1" },
     { name = "sympy", specifier = ">=1.12" },
-    { name = "wfomc", git = "https://github.com/yuanhong-wang/WFOMC.git?branch=for_cofola_aij" },
+    { name = "wfomc", git = "https://github.com/yuanhong-wang/WFOMC.git?branch=devel" },
 ]
 provides-extras = ["coso"]
 
@@ -1573,7 +1573,7 @@ wheels = [
 [[package]]
 name = "wfomc"
 version = "0.1.0"
-source = { git = "https://github.com/yuanhong-wang/WFOMC.git?branch=for_cofola_aij#77eae41ad0db6248a52c2f4219e463e8ab4f7f2e" }
+source = { git = "https://github.com/yuanhong-wang/WFOMC.git?branch=devel#77eae41ad0db6248a52c2f4219e463e8ab4f7f2e" }
 dependencies = [
     { name = "cmd2" },
     { name = "contexttimer" },

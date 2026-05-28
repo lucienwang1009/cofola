@@ -153,6 +153,74 @@ not B subset C
     ) == 45
 
 
+def test_sequence_of_fixed_size_choice_uses_analysis_exact_size() -> None:
+    """Full sequence size should come from the chosen source's analysis facts."""
+    assert parse_and_solve(
+        """
+U = set(a, b, c, d)
+S = choose(U)
+|S| == 2
+row = sequence(S)
+"""
+    ) == 12
+
+
+def test_sequence_of_variable_choice_branches_by_actual_source_size() -> None:
+    """Each full-sequence size branch should constrain the chosen source too."""
+    assert parse_and_solve(
+        """
+U = set(a, b)
+S = choose(U)
+row = sequence(S)
+"""
+    ) == 5
+
+
+def test_full_size_bag_choose_tuple_matches_full_tuple() -> None:
+    """Full-size bag tuple choices should share the compact tuple encoding."""
+    full_tuple = """
+S = bag(A: 5, B: 4, C: 2)
+T = tuple(S)
+"""
+    full_choose_tuple = """
+S = bag(A: 5, B: 4, C: 2)
+T = choose_tuple(S, 11)
+"""
+    unsized_choose_tuple = """
+S = bag(A: 5, B: 4, C: 2)
+T = choose_tuple(S)
+"""
+
+    assert (
+        parse_and_solve(full_choose_tuple)
+        == parse_and_solve(unsized_choose_tuple)
+        == parse_and_solve(full_tuple)
+        == 6930
+    )
+
+
+def test_full_size_choose_is_identity_but_unsized_choose_stays_variable() -> None:
+    """choose(S, |S|) is an alias; choose(S) still ranges over subsets."""
+    assert parse_and_solve(
+        """
+S = set(a, b, c)
+T = choose(S, 3)
+"""
+    ) == 1
+    assert parse_and_solve(
+        """
+S = set(a, b, c)
+T = choose(S)
+"""
+    ) == 8
+    assert parse_and_solve(
+        """
+B = bag(a: 2, b: 1)
+C = choose(B, 3)
+"""
+    ) == 1
+
+
 def test_encode_does_not_mutate_analysis_for_unlifted_mode() -> None:
     """Encoding should not rewrite cached analysis facts in-place."""
     a = Entity("a")

@@ -18,7 +18,13 @@ from .pass_manager import (
     TransformPass,
     UnsatisfiableConstraint,
 )
-from .passes import ConstantFolder, LoweringPass, MergeIdenticalObjects, SimplifyPass
+from .passes import (
+    ConstantFolder,
+    FullChoiceOptimizer,
+    LoweringPass,
+    MergeIdenticalObjects,
+    SimplifyPass,
+)
 from .pipeline import PlaningPipeline, PlanningProfile, SolveBranch, SolveSchedule
 
 __all__ = [
@@ -37,6 +43,7 @@ __all__ = [
     "TransformPass",
     "UnsatisfiableConstraint",
     "ConstantFolder",
+    "FullChoiceOptimizer",
     "LoweringPass",
     "MergeIdenticalObjects",
     "SimplifyPass",
