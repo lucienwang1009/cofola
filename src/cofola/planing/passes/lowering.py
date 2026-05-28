@@ -27,7 +27,6 @@ from cofola.frontend.objects import (
     TupleDef,
     SequenceDef,
     CircleDef,
-    Linear,
     FuncDef,
     SetInit,
     BagInit,
@@ -757,7 +756,7 @@ class LoweringPass(TransformPass):
         # Find a SequenceDef/CircleDef that needs lowering
         for ref in problem.refs():
             defn = problem.get_object(ref)
-            if not isinstance(defn, Linear):
+            if not isinstance(defn, (SequenceDef, CircleDef)):
                 continue
 
             source_defn = problem.get_object(defn.source)
