@@ -30,7 +30,7 @@ def run_coso_program(cola: str, *, debug: bool = False) -> int:
     if run_coso is None:
         raise CoSoSolverError("Installed CoSo package does not expose coso.launcher.run_coso.")
 
-    raw = run_coso(cola=cola, debug=debug)
+    raw = run_coso(cola=_normalize_cola_size_constraints(cola), debug=debug)
     if raw is None:
         raise CoSoSolverError("CoSo returned no result.")
 
@@ -61,6 +61,7 @@ def _install_coso_compat_patches() -> None:
     portion_module = import_module("portion")
 
     solution_cls = count_module.Solution
+    zero_cls = count_module.Zero
     if not getattr(solution_cls, "_cofola_compat_patched", False):
         original_init = solution_cls.__init__
 
@@ -97,10 +98,76 @@ def _install_coso_compat_patches() -> None:
         sharp_csp_cls.split_on_constraints = split_on_constraints_compat
         sharp_csp_cls._cofola_compat_patched = True
 
+    if not getattr(sharp_csp_cls, "_cofola_multisubsets_patched", False):
+        binomial_cls = count_module.Binomial
+
+        def count_multisubsets_exchangeable_compat(self, var_list=None):  # type: ignore[no-untyped-def]
+            variables = var_list if var_list is not None else self.vars
+            n = len(variables)
+            domain = variables[0]
+            indist = domain.elements.find(False)
+            indist_sizes = self.get_sizes_indistinguishable(indist)
+            indist_size = sum(indist_sizes)
+            support_size = domain.size() - indist_size + len(indist_sizes)
+            m = support_size + n - 1
+            action = self.log.action("Counting multisubsets with all exchangeable")
+            self.log.detail(action, f"With binomial coefficient ({m} {n})")
+            return binomial_cls(m, n, f"Choose {n} objects out of {m} distinguishable objects")
+
+        sharp_csp_cls.count_multisubsets_exchangeable = count_multisubsets_exchangeable_compat
+        sharp_csp_cls._cofola_multisubsets_patched = True
+
+    if not getattr(sharp_csp_cls, "_cofola_count_ranges_patched", False):
+        original_apply_count_constraint = sharp_csp_cls.apply_count_constraint
+        original_apply_propositional_count = sharp_csp_cls.apply_propositional_count
+
+        def apply_count_constraint_return_inverse(self, cc, others):  # type: ignore[no-untyped-def]
+            out_values = portion_module.closedopen(0, self.config.size.values.upper) - cc.values
+            if not cc.values.atomic and out_values.atomic:
+                action = self.log.action(f"Considering constraint {cc}")
+                self.log.add_relevant_set(cc.formula)
+                self.log.detail(action, f"Relax {cc} and remove unsat (={out_values})")
+                count_ignore = self.split_on_constraints(1, others, op="add")
+                not_cc = configuration_module.CCounting(cc.formula, out_values)
+                count_not = self.split_on_constraints(1, [not_cc] + others, op="sub", id="2")
+                return count_ignore - count_not
+            return original_apply_count_constraint(self, cc, others)
+
+        def apply_propositional_count_no_early_stop(self, cc, others, ub, action):  # type: ignore[no-untyped-def]
+            values = cc.values.replace(upper=ub, right=portion_module.CLOSED)
+            count = zero_cls()
+            for i in portion_module.iterate(values, step=1):
+                cc_eq = configuration_module.CCounting(cc.formula, portion_module.singleton(i))
+                count_case = self.solve_subproblem(
+                    self.vars,
+                    self.config,
+                    {},
+                    [cc_eq] + others,
+                    caption=f"Case with {i} {cc.formula}",
+                    op="add",
+                    id=str(i),
+                )
+                count += count_case
+            return count
+
+        sharp_csp_cls.apply_count_constraint = apply_count_constraint_return_inverse
+        sharp_csp_cls.apply_propositional_count = apply_propositional_count_no_early_stop
+        sharp_csp_cls._cofola_count_ranges_patched = True
+
+    lifted_set_cls = level_2_module.LiftedSet
+    if not getattr(lifted_set_cls, "_cofola_compat_patched", False):
+        original_lifted_set_eq = lifted_set_cls.__eq__
+
+        def lifted_set_eq_compat(self, rhs):  # type: ignore[no-untyped-def]
+            if not isinstance(rhs, lifted_set_cls):
+                return False
+            return original_lifted_set_eq(self, rhs)
+
+        lifted_set_cls.__eq__ = lifted_set_eq_compat
+        lifted_set_cls._cofola_compat_patched = True
+
     solver_cls = solver_module.Solver
     if not getattr(solver_cls, "_cofola_empty_level2_patched", False):
-        zero_cls = count_module.Zero
-        lifted_set_cls = level_2_module.LiftedSet
         csize_cls = configuration_module.CSize
         sharp_csp_cls = sharp_csp_module.SharpCSP
 
@@ -133,3 +200,18 @@ def _install_coso_compat_patches() -> None:
 
         solver_cls.solve = solve_allowing_empty_level2_groups
         solver_cls._cofola_empty_level2_patched = True
+
+
+def _normalize_cola_size_constraints(cola: str) -> str:
+    """Work around CoSo's open-lower-bound bug for non-empty config sizes."""
+
+    import re
+
+    match = re.search(r"(?m)^\s*([a-z][a-zA-Z\-_0-9]*)\s+in\s+", cola)
+    if match is None:
+        return cola
+
+    name = re.escape(match.group(1))
+    cola = re.sub(rf"(?m)(^\s*#{name})\s*>\s*0\s*;", rf"\1>=1;", cola)
+    cola = re.sub(rf"(?m)(^\s*#{name})\s*!=\s*0\s*;", rf"\1>=1;", cola)
+    return cola

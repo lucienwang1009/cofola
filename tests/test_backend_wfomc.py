@@ -209,6 +209,17 @@ not B subset C
     ) == 45
 
 
+def test_choose_replace_sequence_uses_dynamic_chosen_source() -> None:
+    """choose_replace_sequence over a chosen set must respect the chosen source."""
+    assert parse_and_solve(
+        """
+S = set(a, b, c)
+C = choose(S, 2)
+Q = choose_replace_sequence(C, 4)
+"""
+    ) == 48
+
+
 def test_sequence_of_fixed_size_choice_uses_analysis_exact_size() -> None:
     """Full sequence size should come from the chosen source's analysis facts."""
     assert parse_and_solve(
@@ -300,6 +311,17 @@ T = tuple(S)
 b not in T
 """
     ) == 0
+
+
+def test_choose_replace_sequence_from_chosen_set_respects_source_choice() -> None:
+    """Repeated sequence entries must come from the chosen source subset."""
+    assert parse_and_solve(
+        """
+set_0 = set(e_1, e_2, e_3)
+choose_0 = choose(set_0, 2)
+choose_replace_sequence_0 = choose_replace_sequence(choose_0, 3)
+"""
+    ) == 24
 
 
 def test_encode_does_not_mutate_analysis_for_unlifted_mode() -> None:
