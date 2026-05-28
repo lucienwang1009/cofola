@@ -1,6 +1,0 @@
-suite,backend,total,expected_known,solved,solved_unchecked,wrong,errors,timeouts,unsolved,avg_solved_sec,max_solved_sec,avg_solved_or_unchecked_sec
-synthetic,asp,100,100,19,0,0,0,0,81,1.053675,12.980999,1.053675
-synthetic,coso,100,100,29,0,10,61,0,0,1.002131,13.030695,1.002131
-synthetic,essence,100,100,16,0,0,0,0,84,2.833460,17.280646,2.833460
-synthetic,propositionalwfomc,100,100,92,0,2,0,6,0,9.642455,75.848152,9.642455
-synthetic,wfomc,100,100,99,0,0,0,1,0,5.351666,59.997858,5.351666

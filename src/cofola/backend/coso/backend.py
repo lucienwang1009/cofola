@@ -11,25 +11,27 @@ from cofola.backend.coso.encoder import encode
 from cofola.backend.coso.solver import run_coso_program
 from cofola.frontend.constraints import SizeConstraint
 from cofola.frontend.objects import (
+    BagChoose,
     BagIntersection,
     BagPartDef,
+    CircleDef,
     CompositionDef,
     Entity,
     ObjRef,
     PartitionDef,
+    SequenceDef,
+    SetChoose,
+    SetChooseReplace,
     SetIntersection,
     SetPartDef,
+    TupleDef,
 )
 from cofola.frontend.problem import Problem
 from cofola.planing.analysis.entities import AnalysisResult
 from cofola.planing.pass_manager import FixedPointPass
 from cofola.planing.passes.lowering import ForAllPartsExpansionStep, LoweringPass
 from cofola.planing.passes.merge_identical import MergeIdenticalObjects
-from cofola.planing.passes.optimize import (
-    ConstantFolder,
-    FullChoiceOptimizer,
-    SizeConstraintFolder,
-)
+from cofola.planing.passes.optimize import ConstantFolder, SizeConstraintFolder
 from cofola.planing.passes.simplify import SimplifyPass
 from cofola.planing.pipeline import PlanningProfile
 
@@ -38,7 +40,6 @@ __all__ = ["COSO_GLOBAL_PASSES", "COSO_LOCAL_PASSES", "CoSoBackend"]
 
 COSO_GLOBAL_PASSES = (
     FixedPointPass(ConstantFolder),
-    FixedPointPass(FullChoiceOptimizer),
     MergeIdenticalObjects,
 )
 
@@ -58,6 +59,17 @@ COSO_LOCAL_PASSES = (
     SizeConstraintFolder,
     MergeIdenticalObjects,
     SimplifyPass,
+)
+
+_CONFIG_DEFS = (
+    SetChoose,
+    SetChooseReplace,
+    BagChoose,
+    TupleDef,
+    SequenceDef,
+    CircleDef,
+    PartitionDef,
+    CompositionDef,
 )
 
 
@@ -123,7 +135,10 @@ def _direct_level2_count(
         for ref, defn in problem.defs
         if isinstance(defn, (CompositionDef, PartitionDef))
     ]
-    if len(config_items) != 1:
+    all_config_items = [
+        (ref, defn) for ref, defn in problem.defs if isinstance(defn, _CONFIG_DEFS)
+    ]
+    if len(config_items) != 1 or len(all_config_items) != 1:
         return None
 
     config_ref, config = config_items[0]
@@ -134,6 +149,8 @@ def _direct_level2_count(
     multiplicities = getattr(info, "p_entities_multiplicity", None)
     if multiplicities is None:
         multiplicities = {entity: 1 for entity in info.p_entities}
+    if all(multiplicity == 1 for multiplicity in multiplicities.values()):
+        return None
 
     parts = config.num_parts
     constraints = list(problem.constraints)

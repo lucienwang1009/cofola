@@ -21,6 +21,7 @@ from cofola.frontend import (
     SequenceDef,
     SetPartDef,
     SetChoose,
+    SetChooseReplace,
     SetInit,
     SetIntersection,
     SetUnion,
@@ -571,6 +572,46 @@ Q = choose_sequence(S)
         source=_ref_named(problem, "S"),
         size=2,
     )
+
+
+def test_lowering_choose_replace_sequence_from_derived_set_uses_bag_choice() -> None:
+    """Derived set sources must constrain repeated sequence entries to the source."""
+    problem = parse("""
+S = set(a, b, c, d, e, f)
+C = choose(S, 5)
+Q = choose_replace_sequence(C, 7)
+""")
+    seq_ref = _ref_named(problem, "Q")
+
+    result = LoweringPass().run(problem, AnalysisManager(problem)).problem
+    seq_defn = result.get_object(seq_ref)
+
+    assert isinstance(seq_defn, SequenceDef)
+    assert seq_defn.choose is False
+    assert seq_defn.replace is False
+    assert seq_defn.size == 7
+    assert result.get_object(seq_defn.source) == SetChooseReplace(
+        source=_ref_named(problem, "C"),
+        size=7,
+    )
+
+
+def test_lowering_choose_replace_sequence_from_fixed_set_keeps_flatten() -> None:
+    """Fixed set sources can use the simpler direct flatten encoding."""
+    problem = parse("""
+S = set(a, b, c)
+Q = choose_replace_sequence(S, 4)
+""")
+    seq_ref = _ref_named(problem, "Q")
+
+    result = LoweringPass().run(problem, AnalysisManager(problem)).problem
+    seq_defn = result.get_object(seq_ref)
+
+    assert isinstance(seq_defn, SequenceDef)
+    assert seq_defn.choose is True
+    assert seq_defn.replace is True
+    assert seq_defn.flatten is not None
+    assert isinstance(result.get_object(seq_defn.flatten), SetInit)
 
 
 @pytest.mark.parametrize("tuple_expr", ["choose_tuple(S, 11)", "choose_tuple(S)"])

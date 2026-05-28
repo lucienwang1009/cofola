@@ -2330,7 +2330,7 @@
       "tuple",
       "unknown length"
     ],
-    "program": "code = set(dash, dot)\nsymbol = choose_replace_tuple(code)\n|symbol| <= 4"
+    "program": "code = set(dash, dot)\nsymbol = choose_replace_tuple(code)\n|symbol| <= 4\n|symbol| >= 1"
   },
   "177": {
     "problem": "In the United States, coins have the following thicknesses: penny, 1.55 mm; nickel, 1.95 mm; dime, 1.35 mm; quarter, 1.75 mm. If a stack of these coins is exactly 14 mm high, how many coins are in the stack?",
