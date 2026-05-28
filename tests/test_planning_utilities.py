@@ -26,6 +26,7 @@ from cofola.frontend import (
     SetUnion,
     SizeConstraint,
     TupleCountAtom,
+    TupleDef,
 )
 from cofola.frontend.utils import constraint_refs
 from cofola.frontend.utils import object_refs
@@ -47,7 +48,11 @@ from cofola.planing.passes.lowering import (
     TupleDefLoweringStep,
 )
 from cofola.planing.passes.merge_identical import MergeIdenticalObjects
-from cofola.planing.passes.optimize import ConstantFolder, SizeConstraintFolder
+from cofola.planing.passes.optimize import (
+    ConstantFolder,
+    FullChoiceOptimizer,
+    SizeConstraintFolder,
+)
 from cofola.planing.passes.simplify import SimplifyPass
 from cofola.parser.parser import parse
 
@@ -215,6 +220,77 @@ T = choose(S)
 
     assert base.set_info[chosen].max_size == 3
     assert merged.set_info[chosen].max_size == 1
+
+
+def test_merged_analysis_propagates_full_ordered_source_exact_size() -> None:
+    """A full ordered collection has the same exact size as its source."""
+    problem = parse("""
+U = set(a, b, c, d)
+S = choose(U)
+|S| == 2
+row = sequence(S)
+""")
+    chosen = _ref_named(problem, "S")
+    row = _ref_named(problem, "row")
+
+    analysis = AnalysisManager(problem).get(MergedAnalysis)
+
+    assert analysis.set_info[chosen].exact_size == 2
+    assert analysis.set_info[row].exact_size == 2
+
+
+def test_full_choice_optimizer_defaults_unsized_ordered_choose_to_source_size() -> None:
+    """An unconstrained choose_tuple(B) defaults to choosing the whole bag."""
+    problem = parse("""
+S = bag(A: 5, B: 4, C: 2)
+T = choose_tuple(S)
+""")
+    tuple_ref = _ref_named(problem, "T")
+
+    result = FullChoiceOptimizer().run(problem, AnalysisManager(problem))
+    tuple_defn = result.get_object(tuple_ref)
+
+    assert isinstance(tuple_defn, TupleDef)
+    assert tuple_defn.choose is False
+    assert tuple_defn.size == 11
+
+
+def test_full_choice_optimizer_aliases_full_set_and_bag_choose() -> None:
+    """A full-size choose over a set or bag is just its source object."""
+    problem = parse("""
+S = set(a, b, c)
+T = choose(S, 3)
+B = bag(a: 2, b: 1)
+C = choose(B, 3)
+""")
+    source_set = _ref_named(problem, "S")
+    source_bag = _ref_named(problem, "B")
+    chosen_set = _ref_named(problem, "T")
+    chosen_bag = _ref_named(problem, "C")
+
+    result = FullChoiceOptimizer().run(problem, AnalysisManager(problem))
+
+    assert result.get_object(chosen_set) is None
+    assert result.get_object(chosen_bag) is None
+    assert _ref_named(result, "T") == source_set
+    assert _ref_named(result, "C") == source_bag
+    assert not any(isinstance(defn, (SetChoose, BagChoose)) for _, defn in result.defs)
+
+
+def test_full_choice_optimizer_keeps_variable_unsized_choose() -> None:
+    """Plain choose(S) remains a variable subset unless size is known."""
+    problem = parse("""
+S = set(a, b, c)
+T = choose(S)
+""")
+    chosen = _ref_named(problem, "T")
+
+    result = FullChoiceOptimizer().run(problem, AnalysisManager(problem))
+
+    assert result.get_object(chosen) == SetChoose(
+        source=_ref_named(problem, "S"),
+        size=None,
+    )
 
 
 def test_constant_folder_returns_same_problem_when_unchanged() -> None:
@@ -470,6 +546,30 @@ Q = choose_sequence(S)
     assert result.get_object(seq_defn.source) == SetChoose(
         source=_ref_named(problem, "S"),
         size=2,
+    )
+
+
+@pytest.mark.parametrize("tuple_expr", ["choose_tuple(S, 11)", "choose_tuple(S)"])
+def test_lowering_full_size_bag_choose_tuple_skips_redundant_bag_choose(
+    tuple_expr: str,
+) -> None:
+    """Choosing the whole source bag before tuple lowering is the identity."""
+    problem = parse(f"""
+S = bag(A: 5, B: 4, C: 2)
+T = {tuple_expr}
+""")
+
+    am = PlaningPipeline.run_passes(
+        problem,
+        [FixedPointPass(FullChoiceOptimizer), FixedPointPass(LoweringPass)],
+    )
+
+    assert not any(isinstance(defn, BagChoose) for _, defn in am.problem.defs)
+    assert not any(
+        isinstance(term, BagCountAtom)
+        for constraint in am.problem.constraints
+        if isinstance(constraint, SizeConstraint)
+        for term, _coef in constraint.terms
     )
 
 
