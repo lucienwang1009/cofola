@@ -187,10 +187,14 @@ class Problem:
             cast(Constraint, map_refs(c, sub)) for c in self.constraints
         )
 
-        # Keep names
-        new_names = tuple(
+        # Carry old_ref's name to new_ref so that lookups by the old name
+        # still resolve (important for alias-style substitutions).
+        old_name = self.get_name(old_ref)
+        new_names = [
             (ref, name) for ref, name in self.names if ref != old_ref
-        )
+        ]
+        if old_name is not None:
+            new_names.append((new_ref, old_name))
 
         new_locs = list((ref, loc) for ref, loc in self.locs if ref != old_ref)
         if not new_def_exists:

@@ -1,8 +1,9 @@
 """Optimization passes for the immutable planning problem.
 
 ConstantFolder folds constant expressions like
-SetUnion(SetInit, SetInit) -> SetInit. SizeConstraintFolder substitutes
-known exact sizes into SizeConstraint terms.
+SetUnion(SetInit, SetInit) -> SetInit. FullChoiceOptimizer removes
+full-source choices. SizeConstraintFolder substitutes known exact sizes into
+SizeConstraint terms.
 """
 
 from __future__ import annotations
@@ -36,6 +37,7 @@ from cofola.planing.pass_manager import (
     UnsatisfiableConstraint,
 )
 from cofola.frontend.problem import Problem
+from cofola.planing.analysis.entities import AnalysisResult
 from cofola.planing.analysis.merged import MergedAnalysis
 
 _SIZE_EMBEDDABLE_DEFS = (
@@ -45,6 +47,8 @@ _SIZE_EMBEDDABLE_DEFS = (
     TupleDef,
     SequenceDef,
 )
+
+_ORDERED_DEFS = (TupleDef, SequenceDef, CircleDef)
 
 
 def _eval_comparator(comp: str, lhs: int, rhs: int) -> bool:
@@ -57,6 +61,7 @@ def _eval_comparator(comp: str, lhs: int, rhs: int) -> bool:
         ">":  lhs >  rhs,
         ">=": lhs >= rhs,
     }[comp]
+
 
 class ConstantFolder(TransformPass):
     """Folds constant sub-expressions in the planning problem.
@@ -253,6 +258,146 @@ class ConstantFolder(TransformPass):
 
         # Sort by entity name for determinism
         return tuple(sorted(result.items(), key=lambda x: x[0].name))
+
+
+class FullChoiceOptimizer(TransformPass):
+    """Rewrite choices that select their entire source.
+
+    ``choose(S, |S|)`` is an alias for ``S``.  ``choose_tuple(S, |S|)`` and an
+    unconstrained ``choose_tuple(S)`` over a known-size source are equivalent
+    to ``tuple(S)``.  Running this before size-range decomposition avoids
+    redundant choose objects and, for unsized ordered choices, avoids branching
+    over every possible size.
+    """
+
+    required_analyses = [MergedAnalysis]
+
+    def run(self, problem: Problem, am=None) -> Problem:
+        """Normalize full-source choices."""
+
+        analysis = (am or AnalysisManager(problem)).get(MergedAnalysis)
+        if analysis.unsatisfiable:
+            raise UnsatisfiableConstraint(
+                "MergedAnalysis reported unsatisfiable size facts"
+            )
+
+        substitutions: dict[ObjRef, ObjRef] = {}
+        updated_defs: dict[ObjRef, ObjDef] = {}
+
+        for ref, defn in problem.iter_objects():
+            alias = self._try_alias_choice(ref, defn, analysis)
+            if alias is not None:
+                substitutions[ref] = alias
+                logger.debug(
+                    "FullChoiceOptimizer: aliased {} ref={} to source ref={}",
+                    type(defn).__name__,
+                    ref.id,
+                    alias.id,
+                )
+                continue
+
+            optimized = self._try_optimize_ordered(ref, defn, analysis)
+            if optimized is None:
+                continue
+
+            updated_defs[ref] = optimized
+            logger.debug(
+                "FullChoiceOptimizer: rewrote {} ref={} as full-source ordered object",
+                type(defn).__name__,
+                ref.id,
+            )
+
+        if not substitutions and not updated_defs:
+            return problem
+
+        rewritten = dc_replace(
+            problem,
+            defs=tuple(
+                (ref, updated_defs.get(ref, defn))
+                for ref, defn in problem.defs
+            ),
+        )
+        if not substitutions:
+            return rewritten
+
+        # Resolve transitive alias chains (A→B→C → A→C) then apply each
+        # substitution via Problem.substitute, which remaps defs/constraints/
+        # names/locs and carries the old name to the target.
+        resolved: dict[ObjRef, ObjRef] = {}
+        for old in substitutions:
+            cur = old
+            seen: set[ObjRef] = set()
+            while cur in substitutions and cur not in seen:
+                seen.add(cur)
+                cur = substitutions[cur]
+            resolved[old] = cur
+
+        result = rewritten
+        for old, new in resolved.items():
+            result = result.substitute(old, new)
+        return result
+
+    def _try_alias_choice(
+        self,
+        ref: ObjRef,
+        defn: ObjDef,
+        analysis: AnalysisResult,
+    ) -> ObjRef | None:
+        """Return the source ref when a SetChoose/BagChoose is identity."""
+
+        if not isinstance(defn, (SetChoose, BagChoose)):
+            return None
+
+        source_info = analysis.set_info.get(defn.source) or analysis.bag_info.get(
+            defn.source
+        )
+        if source_info is None or source_info.exact_size is None:
+            return None
+
+        own_info = analysis.set_info.get(ref) or analysis.bag_info.get(ref)
+        requested_size = defn.size
+        if requested_size is None and own_info is not None:
+            requested_size = own_info.exact_size
+
+        if requested_size != source_info.exact_size:
+            return None
+        return defn.source
+
+    def _try_optimize_ordered(
+        self,
+        ref: ObjRef,
+        defn: ObjDef,
+        analysis: AnalysisResult,
+    ) -> ObjDef | None:
+        """Return a non-choose ordered def when the choice is source identity."""
+
+        if not isinstance(defn, _ORDERED_DEFS):
+            return None
+        if not defn.choose or defn.replace:
+            return None
+
+        source_info = analysis.set_info.get(defn.source) or analysis.bag_info.get(
+            defn.source
+        )
+        if source_info is None or source_info.exact_size is None:
+            return None
+
+        own_info = analysis.set_info.get(ref) or analysis.bag_info.get(ref)
+        requested_size = defn.size
+        if requested_size is None and own_info is not None:
+            requested_size = own_info.exact_size
+        if requested_size is None:
+            requested_size = source_info.exact_size
+
+        if requested_size != source_info.exact_size:
+            return None
+
+        return dc_replace(
+            defn,
+            choose=False,
+            replace=False,
+            size=source_info.exact_size,
+        )
 
 
 class SizeConstraintFolder(TransformPass):
