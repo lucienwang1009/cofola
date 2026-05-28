@@ -35,6 +35,7 @@ from cofola.frontend.objects import (
     FuncImage,
     FuncInverseImage,
     SetChoose,
+    SetChooseReplace,
     SetIntersection,
     BagObjDef,
     PartDef,
@@ -834,6 +835,51 @@ class LoweringPass(TransformPass):
             # (replace=True, or replace=False with bag source).
             seq_is_bag = analysis.bag_info.get(ref) is not None
             choose_replace = defn.choose and defn.replace
+            if (
+                choose_replace
+                and not source_is_bag
+                and not isinstance(source_defn, SetInit)
+            ):
+                size = self._resolve_ordered_size(
+                    ref,
+                    defn.size,
+                    analysis,
+                    f"SequenceDef {ref.id}: sequence size must be specified explicitly. "
+                    "Use 'choose k sequence from <source>' with an explicit k, "
+                    "or add a size constraint '|<seq>| == k' or '|<source>| == k'.",
+                )
+                chosen_ref = self._new_ref()
+                chosen_defn = SetChooseReplace(source=defn.source, size=size)
+                if isinstance(defn, CircleDef):
+                    new_seq_defn = CircleDef(
+                        source=chosen_ref,
+                        choose=False,
+                        replace=False,
+                        size=size,
+                        reflection=defn.reflection,
+                    )
+                else:
+                    new_seq_defn = SequenceDef(
+                        source=chosen_ref,
+                        choose=False,
+                        replace=False,
+                        size=size,
+                    )
+
+                new_defs = list(problem.defs)
+                new_defs.append((chosen_ref, chosen_defn))
+                new_defs = [(r, d) if r != ref else (ref, new_seq_defn) for r, d in new_defs]
+
+                logger.info(
+                    f"Lowered SequenceDef {ref}: added choose-replace object {chosen_ref}"
+                )
+
+                return Problem(
+                    defs=tuple(new_defs),
+                    constraints=problem.constraints,
+                    names=problem.names,
+                ), True
+
             if (seq_is_bag or choose_replace) and defn.flatten is None:
                 size = self._resolve_ordered_size(
                     ref,

@@ -4,7 +4,6 @@ from __future__ import annotations
 import re
 from collections.abc import Sequence
 from dataclasses import dataclass, field
-from math import factorial
 
 from cofola.frontend.constraints import (
     BagCountAtom,
@@ -171,7 +170,23 @@ def _find_config(problem: Problem, analysis: AnalysisResult) -> _ConfigSpec | No
             f"found {len(roots) or len(candidates)} ({names})."
         )
 
+    _reject_configuration_source_dependency(roots[0], problem)
     return _config_spec(roots[0], problem, analysis)
+
+
+def _reject_configuration_source_dependency(ref: ObjRef, problem: Problem) -> None:
+    defn = problem.get_object(ref)
+    source = getattr(defn, "source", None)
+    if not isinstance(source, ObjRef):
+        return
+    source_defn = problem.get_object(source)
+    if isinstance(source_defn, _CONFIG_TYPES):
+        raise CoSoEncodingError(
+            "CoSo backend cannot encode a target that depends on another "
+            f"configuration ({_display_ref(problem, ref)} depends on "
+            f"{_display_ref(problem, source)}); translating only the target "
+            "would drop the upstream count."
+        )
 
 
 def _config_spec(ref: ObjRef, problem: Problem, analysis: AnalysisResult) -> _ConfigSpec:
@@ -231,69 +246,127 @@ def _constraint_lines(
     state: _EncodingState,
     spec: _ConfigSpec,
 ) -> tuple[list[str], int]:
-    part_sizes, grouped_part_lines, skip = _indexed_part_size_constraints(constraints, state)
-    count_divisor = 1
+    part_lines, skip = _part_constraint_lines(constraints, state, spec)
     lines: list[str] = []
 
-    if part_sizes:
-        for size, count in sorted(part_sizes.items()):
-            lines.append(f"#( #part={size} )={count};")
-        if spec.kind == "composition" and sum(part_sizes.values()) == spec.size:
-            count_divisor = _part_size_permutation_count(part_sizes)
-    lines.extend(grouped_part_lines)
+    lines.extend(part_lines)
 
     for idx, c in enumerate(constraints):
         if idx in skip:
             continue
-        line = _constraint_line(c, state)
+        line = _constraint_line(c, state, spec)
         if line is not None:
             lines.append(line)
 
-    return lines, count_divisor
+    return lines, 1
 
 
-def _indexed_part_size_constraints(
+def _part_constraint_lines(
     constraints: Sequence[Constraint],
     state: _EncodingState,
-) -> tuple[dict[int, int], list[str], set[int]]:
-    sizes: dict[int, int] = {}
-    grouped: dict[tuple[str, int], int] = {}
+    spec: _ConfigSpec,
+) -> tuple[list[str], set[int]]:
+    if spec.kind not in {"composition", "partition"}:
+        return [], set()
+
+    grouped: dict[tuple[str, str, int], int] = {}
+    lines: list[str] = []
     skip: set[int] = set()
     for idx, c in enumerate(constraints):
-        if not isinstance(c, SizeConstraint):
-            continue
-        atom = _single_unit_size_atom(c)
-        if not isinstance(atom, ObjRef):
-            continue
-        part_defn = state.problem.get_object(atom)
-        if not isinstance(part_defn, (SetPartDef, BagPartDef)) or part_defn.partition != state.target:
-            continue
-        if c.comparator != "==":
-            grouped[(c.comparator, c.rhs)] = grouped.get((c.comparator, c.rhs), 0) + 1
+        part_line = _indexed_part_constraint_line(c, state, spec)
+        if part_line is not None:
+            lines.append(part_line)
             skip.add(idx)
             continue
-        sizes[c.rhs] = sizes.get(c.rhs, 0) + 1
-        skip.add(idx)
-    grouped_lines = [
-        f"#( #part{_comparator(comparator)}{rhs} )={count};"
-        for (comparator, rhs), count in sorted(grouped.items())
-    ]
-    return sizes, grouped_lines, skip
+
+        grouped_key = _grouped_part_constraint_key(c, state, spec)
+        if grouped_key is not None:
+            grouped[grouped_key] = grouped.get(grouped_key, 0) + 1
+            skip.add(idx)
+
+    lines.extend(
+        f"#( #{expr}{comparator}{rhs} )={count};"
+        for (expr, comparator, rhs), count in sorted(grouped.items())
+    )
+    return lines, skip
 
 
-def _part_size_permutation_count(part_sizes: dict[int, int]) -> int:
-    total = sum(part_sizes.values())
-    divisor = 1
-    for count in part_sizes.values():
-        divisor *= factorial(count)
-    return factorial(total) // divisor
-
-
-def _constraint_line(c: Constraint, state: _EncodingState) -> str | None:
+def _indexed_part_constraint_line(
+    c: Constraint,
+    state: _EncodingState,
+    spec: _ConfigSpec,
+) -> str | None:
+    if spec.kind != "composition":
+        return None
     if isinstance(c, SizeConstraint):
-        return _size_constraint_line(c, state)
+        try:
+            atom = _single_unit_size_atom(c)
+        except CoSoEncodingError:
+            return None
+        expr = _part_atom_expr(atom, state, indexed=True)
+        if expr is not None:
+            return f"#{expr}{_comparator(c.comparator)}{c.rhs};"
     if isinstance(c, MembershipConstraint):
-        return _membership_line(c, state)
+        expr = _part_ref_expr(c.container, state, indexed=True)
+        if expr is not None:
+            op = ">" if c.positive else "="
+            return f"#{expr}&{_entity_term(c.entity, state)}{op}0;"
+    return None
+
+
+def _grouped_part_constraint_key(
+    c: Constraint,
+    state: _EncodingState,
+    spec: _ConfigSpec,
+) -> tuple[str, str, int] | None:
+    if spec.kind != "partition":
+        return None
+    if isinstance(c, SizeConstraint):
+        try:
+            atom = _single_unit_size_atom(c)
+        except CoSoEncodingError:
+            return None
+        expr = _part_atom_expr(atom, state, indexed=False)
+        if expr is not None:
+            return expr, _comparator(c.comparator), c.rhs
+    if isinstance(c, MembershipConstraint):
+        expr = _part_ref_expr(c.container, state, indexed=False)
+        if expr is not None:
+            comparator = ">" if c.positive else "="
+            return f"{expr}&{_entity_term(c.entity, state)}", comparator, 0
+    return None
+
+
+def _part_atom_expr(atom: object, state: _EncodingState, *, indexed: bool) -> str | None:
+    if isinstance(atom, ObjRef):
+        part_expr = _part_ref_expr(atom, state, indexed=indexed)
+        if part_expr is not None:
+            return part_expr
+        defn = state.problem.get_object(atom)
+        if isinstance(defn, (SetIntersection, BagIntersection)):
+            left_part = _part_ref_expr(defn.left, state, indexed=indexed)
+            if left_part is not None:
+                return f"{left_part}&{_property(defn.right, state)}"
+            right_part = _part_ref_expr(defn.right, state, indexed=indexed)
+            if right_part is not None:
+                return f"{right_part}&{_property(defn.left, state)}"
+    return None
+
+
+def _part_ref_expr(ref: ObjRef, state: _EncodingState, *, indexed: bool) -> str | None:
+    defn = state.problem.get_object(ref)
+    if not isinstance(defn, (SetPartDef, BagPartDef)) or defn.partition != state.target:
+        return None
+    if indexed:
+        return f"cfg[{defn.index + 1}]"
+    return "part"
+
+
+def _constraint_line(c: Constraint, state: _EncodingState, spec: _ConfigSpec) -> str | None:
+    if isinstance(c, SizeConstraint):
+        return _size_constraint_line(c, state, spec)
+    if isinstance(c, MembershipConstraint):
+        return _membership_line(c, state, spec)
     if isinstance(c, SubsetConstraint):
         return _subset_line(c, state)
     if isinstance(c, DisjointConstraint):
@@ -309,12 +382,18 @@ def _constraint_line(c: Constraint, state: _EncodingState) -> str | None:
     raise CoSoEncodingError(f"Unknown constraint type for CoSo backend: {type(c).__name__}.")
 
 
-def _size_constraint_line(c: SizeConstraint, state: _EncodingState) -> str:
-    atom = _single_unit_size_atom(c)
+def _size_constraint_line(c: SizeConstraint, state: _EncodingState, spec: _ConfigSpec) -> str:
+    try:
+        atom = _single_unit_size_atom(c)
+    except CoSoEncodingError:
+        line = _linear_partition_count_line(c, state, spec)
+        if line is not None:
+            return line
+        raise
 
     comparator = _comparator(c.comparator)
     if isinstance(atom, ObjRef):
-        counted = _counted_ref_expr(atom, state)
+        counted = _counted_ref_expr(atom, state, spec)
         return f"#{counted}{comparator}{c.rhs};"
     if isinstance(atom, BagCountAtom):
         if atom.bag != state.target:
@@ -340,30 +419,95 @@ def _single_unit_size_atom(c: SizeConstraint) -> object:
     return atom
 
 
-def _counted_ref_expr(ref: ObjRef, state: _EncodingState) -> str:
+def _linear_partition_count_line(
+    c: SizeConstraint,
+    state: _EncodingState,
+    spec: _ConfigSpec,
+) -> str | None:
+    if spec.size is None or len(c.terms) != 2:
+        return None
+    (left_atom, left_coef), (right_atom, right_coef) = c.terms
+    left_prop = _target_intersection_property(left_atom, state)
+    right_prop = _target_intersection_property(right_atom, state)
+    if left_prop is None or right_prop is None:
+        return None
+
+    left_entities = _positive_entity_set(left_prop, state)
+    right_entities = _positive_entity_set(right_prop, state)
+    target_entities = _positive_entity_set(spec.source, state)
+    if left_entities & right_entities or left_entities | right_entities != target_entities:
+        return None
+
+    coefficient = left_coef - right_coef
+    constant = right_coef * spec.size
+    valid = [
+        value
+        for value in range(spec.size + 1)
+        if _compare_linear(coefficient * value + constant, c.comparator, c.rhs)
+    ]
+    if not valid:
+        return f"#cfg&{_property(left_prop, state)}<0;"
+    if valid == list(range(spec.size + 1)):
+        return None
+    lower = min(valid)
+    upper = max(valid)
+    if valid != list(range(lower, upper + 1)):
+        return None
+
+    counted = f"cfg&{_property(left_prop, state)}"
+    if lower == upper:
+        return f"#{counted}={lower};"
+    if lower == 0:
+        return f"#{counted}<={upper};"
+    if upper == spec.size:
+        return f"#{counted}>={lower};"
+    return f"#{counted}>={lower};\n#{counted}<={upper};"
+
+
+def _target_intersection_property(atom: object, state: _EncodingState) -> ObjRef | None:
+    if not isinstance(atom, ObjRef):
+        return None
+    defn = state.problem.get_object(atom)
+    if isinstance(defn, (SetIntersection, BagIntersection)):
+        return _binary_ref_other_side(defn.left, defn.right, state.target)
+    return None
+
+
+def _positive_entity_set(ref: ObjRef, state: _EncodingState) -> set[Entity]:
+    return {
+        entity
+        for entity, multiplicity in _source_multiplicities(ref, state.analysis).items()
+        if multiplicity > 0
+    }
+
+
+def _counted_ref_expr(ref: ObjRef, state: _EncodingState, spec: _ConfigSpec) -> str:
     if ref == state.target:
         return "cfg"
+    part_expr = _part_ref_expr(ref, state, indexed=spec.kind == "composition")
+    if part_expr is not None:
+        return part_expr
     defn = state.problem.get_object(ref)
     if isinstance(defn, SetIntersection):
         other = _binary_ref_other_side(defn.left, defn.right, state.target)
         if other is not None:
             return f"cfg&{_property(other, state)}"
-        part_other = _binary_ref_part_other_side(defn.left, defn.right, state)
+        part_other = _binary_ref_part_other_side(defn.left, defn.right, state, spec)
         if part_other is not None:
-            return f"part&{_property(part_other, state)}"
+            part_expr, other_ref = part_other
+            return f"{part_expr}&{_property(other_ref, state)}"
     if isinstance(defn, BagIntersection):
         other = _binary_ref_other_side(defn.left, defn.right, state.target)
         if other is not None:
             return f"cfg&{_property(other, state)}"
-        part_other = _binary_ref_part_other_side(defn.left, defn.right, state)
+        part_other = _binary_ref_part_other_side(defn.left, defn.right, state, spec)
         if part_other is not None:
-            return f"part&{_property(part_other, state)}"
+            part_expr, other_ref = part_other
+            return f"{part_expr}&{_property(other_ref, state)}"
     if isinstance(defn, SetDifference) and defn.left == state.target:
         return f"cfg&{_complement_property(defn.right, state)}"
     if isinstance(defn, BagDifference) and defn.left == state.target:
         return f"cfg&{_complement_property(defn.right, state)}"
-    if isinstance(defn, (SetPartDef, BagPartDef)) and defn.partition == state.target:
-        return "part"
     raise CoSoEncodingError(
         "CoSo backend supports size constraints on the target, "
         "target/property intersections, target differences, and target parts."
@@ -382,17 +526,22 @@ def _binary_ref_part_other_side(
     left: ObjRef,
     right: ObjRef,
     state: _EncodingState,
-) -> ObjRef | None:
-    left_defn = state.problem.get_object(left)
-    if isinstance(left_defn, (SetPartDef, BagPartDef)) and left_defn.partition == state.target:
-        return right
-    right_defn = state.problem.get_object(right)
-    if isinstance(right_defn, (SetPartDef, BagPartDef)) and right_defn.partition == state.target:
-        return left
+    spec: _ConfigSpec,
+) -> tuple[str, ObjRef] | None:
+    left_part = _part_ref_expr(left, state, indexed=spec.kind == "composition")
+    if left_part is not None:
+        return left_part, right
+    right_part = _part_ref_expr(right, state, indexed=spec.kind == "composition")
+    if right_part is not None:
+        return right_part, left
     return None
 
 
-def _membership_line(c: MembershipConstraint, state: _EncodingState) -> str | None:
+def _membership_line(c: MembershipConstraint, state: _EncodingState, spec: _ConfigSpec) -> str | None:
+    part_expr = _part_ref_expr(c.container, state, indexed=spec.kind == "composition")
+    if part_expr is not None:
+        op = ">" if c.positive else "="
+        return f"#{part_expr}&{_entity_term(c.entity, state)}{op}0;"
     if c.container != state.target:
         return _constant_membership_line(c, state)
     op = ">" if c.positive else "="
@@ -580,6 +729,17 @@ def _comparator(comparator: str) -> str:
     if comparator == "==":
         return "="
     return comparator
+
+
+def _compare_linear(lhs: int, comparator: str, rhs: int) -> bool:
+    return {
+        "==": lhs == rhs,
+        "!=": lhs != rhs,
+        "<": lhs < rhs,
+        "<=": lhs <= rhs,
+        ">": lhs > rhs,
+        ">=": lhs >= rhs,
+    }[comparator]
 
 
 def _display_ref(problem: Problem, ref: ObjRef) -> str:

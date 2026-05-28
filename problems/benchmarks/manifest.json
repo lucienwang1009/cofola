@@ -2255,7 +2255,7 @@
     {
       "suite": "real",
       "case_id": "176",
-      "program": "code = set(dash, dot)\nsymbol = choose_replace_tuple(code)\n|symbol| <= 4",
+      "program": "code = set(dash, dot)\nsymbol = choose_replace_tuple(code)\n|symbol| <= 4\n|symbol| >= 1",
       "expected": 30,
       "tags": [
         "tuple",
@@ -2263,7 +2263,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/176.cfl",
-      "program_sha256": "327537d96ff5e80acd687a2a6d8bbb8d78e1fa4f26fe38b4d5e2218cb584ecba"
+      "program_sha256": "b179823f0e9b03c6e29b1a4920d613c0e0ca357359c26ae1ba7737c772683406"
     },
     {
       "suite": "real",
