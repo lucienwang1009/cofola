@@ -17,12 +17,12 @@ toolchain and CMake for Ganak and `pynauty`). On Debian/Ubuntu:
 ```bash
 sudo apt-get update
 sudo apt-get install -y \
-  git curl unzip build-essential cmake \
+  git curl wget unzip build-essential cmake \
   libgmp-dev libmpfr-dev libflint-dev
 ```
 
-On other distros install the equivalents: git, curl, unzip, a C/C++ compiler,
-make, cmake, and the GMP/MPFR/FLINT development headers.
+On other distros install the equivalents: git, curl, wget, unzip, a C/C++
+compiler, make, cmake, and the GMP/MPFR/FLINT development headers.
 
 ### 2. uv and the Python environment
 
@@ -69,30 +69,44 @@ uv run which ganak && uv run ganak --help | head -1
 
 Skip this step if you only run `--backends wfomc coso`.
 
-### 4. Java and Conjure (the `essence` baseline — optional)
+### 4. CoSo baselines: `asp` and `essence` (optional)
 
-The `essence` baseline runs Conjure + Savile Row, which need a Java 11 runtime.
+Both baselines come with `uv sync --extra coso` (step 2), which installs the
+`coso` package together with `clingo` and `portion`.
+
+- **`asp`** needs nothing further: Cofola translates each problem to ASP and
+  counts models with the Python `clingo` package.
+- **`essence`** additionally runs Conjure (which bundles Savile Row + Minion),
+  so it needs a Java 11 runtime plus the Conjure tools.
+
+Install Java and Conjure for `essence`. The versions below match CoSo's
+[`install_tools.sh`](https://github.com/PietroTotis/CoSo/blob/master/install_tools.sh),
+which Cofola's Essence translator targets:
 
 ```bash
 # any JDK/JRE 11 works; e.g. the distro package:
 sudo apt-get install -y openjdk-11-jre-headless
 java -version                                # expect 11.x
 
-# Conjure bundles Savile Row + Minion. Download a Linux release from
-# https://github.com/conjure-cp/conjure/releases and unpack it, e.g.:
+# Conjure v2.3.0 with bundled solvers (Savile Row + Minion):
 mkdir -p "$HOME/tools" && cd "$HOME/tools"
-# curl -L -o conjure.tar.gz <conjure-linux-release-url>
-tar xf conjure.tar.gz                        # -> $HOME/tools/conjure/...
-"$HOME/tools/conjure/conjure" --version
+wget -q https://github.com/conjure-cp/conjure/releases/download/v2.3.0/conjure-v2.3.0-linux-solvers.zip
+unzip -q conjure-v2.3.0-linux-solvers.zip    # -> conjure-v2.3.0-linux-solvers/
+"$HOME/tools/conjure-v2.3.0-linux-solvers/conjure" --version
 cd -
 ```
 
-There are no built-in tool paths; pass them to the runner when using `essence`:
+`--conjure-dir` must point at the directory holding the `conjure` binary (it is
+prepended to `PATH` so the Savile Row and Minion binaries next to it are found):
 
 ```bash
---conjure-dir "$HOME/tools/conjure"          # required for the essence baseline
---java-bin /usr/bin/java                      # optional; otherwise java from PATH
+--conjure-dir "$HOME/tools/conjure-v2.3.0-linux-solvers"   # required for essence
+--java-bin /usr/bin/java                                    # optional; otherwise java from PATH
 ```
+
+> CoSo's `install_tools.sh` also installs sharpSAT, gringo, and the lp2*
+> normalisers for CoSo's own pipeline; Cofola's `asp`/`essence` baselines do not
+> use those — only `clingo` (for `asp`) and Conjure + Java (for `essence`).
 
 ### 5. Smoke test
 
