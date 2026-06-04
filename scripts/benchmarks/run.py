@@ -32,12 +32,12 @@ from scripts.benchmarks.cases import (
     save_cases,
     select_cases,
 )
-from scripts.benchmarks.coso_baselines import (
-    DEFAULT_CONJURE_DIR,
-    DEFAULT_JAVA_BIN,
-    ExternalBaselineConfig,
-    solve_external_baseline,
-)
+# NOTE: ``coso_baselines`` is imported lazily inside ``_solve_one`` so that the
+# WFOMC benchmark runner (and its tests) can be imported without the optional
+# ``coso`` extra (coso / clingo / portion). These CLI defaults mirror the ones
+# in ``coso_baselines`` but carry no heavy dependencies.
+DEFAULT_CONJURE_DIR = Path("/home/sunshixin/lucien/CoSo/tools/conjure")
+DEFAULT_JAVA_BIN = Path("/home/sunshixin/lucien/tools/java/bin/java")
 
 
 STATUS_SOLVED = "solved"
@@ -543,6 +543,12 @@ def _solve_worker(
     kwargs = dict(backend=backend, algo=algo, linear_order_encoding=linear_order_encoding)
     try:
         if backend in EXTERNAL_COSO_BASELINES:
+            # Imported lazily: external baselines need the optional ``coso`` extra.
+            from scripts.benchmarks.coso_baselines import (
+                ExternalBaselineConfig,
+                solve_external_baseline,
+            )
+
             result = solve_external_baseline(
                 program,
                 backend,
