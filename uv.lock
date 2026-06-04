@@ -1573,7 +1573,7 @@ wheels = [
 [[package]]
 name = "wfomc"
 version = "0.1.0"
-source = { git = "https://github.com/yuanhong-wang/WFOMC.git?branch=devel#77eae41ad0db6248a52c2f4219e463e8ab4f7f2e" }
+source = { git = "https://github.com/yuanhong-wang/WFOMC.git?branch=devel#527dd73396cd6b7c6d79f6c47c55aa359c61cd1b" }
 dependencies = [
     { name = "cmd2" },
     { name = "contexttimer" },

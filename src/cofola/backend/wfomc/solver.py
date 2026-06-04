@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from typing import Union
 
-from wfomc import wfomc, Algo, WFOMCProblem, UnaryEvidenceEncoding
+from wfomc import wfomc, Algo, WFOMCProblem, UnaryEvidenceEncoding, WFOMCResult
 from wfomc.algo import LinearOrderEncoding
-from wfomc.utils import RingElement
 
 
 def solve_wfomc(
@@ -12,7 +11,7 @@ def solve_wfomc(
     algo: Algo,
     use_partition_constraint: bool = False,
     linear_order_encoding: Union[LinearOrderEncoding, str, None] = None,
-) -> RingElement:
+) -> WFOMCResult:
     """Solve the given WFOMC problem using the given algorithm.
 
     Args:
@@ -26,7 +25,7 @@ def solve_wfomc(
             picks ``PIN`` (cheap, default) or ``AXIOMS`` (FO³ ground truth).
 
     Returns:
-        The raw ring element result.
+        The WFOMC result object.
     """
     unary_evidence_encoding = (
         UnaryEvidenceEncoding.PC if use_partition_constraint

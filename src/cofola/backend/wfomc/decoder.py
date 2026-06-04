@@ -2,8 +2,7 @@ import sympy
 from collections import defaultdict
 from math import factorial, prod
 
-from wfomc import Expr
-from wfomc.utils import EPoly, RingElement
+from wfomc import Expr, WFOMCResult
 
 from cofola.backend.wfomc.utils import ListLessThan
 
@@ -34,20 +33,23 @@ class Decoder(object):
     def __repr__(self) -> str:
         return str(self)
 
-    def decode_result(self, result: RingElement) -> int:
-        if result == 0:
+    def decode_result(self, result: WFOMCResult) -> int:
+        if result.is_zero():
             return 0
 
-        if len(self.gens) == 0 and not isinstance(result, EPoly):
+        if len(self.gens) == 0 and result.is_constant():
             if not self._constant_validators_accept():
                 return 0
-            return int(result / self.overcount)
+            constant = result.constant_value()
+            if constant is None:
+                return 0
+            return int(constant / self.overcount)
 
-        if not isinstance(result, EPoly):
+        if not result.is_polynomial():
             return 0
 
         ret = 0
-        ret_gens = result.context().names()
+        ret_gens = result.variable_names()
         reordered_gens = list()
         for v_name in ret_gens:
             for v in self.gens:
