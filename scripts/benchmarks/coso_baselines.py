@@ -27,8 +27,10 @@ from coso.configuration import CCounting, CSize
 from coso.util import interval_closed
 
 
-DEFAULT_CONJURE_DIR = Path("/home/sunshixin/lucien/CoSo/tools/conjure")
-DEFAULT_JAVA_BIN = Path("/home/sunshixin/lucien/tools/java/bin/java")
+# Essence baseline tool locations are environment-specific; provide them via
+# ``--conjure-dir`` / ``--java-bin`` (or the ExternalBaselineConfig fields).
+DEFAULT_CONJURE_DIR: Path | None = None
+DEFAULT_JAVA_BIN: Path | None = None
 
 
 class BaselineUnsupportedError(RuntimeError):
@@ -37,7 +39,7 @@ class BaselineUnsupportedError(RuntimeError):
 
 @dataclass(frozen=True)
 class ExternalBaselineConfig:
-    conjure_dir: Path = DEFAULT_CONJURE_DIR
+    conjure_dir: Path | None = DEFAULT_CONJURE_DIR
     java_bin: Path | None = DEFAULT_JAVA_BIN
 
 
@@ -464,6 +466,10 @@ def _run_essence(
     timeout: float,
     config: ExternalBaselineConfig,
 ) -> int:
+    if config.conjure_dir is None:
+        raise RuntimeError(
+            "Essence baseline requires a Conjure directory; pass --conjure-dir"
+        )
     conjure = config.conjure_dir / "conjure"
     if not conjure.exists():
         raise RuntimeError(f"Essence baseline requires Conjure at {conjure}")
