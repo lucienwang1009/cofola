@@ -3,9 +3,115 @@
 Reproducible runners comparing Cofola's WFOMC backend, propositional WFOMC,
 CoSo, and CoSo's ASP/Essence baseline encodings.
 
-For the full server runbook, including tool paths, benchmark construction,
-recommended paper commands, and troubleshooting, see
-[`EXPERIMENT_GUIDE.md`](EXPERIMENT_GUIDE.md).
+## Setup on a clean server
+
+How to provision a fresh Linux server with nothing preinstalled so it can run
+the full benchmark suite, including the optional CoSo and Essence baselines.
+Every tool location is configurable — there are no hardcoded paths.
+
+### 1. System packages
+
+WFOMC has native dependencies (FLINT/GMP/MPFR for `python-flint`, plus a C/C++
+toolchain and CMake for Ganak and `pynauty`). On Debian/Ubuntu:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y \
+  git curl unzip build-essential cmake \
+  libgmp-dev libmpfr-dev libflint-dev
+```
+
+On other distros install the equivalents: git, curl, unzip, a C/C++ compiler,
+make, cmake, and the GMP/MPFR/FLINT development headers.
+
+### 2. uv and the Python environment
+
+```bash
+# install uv (https://docs.astral.sh/uv/)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+exec "$SHELL"                      # reload PATH so `uv` is found
+
+git clone <cofola-repo-url> cofola && cd cofola
+
+# core environment (WFOMC + propositional backend):
+uv sync
+
+# full environment incl. the CoSo baselines (clingo/portion/coso) and dev tools:
+uv sync --extra coso --group dev
+```
+
+`uv` reads `.python-version` (3.11) and provisions the interpreter itself.
+Verify the imports:
+
+```bash
+uv run python -c "import cofola, wfomc; print('core ok')"
+uv run python -c "import coso, clingo, portion; print('coso extra ok')"  # after --extra coso
+```
+
+### 3. Ganak (the `propositionalwfomc` backend)
+
+`propositionalwfomc` (WFOMC with `--algo=propositional`) shells out to the
+`ganak` model counter. Build and install the pinned Ganak with WFOMC's helper
+(exposed on the venv `PATH`):
+
+```bash
+uv run wfomc-install-ganak                  # installs into .venv/bin
+# or pick a location: uv run wfomc-install-ganak --install-dir "$HOME/bin"
+```
+
+The helper needs the toolchain from step 1 (git, cmake, C++, gmp, mpfr, flint).
+Confirm it is found at runtime:
+
+```bash
+uv run which ganak && uv run ganak --help | head -1
+# if installed outside the venv: export PATH="$HOME/bin:$PATH"
+```
+
+Skip this step if you only run `--backends wfomc coso`.
+
+### 4. Java and Conjure (the `essence` baseline — optional)
+
+The `essence` baseline runs Conjure + Savile Row, which need a Java 11 runtime.
+
+```bash
+# any JDK/JRE 11 works; e.g. the distro package:
+sudo apt-get install -y openjdk-11-jre-headless
+java -version                                # expect 11.x
+
+# Conjure bundles Savile Row + Minion. Download a Linux release from
+# https://github.com/conjure-cp/conjure/releases and unpack it, e.g.:
+mkdir -p "$HOME/tools" && cd "$HOME/tools"
+# curl -L -o conjure.tar.gz <conjure-linux-release-url>
+tar xf conjure.tar.gz                        # -> $HOME/tools/conjure/...
+"$HOME/tools/conjure/conjure" --version
+cd -
+```
+
+There are no built-in tool paths; pass them to the runner when using `essence`:
+
+```bash
+--conjure-dir "$HOME/tools/conjure"          # required for the essence baseline
+--java-bin /usr/bin/java                      # optional; otherwise java from PATH
+```
+
+### 5. Smoke test
+
+```bash
+uv run pytest tests/test_benchmark_cases.py tests/test_benchmark_run.py -q
+uv run python -m scripts.benchmarks.run --suite real --backends wfomc --timeout 30
+```
+
+Add `propositionalwfomc` once Ganak is on `PATH`, and `coso asp essence` once
+the CoSo extra (and, for `essence`, Java + Conjure) are installed.
+
+### Troubleshooting
+
+- `ModuleNotFoundError` for `coso`/`clingo`/`portion`: rerun
+  `uv sync --extra coso --group dev` and invoke through `uv run`.
+- `GanakError`: ensure `ganak` is on `PATH` (`uv run which ganak`) and runs
+  standalone (`ganak --help`).
+- Essence reports missing Java: pass `--java-bin /path/to/java`, or put `java`
+  on `PATH`; pass `--conjure-dir /path/to/conjure`.
 
 ## Suites
 
