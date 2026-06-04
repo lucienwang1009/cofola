@@ -40,8 +40,10 @@ uv run python -m scripts.benchmarks.run \
 The external CoSo baselines are `asp` and `essence`; SharpSAT is not part of
 this runner. ASP/Essence wrong answers and backend errors are reported as
 `unsolved`, since these baselines should only count cases they solve correctly.
-Essence needs Conjure/Savile Row and Java; override their locations with
-`--conjure-dir` and `--java-bin` when needed.
+Essence needs Conjure/Savile Row and Java; their locations are
+environment-specific and have no built-in default, so point the runner at them
+with `--conjure-dir` (required for the `essence` baseline) and `--java-bin`
+(optional; otherwise `java` is taken from `PATH`).
 
 For growing-domain cases, the runner uses monotone timeout propagation by
 default: after a backend times out for one family at domain size `n`, larger

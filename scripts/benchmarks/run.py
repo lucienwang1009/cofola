@@ -34,10 +34,11 @@ from scripts.benchmarks.cases import (
 )
 # NOTE: ``coso_baselines`` is imported lazily inside ``_solve_one`` so that the
 # WFOMC benchmark runner (and its tests) can be imported without the optional
-# ``coso`` extra (coso / clingo / portion). These CLI defaults mirror the ones
-# in ``coso_baselines`` but carry no heavy dependencies.
-DEFAULT_CONJURE_DIR = Path("/home/sunshixin/lucien/CoSo/tools/conjure")
-DEFAULT_JAVA_BIN = Path("/home/sunshixin/lucien/tools/java/bin/java")
+# ``coso`` extra (coso / clingo / portion). The Essence baseline tool locations
+# are environment-specific and have no built-in default; pass ``--conjure-dir``
+# and ``--java-bin`` when running it.
+DEFAULT_CONJURE_DIR: Path | None = None
+DEFAULT_JAVA_BIN: Path | None = None
 
 
 STATUS_SOLVED = "solved"
@@ -199,7 +200,7 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_CONJURE_DIR,
         help=(
             "Directory containing the Conjure/Savile Row tools for the Essence "
-            f"baseline. Default: {DEFAULT_CONJURE_DIR}."
+            "baseline. Required to run the Essence baseline (no default)."
         ),
     )
     parser.add_argument(
@@ -208,7 +209,8 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_JAVA_BIN,
         help=(
             "Java executable used by the Essence baseline. Its parent directory "
-            f"is prepended to PATH when it exists. Default: {DEFAULT_JAVA_BIN}."
+            "is prepended to PATH when it exists. No default; falls back to java "
+            "on PATH."
         ),
     )
     return parser.parse_args()
@@ -272,7 +274,7 @@ def main() -> None:
             ),
             "algo": args.algo,
             "linear_order_encoding": args.linear_order_encoding,
-            "conjure_dir": str(args.conjure_dir),
+            "conjure_dir": str(args.conjure_dir) if args.conjure_dir is not None else None,
             "java_bin": str(args.java_bin) if args.java_bin is not None else None,
         },
         "num_cases": len(cases),
@@ -352,7 +354,7 @@ def run_case(
     debug: bool,
     algo: str = "fastv2",
     linear_order_encoding: str | None = None,
-    conjure_dir: Path = DEFAULT_CONJURE_DIR,
+    conjure_dir: Path | None = DEFAULT_CONJURE_DIR,
     java_bin: Path | None = DEFAULT_JAVA_BIN,
 ) -> dict[str, Any]:
     queue: mp.Queue = mp.Queue()
@@ -536,7 +538,7 @@ def _solve_worker(
     debug: bool,
     algo: str = "fastv2",
     linear_order_encoding: str | None = None,
-    conjure_dir: Path = DEFAULT_CONJURE_DIR,
+    conjure_dir: Path | None = DEFAULT_CONJURE_DIR,
     java_bin: Path | None = DEFAULT_JAVA_BIN,
     timeout: float = 300.0,
 ) -> None:
