@@ -76,8 +76,8 @@ Both baselines come with `uv sync --extra coso` (step 2), which installs the
 
 - **`asp`** needs nothing further: Cofola translates each problem to ASP and
   counts models with the Python `clingo` package.
-- **`essence`** additionally runs Conjure (which bundles Savile Row + Minion),
-  so it needs a Java 11 runtime plus the Conjure tools.
+- **`essence`** additionally runs Conjure plus Savile Row/Minion, so it needs a
+  Java 11 runtime plus the Conjure tools.
 
 Install Java and Conjure for `essence`. The versions below match CoSo's
 [`install_tools.sh`](https://github.com/PietroTotis/CoSo/blob/master/install_tools.sh),
@@ -88,11 +88,24 @@ which Cofola's Essence translator targets:
 sudo apt-get install -y openjdk-11-jre-headless
 java -version                                # expect 11.x
 
-# Conjure v2.3.0 with bundled solvers (Savile Row + Minion):
+# Conjure v2.3.0 plus bundled solvers (Savile Row + Minion).
+# The linux-solvers zip contains Savile Row/Minion but not the `conjure`
+# executable, so install both archives and expose them through one directory.
 mkdir -p "$HOME/tools" && cd "$HOME/tools"
+wget -q https://github.com/conjure-cp/conjure/releases/download/v2.3.0/conjure-v2.3.0-linux.zip
 wget -q https://github.com/conjure-cp/conjure/releases/download/v2.3.0/conjure-v2.3.0-linux-solvers.zip
+unzip -q conjure-v2.3.0-linux.zip            # -> conjure-v2.3.0-linux/
 unzip -q conjure-v2.3.0-linux-solvers.zip    # -> conjure-v2.3.0-linux-solvers/
-"$HOME/tools/conjure-v2.3.0-linux-solvers/conjure" --version
+
+mkdir -p conjure-v2.3.0-combined
+ln -sfn "$HOME/tools/conjure-v2.3.0-linux/conjure" conjure-v2.3.0-combined/conjure
+for f in savilerow savilerow.jar minion glucose glucose-syrup \
+         bc_minisat_all_release nbc_minisat_all_release lingeling \
+         fzn-chuffed fzn-gecode open-wbo lib; do
+  ln -sfn "$HOME/tools/conjure-v2.3.0-linux-solvers/$f" "conjure-v2.3.0-combined/$f"
+done
+
+"$HOME/tools/conjure-v2.3.0-combined/conjure" --version
 cd -
 ```
 
@@ -100,8 +113,8 @@ cd -
 prepended to `PATH` so the Savile Row and Minion binaries next to it are found):
 
 ```bash
---conjure-dir "$HOME/tools/conjure-v2.3.0-linux-solvers"   # required for essence
---java-bin /usr/bin/java                                    # optional; otherwise java from PATH
+--conjure-dir "$HOME/tools/conjure-v2.3.0-combined"   # required for essence
+--java-bin /usr/bin/java                              # optional; otherwise java from PATH
 ```
 
 > CoSo's `install_tools.sh` also installs sharpSAT, gringo, and the lp2*
