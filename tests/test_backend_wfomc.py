@@ -450,7 +450,7 @@ def test_backend_does_not_convert_unexpected_solver_errors_to_zero(monkeypatch) 
     def fake_encode(problem: object, analysis: object, lifted: bool):
         return FakeProblem(), FakeDecoder()
 
-    def fake_solve_wfomc(problem: object, algo: Algo, use_partition_constraint: bool,
+    def fake_solve_wfomc(problem: object, algo: Algo, unary_evidence_strategy: object,
                          *, linear_order_encoding=None):
         raise ValueError("backend bug")
 

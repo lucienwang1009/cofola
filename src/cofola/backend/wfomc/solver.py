@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from typing import Union
 
-from wfomc import wfomc, Algo, WFOMCProblem, UnaryEvidenceEncoding, WFOMCResult
+from wfomc import wfomc, Algo, WFOMCProblem, UnaryEvidenceStrategy, WFOMCResult
 from wfomc.algo import LinearOrderEncoding
 
 
 def solve_wfomc(
     problem: WFOMCProblem,
     algo: Algo,
-    use_partition_constraint: bool = False,
+    unary_evidence_strategy: UnaryEvidenceStrategy = UnaryEvidenceStrategy.CCS,
     linear_order_encoding: Union[LinearOrderEncoding, str, None] = None,
 ) -> WFOMCResult:
     """Solve the given WFOMC problem using the given algorithm.
@@ -17,23 +17,20 @@ def solve_wfomc(
     Args:
         problem: The WFOMC problem to solve.
         algo: The WFOMC algorithm to use.
-        use_partition_constraint: Whether to use partition constraint encoding.
-            Ignored when ``algo == Algo.PROPOSITIONAL`` because that algorithm
-            selects its own unary-evidence encoding (``CCS`` or ``NONE``)
-            based on whether order axioms are pinned or axiomatized.
+        unary_evidence_strategy: How unary evidence is handled. ``AUTO`` lets
+            each algorithm use its best supported (lifted) implementation;
+            ``CCS`` forces the auxiliary-predicate and cardinality-constraint
+            encoding. For ``algo == Algo.PROPOSITIONAL`` the solver resolves the
+            effective strategy itself based on the order axioms / encoding.
         linear_order_encoding: Only consulted when ``algo == Algo.PROPOSITIONAL``;
             picks ``PIN`` (cheap, default) or ``AXIOMS`` (FO³ ground truth).
 
     Returns:
         The WFOMC result object.
     """
-    unary_evidence_encoding = (
-        UnaryEvidenceEncoding.PC if use_partition_constraint
-        else UnaryEvidenceEncoding.CCS
-    )
     return wfomc(
         problem,
         algo,
-        unary_evidence_encoding=unary_evidence_encoding,
+        unary_evidence_strategy=unary_evidence_strategy,
         linear_order_encoding=linear_order_encoding,
     )

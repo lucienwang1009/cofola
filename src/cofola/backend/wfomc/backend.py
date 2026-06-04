@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Union
 
-from wfomc import Algo
+from wfomc import Algo, UnaryEvidenceStrategy
 from wfomc.algo import LinearOrderEncoding
 from loguru import logger
 
@@ -51,12 +51,12 @@ class WFOMCBackend(Backend):
     def __init__(
         self,
         algo: Algo = Algo.FASTv2,
-        use_partition_constraint: bool = True,
+        unary_evidence_strategy: UnaryEvidenceStrategy = UnaryEvidenceStrategy.AUTO,
         lifted: bool = False,
         linear_order_encoding: Union[LinearOrderEncoding, str, None] = None,
     ) -> None:
         self.algo = algo
-        self.use_partition_constraint = use_partition_constraint
+        self.unary_evidence_strategy = unary_evidence_strategy
         self.lifted = lifted
         # Only consulted when algo == Algo.PROPOSITIONAL; ignored otherwise.
         # None lets the wfomc library use its default (PIN).
@@ -92,7 +92,7 @@ class WFOMCBackend(Backend):
         wfomc_problem, decoder = encode(problem, analysis, self.lifted)
 
         algo = self.algo
-        use_partition_constraint = self.use_partition_constraint
+        unary_evidence_strategy = self.unary_evidence_strategy
         _order_capable = (Algo.INCREMENTAL, Algo.RECURSIVE, Algo.PROPOSITIONAL)
         if wfomc_problem.contain_linear_order_axiom() and algo not in _order_capable:
             logger.warning(
@@ -102,7 +102,7 @@ class WFOMCBackend(Backend):
                 'Switching to INCREMENTAL algorithm...'
             )
             algo = Algo.INCREMENTAL
-            use_partition_constraint = True
+            unary_evidence_strategy = UnaryEvidenceStrategy.AUTO
 
         logger.debug("WFOMCBackend: algo={}", algo)
 
@@ -110,7 +110,7 @@ class WFOMCBackend(Backend):
             raw = solve_wfomc(
                 wfomc_problem,
                 algo,
-                use_partition_constraint,
+                unary_evidence_strategy,
                 linear_order_encoding=self.linear_order_encoding,
             )
         except IndexError as exc:
