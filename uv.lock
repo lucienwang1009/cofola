@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.11"
 resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'win32'",
@@ -1573,7 +1573,7 @@ wheels = [
 [[package]]
 name = "wfomc"
 version = "0.1.0"
-source = { git = "https://github.com/yuanhong-wang/WFOMC.git?branch=devel#0149ce4077e5bd79c47fc66745a7be0f4407783c" }
+source = { git = "https://github.com/yuanhong-wang/WFOMC.git?branch=devel#6317dfce2675567ce48ea48a337af8b31f0ddf39" }
 dependencies = [
     { name = "cmd2" },
     { name = "contexttimer" },
