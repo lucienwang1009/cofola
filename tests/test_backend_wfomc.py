@@ -41,6 +41,21 @@ def test_wfomc_backend_declares_default_planning_profile() -> None:
     )
 
 
+def test_full_choose_subset_is_trivially_satisfiable() -> None:
+    """`set subset choose(set, |set|)` collapses to a tautology (answer 1).
+
+    Regression for a WFOMC crash when counting an atomless `\\forall X: True`
+    formula (the encoding reduces the whole problem to True).
+    """
+    assert parse_and_solve(
+        """
+S = set(a, b, c)
+T = choose(S, 3)
+S subset T
+"""
+    ) == 1
+
+
 def test_bag_difference_counts_leftover_multiplicities() -> None:
     """Bag difference should use max(left - right, 0), not support difference."""
     assert parse_and_solve(
