@@ -51,6 +51,18 @@ def test_wfomc_backend_declares_default_planning_profile() -> None:
     )
 
 
+def test_full_choose_subset_is_trivially_satisfiable() -> None:
+    """A full-source choice makes its source-subset constraint tautological."""
+
+    assert parse_and_solve(
+        """
+S = set(a, b, c)
+T = choose(S, 3)
+S subset T
+"""
+    ) == 1
+
+
 def test_constant_result_treats_absent_weight_generators_as_zero() -> None:
     generator = var("v_absent")
 
