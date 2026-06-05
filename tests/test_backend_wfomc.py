@@ -52,15 +52,15 @@ def test_wfomc_backend_declares_default_planning_profile() -> None:
 
 
 def test_full_choose_subset_is_trivially_satisfiable() -> None:
-    """A full-source choice makes its source-subset constraint tautological."""
+    """Both lifted and propositional paths count an atomless tautology."""
 
-    assert parse_and_solve(
-        """
+    program = """
 S = set(a, b, c)
 T = choose(S, 3)
 S subset T
 """
-    ) == 1
+    assert parse_and_solve(program) == 1
+    assert parse_and_solve(program, algo="propositional") == 1
 
 
 def test_constant_result_treats_absent_weight_generators_as_zero() -> None:
