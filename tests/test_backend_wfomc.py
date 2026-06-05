@@ -44,16 +44,18 @@ def test_wfomc_backend_declares_default_planning_profile() -> None:
 def test_full_choose_subset_is_trivially_satisfiable() -> None:
     """`set subset choose(set, |set|)` collapses to a tautology (answer 1).
 
-    Regression for a WFOMC crash when counting an atomless `\\forall X: True`
-    formula (the encoding reduces the whole problem to True).
+    Regression for two WFOMC crashes when counting an atomless `\\forall X: True`
+    formula: the lifted algorithms crashed building the cell graph, and the
+    propositional backend produced an empty CNF that aborted ganak. The
+    propositional case short-circuits to 1 and needs no ganak binary.
     """
-    assert parse_and_solve(
-        """
+    program = """
 S = set(a, b, c)
 T = choose(S, 3)
 S subset T
 """
-    ) == 1
+    assert parse_and_solve(program) == 1
+    assert parse_and_solve(program, algo="propositional") == 1
 
 
 def test_bag_difference_counts_leftover_multiplicities() -> None:
