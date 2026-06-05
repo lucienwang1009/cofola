@@ -480,6 +480,40 @@ b not in T
     )
 
 
+def test_lowering_bag_tuple_membership_uses_inverse_image_size() -> None:
+    """Bag tuple membership should reuse inverse images instead of tuple images."""
+    problem = parse("""
+B = bag(a: 2, b: 1)
+T = choose_tuple(B, 2)
+a in T
+b not in T
+""")
+
+    am = PlaningPipeline.run_passes(
+        problem,
+        [FixedPointPass(LoweringPass), MergeIdenticalObjects],
+    )
+    inverse_images = {
+        defn.argument: ref
+        for ref, defn in am.problem.defs
+        if isinstance(defn, FuncInverseImage)
+    }
+
+    assert Entity("a") in inverse_images
+    assert Entity("b") in inverse_images
+    assert not any(isinstance(defn, FuncImage) for _, defn in am.problem.defs)
+    assert SizeConstraint(
+        terms=((inverse_images[Entity("a")], 1),),
+        comparator=">",
+        rhs=0,
+    ) in am.problem.constraints
+    assert SizeConstraint(
+        terms=((inverse_images[Entity("b")], 1),),
+        comparator="==",
+        rhs=0,
+    ) in am.problem.constraints
+
+
 def test_lowering_rejects_for_all_parts_placeholder_partition_mismatch() -> None:
     """Malformed builder input should not silently rewrite with the wrong part."""
     a = Entity("a")

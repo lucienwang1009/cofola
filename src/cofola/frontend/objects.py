@@ -329,7 +329,7 @@ class FuncImage(SetObjDef):
     """
 
     func: ObjRef
-    argument: ObjRef  # Set or Entity ref
+    argument: ObjRef | Entity
 
 
 @dataclass(frozen=True, slots=True)
@@ -340,7 +340,7 @@ class FuncInverseImage(SetObjDef):
     """
 
     func: ObjRef
-    argument: ObjRef
+    argument: ObjRef | Entity
 
 
 @dataclass(frozen=True, slots=True)
