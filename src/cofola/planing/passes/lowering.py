@@ -554,6 +554,7 @@ class LoweringPass(TransformPass):
                         f"entity analysis must run before lowering"
                     )
                 inv_img_refs: list[ObjRef] = []
+                inv_img_by_entity: dict[Entity, ObjRef] = {}
                 for entity, max_mult in bag_info.p_entities_multiplicity.items():
                     if entity in analysis.singletons:
                         continue
@@ -562,6 +563,7 @@ class LoweringPass(TransformPass):
                         (inv_img_ref, FuncInverseImage(func=mapping_ref, argument=entity))
                     )
                     inv_img_refs.append(inv_img_ref)
+                    inv_img_by_entity[entity] = inv_img_ref
 
                     # BagInit → fixed int; derived bags → BagCountAtom
                     if isinstance(source_defn, BagInit):
@@ -591,6 +593,7 @@ class LoweringPass(TransformPass):
 
             else:
                 # ── Set source (SetObjDef) ─────────────────────────────────────────
+                inv_img_by_entity = {}
                 injective = not defn.replace
                 surjective = not defn.choose
                 if surjective:
@@ -616,7 +619,13 @@ class LoweringPass(TransformPass):
 
             # Rewrite constraints referencing this TupleDef
             new_constraints, extra_defs = self._lower_tuple_constraints(
-                tuple(new_constraints), ref, mapping_ref, indices_ref, size
+                tuple(new_constraints),
+                ref,
+                mapping_ref,
+                indices_ref,
+                size,
+                is_bag_source=is_bag_source,
+                inverse_image_cache=inv_img_by_entity,
             )
             new_defs.extend(extra_defs)
 
@@ -641,6 +650,9 @@ class LoweringPass(TransformPass):
         size: int,
         extra_defs: list,
         image_cache: dict[tuple[ObjRef, ObjRef], ObjRef],
+        *,
+        is_bag_source: bool,
+        inverse_image_cache: dict[Entity, ObjRef],
     ) -> object | None:
         """Lower a single atomic constraint that may reference tuple_ref.
 
@@ -663,6 +675,23 @@ class LoweringPass(TransformPass):
                 positive=c.positive,
             )
         elif isinstance(c, MembershipConstraint) and c.container == tuple_ref:
+            if is_bag_source:
+                inv_img_ref = inverse_image_cache.get(c.entity)
+                if inv_img_ref is None:
+                    inv_img_ref = self._new_ref()
+                    inverse_image_cache[c.entity] = inv_img_ref
+                    extra_defs.append(
+                        (
+                            inv_img_ref,
+                            FuncInverseImage(func=mapping_ref, argument=c.entity),
+                        )
+                    )
+                return SizeConstraint(
+                    terms=((inv_img_ref, 1),),
+                    comparator=">" if c.positive else "==",
+                    rhs=0,
+                )
+
             image_key = (mapping_ref, indices_ref)
             new_image_ref = image_cache.get(image_key)
             if new_image_ref is None:
@@ -713,14 +742,19 @@ class LoweringPass(TransformPass):
         mapping_ref: ObjRef,
         indices_ref: ObjRef,
         size: int,
+        *,
+        is_bag_source: bool,
+        inverse_image_cache: dict[Entity, ObjRef],
     ) -> tuple[tuple, list]:
         """Lower atomic constraints that reference a just-lowered TupleDef.
 
         Replaces:
         - TupleIndexEq(tuple_ref=T, index=i, entity=e) →
             FuncPairConstraint(mapping, Entity("idx_i"), e)
-        - MembershipConstraint(entity=e, container=T) →
+        - Set-source MembershipConstraint(entity=e, container=T) →
             MembershipConstraint(entity=e, container=FuncImage(mapping, indices))
+        - Bag-source MembershipConstraint(entity=e, container=T) →
+            SizeConstraint(FuncInverseImage(mapping, e) > 0)
         - TupleIndexMembership(tuple_ref=T, index=i, container=C) →
             FuncPairConstraint(mapping, Entity("idx_i"), C)
 
@@ -747,6 +781,8 @@ class LoweringPass(TransformPass):
                 size,
                 extra_defs,
                 image_cache,
+                is_bag_source=is_bag_source,
+                inverse_image_cache=inverse_image_cache,
             )) is not None
         )
         return new_constraints, extra_defs
