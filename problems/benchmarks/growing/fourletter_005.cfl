@@ -1,4 +1,4 @@
 letters = set(a0...5)
 arr = choose_tuple(letters, 4)
 arr[0] == a0
-arr.count(a1) > 0
+a1 in arr
