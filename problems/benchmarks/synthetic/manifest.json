@@ -159,7 +159,7 @@
       "suite": "synthetic",
       "case_id": "entitycount-10-operatorcount-2-constraintcount-1-186ea0802266995e",
       "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0)\nchoose_tuple_0 = choose_replace_tuple(set_0, 11)\nchoose_tuple_0.count(e_4) > 9",
-      "expected": 1448500838400000,
+      "expected": 36288000,
       "tags": [
         "synthetic",
         "family=entitycount-10-operatorcount-2-constraintcount-1",
@@ -516,7 +516,7 @@
       "suite": "synthetic",
       "case_id": "entitycount-12-operatorcount-2-constraintcount-1-e92b0c267ac36aa3",
       "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0, reflection=True)\ntuple_0 = tuple(set_0)\ntuple_0[10] == e_4",
-      "expected": 381608820557217792000000,
+      "expected": 796675461120000,
       "tags": [
         "synthetic",
         "family=entitycount-12-operatorcount-2-constraintcount-1",
@@ -1128,7 +1128,7 @@
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-2-constraintcount-2-8b61a11318f3a02e",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nsequence_0 = sequence(set_0)\nchoose_tuple_0 = choose_replace_tuple(set_0, 8)\n(e_3, e_6) in sequence_0\nchoose_tuple_0.count(e_2) > 2",
-      "expected": 1095854054400,
+      "expected": 27178920,
       "tags": [
         "synthetic",
         "family=entitycount-6-operatorcount-2-constraintcount-2",
@@ -1162,7 +1162,7 @@
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-2-constraintcount-2-cec10f42ac958b3a",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nsequence_0 = sequence(set_0)\ntuple_0 = tuple(set_0)\ne_2 < e_3 in sequence_0\n(e_1, e_2) in sequence_0",
-      "expected": 31104000,
+      "expected": 43200,
       "tags": [
         "synthetic",
         "family=entitycount-6-operatorcount-2-constraintcount-2",
@@ -1451,7 +1451,7 @@
       "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-2-constraintcount-0-9f8cd64698bc8227",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\ntuple_0 = tuple(set_0)",
-      "expected": 4096770048000,
+      "expected": 101606400,
       "tags": [
         "synthetic",
         "family=entitycount-8-operatorcount-2-constraintcount-0",
@@ -1553,7 +1553,7 @@
       "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-2-constraintcount-2-63932c1283bda3af",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncompose_0 = compose(set_0, 3)\nsequence_0 = sequence(compose_0[2])\n|compose_0[2]| > 0\n(e_8, e_6) in sequence_0",
-      "expected": 483418,
+      "expected": 483414,
       "tags": [
         "synthetic",
         "family=entitycount-8-operatorcount-2-constraintcount-2",
