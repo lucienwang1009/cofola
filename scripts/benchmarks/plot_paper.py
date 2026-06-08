@@ -11,7 +11,7 @@ Figures (default prefix ``experiment``):
   solved).
 * ``experiment_synthetic_cactus.pdf`` -- analogous cactus plot on the
   synthetic suite.
-* ``experiment_growing_family_runtime.pdf`` -- single-row, one-panel-per-family
+* ``experiment_growing_family_runtime.pdf`` -- one-panel-per-family
   runtime plot using the extended ``domain in {5, 10, ..., 100}`` results.
   Instances on which a backend timed out, raised an error, or returned a wrong
   answer are drawn as crosses placed at the per-instance timeout (100 s) so
@@ -33,10 +33,8 @@ Conventions:
 Example::
 
     uv run python -m scripts.benchmarks.plot_paper \
-        --real-results check-points/paper-real-growing-timeout100/results.csv \
-        --synthetic-results check-points/paper-synthetic-timeout100/results.csv \
-        --growing-results check-points/paper-growing-domain5-100-timeout100/results.csv \
-        --synthetic-dir problems/benchmarks/synthetic \
+        --results check-points/full-benchmarks/results.csv \
+        --metadata check-points/full-benchmarks/metadata.json \
         --output-dir ../comb_aij/figs/experiments \
         --prefix experiment \
         --timeout-sec 100 \
@@ -46,6 +44,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import math
 import re
 from collections import defaultdict
@@ -102,15 +101,21 @@ GROWING_PANELS = (
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--real-results", type=Path, required=True,
-                        help="results.csv covering the real + growing suite.")
-    parser.add_argument("--synthetic-results", type=Path, required=True,
-                        help="results.csv covering the synthetic suite.")
-    parser.add_argument("--growing-results", type=Path, required=True,
-                        help="results.csv covering the 5..100 growing suite.")
-    parser.add_argument("--synthetic-dir", type=Path, required=True,
-                        help="Directory containing synthetic .cfl files used "
-                             "to infer object types per instance.")
+    parser.add_argument("--results", type=Path,
+                        help="Single full-benchmark results.csv containing "
+                             "real, growing, and synthetic suites.")
+    parser.add_argument("--metadata", type=Path,
+                        help="metadata.json produced by the benchmark runner; "
+                             "used to infer object types for generated suites.")
+    parser.add_argument("--real-results", type=Path,
+                        help="Legacy: results.csv covering the real suite.")
+    parser.add_argument("--synthetic-results", type=Path,
+                        help="Legacy: results.csv covering the synthetic suite.")
+    parser.add_argument("--growing-results", type=Path,
+                        help="Legacy: results.csv covering the growing suite.")
+    parser.add_argument("--synthetic-dir", type=Path,
+                        help="Legacy fallback: directory containing synthetic "
+                             ".cfl files used to infer object types per instance.")
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--prefix", default="experiment")
     parser.add_argument("--formats", nargs="+", default=("pdf",),
@@ -126,14 +131,24 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    validate_args(args)
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
-    real_rows = [r for r in load_rows(args.real_results) if r["suite"] == "real"]
-    synth_rows = [r for r in load_rows(args.synthetic_results) if r["suite"] == "synthetic"]
-    growing_rows = [r for r in load_rows(args.growing_results) if r["suite"] == "growing"]
+    if args.results is not None:
+        all_rows = load_rows(args.results)
+        real_rows = [r for r in all_rows if r["suite"] == "real"]
+        synth_rows = [r for r in all_rows if r["suite"] == "synthetic"]
+        growing_rows = [r for r in all_rows if r["suite"] == "growing"]
+    else:
+        real_rows = [r for r in load_rows(args.real_results) if r["suite"] == "real"]
+        synth_rows = [r for r in load_rows(args.synthetic_results) if r["suite"] == "synthetic"]
+        growing_rows = [r for r in load_rows(args.growing_results) if r["suite"] == "growing"]
 
     real_types = real_object_types(real_rows)
-    synth_types = synthetic_object_types(args.synthetic_dir)
+    if args.metadata is not None:
+        synth_types = metadata_object_types(args.metadata, suite="synthetic")
+    else:
+        synth_types = synthetic_object_types(args.synthetic_dir)
 
     figs = {
         "real_cactus": plot_cactus(real_rows, suite_label="real"),
@@ -161,6 +176,22 @@ def main() -> None:
 def load_rows(path: Path) -> list[dict[str, str]]:
     with path.open(newline="") as f:
         return [dict(r) for r in csv.DictReader(f)]
+
+
+def validate_args(args: argparse.Namespace) -> None:
+    if args.results is not None:
+        legacy = (args.real_results, args.synthetic_results, args.growing_results)
+        if any(value is not None for value in legacy):
+            raise SystemExit("--results cannot be combined with per-suite result flags")
+    elif not (args.real_results and args.synthetic_results and args.growing_results):
+        raise SystemExit(
+            "Pass either --results FULL_RESULTS.csv or all of "
+            "--real-results, --synthetic-results, and --growing-results."
+        )
+    if args.metadata is None and args.synthetic_dir is None:
+        raise SystemExit(
+            "Pass --metadata metadata.json or --synthetic-dir to infer synthetic object types."
+        )
 
 
 def configure_matplotlib() -> None:
@@ -245,6 +276,16 @@ def synthetic_object_types(synthetic_dir: Path) -> dict[str, set[str]]:
     out: dict[str, set[str]] = {}
     for path in sorted(synthetic_dir.glob("*.cfl")):
         out[path.stem] = detect_object_types(path.read_text())
+    return out
+
+
+def metadata_object_types(metadata_path: Path, suite: str) -> dict[str, set[str]]:
+    data = json.loads(metadata_path.read_text())
+    out: dict[str, set[str]] = {}
+    for case in data.get("cases", []):
+        if str(case.get("suite")) != suite:
+            continue
+        out[str(case["case_id"])] = detect_object_types(str(case.get("program", "")))
     return out
 
 
@@ -333,7 +374,8 @@ def plot_cactus(rows: list[dict[str, str]], suite_label: str) -> Figure:
     configure_matplotlib()
     backends = backends_present(rows)
 
-    fig, ax = plt.subplots(figsize=(6.4, 2.8))
+    figsize = (7.2, 3.0) if suite_label == "real" else (3.5, 2.75)
+    fig, ax = plt.subplots(figsize=figsize)
     for backend in backends:
         runtimes = sorted(
             v for v in (
@@ -354,23 +396,22 @@ def plot_cactus(rows: list[dict[str, str]], suite_label: str) -> Figure:
                 color=BACKEND_COLORS.get(backend),
             )
             continue
-        ax.plot(
+        ax.step(
             runtimes,
             range(1, len(runtimes) + 1),
-            marker=BACKEND_MARKERS.get(backend, "o"),
-            markersize=3.0,
+            where="post",
             linewidth=1.2,
             label=f"{BACKEND_LABELS.get(backend, backend)} ({len(runtimes)})",
             color=BACKEND_COLORS.get(backend),
         )
     ax.set_xscale("log")
-    ax.set_xlabel(f"Runtime on solved {suite_label} instances (s, log)")
+    ax.axvline(100, color="#555555", linewidth=0.8, linestyle=":", label="100s timeout")
+    ax.set_xlim(0.08, 120)
+    ax.set_ylim(0, len({row["case_id"] for row in rows}) + (8 if suite_label == "real" else 4))
+    ax.set_xlabel("Runtime on solved instances (s, log)")
     ax.set_ylabel(f"{suite_label.capitalize()} instances solved")
-    ax.grid(True, which="both", axis="x", alpha=0.25)
-    # Cactus curves rise monotonically from the bottom-left, so the upper-left
-    # corner is the empty quadrant; put the legend there to avoid occluding
-    # the data.
-    ax.legend(frameon=False, loc="upper left", ncol=1)
+    ax.grid(True, which="both", axis="both", alpha=0.25)
+    ax.legend(frameon=False, loc="lower right", ncol=2 if suite_label == "real" else 1)
     fig.tight_layout(pad=0.8)
     return fig
 
@@ -385,9 +426,7 @@ def plot_growing_runtime(
 ) -> Figure:
     configure_matplotlib()
     n_panels = len(GROWING_PANELS)
-    fig, axes_arr = plt.subplots(
-        1, n_panels, figsize=(11.5, 2.4), sharey=True, squeeze=False,
-    )
+    fig, axes_arr = plt.subplots(2, 3, figsize=(7.4, 4.55), sharey=True, squeeze=False)
     axes = list(axes_arr.flat)
 
     legend_handles: dict[str, plt.Line2D] = {}
@@ -437,25 +476,29 @@ def plot_growing_runtime(
                     linewidths=0.9,
                 )
         ax.set_title(subtitle)
-        ax.set_xlabel("# entities")
+        ax.set_xlabel("Domain size n")
         ax.set_yscale("log")
         ax.set_ylim(top=timeout_sec * 1.6, bottom=0.05)
+        ax.set_xlim(3, 102)
+        ax.set_xticks([5, 25, 50, 75, 100])
         # Mark the timeout with a faint dashed horizontal rail.
         ax.axhline(
             y=timeout_sec, linestyle=":", linewidth=0.7, color="black", alpha=0.4,
         )
-        ax.grid(True, which="both", axis="y", alpha=0.25)
+        ax.grid(True, which="both", axis="both", alpha=0.2)
 
+    for ax in axes[n_panels:]:
+        ax.axis("off")
     axes[0].set_ylabel("Runtime (s, log)")
     fig.legend(
         legend_handles.values(),
         [h.get_label() for h in legend_handles.values()],
-        loc="lower center",
-        ncol=len(legend_handles),
+        loc="lower right",
+        ncol=1,
         frameon=False,
-        bbox_to_anchor=(0.5, -0.04),
+        bbox_to_anchor=(0.985, 0.08),
     )
-    fig.tight_layout(pad=0.8, rect=(0, 0.04, 1, 1))
+    fig.tight_layout(pad=0.8, rect=(0, 0.02, 1, 1))
     return fig
 
 

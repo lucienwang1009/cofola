@@ -85,6 +85,37 @@ def parse_args() -> argparse.Namespace:
         choices=("pdf", "png", "svg"),
         help="Output figure formats. PDF is the default for papers.",
     )
+    parser.add_argument(
+        "--paper",
+        action="store_true",
+        help=(
+            "Generate the paper figures/tables by delegating to "
+            "scripts.benchmarks.plot_paper. This is useful for full-benchmark "
+            "runs whose results.csv contains real, growing, and synthetic suites."
+        ),
+    )
+    parser.add_argument(
+        "--metadata",
+        type=Path,
+        help="metadata.json used by --paper to infer synthetic object types.",
+    )
+    parser.add_argument(
+        "--synthetic-dir",
+        type=Path,
+        default=Path("problems/benchmarks/synthetic"),
+        help="Fallback synthetic .cfl directory used by --paper without --metadata.",
+    )
+    parser.add_argument(
+        "--timeout-sec",
+        type=float,
+        default=100.0,
+        help="Timeout rail used by --paper growing-domain plots.",
+    )
+    parser.add_argument(
+        "--print-tables",
+        action="store_true",
+        help="With --paper, print LaTeX-ready per-object table rows.",
+    )
     return parser.parse_args()
 
 
@@ -92,6 +123,9 @@ def main() -> None:
     args = parse_args()
     rows = load_rows(args.results)
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    if args.paper:
+        write_paper_outputs(args, rows)
+        return
 
     figures = {
         "outcomes": plot_outcomes(rows),
@@ -105,6 +139,37 @@ def main() -> None:
 
     write_plot_summary(rows, args.output_dir / f"{args.prefix}_plot_summary.csv")
     print(f"Wrote {len(figures)} figure(s) to {args.output_dir}")
+
+
+def write_paper_outputs(args: argparse.Namespace, rows: list[dict[str, str]]) -> None:
+    from scripts.benchmarks import plot_paper
+
+    real_rows = [r for r in rows if r["suite"] == "real"]
+    synth_rows = [r for r in rows if r["suite"] == "synthetic"]
+    growing_rows = [r for r in rows if r["suite"] == "growing"]
+    real_types = plot_paper.real_object_types(real_rows)
+    if args.metadata is not None:
+        synth_types = plot_paper.metadata_object_types(args.metadata, suite="synthetic")
+    else:
+        synth_types = plot_paper.synthetic_object_types(args.synthetic_dir)
+
+    figures = {
+        "real_cactus": plot_paper.plot_cactus(real_rows, suite_label="real"),
+        "synthetic_cactus": plot_paper.plot_cactus(synth_rows, suite_label="synthetic"),
+        "growing_family_runtime": plot_paper.plot_growing_runtime(
+            growing_rows, timeout_sec=args.timeout_sec,
+        ),
+    }
+    for name, fig in figures.items():
+        save_figure(fig, args.output_dir / f"{args.prefix}_{name}", args.formats)
+        plt.close(fig)
+    print(f"Wrote {len(figures)} paper figure(s) to {args.output_dir}")
+
+    if args.print_tables:
+        print()
+        plot_paper.print_per_object_table(real_rows, real_types, label="real")
+        print()
+        plot_paper.print_per_object_table(synth_rows, synth_types, label="synthetic")
 
 
 def load_rows(paths: Iterable[Path]) -> list[dict[str, str]]:
