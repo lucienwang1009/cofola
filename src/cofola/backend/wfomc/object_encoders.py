@@ -42,6 +42,15 @@ def _actual_size(
     return exact_size if exact_size is not None else defn_size
 
 
+def _circle_symmetry_factor(size: int, reflection: bool) -> int:
+    if size <= 1:
+        return 1
+    factor = size
+    if reflection and size > 2:
+        factor *= 2
+    return factor
+
+
 # Object encoding dispatcher
 # =============================================================================
 
@@ -810,9 +819,10 @@ def _encode_sequence(
             else domain_size
         )
         context.circle_len = circle_size
-        context.overcount = context.overcount * circle_size
-        if defn.reflection and circle_size > 2:
-            context.overcount = context.overcount * 2
+        context.overcount = context.overcount * _circle_symmetry_factor(
+            circle_size,
+            defn.reflection,
+        )
 
 
 # =============================================================================

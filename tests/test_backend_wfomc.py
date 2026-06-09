@@ -21,6 +21,7 @@ from cofola.backend.wfomc.context import Context
 from cofola.backend.wfomc.decoder import Decoder
 from cofola.backend.wfomc.encoder import encode
 from cofola.backend.wfomc.formula_helpers import exactly_one_qf
+from cofola.backend.wfomc.object_encoders import _circle_symmetry_factor
 from cofola.frontend import (
     BagEqConstraint,
     BagInit,
@@ -479,6 +480,20 @@ def test_unknown_sequence_pattern_reaching_backend_is_an_error() -> None:
 
     with pytest.raises(TypeError, match="Unknown sequence pattern type"):
         encode(problem, analysis)
+
+
+def test_empty_circle_branch_uses_unit_symmetry_factor() -> None:
+    """Empty circles must not create a zero decoder overcount."""
+
+    assert _circle_symmetry_factor(0, reflection=True) == 1
+    assert _circle_symmetry_factor(1, reflection=True) == 1
+    assert parse_and_solve(
+        """
+S = set(a, b)
+P = compose(S, 2)
+C = circle(P[0], reflection=True)
+"""
+    ) == 12
 
 
 def test_backend_does_not_convert_unexpected_solver_errors_to_zero(monkeypatch) -> None:
