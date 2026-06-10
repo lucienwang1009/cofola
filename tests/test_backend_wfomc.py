@@ -24,9 +24,11 @@ from cofola.frontend import (
     SetInit,
     TupleIndexEq,
 )
+from cofola.parser.parser import parse
 from cofola.planing.analysis.entities import AnalysisResult, BagInfo, SetInfo
 from cofola.planing.pass_manager import FixedPointPass
 from cofola.planing.passes.lowering import LoweringPass
+from cofola.planing.pipeline import PlaningPipeline
 from cofola.solver import parse_and_solve
 
 
@@ -145,6 +147,79 @@ order = sequence(creatures)
 (crocodile, crocodile) not in order
 """
     ) == 3
+
+
+def test_positive_predecessor_pattern_with_repeated_right_is_left_total() -> None:
+    """(a, b) in seq only needs each a occurrence to precede some b occurrence."""
+    assert parse_and_solve(
+        """
+B = bag(a: 1, b: 2)
+row = sequence(B)
+(a, b) in row
+"""
+    ) == 2
+
+
+def test_positive_next_to_pattern_with_repeated_right_is_left_total() -> None:
+    """next_to(a, b) should not require a to be adjacent to every b occurrence."""
+    assert parse_and_solve(
+        """
+B = bag(a: 1, b: 2)
+row = sequence(B)
+next_to(a, b) in row
+"""
+    ) == 3
+
+
+def test_less_than_pattern_count_is_strict_for_repeated_entities() -> None:
+    """seq.count(a < a) counts strict ordered occurrence pairs, not LEQ pairs."""
+    assert parse_and_solve(
+        """
+B = bag(a: 2)
+row = sequence(B)
+row.count(a < a) == 1
+"""
+    ) == 1
+    assert parse_and_solve(
+        """
+B = bag(a: 2)
+row = sequence(B)
+row.count(a < a) == 3
+"""
+    ) == 0
+
+
+def test_set_group_pattern_argument_works_in_flattened_sequence() -> None:
+    """Set refs used as pattern groups should work in bag-backed sequences."""
+    assert parse_and_solve(
+        """
+B = bag(a: 1, b: 1, c: 1)
+G = set(a)
+row = sequence(B)
+next_to(G, b) in row
+"""
+    ) == 4
+
+
+def test_plain_set_together_uses_compact_occurrence_predicates() -> None:
+    """Plain set sequences should not expand set patterns per entity."""
+    program = """
+math_books = set(math0...3)
+english_books = set(english0...5)
+shelf = sequence(math_books + english_books)
+together(math_books) in shelf
+together(english_books) in shelf
+"""
+    backend = WFOMCBackend()
+    schedule = PlaningPipeline(backend.planning_profile()).process(parse(program))
+    component, analysis = schedule.branches[0].components[0]
+    wfomc_problem, _ = encode(component, analysis, lifted=False)
+    sentence = str(wfomc_problem.sentence)
+
+    assert "p_math_books_occ" in sentence
+    assert "p_english_books_occ" in sentence
+    assert "math_books_math0_occ" not in sentence
+    assert "english_books_english0_occ" not in sentence
 
 
 def test_negative_bag_equality_is_any_multiplicity_difference() -> None:

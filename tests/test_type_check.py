@@ -35,7 +35,7 @@ seq = sequence(T)
 """,
         "requires Bag or Set",
     ),
-    # 3) together() over an entity (entities are not Set/Bag).
+    # 3) together() over an entity (entities are not Set).
     (
         "together_of_entity",
         """
@@ -44,6 +44,16 @@ arr = sequence(S)
 together(a) in arr
 """,
         "together",
+    ),
+    # 3b) Pattern arguments accept entities and Sets, but not Bags.
+    (
+        "pattern_arg_bag",
+        """
+B = bag(a: 1, b: 1)
+arr = sequence(B)
+next_to(B, a) in arr
+""",
+        "requires Set or Entity",
     ),
     # 4) Cross-kind subset (set subset bag).
     (

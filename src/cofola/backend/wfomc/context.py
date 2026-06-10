@@ -59,6 +59,7 @@ class Context:
         used_refs: Set of ObjRef whose predicates are actually used in the sentence.
         sequence_ref: ObjRef of the unique SequenceDef, or None if no sequence.
         leq_pred: Global 'LEQ' binary predicate (linear order).
+        lt_pred: Sequence-restricted strict less-than predicate, created lazily.
         pred_pred: Global 'PRED' binary predicate (predecessor for linear sequences).
         circular_pred: Global 'CIRCULAR_PRED' binary predicate (predecessor for circles).
         circle_len: Number of elements in the domain (used for circular sequences).
@@ -107,6 +108,7 @@ class Context:
 
         # Global linear-order / predecessor predicates (shared by all sequences)
         self.leq_pred: Pred = Pred('LEQ', 2)
+        self.lt_pred: Pred | None = None
         self.pred_pred: Pred = Pred('PRED', 2)
         self.circular_pred: Pred = Pred('CIRCULAR_PRED', 2)
         self.circle_len: int = len(self.domain)
@@ -355,6 +357,29 @@ class Context:
         )
         self.ref2leq_pred[seq_ref] = leq_pred
         return leq_pred
+
+    def get_lt_pred(self, seq_ref: ObjRef) -> Pred:
+        """Get the sequence-restricted strict less-than predicate.
+
+        Creates a binary predicate `<seq_name>_LT` and adds:
+            ∀X∀Y: (seq_LT(X,Y) ↔ (seq_LEQ(X,Y) ∧ ¬seq_LEQ(Y,X)))
+
+        Args:
+            seq_ref: ObjRef of the SequenceDef.
+
+        Returns:
+            The sequence-restricted strict less-than Pred.
+        """
+        if self.lt_pred is not None:
+            return self.lt_pred
+        leq_pred = self.get_leq_pred(seq_ref)
+        lt_name = f"{self._get_name(seq_ref)}_LT"
+        self.lt_pred = self.create_pred(lt_name, 2)
+        self.sentence = self.sentence & parse(
+            f"\\forall X: (\\forall Y: ({self.lt_pred}(X,Y) <-> "
+            f"({leq_pred}(X,Y) & ~{leq_pred}(Y,X))))"
+        )
+        return self.lt_pred
 
     def get_predecessor_pred(self, seq_ref: ObjRef) -> Pred:
         """Get the sequence-restricted PRED predicate for a SequenceDef.

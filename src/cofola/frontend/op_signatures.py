@@ -356,25 +356,25 @@ SIGNATURES: dict[type, Signature] = {
 # `entity_ok` says whether an Entity literal is also valid in the field.
 # `kinds` is the acceptable type expectation when the value is an ObjRef.
 #
-# Per spec (ordered_objects.tex):
-# - TogetherPattern.group: must be a Set/Bag (entity makes no sense alone).
+# Current language rule:
+# - TogetherPattern.group: must be a Set (entity makes no sense alone).
 # - LessThanPattern.left/right, PredecessorPattern.first/second,
-#   NextToPattern.first/second: may be a single entity or a Set/Bag.
+#   NextToPattern.first/second: may be a single entity or a Set.
 PATTERN_FIELD_EXPECT: dict[
     type,
     tuple[tuple[str, TypeExpect, bool], ...],
 ] = {
-    TogetherPattern: (("group", SetLike, False),),
+    TogetherPattern: (("group", SetObjDef, False),),
     LessThanPattern: (
-        ("left", SetLike, True),
-        ("right", SetLike, True),
+        ("left", SetObjDef, True),
+        ("right", SetObjDef, True),
     ),
     PredecessorPattern: (
-        ("first", SetLike, True),
-        ("second", SetLike, True),
+        ("first", SetObjDef, True),
+        ("second", SetObjDef, True),
     ),
     NextToPattern: (
-        ("first", SetLike, True),
-        ("second", SetLike, True),
+        ("first", SetObjDef, True),
+        ("second", SetObjDef, True),
     ),
 }
