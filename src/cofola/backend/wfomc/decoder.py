@@ -50,6 +50,8 @@ class Decoder(object):
 
         ret = 0
         ret_gens = result.variable_names()
+        # Symbols (from self.gens) that appear in the result polynomial, ordered
+        # to match the degree tuples returned by result.terms().
         reordered_gens = list()
         for v_name in ret_gens:
             for v in self.gens:
@@ -57,8 +59,15 @@ class Decoder(object):
                     reordered_gens.append(v)
                     break
 
+        # A gen absent from the result polynomial has degree 0 in every term
+        # (its weighted predicate is unsatisfiable / was optimized away). A
+        # validator referencing it would otherwise carry a dangling free symbol
+        # and misevaluate. Substitute those gens with 0 once, up front, so the
+        # per-term loop stays as cheap as evaluating over the raw degree tuple.
+        present = set(reordered_gens)
+        absent = {g: 0 for g in self.gens if g not in present}
         lambdified_validator = [
-            sympy.lambdify(reordered_gens, v, 'math')
+            sympy.lambdify(reordered_gens, v.subs(absent) if absent else v, 'math')
             for v in self.validator if not isinstance(v, ListLessThan)
         ]
         list_less_than_validator = [
@@ -70,6 +79,7 @@ class Decoder(object):
                 var2degree = dict(
                     zip(reordered_gens, list(int(d) for d in degrees))
                 )
+                var2degree.update(absent)  # absent gens have degree 0
                 if len(list_less_than_validator) > 0 and any(
                     not v.subs(var2degree)
                     for v in list_less_than_validator
