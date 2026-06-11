@@ -56,6 +56,39 @@ a in Z
 """
         ) == 1
 
+    def test_empty_derived_bag_size_is_satisfiable(self) -> None:
+        """`|X op Y| == 0` must count the empty models, not collapse to 0.
+
+        Regression (decoder): when `|Z| == 0` collapses Z, its multiplicity
+        variables drop out of the WFOMC polynomial, but the validators still
+        reference them. Absent variables must be read as degree 0 rather than
+        dangling free symbols.
+        """
+        # bag(a:2): X,Y range over a in {0,1,2}. Empty results, by operation:
+        #   X+Y: both empty -> 1;  X&Y: X=0 or Y=0 -> 5;  X-Y: X<=Y -> 6.
+        expected = {"X + Y": 1, "X & Y": 5, "X - Y": 6}
+        for op, exp in expected.items():
+            assert parse_and_solve(
+                f"B = bag(a: 2)\nX = choose(B)\nY = choose(B)\nZ = {op}\n|Z| == 0\n"
+            ) == exp, op
+
+    def test_derived_bag_tracks_equal_multiplicity_entities(self) -> None:
+        """Union/intersection/difference must keep entities the sources hold as
+        indistinguishable (equal multiplicities).
+
+        Regression (bag classification): a derived bag took only the sources'
+        `dis_entities`, dropping entities kept in `indis_entities`, so its size
+        expression became 0 and `|Z| == k` folded to a constant.
+        """
+        # bag(a:2, b:2): a,b indistinguishable. |X+Y| == 1 -> 6 (one unit in a or b).
+        assert parse_and_solve(
+            "B = bag(a: 2, b: 2)\nX = choose(B)\nY = choose(B)\nZ = X + Y\n|Z| == 1\n"
+        ) == 6
+        # Intersection size 4 (both full): 1.
+        assert parse_and_solve(
+            "B = bag(a: 2, b: 2)\nX = choose(B)\nY = choose(B)\nZ = X & Y\n|Z| == 4\n"
+        ) == 1
+
     def test_bag_union_preserves_max_multiplicity_for_dynamic_sources(self) -> None:
         """Bag union should constrain multiplicities with max(left, right)."""
         assert parse_and_solve(

@@ -276,32 +276,16 @@ class BagClassification(AnalysisPass[AnalysisResult]):
                 info.dis_entities = src_info.dis_entities.copy()
                 info.indis_entities = {k: v.copy() for k, v in src_info.indis_entities.items()}
 
-        elif isinstance(defn, BagUnion):
-            left_info = analysis.bag_info.get(defn.left)
-            right_info = analysis.bag_info.get(defn.right)
-            if left_info is not None and right_info is not None:
-                info.dis_entities = left_info.dis_entities | right_info.dis_entities
-                info.indis_entities = {}
-
-        elif isinstance(defn, BagAdditiveUnion):
-            # These are non-liftable, already handled by step 2
-            left_info = analysis.bag_info.get(defn.left)
-            right_info = analysis.bag_info.get(defn.right)
-            if left_info is not None and right_info is not None:
-                info.dis_entities = left_info.dis_entities | right_info.dis_entities
-                info.indis_entities = {}
-
-        elif isinstance(defn, (BagIntersection, BagDifference)):
-            # These are non-liftable, already handled by step 2.
-            # dis_entities must be restricted to entities that actually appear
-            # in the result: intersection result drops entities not in both bags,
-            # difference result drops entities from the right bag.
-            left_info = analysis.bag_info.get(defn.left)
-            right_info = analysis.bag_info.get(defn.right)
-            if left_info is not None and right_info is not None:
-                combined = left_info.dis_entities | right_info.dis_entities
-                info.dis_entities = combined & info.p_entities_multiplicity.keys()
-                info.indis_entities = {}
+        elif isinstance(defn, (BagUnion, BagAdditiveUnion, BagIntersection, BagDifference)):
+            # BagUnion/BagAdditiveUnion/BagIntersection/BagDifference are encoded
+            # non-lifted: every entity in the result needs its own multiplicity
+            # variable. Use the result's own entity set rather than the sources'
+            # dis_entities — a source may keep entities in indis_entities (e.g. equal
+            # multiplicities), and those must not be dropped. The result's p_entities_multiplicity
+            # already reflects which entities actually appear (intersection drops
+            # entities not in both; difference drops right-only entities).
+            info.dis_entities = set(info.p_entities_multiplicity.keys())
+            info.indis_entities = {}
 
         elif isinstance(defn, PartDef):
             partition_defn = problem.get_object(defn.partition)
