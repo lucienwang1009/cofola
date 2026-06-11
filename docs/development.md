@@ -7,7 +7,7 @@ This guide covers the commands and test layout used by Cofola contributors.
 ```bash
 uv sync
 uv run pytest
-COFOLA_ALL_TESTS=1 uv run pytest tests/test_all_problems.py
+COFOLA_ALL_TESTS=1 uv run pytest tests/benchmarks/test_all_problems.py
 uv run pyright
 ```
 
@@ -17,20 +17,23 @@ add Pyright separately when type checking locally.
 
 ## Test Layout
 
-- `tests/test_all_problems.py` runs representative `.cfl` examples from
-  `problems/real/corpus.json`. By default it runs examples tagged `benchmark`;
-  set `COFOLA_ALL_TESTS=1` for the larger dataset.
-- `tests/test_type_check.py` covers invalid user programs that should fail
-  validation before solving.
-- `tests/test_parser_errors.py` covers parser and transformer diagnostics.
-- `tests/test_problem_builder_usage.py` contains executable examples for the
-  public Python builder API.
-- `tests/test_pass_infrastructure.py` covers `AnalysisManager`,
-  `RefAllocator`, and fixed-point pass behavior.
-- `tests/test_planning_utilities.py` covers planning analyses and lowering
-  policies.
-- `tests/test_backend_wfomc.py` covers WFOMC backend boundary behavior and
-  semantic regressions.
+Tests are grouped by the layer under test (see `tests/README.md` for the full
+map):
+
+- `tests/frontend/` — parser diagnostics (`test_parser_errors.py`),
+  type-checking failures (`test_type_check.py`), and public builder-API
+  examples (`test_problem_builder_usage.py`).
+- `tests/planning/` — pass infrastructure (`test_pass_infrastructure.py`) plus
+  focused modules for reference utilities, analysis inference, optimization
+  passes, lowering passes, analysis boundaries, and transform invariants.
+- `tests/backends/` — `wfomc/` (profile, collection semantics, sequence
+  patterns, choice/membership, encoding boundaries) and `test_backend_coso.py`.
+- `tests/benchmarks/` — benchmark case discovery and runner behavior, plus
+  `test_all_problems.py`, which runs representative `.cfl` examples from
+  `problems/real/corpus.json` (examples tagged `benchmark` by default; set
+  `COFOLA_ALL_TESTS=1` for the larger dataset).
+
+Shared `Problem`-navigation helpers live in `tests/helpers.py`.
 
 When adding a feature, prefer one small parser/type-check test and one semantic
 solver test. Add planning or backend tests only when the behavior depends on a
