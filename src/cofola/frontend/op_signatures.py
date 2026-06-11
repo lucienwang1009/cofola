@@ -165,7 +165,7 @@ def _coverage_supported(node: object, problem: _ObjectResolver) -> Optional[str]
         return None
 
     pattern = getattr(node, "pattern")
-    if isinstance(pattern, PredecessorPattern | NextToPattern):
+    if isinstance(pattern, (PredecessorPattern, NextToPattern)):
         if coverage == pattern.first or coverage == pattern.second:
             return None
         return "coverage qualifier `for each ...` must name one of the local pattern arguments"
