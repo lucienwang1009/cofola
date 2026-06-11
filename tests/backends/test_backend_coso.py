@@ -554,7 +554,7 @@ def test_coso_backend_on_verified_corpus_problem(problem_id: str) -> None:
     import json
     from pathlib import Path
 
-    problems_path = Path(__file__).parent.parent / "problems" / "real" / "corpus.json"
+    problems_path = Path(__file__).parents[2] / "problems" / "real" / "corpus.json"
     problem_data = json.loads(problems_path.read_text())[problem_id]
 
     result = parse_and_solve(problem_data["program"], backend="coso")

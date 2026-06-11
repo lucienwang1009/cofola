@@ -15,7 +15,7 @@ from cofola.solver import parse_and_solve
 
 
 # Load problems from JSON
-PROBLEMS_FILE = Path(__file__).parent.parent / "problems" / "real" / "corpus.json"
+PROBLEMS_FILE = Path(__file__).parents[2] / "problems" / "real" / "corpus.json"
 
 # Run the full suite only when explicitly requested
 _RUN_ALL = os.environ.get("COFOLA_ALL_TESTS", "0").strip() not in ("", "0", "false", "no")
