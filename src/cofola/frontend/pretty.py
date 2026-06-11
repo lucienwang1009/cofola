@@ -86,13 +86,40 @@ def _fmt_pattern(pattern: object, problem: Problem) -> str:
         case TogetherPattern(group=g):
             return f"together({_ref_or_entity(g, problem)})"
         case LessThanPattern(left=l, right=r):
-            return f"{_ref_or_entity(l, problem)} < {_ref_or_entity(r, problem)}"
+            return f"before({_ref_or_entity(l, problem)}, {_ref_or_entity(r, problem)})"
         case PredecessorPattern(first=f, second=s):
-            return f"{_ref_or_entity(f, problem)} ≺ {_ref_or_entity(s, problem)}"
+            return f"({_ref_or_entity(f, problem)}, {_ref_or_entity(s, problem)})"
         case NextToPattern(first=f, second=s):
-            return f"{_ref_or_entity(f, problem)} ~ {_ref_or_entity(s, problem)}"
+            return f"next_to({_ref_or_entity(f, problem)}, {_ref_or_entity(s, problem)})"
         case _:
             return repr(pattern)
+
+
+def _fmt_seq_pattern_constraint(
+    seq: ObjRef,
+    pattern: object,
+    coverage: ObjRef | Entity | None,
+    problem: Problem,
+) -> str:
+    """Render a positive sequence pattern constraint in surface syntax.
+
+    Global patterns use the method form (``seq.together(...)`` /
+    ``seq.before(...)``); local patterns use the ``pattern in seq`` form with an
+    optional ``for each`` coverage qualifier.
+    """
+    s = _name(seq, problem)
+    match pattern:
+        case TogetherPattern(group=g):
+            return f"{s}.together({_ref_or_entity(g, problem)})"
+        case LessThanPattern(left=l, right=r):
+            return f"{s}.before({_ref_or_entity(l, problem)}, {_ref_or_entity(r, problem)})"
+        case _:
+            cov = (
+                f" for each {_ref_or_entity(coverage, problem)}"
+                if coverage is not None
+                else ""
+            )
+            return f"{_fmt_pattern(pattern, problem)} in {s}{cov}"
 
 
 def _fmt_size_atom(atom: object, problem: Problem) -> str:
@@ -220,9 +247,11 @@ def _fmt_constraint(c: object, problem: Problem) -> str:
         case TupleIndexMembership(tuple_ref=tr, index=i, container=cont, positive=pos):
             sym = "∈" if pos else "∉"
             return f"{n(tr)}[{i}] {sym} {n(cont)}"
-        case SequencePatternConstraint(seq=s, pattern=p, positive=pos):
-            neg = "¬" if not pos else ""
-            return f"{neg}{_fmt_pattern(p, problem)} in {n(s)}"
+        case SequencePatternConstraint(seq=s, pattern=p, positive=pos, coverage=cov):
+            body = _fmt_seq_pattern_constraint(s, p, cov, problem)
+            # Negation is Boolean negation of the whole assertion, matching the
+            # surface `not (...)` form rather than pushing it into the pattern.
+            return body if pos else f"¬({body})"
         case FuncPairConstraint(func=f, arg_entity=arg, result=res, positive=pos):
             sym = "=" if pos else "≠"
             return f"{n(f)}({arg.name}) {sym} {roe(res)}"

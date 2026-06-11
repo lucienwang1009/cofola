@@ -147,13 +147,30 @@ def _disjoint_same_kind(node: object, problem: _ObjectResolver) -> Optional[str]
 
 
 def _no_together_count(node: object, problem: _ObjectResolver) -> Optional[str]:
-    """Per spec (ordered_objects.tex): `together` does NOT have a count
-    variant — `seq.count(together(...))` is forbidden.
-    """
+    """Only local patterns have a count variant."""
     pattern = getattr(node, "pattern")
     if isinstance(pattern, TogetherPattern):
         return "seq.count(together(...)) is not supported (no count variant for `together` per spec)"
+    if isinstance(pattern, LessThanPattern):
+        return "seq.count(A < B) is not supported (no count variant for `<` per spec)"
     return None
+
+
+def _coverage_supported(node: object, problem: _ObjectResolver) -> Optional[str]:
+    """Coverage qualifiers are only valid for local patterns and must name
+    one of the pattern arguments.
+    """
+    coverage = getattr(node, "coverage", None)
+    if coverage is None:
+        return None
+
+    pattern = getattr(node, "pattern")
+    if isinstance(pattern, PredecessorPattern | NextToPattern):
+        if coverage == pattern.first or coverage == pattern.second:
+            return None
+        return "coverage qualifier `for each ...` must name one of the local pattern arguments"
+
+    return "coverage qualifier `for each ...` is only supported for local patterns"
 
 
 # ---------------------------------------------------------------------------
@@ -300,6 +317,7 @@ SIGNATURES: dict[type, Signature] = {
     ),
     SequencePatternConstraint: Signature(
         params=(Param(Linear, "seq", field="seq"),),
+        extra=(_coverage_supported,),
     ),
     FuncPairConstraint: Signature(
         params=(Param(FuncObjDef, "func", field="func"),),
@@ -335,24 +353,24 @@ SIGNATURES: dict[type, Signature] = {
 # `kinds` is the acceptable type expectation when the value is an ObjRef.
 #
 # Per spec (ordered_objects.tex):
-# - TogetherPattern.group: must be a Set/Bag (entity makes no sense alone).
+# - TogetherPattern.group: must be a Set (entity makes no sense alone).
 # - LessThanPattern.left/right, PredecessorPattern.first/second,
-#   NextToPattern.first/second: may be a single entity or a Set/Bag.
+#   NextToPattern.first/second: may be a single entity or a Set.
 PATTERN_FIELD_EXPECT: dict[
     type,
     tuple[tuple[str, TypeExpect, bool], ...],
 ] = {
-    TogetherPattern: (("group", SetLike, False),),
+    TogetherPattern: (("group", SetObjDef, False),),
     LessThanPattern: (
-        ("left", SetLike, True),
-        ("right", SetLike, True),
+        ("left", SetObjDef, True),
+        ("right", SetObjDef, True),
     ),
     PredecessorPattern: (
-        ("first", SetLike, True),
-        ("second", SetLike, True),
+        ("first", SetObjDef, True),
+        ("second", SetObjDef, True),
     ),
     NextToPattern: (
-        ("first", SetLike, True),
-        ("second", SetLike, True),
+        ("first", SetObjDef, True),
+        ("second", SetObjDef, True),
     ),
 }

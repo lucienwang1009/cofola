@@ -1,4 +1,4 @@
 bag_0 = bag(e_1: 1, e_3: 2, e_4: 1, e_5: 1, e_6: 1)
 sequence_0 = sequence(bag_0)
-next_to(e_6, e_4) not in sequence_0
-e_1 < e_5 in sequence_0
+not (next_to(e_6, e_4) in sequence_0)
+sequence_0.before(e_1, e_5)
