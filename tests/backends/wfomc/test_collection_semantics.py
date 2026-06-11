@@ -37,6 +37,25 @@ D = B - C
         ) == 1
 
 
+    def test_bag_difference_subtracts_singleton_entities(self) -> None:
+        """A singleton entity in a bag difference must still subtract the RHS.
+
+        Regression: singletons were skipped in the per-entity loop and only the
+        loose ``obj -> left`` bound was emitted, so ``a in (X - Y)`` ignored Y
+        for singleton ``a``.
+        """
+        # a is a singleton: a in (X - Y) iff a in X and a not in Y.
+        # X,Y range over sub-bags of bag(a:1); pairs with X_a=1,Y_a=0 -> 1.
+        assert parse_and_solve(
+            """
+B = bag(a: 1)
+X = choose(B)
+Y = choose(B)
+Z = X - Y
+a in Z
+"""
+        ) == 1
+
     def test_bag_union_preserves_max_multiplicity_for_dynamic_sources(self) -> None:
         """Bag union should constrain multiplicities with max(left, right)."""
         assert parse_and_solve(
