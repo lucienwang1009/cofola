@@ -31,6 +31,52 @@ not B subset C
         ) == 45
 
 
+    def test_bag_subset_constrains_singleton_entities(self) -> None:
+        """Singleton entities (multiplicity <= 1) must still obey bag subset.
+
+        Regression: singletons were skipped in the multiplicity loop and never
+        constrained over the singleton subdomain, so ``a in sub`` was allowed
+        even when ``a not in sup``.
+        """
+        # `a` is a singleton; pairs over a in {0,1}: (0,0),(0,1),(1,1) = 3.
+        assert parse_and_solve(
+            """
+B = bag(a: 1)
+sub = choose(B)
+sup = choose(B)
+sub subset sup
+"""
+        ) == 3
+        # `a` singleton, `b` multiplicity 2: 3 (a) * 6 (b) = 18.
+        assert parse_and_solve(
+            """
+B = bag(a: 1, b: 2)
+sub = choose(B)
+sup = choose(B)
+sub subset sup
+"""
+        ) == 18
+
+    def test_bag_equality_constrains_singleton_entities(self) -> None:
+        """Bag equality must hold per singleton entity, not only non-singletons."""
+        # equal pairs: a (2) * b (3) = 6; unequal = 36 - 6 = 30.
+        assert parse_and_solve(
+            """
+B = bag(a: 1, b: 2)
+sub = choose(B)
+sup = choose(B)
+sub == sup
+"""
+        ) == 6
+        assert parse_and_solve(
+            """
+B = bag(a: 1, b: 2)
+sub = choose(B)
+sup = choose(B)
+sub != sup
+"""
+        ) == 30
+
     def test_choose_replace_sequence_uses_dynamic_chosen_source(self) -> None:
         """choose_replace_sequence over a chosen set must respect the chosen source."""
         assert parse_and_solve(

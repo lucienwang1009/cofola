@@ -319,6 +319,23 @@ def _encode_sequence_pattern_constraint(
             raise TypeError(f"Unknown sequence pattern type: {type(c.pattern).__name__}")
 
 
+def _count_singleton_violations(name: str, body: str, context: Context) -> Expr:
+    """Weight an aux predicate that holds on the singleton domain elements where
+    ``body`` is true, and return its counting variable.
+
+    Mirrors the local-pattern count pattern: the predicate is functionally
+    defined by a biconditional, so the returned variable tracks the number of
+    violating singletons and can be tested with ``> 0`` in the validator.
+    """
+    pred = create_aux_pred(1, name)
+    context.sentence = context.sentence & parse(
+        f"\\forall X: ({pred}(X) <-> ({body}))"
+    )
+    var = context.create_var(name)
+    context.weighting[pred] = (var, 1)
+    return var
+
+
 def _encode_bag_subset_constraint(
     c: ir_cst.BagSubsetConstraint,
     analysis: AnalysisResult,
@@ -332,8 +349,10 @@ def _encode_bag_subset_constraint(
 
     entities = set(sub_info.p_entities_multiplicity) | set(sup_info.p_entities_multiplicity)
     comparisons = []
+    has_singleton = False
     for entity in entities:
         if entity in context.singletons:
+            has_singleton = True
             continue
         sub_var = _bag_entity_expr(c.sub, entity, analysis, context)
         sup_var = _bag_entity_expr(c.sup, entity, analysis, context)
@@ -341,6 +360,28 @@ def _encode_bag_subset_constraint(
             context.validator.append(sub_var <= sup_var)
         else:
             comparisons.append(sub_var > sup_var)
+
+    # Singleton entities are domain constants whose membership in a bag is a
+    # first-order atom (the bag predicate at that constant), not an integer
+    # multiplicity variable, so they are constrained over the singleton
+    # subdomain instead of via var comparisons.
+    if has_singleton and context.singletons_pred is not None:
+        sp = context.singletons_pred
+        p_sub = context.get_pred(c.sub)
+        p_sup = context.get_pred(c.sup)
+        if c.positive:
+            context.sentence = context.sentence & parse(
+                f"\\forall X: (({sp}(X) & {p_sub}(X)) -> {p_sup}(X))"
+            )
+        else:
+            comparisons.append(
+                _count_singleton_violations(
+                    f"bag_subset_viol_{c.sub.id}_{c.sup.id}",
+                    f"{sp}(X) & {p_sub}(X) & ~{p_sup}(X)",
+                    context,
+                ) > 0
+            )
+
     if not c.positive:
         context.validator.append(Or(*comparisons) if comparisons else false)
 
@@ -359,8 +400,10 @@ def _encode_bag_eq_constraint(
     # Get all entities from both bags
     all_entities = set(left_info.p_entities_multiplicity) | set(right_info.p_entities_multiplicity)
     comparisons = []
+    has_singleton = False
     for entity in all_entities:
         if entity in context.singletons:
+            has_singleton = True
             continue
         left_var = _bag_entity_expr(c.left, entity, analysis, context)
         right_var = _bag_entity_expr(c.right, entity, analysis, context)
@@ -368,6 +411,27 @@ def _encode_bag_eq_constraint(
             context.validator.append(Eq(left_var, right_var))
         else:
             comparisons.append(Ne(left_var, right_var))
+
+    # Singleton entities: equality of multiplicity reduces to equality of
+    # membership over the singleton subdomain (see _encode_bag_subset_constraint).
+    if has_singleton and context.singletons_pred is not None:
+        sp = context.singletons_pred
+        p_left = context.get_pred(c.left)
+        p_right = context.get_pred(c.right)
+        if c.positive:
+            context.sentence = context.sentence & parse(
+                f"\\forall X: ({sp}(X) -> ({p_left}(X) <-> {p_right}(X)))"
+            )
+        else:
+            comparisons.append(
+                _count_singleton_violations(
+                    f"bag_eq_viol_{c.left.id}_{c.right.id}",
+                    f"{sp}(X) & (({p_left}(X) & ~{p_right}(X)) "
+                    f"| (~{p_left}(X) & {p_right}(X)))",
+                    context,
+                ) > 0
+            )
+
     if not c.positive:
         context.validator.append(Or(*comparisons) if comparisons else false)
 
