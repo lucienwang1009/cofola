@@ -79,6 +79,7 @@ from .constraints import (
     PredecessorPattern,
     NextToPattern,
     SeqPattern,
+    PatternArg,
     SequencePatternConstraint,
     # Function constraints
     FuncPairConstraint,
@@ -186,6 +187,7 @@ __all__ = [
     "PredecessorPattern",
     "NextToPattern",
     "SeqPattern",
+    "PatternArg",
     "SequencePatternConstraint",
     # Function constraints
     "FuncPairConstraint",

@@ -3,4 +3,4 @@ choose_0 = choose(bag_0, 7)
 sequence_0 = sequence(choose_0)
 e_9 in choose_0
 choose_0 disjoint bag_0
-e_6 < e_10 not in sequence_0
+not sequence_0.before(e_6, e_10)

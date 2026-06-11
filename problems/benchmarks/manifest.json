@@ -113,7 +113,7 @@
     {
       "suite": "real",
       "case_id": "7",
-      "program": "math_books = set(math0...3)\nenglish_books = set(english0...5)\nshelf = sequence(math_books + english_books)\ntogether(math_books) in shelf\ntogether(english_books) in shelf",
+      "program": "math_books = set(math0...3)\nenglish_books = set(english0...5)\nshelf = sequence(math_books + english_books)\nshelf.together(math_books)\nshelf.together(english_books)",
       "expected": 1440,
       "tags": [
         "set",
@@ -123,12 +123,12 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/7.cfl",
-      "program_sha256": "02302154e7d2aada36395671127d9dea1f2e6db071d2ec345f03bb021c81c8f9"
+      "program_sha256": "ab30ef3760896b4a639faeabb3cbc261cd46bd44152bdfa7c52740194984e1e1"
     },
     {
       "suite": "real",
       "case_id": "8",
-      "program": "Democrats = set(D0...5)\nRepublicans = set(R0...5)\ntable = circle(Democrats + Republicans)\ntogether(Democrats) in table\ntogether(Republicans) in table",
+      "program": "Democrats = set(D0...5)\nRepublicans = set(R0...5)\ntable = circle(Democrats + Republicans)\ntable.together(Democrats)\ntable.together(Republicans)",
       "expected": 14400,
       "tags": [
         "set",
@@ -138,7 +138,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/8.cfl",
-      "program_sha256": "7854183b428b5003ab30931718edafd583673c4ae00f87c5433ef120626d4d85"
+      "program_sha256": "5403c8f0d51e66cc3988bbd4163816937c6de16bb22fb16fedd3c4bc4d6e2ccb"
     },
     {
       "suite": "real",
@@ -283,7 +283,7 @@
     {
       "suite": "real",
       "case_id": "23",
-      "program": "girls = set(girl0...6)\nboys = set(boy0...2)\nrow = sequence(girls+boys)\ntogether(boys) in row",
+      "program": "girls = set(girl0...6)\nboys = set(boy0...2)\nrow = sequence(girls+boys)\nrow.together(boys)",
       "expected": 10080,
       "tags": [
         "set",
@@ -292,7 +292,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/23.cfl",
-      "program_sha256": "e7b9157b3e96e76356c44de9961b1ff7d59d36e51beff8f8be539950f4346984"
+      "program_sha256": "844d7a107faf755a4116e346293febdf7eb6c2a67de509b9ba9ca88d671c2b2e"
     },
     {
       "suite": "real",
@@ -368,7 +368,7 @@
     {
       "suite": "real",
       "case_id": "29",
-      "program": "math_books = set(math0...2)\nphysics_books = set(physic)\nother_books = set(other0...4)\narrangement = sequence(math_books + physics_books + other_books)\ntogether(math_books) in arrangement\nmath_books < physics_books in arrangement",
+      "program": "math_books = set(math0...2)\nphysics_books = set(physic)\nother_books = set(other0...4)\narrangement = sequence(math_books + physics_books + other_books)\narrangement.together(math_books)\narrangement.before(math_books, physics_books)",
       "expected": 720,
       "tags": [
         "set",
@@ -378,7 +378,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/29.cfl",
-      "program_sha256": "7dbfb12fddc45f67b9994757dd3b9fb3df35304372ea47addfc2ab5c4cb93f3d"
+      "program_sha256": "094959985f37818741371d4190cef8f17ea2fa88c22049fe54ac0555a85d21ee"
     },
     {
       "suite": "real",
@@ -399,7 +399,7 @@
     {
       "suite": "real",
       "case_id": "31",
-      "program": "students = set(student0...4)\nline = sequence(students)\nnext_to(student0, student1) not in line",
+      "program": "students = set(student0...4)\nline = sequence(students)\nnot (next_to(student0, student1) in line)",
       "expected": 12,
       "tags": [
         "set",
@@ -410,7 +410,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/31.cfl",
-      "program_sha256": "7ec41530bfce6ce41bb0de06ff660987df660891a13ffc440f115403ac98c481"
+      "program_sha256": "7ffe503c37cedb917de42899ed5820d106f63ccb743439dd918b86e3a0574403"
     },
     {
       "suite": "real",
@@ -428,7 +428,7 @@
     {
       "suite": "real",
       "case_id": "33",
-      "program": "people = set(Pierre, Thomas, Rosa, other0...5)\ntable = circle(people)\nnext_to(Pierre, Thomas) in table\nnext_to(Rosa, Pierre) not in table\nnext_to(Rosa, Thomas) not in table",
+      "program": "people = set(Pierre, Thomas, Rosa, other0...5)\ntable = circle(people)\nnext_to(Pierre, Thomas) in table\nnot (next_to(Rosa, Pierre) in table)\nnot (next_to(Rosa, Thomas) in table)",
       "expected": 960,
       "tags": [
         "set",
@@ -439,12 +439,12 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/33.cfl",
-      "program_sha256": "034030b3f9e49478f280fde2f86848f201726776f5dbfdc2a1e620081f2df443"
+      "program_sha256": "737a9dc89690a307efbb135e2637d3fc7ad538ec1b60db910cd8e04db2a9c537"
     },
     {
       "suite": "real",
       "case_id": "34",
-      "program": "creatures = bag(crocodile: 4, catfish, squid: 2)\norder = sequence(creatures)\n(crocodile, crocodile) not in order",
+      "program": "creatures = bag(crocodile: 4, catfish, squid: 2)\norder = sequence(creatures)\nnot ((crocodile, crocodile) in order)",
       "expected": 3,
       "tags": [
         "bag",
@@ -455,7 +455,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/34.cfl",
-      "program_sha256": "6046839931703ec5d15ae3ce8b54289179a6dd451b785e5cf6c97e0c53ece68d"
+      "program_sha256": "f4e46bce0f30afde02fc13fc4ba421aa81ed55aaca2c23a6769609da9ce3d6d6"
     },
     {
       "suite": "real",
@@ -503,7 +503,7 @@
     {
       "suite": "real",
       "case_id": "39",
-      "program": "together_people = set(Pierre, Rosa, Thomas)\npeople = together_people + set(other0...5)\ntable = circle(people)\ntogether(together_people) in table",
+      "program": "together_people = set(Pierre, Rosa, Thomas)\npeople = together_people + set(other0...5)\ntable = circle(people)\ntable.together(together_people)",
       "expected": 720,
       "tags": [
         "set",
@@ -512,7 +512,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/39.cfl",
-      "program_sha256": "b48e85c3ba0be2b466d4cbb9035744afc785e0c5b94f20036d26117f5066d38d"
+      "program_sha256": "8eb98299aee428eaae63d437ff79a372e5193c20412e7fff2f96a7361a3187fb"
     },
     {
       "suite": "real",
@@ -548,7 +548,7 @@
     {
       "suite": "real",
       "case_id": "42",
-      "program": "reps = set(rep0...5)\ndems = set(dem0...4)\ncommitte = reps + dems\nchairs = sequence(committe)\ntogether(dems) in chairs",
+      "program": "reps = set(rep0...5)\ndems = set(dem0...4)\ncommitte = reps + dems\nchairs = sequence(committe)\nchairs.together(dems)",
       "expected": 17280,
       "tags": [
         "set",
@@ -557,7 +557,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/42.cfl",
-      "program_sha256": "26446505c09c757faa498a371561addd8545781a77539a99a3194c67a862cedc"
+      "program_sha256": "2f38c4df9e6593dcad6bd5fefc2856a3cbbe387725d522fa9c38029df905b093"
     },
     {
       "suite": "real",
@@ -591,7 +591,7 @@
     {
       "suite": "real",
       "case_id": "45",
-      "program": "basil_plants = set(basil0...4)\ntomato_plants = set(tomato0...4)\nrow = sequence(basil_plants + tomato_plants)\ntogether(tomato_plants) in row",
+      "program": "basil_plants = set(basil0...4)\ntomato_plants = set(tomato0...4)\nrow = sequence(basil_plants + tomato_plants)\nrow.together(tomato_plants)",
       "expected": 2880,
       "tags": [
         "set",
@@ -600,7 +600,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/45.cfl",
-      "program_sha256": "841c832b4aac03382450f9dc57509526fccfda7bef4c07be59b335aa4a49f654"
+      "program_sha256": "f0d4c566a3cc206c1c6876a247dbfa5363fb908170be616ee0ae2ea65515c4e4"
     },
     {
       "suite": "real",
@@ -622,7 +622,7 @@
     {
       "suite": "real",
       "case_id": "47",
-      "program": "people = set(Pierre, Rosa, Thomas, other0...4)\nnot_next_to = set(Pierre, Rosa, Thomas)\ntable = circle(people)\nnext_to(not_next_to,not_next_to) not in table",
+      "program": "people = set(Pierre, Rosa, Thomas, other0...4)\nnot_next_to = set(Pierre, Rosa, Thomas)\ntable = circle(people)\nnot (next_to(not_next_to,not_next_to) in table)",
       "expected": 144,
       "tags": [
         "set",
@@ -632,7 +632,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/47.cfl",
-      "program_sha256": "06fccc3292bde86059602cbcc5d2f343067ae262e33075d8e9c7933345728b4b"
+      "program_sha256": "87af382802b805e08a94b6581144d327115b48f477f987272343194f97913378"
     },
     {
       "suite": "real",
@@ -676,7 +676,7 @@
     {
       "suite": "real",
       "case_id": "53",
-      "program": "Democrats = set(D0...5)\nRepublicans = set(R0...5)\ncommittee = Democrats + Republicans + set(Independent)\ntable = circle(committee)\ntogether(Democrats) in table\ntogether(Republicans) in table",
+      "program": "Democrats = set(D0...5)\nRepublicans = set(R0...5)\ncommittee = Democrats + Republicans + set(Independent)\ntable = circle(committee)\ntable.together(Democrats)\ntable.together(Republicans)",
       "expected": 28800,
       "tags": [
         "set",
@@ -685,7 +685,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/53.cfl",
-      "program_sha256": "13f83e309a3432d61c3909173489eb1986dee186d53a1bc42c23cbff97c48e13"
+      "program_sha256": "5aab7ab22c5d204cddd28f9347aa29df9d8d71ef4e351298d583c7526a39d4bd"
     },
     {
       "suite": "real",
@@ -1009,7 +1009,7 @@
     {
       "suite": "real",
       "case_id": "80",
-      "program": "green = set(g0...2)\nred = set(r0...3)\nblue = set(b0)\nfrogs = green + red + blue\nrow = sequence(frogs)\nnext_to(green,red) not in row",
+      "program": "green = set(g0...2)\nred = set(r0...3)\nblue = set(b0)\nfrogs = green + red + blue\nrow = sequence(frogs)\nnot (next_to(green,red) in row)",
       "expected": 24,
       "tags": [
         "set",
@@ -1019,7 +1019,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/80.cfl",
-      "program_sha256": "2db168ef0f704e999f3dcef62143d6f9f9370ad13259e61f66629ab160a44053"
+      "program_sha256": "a583bcdc804dde3fb58f354539187f8ef119601413347009b9f4c45b3f8b101c"
     },
     {
       "suite": "real",
@@ -1214,7 +1214,7 @@
     {
       "suite": "real",
       "case_id": "96",
-      "program": "books = set(math1, math2, other0...4)\nshelf = sequence(books)\nnext_to(math1, math2) not in shelf",
+      "program": "books = set(math1, math2, other0...4)\nshelf = sequence(books)\nnot (next_to(math1, math2) in shelf)",
       "expected": 480,
       "tags": [
         "set",
@@ -1224,7 +1224,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/96.cfl",
-      "program_sha256": "1aa57379ab7c6307d272825ce746c2bc550a124045a5fbc240295de35baebdec"
+      "program_sha256": "d7d315f7f0fb366ce35b47ffb2f936882a11a5e34e969c0a9fbd85fdef4a287a"
     },
     {
       "suite": "real",
@@ -1258,7 +1258,7 @@
     {
       "suite": "real",
       "case_id": "99",
-      "program": "lecturers = set(Jones, Smith, other0...4)\nschedule = sequence(lecturers)\n(Jones < Smith) in schedule",
+      "program": "lecturers = set(Jones, Smith, other0...4)\nschedule = sequence(lecturers)\nschedule.before(Jones, Smith)",
       "expected": 360,
       "tags": [
         "set",
@@ -1267,7 +1267,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/99.cfl",
-      "program_sha256": "77902021a32e49f34b12fc0deea1bdb474029d6099b65dad84bfe38821a49bee"
+      "program_sha256": "afe38e15b0356ec66aaa996d4c8ad7cc8bdda107a86f9f26394b43714f3a457b"
     },
     {
       "suite": "real",
@@ -1299,7 +1299,7 @@
     {
       "suite": "real",
       "case_id": "102",
-      "program": "Cubs = set(C0...3)\nRed_Sox = set(R0...3)\nYankees = set(Y0...2)\nAll_Stars = Cubs + Red_Sox + Yankees\nrow = sequence(All_Stars)\ntogether(Cubs) in row\ntogether(Red_Sox) in row\ntogether(Yankees) in row",
+      "program": "Cubs = set(C0...3)\nRed_Sox = set(R0...3)\nYankees = set(Y0...2)\nAll_Stars = Cubs + Red_Sox + Yankees\nrow = sequence(All_Stars)\nrow.together(Cubs)\nrow.together(Red_Sox)\nrow.together(Yankees)",
       "expected": 432,
       "tags": [
         "set",
@@ -1308,7 +1308,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/102.cfl",
-      "program_sha256": "4809682d7d286b721506ca0023d4c0eb56f1b985e35090ed5e49c33ebd60a4f7"
+      "program_sha256": "f4e63b662349bc3fe4dd9aa783a2ff048e1de45c4d45396c5137f1b8c8373b6f"
     },
     {
       "suite": "real",
@@ -1652,7 +1652,7 @@
     {
       "suite": "real",
       "case_id": "130",
-      "program": "chickens = set(chi0...4)\ndogs = set(dog0...2)\ncats = set(cat0...5)\nanimals = chickens + dogs + cats\narrangement = sequence(animals)\ntogether(chickens) in arrangement\ntogether(dogs) in arrangement\ntogether(cats) in arrangement",
+      "program": "chickens = set(chi0...4)\ndogs = set(dog0...2)\ncats = set(cat0...5)\nanimals = chickens + dogs + cats\narrangement = sequence(animals)\narrangement.together(chickens)\narrangement.together(dogs)\narrangement.together(cats)",
       "expected": 34560,
       "tags": [
         "set",
@@ -1661,7 +1661,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/130.cfl",
-      "program_sha256": "5cb653e1650aadfbed0b59f4c95c9a74e6790039e7b077ae35e178726e07ac62"
+      "program_sha256": "fe9edee922d053e22ab5ad191e08be997d78e9d9bc355b1ec5e64fefb46a36b5"
     },
     {
       "suite": "real",
@@ -1727,7 +1727,7 @@
     {
       "suite": "real",
       "case_id": "135",
-      "program": "digits = set(1, 2, 3, 4, 5)\ninteger = sequence(digits)\n(1 < 2) in integer",
+      "program": "digits = set(1, 2, 3, 4, 5)\ninteger = sequence(digits)\ninteger.before(1, 2)",
       "expected": 60,
       "tags": [
         "set",
@@ -1736,7 +1736,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/135.cfl",
-      "program_sha256": "79a995b0098638ffe5e759add25cecedb5d5c4225cf02abf554d92d2f7862dfc"
+      "program_sha256": "df1c3764fc50637ae9991b16bca261dc39e596e5855e5803884f397f20b46e14"
     },
     {
       "suite": "real",
@@ -1757,7 +1757,7 @@
     {
       "suite": "real",
       "case_id": "137",
-      "program": "people = set(Alice, Bob, other0...6)\ntable = circle(people)\nnext_to(Alice, Bob) not in table",
+      "program": "people = set(Alice, Bob, other0...6)\ntable = circle(people)\nnot (next_to(Alice, Bob) in table)",
       "expected": 3600,
       "tags": [
         "set",
@@ -1767,7 +1767,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/137.cfl",
-      "program_sha256": "884969e84b519cdb1142c7894862f58f50d660e21c2dfb45bf8bf026e0400ccb"
+      "program_sha256": "1425b46ce67f1d06d656128f8b5f705330b2e1111dba13d87639397636bae8aa"
     },
     {
       "suite": "real",
@@ -1911,7 +1911,7 @@
     {
       "suite": "real",
       "case_id": "149",
-      "program": "Democrats = set(D0...5)\nRepublicans = set(R0...5)\ntable = circle(Democrats + Republicans)\nnext_to(Democrats, Democrats) not in table\nnext_to(Republicans, Republicans) not in table",
+      "program": "Democrats = set(D0...5)\nRepublicans = set(R0...5)\ntable = circle(Democrats + Republicans)\nnot (next_to(Democrats, Democrats) in table)\nnot (next_to(Republicans, Republicans) in table)",
       "expected": 2880,
       "tags": [
         "set",
@@ -1921,7 +1921,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/149.cfl",
-      "program_sha256": "5daebae4b565c3f067e2c0a71850f07df9b83b20822c2fd3ceee4e69597e1247"
+      "program_sha256": "a6351c31090d6d6a14eede008f904542e8f3a3a100422ab7375cdde8ade939f4"
     },
     {
       "suite": "real",
@@ -2212,7 +2212,7 @@
     {
       "suite": "real",
       "case_id": "172",
-      "program": "Spiderman = set(s0...6)\nArchie = set(a0...5)\nGarfield = set(g0...4)\nall = Spiderman + Archie + Garfield\npile = sequence(all)\ntogether(Spiderman) in pile\ntogether(Archie) in pile\ntogether(Garfield) in pile",
+      "program": "Spiderman = set(s0...6)\nArchie = set(a0...5)\nGarfield = set(g0...4)\nall = Spiderman + Archie + Garfield\npile = sequence(all)\npile.together(Spiderman)\npile.together(Archie)\npile.together(Garfield)",
       "expected": 12441600,
       "tags": [
         "set",
@@ -2222,7 +2222,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/172.cfl",
-      "program_sha256": "379957304dde0744741fc6e04cb030b6eff90f6da734fb8c2bfea1a4bf09150b"
+      "program_sha256": "0b5d7199d8aa423bf49119ff77e537f53f462650cde27e81cd14f0cbc6b9d875"
     },
     {
       "suite": "real",
@@ -2240,7 +2240,7 @@
     {
       "suite": "real",
       "case_id": "175",
-      "program": "people = set(Wilma, Paul, other0...5)\nrow = sequence(people)\nnext_to(Wilma, Paul) not in row",
+      "program": "people = set(Wilma, Paul, other0...5)\nrow = sequence(people)\nnot (next_to(Wilma, Paul) in row)",
       "expected": 3600,
       "tags": [
         "set",
@@ -2250,7 +2250,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/175.cfl",
-      "program_sha256": "a2191bc2f86e48d5b844bd8d94b76ab6440ec15480f1d17e237c7311d2e2899c"
+      "program_sha256": "78db1d01124f8b0891864483e2e4521fbeaa46971198a5c24e2c6fb83897c173"
     },
     {
       "suite": "real",
@@ -2476,7 +2476,7 @@
     {
       "suite": "real",
       "case_id": "192",
-      "program": "odds = set(1, 3, 5, 7, 9)\nevens = set(0, 2, 4, 6, 8)digits = odds + evens\nseq = choose_replace_sequence(digits, 6)\n(odds, odds) not in seq\n(evens, evens) not in seq",
+      "program": "odds = set(1, 3, 5, 7, 9)\nevens = set(0, 2, 4, 6, 8)digits = odds + evens\nseq = choose_replace_sequence(digits, 6)\nnot ((odds, odds) in seq)\nnot ((evens, evens) in seq)",
       "expected": 31250,
       "tags": [
         "bag",
@@ -2488,12 +2488,12 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/192.cfl",
-      "program_sha256": "b58e27e78ed62de4dfec49db0f3604a36668895e4a68775ed4b7cfd9f42b197a"
+      "program_sha256": "a301f52ea3ae4dbf608ef587bbc7ca20972d4481124e22378792c7290137a3e8"
     },
     {
       "suite": "real",
       "case_id": "193",
-      "program": "odds = set(1, 3, 5, 7, 9)\nevens = set(2, 4, 6, 8)\nnumber = sequence(odds + evens)\n(odds, odds) not in number\n(evens, evens) not in number",
+      "program": "odds = set(1, 3, 5, 7, 9)\nevens = set(2, 4, 6, 8)\nnumber = sequence(odds + evens)\nnot ((odds, odds) in number)\nnot ((evens, evens) in number)",
       "expected": 2880,
       "tags": [
         "set",
@@ -2503,7 +2503,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/193.cfl",
-      "program_sha256": "08ab203f49d4c46c61e4e2f4d0b07e03c99632e05f98f6f22b5032a85cac1df5"
+      "program_sha256": "4783c9f0d93d4b91e472596f1b892bd2ebfca38b58937064413369ef367eccb5"
     },
     {
       "suite": "real",
@@ -2625,7 +2625,7 @@
     {
       "suite": "real",
       "case_id": "206",
-      "program": "plates = bag(blue: 5, red: 2, green: 2, orange: 1)\narrangement = circle(plates)\nnext_to(green, green) not in arrangement",
+      "program": "plates = bag(blue: 5, red: 2, green: 2, orange: 1)\narrangement = circle(plates)\nnot (next_to(green, green) in arrangement)",
       "expected": 588,
       "tags": [
         "set",
@@ -2635,12 +2635,12 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/206.cfl",
-      "program_sha256": "611f8ac4da1fdc2068764935ad35846eae946ff9dc9da502d6ddf38175b48c51"
+      "program_sha256": "d42641c3b78f4b3e80482d69b77e95dcb1a04bd1f9865af29a814fde0c3a17e4"
     },
     {
       "suite": "real",
       "case_id": "207",
-      "program": "German = set(G0...6)\nFrench = set(F0...5)\nItalian = set(I0...3)\nAll = German + French + Italian\nchairs = sequence(All)\ntogether(German) in chairs\ntogether(French) in chairs\ntogether(Italian) in chairs",
+      "program": "German = set(G0...6)\nFrench = set(F0...5)\nItalian = set(I0...3)\nAll = German + French + Italian\nchairs = sequence(All)\nchairs.together(German)\nchairs.together(French)\nchairs.together(Italian)",
       "expected": 3110400,
       "tags": [
         "set",
@@ -2650,7 +2650,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/207.cfl",
-      "program_sha256": "1a11fd7674b24667e2c9d225d939c89e3da127877208d17cdf9010467d5b5ae1"
+      "program_sha256": "58b572267504c9c20e59acad722b3bb9d8a49cc6676c17631cf682b75c86fde4"
     },
     {
       "suite": "real",
@@ -2896,7 +2896,7 @@
     {
       "suite": "real",
       "case_id": "231",
-      "program": "people = set(John, Wilma, Paul, other0...5)\nnot_consecutive = set(John, Wilma, Paul)\nrow = sequence(people)\n# (next_to(John, Wilma) not in row) or (next_to(John, Paul) not in row) or (next_to(Wilma, Paul) not in row)\ntogether(not_consecutive) not in row",
+      "program": "people = set(John, Wilma, Paul, other0...5)\nnot_consecutive = set(John, Wilma, Paul)\nrow = sequence(people)\n# (not (next_to(John, Wilma) in row)) or (not (next_to(John, Paul) in row)) or (not (next_to(Wilma, Paul) in row))\nnot row.together(not_consecutive)",
       "expected": 36000,
       "tags": [
         "set",
@@ -2906,7 +2906,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/231.cfl",
-      "program_sha256": "f7e4d2208d6e22d7f63e2b856425bcc13fc48e29eef181b6339fdf2991762743"
+      "program_sha256": "d1756d2dcc1c196d9ee6d6372f70ec05838dd1270387a432c768649f656ac5d9"
     },
     {
       "suite": "real",
@@ -3011,7 +3011,7 @@
     {
       "suite": "real",
       "case_id": "240",
-      "program": "England = set(E0...3)\nGermany = set(G0...4)\nFrance = set(F0...2)\ntable = circle(England + Germany + France)\ntogether(England) in table\ntogether(Germany) in table\ntogether(France) in table",
+      "program": "England = set(E0...3)\nGermany = set(G0...4)\nFrance = set(F0...2)\ntable = circle(England + Germany + France)\ntable.together(England)\ntable.together(Germany)\ntable.together(France)",
       "expected": 576,
       "tags": [
         "set",
@@ -3020,7 +3020,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/240.cfl",
-      "program_sha256": "d73deba20015b19bf113052031631abc5f9cc4b2e6f5fb2401d5f61f84707396"
+      "program_sha256": "b10e0c21e53a6a9cc2f7320ffa4492eb47c1e0e4decf1baf47b7ef1e13c01ec6"
     },
     {
       "suite": "real",
@@ -3317,7 +3317,7 @@
     {
       "suite": "real",
       "case_id": "265",
-      "program": "books = set(math, history, physics)\nshelf = choose_replace_sequence(books, 8)\n(math, math) not in shelf\n(history, history) not in shelf\n(physics, physics) not in shelf",
+      "program": "books = set(math, history, physics)\nshelf = choose_replace_sequence(books, 8)\nnot ((math, math) in shelf)\nnot ((history, history) in shelf)\nnot ((physics, physics) in shelf)",
       "expected": 384,
       "tags": [
         "set",
@@ -3328,7 +3328,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/265.cfl",
-      "program_sha256": "7eaef495dde53026f6af901264400575a99a7e02abad05fd9cbcb91b804c7704"
+      "program_sha256": "d51590444c52d24f9383e675b1b3b2a12c391539da7ff71015c81219a2b2e766"
     },
     {
       "suite": "real",
@@ -3522,7 +3522,7 @@
     {
       "suite": "real",
       "case_id": "284",
-      "program": "people = set(Alice, Bob, Eve, other0...5)\nseating = circle(people)\nnot_next_to = set(Alice, Bob, Eve)\nnext_to(not_next_to, not_next_to) not in seating",
+      "program": "people = set(Alice, Bob, Eve, other0...5)\nseating = circle(people)\nnot_next_to = set(Alice, Bob, Eve)\nnot (next_to(not_next_to, not_next_to) in seating)",
       "expected": 1440,
       "tags": [
         "set",
@@ -3532,7 +3532,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/284.cfl",
-      "program_sha256": "3754e44cb68c8a62154b8ee3b21c62a5e3a650cc603d211274568ef8372f865a"
+      "program_sha256": "5e6e575e64d17d4a5a684d8b5092122fd7af86b750562898ff0ca1ca99144a91"
     },
     {
       "suite": "real",
@@ -3605,7 +3605,7 @@
     {
       "suite": "real",
       "case_id": "291",
-      "program": "digits = set(1...6)\ncombination = choose_replace_sequence(digits, 5)\nnext_to(2, 4) not in combination\nnext_to(1, 3) not in combination\nnext_to(3, 5) not in combination\nnext_to(1, 5) not in combination\n(1, 1) not in combination\n(2, 2) not in combination\n(3, 3) not in combination\n(4, 4) not in combination\n(5, 5) not in combination",
+      "program": "digits = set(1...6)\ncombination = choose_replace_sequence(digits, 5)\nnot (next_to(2, 4) in combination)\nnot (next_to(1, 3) in combination)\nnot (next_to(3, 5) in combination)\nnot (next_to(1, 5) in combination)\nnot ((1, 1) in combination)\nnot ((2, 2) in combination)\nnot ((3, 3) in combination)\nnot ((4, 4) in combination)\nnot ((5, 5) in combination)",
       "expected": 180,
       "tags": [
         "set",
@@ -3616,12 +3616,12 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/291.cfl",
-      "program_sha256": "e4798dd009fa6c3473a4527c3514fc7762c6bbe9ebe60fb64b86f51a73eb3efc"
+      "program_sha256": "361dd5a5078e38172820a09d1c789347db4defd9969a89745282edee12608e59"
     },
     {
       "suite": "real",
       "case_id": "292",
-      "program": "sons = set(son0...4)\ndaughters = set(daughter0...3)\nfamily = sons + daughters\nrow = sequence(family)\ntogether(daughters) in row",
+      "program": "sons = set(son0...4)\ndaughters = set(daughter0...3)\nfamily = sons + daughters\nrow = sequence(family)\nrow.together(daughters)",
       "expected": 720,
       "tags": [
         "set",
@@ -3630,7 +3630,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/292.cfl",
-      "program_sha256": "c94154aa00df513a8256b4eea9810438a125d98bb7ea354d7f3bc342bdcbb526"
+      "program_sha256": "4736975dd85ad9e1a6e2ae78b01a1a4ba68370f62fb95bc288d1bbdcd75bd110"
     },
     {
       "suite": "real",
@@ -3818,7 +3818,7 @@
     {
       "suite": "real",
       "case_id": "307",
-      "program": "letters = set(A, B, C)\nword = choose_replace_sequence(letters, 7)\n(A, B) not in word and (B, C) not in word and (C, A) not in word",
+      "program": "letters = set(A, B, C)\nword = choose_replace_sequence(letters, 7)\nnot ((A, B) in word) and not ((B, C) in word) and not ((C, A) in word)",
       "expected": 192,
       "tags": [
         "set",
@@ -3829,12 +3829,12 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/307.cfl",
-      "program_sha256": "ac514479758b6fb737c130c06b06b25c3913aab8b06daff7d32c257309ebc1c9"
+      "program_sha256": "23017afa7f8cf45a5b001420933aa1d0f866fe07ee0cdd5b3757aa175cf8964c"
     },
     {
       "suite": "real",
       "case_id": "308",
-      "program": "digits = set(0...10)\nletters = set(l0...26)\nchosen_digits = choose_replace(digits, 4)\nchosen_letters = choose_replace(letters, 2)\nlicense_plate = sequence(chosen_digits ++ chosen_letters)\ntogether(chosen_letters) in license_plate",
+      "program": "digits = set(0...10)\nletters = set(l0...26)\nchosen_digits = choose_replace(digits, 4)\nchosen_letters = choose_replace(letters, 2)\nlicense_plate = sequence(chosen_digits ++ chosen_letters)\nlicense_plate.together(supp(chosen_letters))",
       "expected": 33800000,
       "tags": [
         "set",
@@ -3846,7 +3846,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/308.cfl",
-      "program_sha256": "ce1b6650fe262bfd743359f80a153426297d02ac4921e655557b691730abf20c"
+      "program_sha256": "c51bdc867c650f2b8c16b88b1451725eb4a7575bd0a19754b1bada48d83b086c"
     },
     {
       "suite": "real",
@@ -5805,7 +5805,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-10-operatorcount-1-constraintcount-2-0e826c127e923b9f",
-      "program": "bag_0 = bag(e_10: 3, e_2: 2, e_4: 1, e_7: 3, e_8: 1)\nsequence_0 = sequence(bag_0)\ne_4 < e_2 in sequence_0\nnext_to(e_2, e_10) in sequence_0",
+      "program": "bag_0 = bag(e_10: 3, e_2: 2, e_4: 1, e_7: 3, e_8: 1)\nsequence_0 = sequence(bag_0)\nsequence_0.before(e_4, e_2)\nnext_to(e_2, e_10) in sequence_0",
       "expected": 0,
       "tags": [
         "synthetic",
@@ -5817,7 +5817,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-10-operatorcount-1-constraintcount-2-0e826c127e923b9f.cfl",
-      "program_sha256": "db64000336c7aef593bf45fa9dcde28f98b0e21093c786bf013bec4c5a2e9efa"
+      "program_sha256": "62c6bc97890bf5f16210e17b65b17684450a4b89f034db68d7d902e5469c54bf"
     },
     {
       "suite": "synthetic",
@@ -5975,7 +5975,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-10-operatorcount-2-constraintcount-2-fd03ab679f3d7732",
-      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0)\nchoose_0 = choose(set_0, 5)\ntogether(set(e_5, e_7, e_4)) in circle_0\ne_3 in choose_0",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0)\nchoose_0 = choose(set_0, 5)\ncircle_0.together(set(e_5, e_7, e_4))\ne_3 in choose_0",
       "expected": 3810240,
       "tags": [
         "synthetic",
@@ -5987,12 +5987,12 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-10-operatorcount-2-constraintcount-2-fd03ab679f3d7732.cfl",
-      "program_sha256": "19939bbb30e975af77249caf4ae8c3a02fef37f31b041fe60c198676315ec1bf"
+      "program_sha256": "6ee9d5484546499a2619c780307fe0318c637e8a9da1f3625300d8254f3048df"
     },
     {
       "suite": "synthetic",
       "case_id": "entitycount-10-operatorcount-2-constraintcount-3-3c103cd215f398b2",
-      "program": "bag_0 = bag(e_1: 1, e_10: 1, e_3: 1, e_4: 2, e_6: 1, e_7: 2, e_8: 1, e_9: 1)\nchoose_0 = choose(bag_0, 7)\nsequence_0 = sequence(choose_0)\ne_9 in choose_0\nchoose_0 disjoint bag_0\ne_6 < e_10 not in sequence_0",
+      "program": "bag_0 = bag(e_1: 1, e_10: 1, e_3: 1, e_4: 2, e_6: 1, e_7: 2, e_8: 1, e_9: 1)\nchoose_0 = choose(bag_0, 7)\nsequence_0 = sequence(choose_0)\ne_9 in choose_0\nchoose_0 disjoint bag_0\nnot sequence_0.before(e_6, e_10)",
       "expected": 0,
       "tags": [
         "synthetic",
@@ -6004,7 +6004,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-10-operatorcount-2-constraintcount-3-3c103cd215f398b2.cfl",
-      "program_sha256": "5723bfb083db9083507e99e34eefe32b79c4fc6d4d6389b3c4d756f8c484808d"
+      "program_sha256": "16b2f99384c618e9088725273f57280532ab513628a14be689c0b437b81c8be2"
     },
     {
       "suite": "synthetic",
@@ -6485,7 +6485,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-1-aefbdbf0a1df8620",
-      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_5: 2, e_6: 1)\nsequence_0 = sequence(bag_0)\ne_6 < e_5 in sequence_0",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_5: 2, e_6: 1)\nsequence_0 = sequence(bag_0)\nsequence_0.before(e_6, e_5)",
       "expected": 120,
       "tags": [
         "synthetic",
@@ -6497,7 +6497,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-6-operatorcount-1-constraintcount-1-aefbdbf0a1df8620.cfl",
-      "program_sha256": "8e4cdc2209fa407bb786cf4d7a6b07cf2f6536322a6fe44604e9cc66b0be72a6"
+      "program_sha256": "4785e1394eb578bbb539b60fbe093c5dbfc6f022ace7ea9137d50919c1f416fe"
     },
     {
       "suite": "synthetic",
@@ -6519,7 +6519,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-1-c2e6ac1d7d372886",
-      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 1, e_6: 3)\ncircle_0 = circle(bag_0, reflection=True)\nnext_to(e_5, e_1) not in circle_0",
+      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 1, e_6: 3)\ncircle_0 = circle(bag_0, reflection=True)\nnot (next_to(e_5, e_1) in circle_0)",
       "expected": 6,
       "tags": [
         "synthetic",
@@ -6531,12 +6531,12 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-6-operatorcount-1-constraintcount-1-c2e6ac1d7d372886.cfl",
-      "program_sha256": "ec833ddcf34e37bed613ff1ec04c8598ecea915ff7596c9f92c25379ab95de7c"
+      "program_sha256": "5b4e0e208ac2ebc18a22b74b6be226c875e19fd8d4a38e6384c88e6304750472"
     },
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-2-0fd8b0e226dabf0f",
-      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 2, e_5: 1, e_6: 1)\nsequence_0 = sequence(bag_0)\nnext_to(e_6, e_1) not in sequence_0\ntogether(set(e_4, e_5, e_2)) in sequence_0",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 2, e_5: 1, e_6: 1)\nsequence_0 = sequence(bag_0)\nnot (next_to(e_6, e_1) in sequence_0)\nsequence_0.together(set(e_4, e_5, e_2))",
       "expected": 24,
       "tags": [
         "synthetic",
@@ -6548,12 +6548,12 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-6-operatorcount-1-constraintcount-2-0fd8b0e226dabf0f.cfl",
-      "program_sha256": "fdb18b2a267341a7217b2b36fe0d9e5e05b96cdcdd5d97a503988aa62d241a6e"
+      "program_sha256": "88b3b3174c758f7dd7687418ce8954b5539174034a626e2f98d9b8b8f8d8fba7"
     },
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-2-699b0cadc6e5bcdd",
-      "program": "bag_0 = bag(e_1: 1, e_3: 2, e_4: 1, e_5: 1, e_6: 1)\nsequence_0 = sequence(bag_0)\nnext_to(e_6, e_4) not in sequence_0\ne_1 < e_5 in sequence_0",
+      "program": "bag_0 = bag(e_1: 1, e_3: 2, e_4: 1, e_5: 1, e_6: 1)\nsequence_0 = sequence(bag_0)\nnot (next_to(e_6, e_4) in sequence_0)\nsequence_0.before(e_1, e_5)",
       "expected": 120,
       "tags": [
         "synthetic",
@@ -6565,7 +6565,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-6-operatorcount-1-constraintcount-2-699b0cadc6e5bcdd.cfl",
-      "program_sha256": "18e7beb7c58388b2b47cf0fee71e63be18fddd63b3e2eb5d75da71f2049553e4"
+      "program_sha256": "906c17e9b3536fc39c27ac6bb58da6d6327af4dccc59477bf92e855526dcadb4"
     },
     {
       "suite": "synthetic",
@@ -6587,7 +6587,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-2-7fb97b49ac44c5e6",
-      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_5: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\ntogether(set(e_3, e_2, e_5)) not in circle_0\nnext_to(e_3, e_2) in circle_0",
+      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_5: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\nnot circle_0.together(set(e_3, e_2, e_5))\nnext_to(e_3, e_2) in circle_0",
       "expected": 0,
       "tags": [
         "synthetic",
@@ -6599,7 +6599,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-6-operatorcount-1-constraintcount-2-7fb97b49ac44c5e6.cfl",
-      "program_sha256": "e532f56f69b13e56fb34ec2d01f456957bd1d4b6fde94d9f5dacf5876f7f7a0a"
+      "program_sha256": "44925d4e9779bb930f196862dca4a12a9cea93b680cc7c7f0967bed6118cd434"
     },
     {
       "suite": "synthetic",
@@ -6672,7 +6672,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-3-ae6115d84e6b3da5",
-      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_4: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\ntogether(set(e_6, e_2)) in circle_0\nnext_to(e_2, e_6) not in circle_0\nnext_to(e_6, e_4) in circle_0",
+      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_4: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\ncircle_0.together(set(e_6, e_2))\nnot (next_to(e_2, e_6) in circle_0)\nnext_to(e_6, e_4) in circle_0",
       "expected": 0,
       "tags": [
         "synthetic",
@@ -6684,7 +6684,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-6-operatorcount-1-constraintcount-3-ae6115d84e6b3da5.cfl",
-      "program_sha256": "493f42969b37b4e9ceefb068bfb959505f78f822ec93fe41b67199faabbc7732"
+      "program_sha256": "2a7a110dd6a6f5cde9a1385c7da82b67aa3b6014e3d15a408224435ac2b9e303"
     },
     {
       "suite": "synthetic",
@@ -6893,7 +6893,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-2-constraintcount-2-9222f8b87ab8c7e1",
-      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 3, e_6: 1)\ncircle_0 = circle(bag_0)\nchoose_0 = choose(bag_0, 4)\nnext_to(e_6, e_4) not in circle_0\nnext_to(e_1, e_4) in circle_0",
+      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 3, e_6: 1)\ncircle_0 = circle(bag_0)\nchoose_0 = choose(bag_0, 4)\nnot (next_to(e_6, e_4) in circle_0)\nnext_to(e_1, e_4) in circle_0",
       "expected": 42,
       "tags": [
         "synthetic",
@@ -6905,12 +6905,12 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-6-operatorcount-2-constraintcount-2-9222f8b87ab8c7e1.cfl",
-      "program_sha256": "d977dc4e6032f4be51d6473cf2ed101dac291afeb0a074f4c04ae584597f2257"
+      "program_sha256": "fe2a8130cf0eb90cc361c831f4191ce01a86e129380445df9273298e7bef18e2"
     },
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-2-constraintcount-2-cec10f42ac958b3a",
-      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nsequence_0 = sequence(set_0)\ntuple_0 = tuple(set_0)\ne_2 < e_3 in sequence_0\n(e_1, e_2) in sequence_0",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nsequence_0 = sequence(set_0)\ntuple_0 = tuple(set_0)\nsequence_0.before(e_2, e_3)\n(e_1, e_2) in sequence_0",
       "expected": 43200,
       "tags": [
         "synthetic",
@@ -6922,7 +6922,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-6-operatorcount-2-constraintcount-2-cec10f42ac958b3a.cfl",
-      "program_sha256": "d2f21dcac13baf6e3cc99945504356fa00de10aef8f05fe519d11e08fc841a88"
+      "program_sha256": "c2bb4b5c2ac90a615e8f3157332bc2a953a0e235413533c6f36fd5abf31f945a"
     },
     {
       "suite": "synthetic",
@@ -7131,7 +7131,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-1-constraintcount-2-db03d03a3ac2b0cb",
-      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\nnext_to(e_7, e_2) not in circle_0\ntogether(set(e_2, e_5)) not in circle_0",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\nnot (next_to(e_7, e_2) in circle_0)\nnot circle_0.together(set(e_2, e_5))",
       "expected": 1200,
       "tags": [
         "synthetic",
@@ -7143,12 +7143,12 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-8-operatorcount-1-constraintcount-2-db03d03a3ac2b0cb.cfl",
-      "program_sha256": "bdc4ff0c62b88a3c1e84e13e710c7f2c997aed933cef12ff3d5dd04272a9377d"
+      "program_sha256": "7deff342468d4781ce20ffecf2372f18e479f724a77aad0cd1ccca2f1ae1cb21"
     },
     {
       "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-1-constraintcount-2-eec0c01b36b41b1f",
-      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 1, e_7: 4, e_8: 1)\ncircle_0 = circle(bag_0)\nnext_to(e_8, e_7) not in circle_0\nnext_to(e_4, e_1) not in circle_0",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 1, e_7: 4, e_8: 1)\ncircle_0 = circle(bag_0)\nnot (next_to(e_8, e_7) in circle_0)\nnot (next_to(e_4, e_1) in circle_0)",
       "expected": 26,
       "tags": [
         "synthetic",
@@ -7160,7 +7160,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-8-operatorcount-1-constraintcount-2-eec0c01b36b41b1f.cfl",
-      "program_sha256": "22a515fbc59751ad5de1b5ef9e4a082a1d36b6ed8445061278822a43c4035daa"
+      "program_sha256": "e25e2d5c08fd36166f613780905ff7e9bb7bc8ad4c80e86a0bdbb33f013252f1"
     },
     {
       "suite": "synthetic",
@@ -7437,7 +7437,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-4-constraintcount-3-3fc73f82e58ffbfd",
-      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_4: 1, e_5: 1, e_7: 1, e_8: 2)\nchoose_0 = choose(bag_0, 4)\ncircle_0 = circle(choose_0)\ncompose_0 = compose(choose_0, 3)\ncircle_1 = circle(compose_0[0])\ntogether(set(e_5, e_1, e_2)) not in circle_0\n|compose_0[1]| + |choose_0| == 1\ntogether(set(e_2, e_3, e_5)) in circle_1",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_4: 1, e_5: 1, e_7: 1, e_8: 2)\nchoose_0 = choose(bag_0, 4)\ncircle_0 = circle(choose_0)\ncompose_0 = compose(choose_0, 3)\ncircle_1 = circle(compose_0[0])\nnot circle_0.together(set(e_5, e_1, e_2))\n|compose_0[1]| + |choose_0| == 1\ncircle_1.together(set(e_2, e_3, e_5))",
       "expected": 0,
       "tags": [
         "synthetic",
@@ -7449,7 +7449,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-8-operatorcount-4-constraintcount-3-3fc73f82e58ffbfd.cfl",
-      "program_sha256": "86a91580e57cf9a5a3bfb258c8d5bdb7221c9cd98be420cade59d352fe67e3bc"
+      "program_sha256": "753bdba71b0714bd072519c1e1a382e49553494b8597ee0a6a6fe6721d49a285"
     }
   ]
 }

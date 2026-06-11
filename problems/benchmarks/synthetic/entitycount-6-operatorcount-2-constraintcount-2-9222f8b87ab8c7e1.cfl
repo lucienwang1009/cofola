@@ -1,5 +1,5 @@
 bag_0 = bag(e_1: 1, e_4: 1, e_5: 3, e_6: 1)
 circle_0 = circle(bag_0)
 choose_0 = choose(bag_0, 4)
-next_to(e_6, e_4) not in circle_0
+not (next_to(e_6, e_4) in circle_0)
 next_to(e_1, e_4) in circle_0
