@@ -3,6 +3,6 @@ French = set(F0...5)
 Italian = set(I0...3)
 All = German + French + Italian
 chairs = sequence(All)
-together(German) in chairs
-together(French) in chairs
-together(Italian) in chairs
+chairs.together(German)
+chairs.together(French)
+chairs.together(Italian)

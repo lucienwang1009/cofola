@@ -2,5 +2,5 @@ Democrats = set(D0...5)
 Republicans = set(R0...5)
 committee = Democrats + Republicans + set(Independent)
 table = circle(committee)
-together(Democrats) in table
-together(Republicans) in table
+table.together(Democrats)
+table.together(Republicans)
