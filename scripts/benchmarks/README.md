@@ -124,7 +124,7 @@ prepended to `PATH` so the Savile Row and Minion binaries next to it are found):
 ### 5. Smoke test
 
 ```bash
-uv run pytest tests/test_benchmark_cases.py tests/test_benchmark_run.py -q
+uv run pytest tests/benchmarks/test_benchmark_cases.py tests/benchmarks/test_benchmark_run.py -q
 uv run python -m scripts.benchmarks.run --suite real --backends wfomc --timeout 30
 ```
 

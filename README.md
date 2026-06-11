@@ -118,7 +118,7 @@ Useful commands:
 
 ```bash
 uv run pytest
-COFOLA_ALL_TESTS=1 uv run pytest tests/test_all_problems.py
+COFOLA_ALL_TESTS=1 uv run pytest tests/benchmarks/test_all_problems.py
 uv run pyright
 ```
 
