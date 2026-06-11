@@ -277,11 +277,11 @@ class BagClassification(AnalysisPass[AnalysisResult]):
                 info.indis_entities = {k: v.copy() for k, v in src_info.indis_entities.items()}
 
         elif isinstance(defn, (BagUnion, BagAdditiveUnion, BagIntersection, BagDifference)):
-            # Derived bags are not lifted: every entity of the result is
-            # distinguishable. Use the result's own entity set rather than the
-            # sources' dis_entities — a source may keep entities in
-            # indis_entities (e.g. equal multiplicities), and those must not be
-            # dropped from the derived bag. The result's p_entities_multiplicity
+            # BagUnion/BagAdditiveUnion/BagIntersection/BagDifference are encoded
+            # non-lifted: every entity in the result needs its own multiplicity
+            # variable. Use the result's own entity set rather than the sources'
+            # dis_entities — a source may keep entities in indis_entities (e.g. equal
+            # multiplicities), and those must not be dropped. The result's p_entities_multiplicity
             # already reflects which entities actually appear (intersection drops
             # entities not in both; difference drops right-only entities).
             info.dis_entities = set(info.p_entities_multiplicity.keys())
