@@ -47,6 +47,14 @@ sup = choose(B)
 sub subset sup
 """
         ) == 3
+        assert parse_and_solve(
+            """
+B = bag(a: 1)
+sub = choose(B)
+sup = choose(B)
+not sub subset sup
+"""
+        ) == 1
         # `a` singleton, `b` multiplicity 2: 3 (a) * 6 (b) = 18.
         assert parse_and_solve(
             """
