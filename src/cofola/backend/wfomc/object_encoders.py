@@ -503,9 +503,20 @@ def _encode_bag_difference(
     """Encode a BagDifference node: ref = max(left - right, 0) per entity."""
     obj_pred = context.get_pred(ref, create=True, use=False)
     left_pred = context.get_pred(defn.left)
+    right_pred = context.get_pred(defn.right)
     context.sentence = context.sentence & parse(
         f"\\forall X: ({obj_pred}(X) -> {left_pred}(X))"
     )
+    # Presence of a non-singleton entity in the difference is driven by its
+    # multiplicity variable below. Singleton entities have no such variable, so
+    # pin their membership directly: for 0/1 multiplicities,
+    # max(left - right, 0) > 0  iff  left and not right.
+    if context.singletons_pred is not None:
+        sp = context.singletons_pred
+        context.sentence = context.sentence & parse(
+            f"\\forall X: ({sp}(X) -> "
+            f"({obj_pred}(X) <-> ({left_pred}(X) & ~{right_pred}(X))))"
+        )
     bag_info = analysis.bag_info[ref]
     for entity in bag_info.dis_entities:
         if entity in context.singletons:
