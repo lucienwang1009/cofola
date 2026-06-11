@@ -41,7 +41,7 @@ seq = sequence(T)
         """
 S = set(a, b, c)
 arr = sequence(S)
-together(a) in arr
+arr.together(a)
 """,
         "together",
     ),
@@ -92,7 +92,7 @@ T == S
         """
 S = set(a, b, c, d)
 C = circle(S)
-a < b in C
+C.before(a, b)
 """,
         "Circle",
     ),
@@ -105,6 +105,43 @@ seq = sequence(S)
 seq.count(together(S)) > 0
 """,
         "together",
+    ),
+    (
+        "seq_count_less_than",
+        """
+S = set(a, b, c, d)
+seq = sequence(S)
+seq.count(a < b) > 0
+""",
+        "count",
+    ),
+    (
+        "coverage_on_global_pattern",
+        """
+S = set(a, b, c, d)
+seq = sequence(S)
+a < b in seq for each a
+""",
+        "coverage",
+    ),
+    (
+        "coverage_anchor_not_pattern_arg",
+        """
+S = set(a, b, c, d)
+seq = sequence(S)
+(a, b) in seq for each c
+""",
+        "coverage",
+    ),
+    (
+        "pattern_arg_bag",
+        """
+B = bag(a, b)
+S = set(c)
+seq = sequence(B)
+next_to(B, c) in seq
+""",
+        "Set",
     ),
     # 10) Indexing into an unordered Partition — must use Composition.
     (

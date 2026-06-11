@@ -6,7 +6,7 @@ from cofola.backend.wfomc.api import Const, parse
 
 import cofola.frontend.constraints as ir_cst
 import cofola.frontend.objects as ir_obj
-from cofola.backend.wfomc.context import Context
+from cofola.backend.wfomc.context import Context, Expr
 from cofola.backend.wfomc.encoding_helpers import (
     _bag_entity_expr,
     _encode_entity_in_ctx,
@@ -244,6 +244,15 @@ def _get_seq_entity_pred(
     return context.get_pred(entity_or_ref)
 
 
+def _get_seq_domain_pred(seq_ref: ObjRef, context: Context) -> object:
+    seq_defn = context.problem.get_object(seq_ref)
+    if not isinstance(seq_defn, (ir_obj.SequenceDef, ir_obj.CircleDef)):
+        raise TypeError("Sequence pattern constraints require a sequence or circle")
+    return context.get_pred(
+        seq_defn.flatten if seq_defn.flatten is not None else seq_defn.source
+    )
+
+
 def _build_group_type_pred_for_seq(
     group_ref: ObjRef,
     seq_ref: ObjRef,
@@ -272,6 +281,8 @@ def _build_group_type_pred_for_seq(
         if (seq_ref, e) in context.ref_entity2pred
     ]
     if not type_preds:
+        # The group has no entity types that can appear in this sequence, so
+        # return a predicate that is false on the whole WFOMC domain.
         false_pred = create_aux_pred(1)
         for e in context.analysis.all_entities:
             context.unary_evidence.add(~false_pred(Const(e.name)))
@@ -293,13 +304,17 @@ def _encode_sequence_pattern_constraint(
     """Encode a SequencePatternConstraint."""
     match c.pattern:
         case ir_cst.TogetherPattern():
+            if c.coverage is not None:
+                raise TypeError("Coverage qualifiers are only valid for local patterns")
             _encode_together_pattern(c.seq, c.pattern, c.positive, context)
         case ir_cst.LessThanPattern():
+            if c.coverage is not None:
+                raise TypeError("Coverage qualifiers are only valid for local patterns")
             _encode_less_than_pattern(c.seq, c.pattern, c.positive, context)
         case ir_cst.PredecessorPattern():
-            _encode_predecessor_pattern(c.seq, c.pattern, c.positive, context)
+            _encode_predecessor_pattern(c.seq, c.pattern, c.positive, c.coverage, context)
         case ir_cst.NextToPattern():
-            _encode_next_to_pattern(c.seq, c.pattern, c.positive, context)
+            _encode_next_to_pattern(c.seq, c.pattern, c.positive, c.coverage, context)
         case _:
             raise TypeError(f"Unknown sequence pattern type: {type(c.pattern).__name__}")
 
@@ -417,10 +432,7 @@ def _encode_together_pattern(
     # elements (pred_pred(Y,X) is vacuously False for non-source X, so the
     # ∀Y-quantifier is trivially satisfied).
     pred_pred = context.get_predecessor_pred(seq_ref)
-    seq_defn = context.problem.get_object(seq_ref)
-    domain_pred = context.get_pred(
-        seq_defn.flatten if seq_defn.flatten is not None else seq_defn.source
-    )
+    domain_pred = _get_seq_domain_pred(seq_ref, context)
 
     # Create "first" predicate
     name = context.problem.get_name(group_ref) or f"obj_{group_ref.id}"
@@ -466,11 +478,11 @@ def _encode_less_than_pattern(
     context: Context,
 ) -> None:
     """Encode a LessThanPattern: left appears before right in seq."""
-    _encode_sequence_relation_universal(
+    _encode_sequence_relation_global(
         seq_ref,
         pattern.left,
         pattern.right,
-        context.get_leq_pred(seq_ref),
+        context.get_lt_pred(seq_ref),
         positive,
         context,
     )
@@ -480,15 +492,18 @@ def _encode_predecessor_pattern(
     seq_ref: ObjRef,
     pattern: ir_cst.PredecessorPattern,
     positive: bool,
+    coverage: ir_cst.PatternArg | None,
     context: Context,
 ) -> None:
     """Encode a PredecessorPattern: first immediately precedes second in seq."""
-    _encode_sequence_relation_universal(
+    _encode_sequence_relation_local(
         seq_ref,
         pattern.first,
         pattern.second,
+        "pred",
         context.get_predecessor_pred(seq_ref),
         positive,
+        coverage,
         context,
     )
 
@@ -497,22 +512,25 @@ def _encode_next_to_pattern(
     seq_ref: ObjRef,
     pattern: ir_cst.NextToPattern,
     positive: bool,
+    coverage: ir_cst.PatternArg | None,
     context: Context,
 ) -> None:
     """Encode a NextToPattern: first and second are adjacent in seq."""
-    _encode_sequence_relation_universal(
+    _encode_sequence_relation_local(
         seq_ref,
         pattern.first,
         pattern.second,
+        "next_to",
         context.get_next_to_pred(seq_ref),
         positive,
+        coverage,
         context,
     )
 
 
 # =============================================================================
 
-def _encode_sequence_relation_universal(
+def _encode_sequence_relation_global(
     seq_ref: ObjRef,
     left: Entity | ObjRef,
     right: Entity | ObjRef,
@@ -520,25 +538,126 @@ def _encode_sequence_relation_universal(
     positive: bool,
     context: Context,
 ) -> None:
-    """Encode an asserted sequence relation with universal pattern semantics.
-
-    Pattern constraints such as ``A < B in seq`` mean every matching left
-    occurrence stands in the relation to every matching right occurrence.
-    Negative constraints mean the pattern has no occurrences, so every matching
-    pair must fail the relation.
-    """
+    """Encode a global sequence relation such as ``A < B in seq``."""
     left_pred = _get_seq_entity_pred(left, seq_ref, context)
     right_pred = _get_seq_entity_pred(right, seq_ref, context)
+    domain_pred = _get_seq_domain_pred(seq_ref, context)
     if positive:
         context.sentence = context.sentence & parse(
-            f"\\forall X: (\\forall Y: (({left_pred}(X) & {right_pred}(Y)) -> "
+            f"\\forall X: (\\forall Y: (({left_pred}(X) & {domain_pred}(X) & "
+            f"{right_pred}(Y) & {domain_pred}(Y)) -> "
             f"{relation_pred}(X,Y)))"
         )
     else:
         context.sentence = context.sentence & parse(
-            f"\\forall X: (\\forall Y: (({left_pred}(X) & {right_pred}(Y)) -> "
-            f"~{relation_pred}(X,Y)))"
+            f"\\exists X: (\\exists Y: ({left_pred}(X) & {domain_pred}(X) & "
+            f"{right_pred}(Y) & {domain_pred}(Y) & ~{relation_pred}(X,Y)))"
         )
+
+
+def _encode_sequence_relation_local(
+    seq_ref: ObjRef,
+    left: Entity | ObjRef,
+    right: Entity | ObjRef,
+    relation_name: str,
+    relation_pred: object,
+    positive: bool,
+    coverage: ir_cst.PatternArg | None,
+    context: Context,
+) -> None:
+    """Encode a local sequence pattern.
+
+    Without a coverage qualifier, local ``p in seq`` means at least one
+    occurrence of ``p`` exists. With ``for each A``, every occurrence matching
+    the selected pattern argument must participate in such a local occurrence.
+    """
+    if coverage is None:
+        if not positive:
+            _encode_sequence_relation_absence(seq_ref, left, right, relation_pred, context)
+            return
+        pair_var = _encode_sequence_relation_count(
+            seq_ref,
+            left,
+            right,
+            relation_name,
+            relation_pred,
+            context,
+        )
+        context.validator.append(pair_var > 0)
+        return
+
+    _encode_sequence_relation_coverage(
+        seq_ref,
+        left,
+        right,
+        relation_pred,
+        positive,
+        coverage,
+        context,
+    )
+
+
+def _encode_sequence_relation_coverage(
+    seq_ref: ObjRef,
+    left: Entity | ObjRef,
+    right: Entity | ObjRef,
+    relation_pred: object,
+    positive: bool,
+    coverage: ir_cst.PatternArg,
+    context: Context,
+) -> None:
+    left_pred = _get_seq_entity_pred(left, seq_ref, context)
+    right_pred = _get_seq_entity_pred(right, seq_ref, context)
+    domain_pred = _get_seq_domain_pred(seq_ref, context)
+
+    if coverage == left:
+        if positive:
+            context.sentence = context.sentence & parse(
+                f"\\forall X: (({left_pred}(X) & {domain_pred}(X)) -> "
+                f"(\\exists Y: ({right_pred}(Y) & {domain_pred}(Y) & "
+                f"{relation_pred}(X,Y))))"
+            )
+        else:
+            context.sentence = context.sentence & parse(
+                f"\\exists X: ({left_pred}(X) & {domain_pred}(X) & "
+                f"(\\forall Y: (({right_pred}(Y) & {domain_pred}(Y)) -> "
+                f"~{relation_pred}(X,Y))))"
+            )
+        return
+
+    if coverage == right:
+        if positive:
+            context.sentence = context.sentence & parse(
+                f"\\forall Y: (({right_pred}(Y) & {domain_pred}(Y)) -> "
+                f"(\\exists X: ({left_pred}(X) & {domain_pred}(X) & "
+                f"{relation_pred}(X,Y))))"
+            )
+        else:
+            context.sentence = context.sentence & parse(
+                f"\\exists Y: ({right_pred}(Y) & {domain_pred}(Y) & "
+                f"(\\forall X: (({left_pred}(X) & {domain_pred}(X)) -> "
+                f"~{relation_pred}(X,Y))))"
+            )
+        return
+
+    raise TypeError("Coverage qualifier must name one of the local pattern arguments")
+
+
+def _encode_sequence_relation_absence(
+    seq_ref: ObjRef,
+    left: Entity | ObjRef,
+    right: Entity | ObjRef,
+    relation_pred: object,
+    context: Context,
+) -> None:
+    """Encode local pattern absence directly in first-order logic."""
+    left_pred = _get_seq_entity_pred(left, seq_ref, context)
+    right_pred = _get_seq_entity_pred(right, seq_ref, context)
+    domain_pred = _get_seq_domain_pred(seq_ref, context)
+    context.sentence = context.sentence & parse(
+        f"\\forall X: (\\forall Y: (({left_pred}(X) & {domain_pred}(X) & "
+        f"{right_pred}(Y) & {domain_pred}(Y)) -> ~{relation_pred}(X,Y)))"
+    )
 
 
 def _encode_sequence_relation_count(
@@ -548,7 +667,7 @@ def _encode_sequence_relation_count(
     relation_name: str,
     relation_pred: object,
     context: Context,
-) -> object:
+) -> Expr:
     """Encode a binary sequence relation and return its counting variable."""
     left_pred = _get_seq_entity_pred(left, seq_ref, context)
     right_pred = _get_seq_entity_pred(right, seq_ref, context)
@@ -577,16 +696,6 @@ def _get_seq_pattern_count_var(
     pattern = atom.pattern
 
     match pattern:
-        case ir_cst.LessThanPattern():
-            return _encode_sequence_relation_count(
-                seq_ref,
-                pattern.left,
-                pattern.right,
-                "leq",
-                context.get_leq_pred(seq_ref),
-                context,
-            )
-
         case ir_cst.PredecessorPattern():
             return _encode_sequence_relation_count(
                 seq_ref,
@@ -608,4 +717,6 @@ def _get_seq_pattern_count_var(
             )
 
         case _:
-            raise TypeError(f"Unknown pattern type: {type(pattern)}")
+            raise TypeError(
+                f"Only local patterns can be counted, got {type(pattern).__name__}"
+            )

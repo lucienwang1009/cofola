@@ -104,6 +104,7 @@ class Context:
         # Find the unique SequenceDef, if any (at most one per problem after lowering)
         self.sequence_ref: ObjRef | None = self._find_sequence_ref()
         self.ref2leq_pred: dict[ObjRef, Pred] = {}
+        self.ref2lt_pred: dict[ObjRef, Pred] = {}
         self.ref2predecessor_pred: dict[ObjRef, Pred] = {}
         self.ref2next_to_pred: dict[ObjRef, Pred] = {}
 
@@ -392,6 +393,26 @@ class Context:
         )
         self.ref2predecessor_pred[seq_ref] = seq_pred
         return seq_pred
+
+    def get_lt_pred(self, seq_ref: ObjRef) -> Pred:
+        """Get the strict sequence order predicate for a SequenceDef.
+
+        The global LEQ predicate is reflexive. Pattern constraints use strict
+        before semantics, so LT(X,Y) is derived from the sequence-restricted
+        order by excluding the reverse order.
+        """
+        if seq_ref in self.ref2lt_pred:
+            return self.ref2lt_pred[seq_ref]
+
+        leq_pred = self.get_leq_pred(seq_ref)
+        lt_name = f"{self._get_name(seq_ref)}_LT"
+        lt_pred = self.create_pred(lt_name, 2)
+        self.sentence = self.sentence & parse(
+            f"\\forall X: (\\forall Y: ({lt_pred}(X,Y) <-> "
+            f"({leq_pred}(X,Y) & ~{leq_pred}(Y,X))))"
+        )
+        self.ref2lt_pred[seq_ref] = lt_pred
+        return lt_pred
 
     def get_next_to_pred(self, seq_ref: ObjRef) -> Pred:
         """Get the NEXT_TO predicate for a SequenceDef.

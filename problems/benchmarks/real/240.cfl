@@ -2,6 +2,6 @@ England = set(E0...3)
 Germany = set(G0...4)
 France = set(F0...2)
 table = circle(England + Germany + France)
-together(England) in table
-together(Germany) in table
-together(France) in table
+table.together(England)
+table.together(Germany)
+table.together(France)
