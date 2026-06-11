@@ -1,6 +1,8 @@
 """Constraint transformer mixin for Cofola parser."""
 from __future__ import annotations
 
+from loguru import logger
+
 from cofola.frontend.constraints import (
     AndConstraint,
     BagEqConstraint,
@@ -24,6 +26,26 @@ from cofola.frontend.constraints import (
 from cofola.frontend.objects import BagObjDef, ObjDef
 from cofola.frontend.objects import Entity, ObjRef
 from cofola.parser.utils import CofolaParsingError, TupleIndexSentinel
+
+
+def _warn_if_deprecated_global_in_form(pattern: object) -> None:
+    """Warn when a global pattern is written with the legacy ``... in seq`` form.
+
+    Global constraints (``together`` and ``before``) are documented only in the
+    method form ``seq.together(...)`` / ``seq.before(...)``. The ``together(...)
+    in seq`` and ``a < b in seq`` spellings are still parsed for backward
+    compatibility but are deprecated.
+    """
+    if isinstance(pattern, TogetherPattern):
+        logger.warning(
+            "`together(...) in seq` is deprecated; use the method form "
+            "`seq.together(...)` instead."
+        )
+    elif isinstance(pattern, LessThanPattern):
+        logger.warning(
+            "`a < b in seq` is deprecated; use the method form "
+            "`seq.before(a, b)` instead."
+        )
 
 
 def _resolve_subset_constraint(
@@ -162,14 +184,38 @@ class ConstraintTransformerMixin:
         return count
 
     def seq_constraint(self, args):
-        pattern, is_in, obj = args
+        if len(args) == 2:
+            seq, pattern = args
+            return SequencePatternConstraint(seq=seq, pattern=pattern)
+
+        pattern, in_token_or_flag, obj, *coverage = args
         # TypeChecker enforces that `seq` is a Sequence/Circle via the
         # SequencePatternConstraint signature.
-        return SequencePatternConstraint(seq=obj, pattern=pattern, positive=is_in)
+        _warn_if_deprecated_global_in_form(pattern)
+        is_in = True if coverage else in_token_or_flag
+        coverage_arg = coverage[0] if coverage else None
+        return SequencePatternConstraint(
+            seq=obj,
+            pattern=pattern,
+            positive=is_in,
+            coverage=coverage_arg,
+        )
+
+    def coverage(self, args):
+        _, _, pattern_arg = args
+        return pattern_arg
 
     def seq_pattern(self, args):
         # Pattern objects are frontend dataclasses — return directly, not added to builder
         return args[0]
+
+    def seq_together_method(self, args):
+        obj = args[2]
+        return TogetherPattern(group=obj)
+
+    def seq_before_method(self, args):
+        entity_or_obj1, entity_or_obj2 = args[2], args[3]
+        return LessThanPattern(left=entity_or_obj1, right=entity_or_obj2)
 
     def together(self, args):
         obj = args[2]

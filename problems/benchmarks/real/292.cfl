@@ -2,4 +2,4 @@ sons = set(son0...4)
 daughters = set(daughter0...3)
 family = sons + daughters
 row = sequence(family)
-together(daughters) in row
+row.together(daughters)

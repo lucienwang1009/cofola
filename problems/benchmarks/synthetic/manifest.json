@@ -56,7 +56,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-10-operatorcount-1-constraintcount-2-0e826c127e923b9f",
-      "program": "bag_0 = bag(e_10: 3, e_2: 2, e_4: 1, e_7: 3, e_8: 1)\nsequence_0 = sequence(bag_0)\ne_4 < e_2 in sequence_0\nnext_to(e_2, e_10) in sequence_0",
+      "program": "bag_0 = bag(e_10: 3, e_2: 2, e_4: 1, e_7: 3, e_8: 1)\nsequence_0 = sequence(bag_0)\nsequence_0.before(e_4, e_2)\nnext_to(e_2, e_10) in sequence_0",
       "expected": 0,
       "tags": [
         "synthetic",
@@ -68,7 +68,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-10-operatorcount-1-constraintcount-2-0e826c127e923b9f.cfl",
-      "program_sha256": "db64000336c7aef593bf45fa9dcde28f98b0e21093c786bf013bec4c5a2e9efa"
+      "program_sha256": "62c6bc97890bf5f16210e17b65b17684450a4b89f034db68d7d902e5469c54bf"
     },
     {
       "suite": "synthetic",
@@ -226,7 +226,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-10-operatorcount-2-constraintcount-2-fd03ab679f3d7732",
-      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0)\nchoose_0 = choose(set_0, 5)\ntogether(set(e_5, e_7, e_4)) in circle_0\ne_3 in choose_0",
+      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0)\nchoose_0 = choose(set_0, 5)\ncircle_0.together(set(e_5, e_7, e_4))\ne_3 in choose_0",
       "expected": 3810240,
       "tags": [
         "synthetic",
@@ -238,12 +238,12 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-10-operatorcount-2-constraintcount-2-fd03ab679f3d7732.cfl",
-      "program_sha256": "19939bbb30e975af77249caf4ae8c3a02fef37f31b041fe60c198676315ec1bf"
+      "program_sha256": "6ee9d5484546499a2619c780307fe0318c637e8a9da1f3625300d8254f3048df"
     },
     {
       "suite": "synthetic",
       "case_id": "entitycount-10-operatorcount-2-constraintcount-3-3c103cd215f398b2",
-      "program": "bag_0 = bag(e_1: 1, e_10: 1, e_3: 1, e_4: 2, e_6: 1, e_7: 2, e_8: 1, e_9: 1)\nchoose_0 = choose(bag_0, 7)\nsequence_0 = sequence(choose_0)\ne_9 in choose_0\nchoose_0 disjoint bag_0\ne_6 < e_10 not in sequence_0",
+      "program": "bag_0 = bag(e_1: 1, e_10: 1, e_3: 1, e_4: 2, e_6: 1, e_7: 2, e_8: 1, e_9: 1)\nchoose_0 = choose(bag_0, 7)\nsequence_0 = sequence(choose_0)\ne_9 in choose_0\nchoose_0 disjoint bag_0\nnot sequence_0.before(e_6, e_10)",
       "expected": 0,
       "tags": [
         "synthetic",
@@ -255,7 +255,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-10-operatorcount-2-constraintcount-3-3c103cd215f398b2.cfl",
-      "program_sha256": "5723bfb083db9083507e99e34eefe32b79c4fc6d4d6389b3c4d756f8c484808d"
+      "program_sha256": "16b2f99384c618e9088725273f57280532ab513628a14be689c0b437b81c8be2"
     },
     {
       "suite": "synthetic",
@@ -736,7 +736,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-1-aefbdbf0a1df8620",
-      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_5: 2, e_6: 1)\nsequence_0 = sequence(bag_0)\ne_6 < e_5 in sequence_0",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_5: 2, e_6: 1)\nsequence_0 = sequence(bag_0)\nsequence_0.before(e_6, e_5)",
       "expected": 120,
       "tags": [
         "synthetic",
@@ -748,7 +748,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-6-operatorcount-1-constraintcount-1-aefbdbf0a1df8620.cfl",
-      "program_sha256": "8e4cdc2209fa407bb786cf4d7a6b07cf2f6536322a6fe44604e9cc66b0be72a6"
+      "program_sha256": "4785e1394eb578bbb539b60fbe093c5dbfc6f022ace7ea9137d50919c1f416fe"
     },
     {
       "suite": "synthetic",
@@ -770,7 +770,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-1-c2e6ac1d7d372886",
-      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 1, e_6: 3)\ncircle_0 = circle(bag_0, reflection=True)\nnext_to(e_5, e_1) not in circle_0",
+      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 1, e_6: 3)\ncircle_0 = circle(bag_0, reflection=True)\nnot (next_to(e_5, e_1) in circle_0)",
       "expected": 6,
       "tags": [
         "synthetic",
@@ -782,12 +782,12 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-6-operatorcount-1-constraintcount-1-c2e6ac1d7d372886.cfl",
-      "program_sha256": "ec833ddcf34e37bed613ff1ec04c8598ecea915ff7596c9f92c25379ab95de7c"
+      "program_sha256": "5b4e0e208ac2ebc18a22b74b6be226c875e19fd8d4a38e6384c88e6304750472"
     },
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-2-0fd8b0e226dabf0f",
-      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 2, e_5: 1, e_6: 1)\nsequence_0 = sequence(bag_0)\nnext_to(e_6, e_1) not in sequence_0\ntogether(set(e_4, e_5, e_2)) in sequence_0",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 2, e_5: 1, e_6: 1)\nsequence_0 = sequence(bag_0)\nnot (next_to(e_6, e_1) in sequence_0)\nsequence_0.together(set(e_4, e_5, e_2))",
       "expected": 24,
       "tags": [
         "synthetic",
@@ -799,12 +799,12 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-6-operatorcount-1-constraintcount-2-0fd8b0e226dabf0f.cfl",
-      "program_sha256": "fdb18b2a267341a7217b2b36fe0d9e5e05b96cdcdd5d97a503988aa62d241a6e"
+      "program_sha256": "88b3b3174c758f7dd7687418ce8954b5539174034a626e2f98d9b8b8f8d8fba7"
     },
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-2-699b0cadc6e5bcdd",
-      "program": "bag_0 = bag(e_1: 1, e_3: 2, e_4: 1, e_5: 1, e_6: 1)\nsequence_0 = sequence(bag_0)\nnext_to(e_6, e_4) not in sequence_0\ne_1 < e_5 in sequence_0",
+      "program": "bag_0 = bag(e_1: 1, e_3: 2, e_4: 1, e_5: 1, e_6: 1)\nsequence_0 = sequence(bag_0)\nnot (next_to(e_6, e_4) in sequence_0)\nsequence_0.before(e_1, e_5)",
       "expected": 120,
       "tags": [
         "synthetic",
@@ -816,7 +816,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-6-operatorcount-1-constraintcount-2-699b0cadc6e5bcdd.cfl",
-      "program_sha256": "18e7beb7c58388b2b47cf0fee71e63be18fddd63b3e2eb5d75da71f2049553e4"
+      "program_sha256": "906c17e9b3536fc39c27ac6bb58da6d6327af4dccc59477bf92e855526dcadb4"
     },
     {
       "suite": "synthetic",
@@ -838,7 +838,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-2-7fb97b49ac44c5e6",
-      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_5: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\ntogether(set(e_3, e_2, e_5)) not in circle_0\nnext_to(e_3, e_2) in circle_0",
+      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_5: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\nnot circle_0.together(set(e_3, e_2, e_5))\nnext_to(e_3, e_2) in circle_0",
       "expected": 0,
       "tags": [
         "synthetic",
@@ -850,7 +850,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-6-operatorcount-1-constraintcount-2-7fb97b49ac44c5e6.cfl",
-      "program_sha256": "e532f56f69b13e56fb34ec2d01f456957bd1d4b6fde94d9f5dacf5876f7f7a0a"
+      "program_sha256": "44925d4e9779bb930f196862dca4a12a9cea93b680cc7c7f0967bed6118cd434"
     },
     {
       "suite": "synthetic",
@@ -923,7 +923,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-3-ae6115d84e6b3da5",
-      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_4: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\ntogether(set(e_6, e_2)) in circle_0\nnext_to(e_2, e_6) not in circle_0\nnext_to(e_6, e_4) in circle_0",
+      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_4: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\ncircle_0.together(set(e_6, e_2))\nnot (next_to(e_2, e_6) in circle_0)\nnext_to(e_6, e_4) in circle_0",
       "expected": 0,
       "tags": [
         "synthetic",
@@ -935,7 +935,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-6-operatorcount-1-constraintcount-3-ae6115d84e6b3da5.cfl",
-      "program_sha256": "493f42969b37b4e9ceefb068bfb959505f78f822ec93fe41b67199faabbc7732"
+      "program_sha256": "2a7a110dd6a6f5cde9a1385c7da82b67aa3b6014e3d15a408224435ac2b9e303"
     },
     {
       "suite": "synthetic",
@@ -1144,7 +1144,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-2-constraintcount-2-9222f8b87ab8c7e1",
-      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 3, e_6: 1)\ncircle_0 = circle(bag_0)\nchoose_0 = choose(bag_0, 4)\nnext_to(e_6, e_4) not in circle_0\nnext_to(e_1, e_4) in circle_0",
+      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 3, e_6: 1)\ncircle_0 = circle(bag_0)\nchoose_0 = choose(bag_0, 4)\nnot (next_to(e_6, e_4) in circle_0)\nnext_to(e_1, e_4) in circle_0",
       "expected": 42,
       "tags": [
         "synthetic",
@@ -1156,12 +1156,12 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-6-operatorcount-2-constraintcount-2-9222f8b87ab8c7e1.cfl",
-      "program_sha256": "d977dc4e6032f4be51d6473cf2ed101dac291afeb0a074f4c04ae584597f2257"
+      "program_sha256": "fe2a8130cf0eb90cc361c831f4191ce01a86e129380445df9273298e7bef18e2"
     },
     {
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-2-constraintcount-2-cec10f42ac958b3a",
-      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nsequence_0 = sequence(set_0)\ntuple_0 = tuple(set_0)\ne_2 < e_3 in sequence_0\n(e_1, e_2) in sequence_0",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nsequence_0 = sequence(set_0)\ntuple_0 = tuple(set_0)\nsequence_0.before(e_2, e_3)\n(e_1, e_2) in sequence_0",
       "expected": 43200,
       "tags": [
         "synthetic",
@@ -1173,7 +1173,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-6-operatorcount-2-constraintcount-2-cec10f42ac958b3a.cfl",
-      "program_sha256": "d2f21dcac13baf6e3cc99945504356fa00de10aef8f05fe519d11e08fc841a88"
+      "program_sha256": "c2bb4b5c2ac90a615e8f3157332bc2a953a0e235413533c6f36fd5abf31f945a"
     },
     {
       "suite": "synthetic",
@@ -1382,7 +1382,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-1-constraintcount-2-db03d03a3ac2b0cb",
-      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\nnext_to(e_7, e_2) not in circle_0\ntogether(set(e_2, e_5)) not in circle_0",
+      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\nnot (next_to(e_7, e_2) in circle_0)\nnot circle_0.together(set(e_2, e_5))",
       "expected": 1200,
       "tags": [
         "synthetic",
@@ -1394,12 +1394,12 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-8-operatorcount-1-constraintcount-2-db03d03a3ac2b0cb.cfl",
-      "program_sha256": "bdc4ff0c62b88a3c1e84e13e710c7f2c997aed933cef12ff3d5dd04272a9377d"
+      "program_sha256": "7deff342468d4781ce20ffecf2372f18e479f724a77aad0cd1ccca2f1ae1cb21"
     },
     {
       "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-1-constraintcount-2-eec0c01b36b41b1f",
-      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 1, e_7: 4, e_8: 1)\ncircle_0 = circle(bag_0)\nnext_to(e_8, e_7) not in circle_0\nnext_to(e_4, e_1) not in circle_0",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 1, e_7: 4, e_8: 1)\ncircle_0 = circle(bag_0)\nnot (next_to(e_8, e_7) in circle_0)\nnot (next_to(e_4, e_1) in circle_0)",
       "expected": 26,
       "tags": [
         "synthetic",
@@ -1411,7 +1411,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-8-operatorcount-1-constraintcount-2-eec0c01b36b41b1f.cfl",
-      "program_sha256": "22a515fbc59751ad5de1b5ef9e4a082a1d36b6ed8445061278822a43c4035daa"
+      "program_sha256": "e25e2d5c08fd36166f613780905ff7e9bb7bc8ad4c80e86a0bdbb33f013252f1"
     },
     {
       "suite": "synthetic",
@@ -1688,7 +1688,7 @@
     {
       "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-4-constraintcount-3-3fc73f82e58ffbfd",
-      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_4: 1, e_5: 1, e_7: 1, e_8: 2)\nchoose_0 = choose(bag_0, 4)\ncircle_0 = circle(choose_0)\ncompose_0 = compose(choose_0, 3)\ncircle_1 = circle(compose_0[0])\ntogether(set(e_5, e_1, e_2)) not in circle_0\n|compose_0[1]| + |choose_0| == 1\ntogether(set(e_2, e_3, e_5)) in circle_1",
+      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_4: 1, e_5: 1, e_7: 1, e_8: 2)\nchoose_0 = choose(bag_0, 4)\ncircle_0 = circle(choose_0)\ncompose_0 = compose(choose_0, 3)\ncircle_1 = circle(compose_0[0])\nnot circle_0.together(set(e_5, e_1, e_2))\n|compose_0[1]| + |choose_0| == 1\ncircle_1.together(set(e_2, e_3, e_5))",
       "expected": 0,
       "tags": [
         "synthetic",
@@ -1700,7 +1700,7 @@
       ],
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-8-operatorcount-4-constraintcount-3-3fc73f82e58ffbfd.cfl",
-      "program_sha256": "86a91580e57cf9a5a3bfb258c8d5bdb7221c9cd98be420cade59d352fe67e3bc"
+      "program_sha256": "753bdba71b0714bd072519c1e1a382e49553494b8597ee0a6a6fe6721d49a285"
     }
   ]
 }

@@ -350,9 +350,9 @@ class TypeChecker:
     ) -> None:
         """Validate ObjRef/Entity fields inside a sequence pattern.
 
-        Per spec, some patterns (TogetherPattern.group) require SetLike
+        Per spec, some patterns (TogetherPattern.group) require Set
         and reject Entity; others (LessThanPattern, NextToPattern,
-        PredecessorPattern) accept either an Entity or a SetLike ref.
+        PredecessorPattern) accept either an Entity or a Set ref.
         """
         spec = PATTERN_FIELD_EXPECT.get(type(pattern))
         if spec is None:

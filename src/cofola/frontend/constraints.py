@@ -124,7 +124,7 @@ class TupleIndexMembership:
 class TogetherPattern:
     """Entities that must appear together in a sequence.
 
-    Example: A together in S
+    Example: S.together(A)
     """
 
     group: ObjRef
@@ -134,7 +134,7 @@ class TogetherPattern:
 class LessThanPattern:
     """Ordering constraint: left < right in sequence.
 
-    Example: a < b in S
+    Example: S.before(a, b)
     """
 
     left: ObjRef | Entity
@@ -165,18 +165,20 @@ class NextToPattern:
 
 # Union type for all sequence patterns
 SeqPattern = TogetherPattern | LessThanPattern | PredecessorPattern | NextToPattern
+PatternArg = ObjRef | Entity
 
 
 @dataclass(frozen=True, slots=True)
 class SequencePatternConstraint:
     """Sequence pattern constraint.
 
-    Example: a < b in S, A together in S
+    Example: S.before(a, b), next_to(a, b) in S
     """
 
     seq: ObjRef
     pattern: SeqPattern
     positive: bool = True
+    coverage: PatternArg | None = None
 
 
 # =============================================================================
