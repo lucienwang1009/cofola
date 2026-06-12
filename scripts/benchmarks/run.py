@@ -32,11 +32,8 @@ from scripts.benchmarks.cases import (
     save_cases,
     select_cases,
 )
-# NOTE: ``coso_baselines`` is imported lazily inside ``_solve_one`` so that the
-# WFOMC benchmark runner (and its tests) can be imported without the optional
-# ``coso`` extra (coso / clingo / portion). The Essence baseline tool locations
-# are environment-specific and have no built-in default; pass ``--conjure-dir``
-# and ``--java-bin`` when running it.
+# Essence tool locations are environment-specific and have no built-in default;
+# pass ``--conjure-dir`` and ``--java-bin`` when running it.
 DEFAULT_CONJURE_DIR: Path | None = None
 DEFAULT_JAVA_BIN: Path | None = None
 
@@ -57,7 +54,6 @@ BACKEND_CHOICES = (
     "asp",
     "essence",
 )
-EXTERNAL_COSO_BASELINES = {"essence"}
 
 
 def parse_args() -> argparse.Namespace:
@@ -176,7 +172,7 @@ def parse_args() -> argparse.Namespace:
         "--trust-unchecked-backends",
         nargs="+",
         default=(),
-        choices=("wfomc", "coso"),
+        choices=("wfomc", "coso", "asp", "essence"),
         help=(
             "Treat results from these backends as correct even when a case has "
             "no independent expected answer."
@@ -200,7 +196,7 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_CONJURE_DIR,
         help=(
             "Directory containing the Conjure/Savile Row tools for the Essence "
-            "baseline. Required to run the Essence baseline (no default)."
+            "backend. Required when Conjure is not on PATH (no default)."
         ),
     )
     parser.add_argument(
@@ -208,7 +204,7 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=DEFAULT_JAVA_BIN,
         help=(
-            "Java executable used by the Essence baseline. Its parent directory "
+            "Java executable used by the Essence backend. Its parent directory "
             "is prepended to PATH when it exists. No default; falls back to java "
             "on PATH."
         ),
@@ -362,6 +358,11 @@ def run_case(
         backend,
         argparse.Namespace(algo=algo, linear_order_encoding=linear_order_encoding),
     )
+    worker_timeout = timeout
+    join_timeout = timeout
+    if backend == "essence":
+        worker_timeout = max(0.1, timeout - 2.0)
+        join_timeout = timeout + 5.0
     process = mp.Process(
         target=_solve_worker,
         args=(
@@ -373,12 +374,12 @@ def run_case(
             worker_linear_order_encoding,
             conjure_dir,
             java_bin,
-            timeout,
+            worker_timeout,
         ),
     )
     started = time.perf_counter()
     process.start()
-    process.join(timeout)
+    process.join(join_timeout)
     elapsed = time.perf_counter() - started
 
     if process.is_alive():
@@ -478,10 +479,6 @@ def _backend_worker_args(
     return backend, args.algo, args.linear_order_encoding
 
 
-def _is_external_baseline(backend: str) -> bool:
-    return backend in EXTERNAL_COSO_BASELINES
-
-
 def _row_from_payload(
     case: BenchmarkCase,
     *,
@@ -499,10 +496,6 @@ def _row_from_payload(
             status = STATUS_SOLVED
             error_type = ""
             error_message = ""
-        elif _is_external_baseline(backend):
-            status = STATUS_UNSOLVED
-            error_type = "WrongAnswer"
-            error_message = f"expected {case.expected}, got {result}"
         else:
             status = STATUS_WRONG
             error_type = "WrongAnswer"
@@ -517,8 +510,8 @@ def _row_from_payload(
             error_message=error_message,
         )
 
-    status = STATUS_UNSOLVED if _is_external_baseline(backend) else STATUS_ERROR
-    if payload["error_type"] == "TimeoutError" and not _is_external_baseline(backend):
+    status = STATUS_ERROR
+    if payload["error_type"] == "TimeoutError":
         status = STATUS_TIMEOUT
     return _row(
         case,
@@ -544,27 +537,22 @@ def _solve_worker(
 ) -> None:
     kwargs = dict(backend=backend, algo=algo, linear_order_encoding=linear_order_encoding)
     try:
-        if backend in EXTERNAL_COSO_BASELINES:
-            # Imported lazily: external baselines need the optional ``coso`` extra.
-            from scripts.benchmarks.coso_baselines import (
-                ExternalBaselineConfig,
-                solve_external_baseline,
-            )
+        if backend == "essence":
+            from cofola.backend.essence.backend import EssenceBackend
 
-            result = solve_external_baseline(
-                program,
-                backend,
+            kwargs["backend"] = EssenceBackend(
+                conjure_dir=conjure_dir,
+                java_bin=java_bin,
                 timeout=timeout,
-                config=ExternalBaselineConfig(conjure_dir=conjure_dir, java_bin=java_bin),
+                debug=debug,
             )
+        if debug:
+            result = parse_and_solve(program, debug=True, **kwargs)
         else:
-            if debug:
-                result = parse_and_solve(program, debug=True, **kwargs)
-            else:
-                logger.remove()
-                with open(os.devnull, "w") as devnull:
-                    with contextlib.redirect_stdout(devnull), contextlib.redirect_stderr(devnull):
-                        result = parse_and_solve(program, debug=False, **kwargs)
+            logger.remove()
+            with open(os.devnull, "w") as devnull:
+                with contextlib.redirect_stdout(devnull), contextlib.redirect_stderr(devnull):
+                    result = parse_and_solve(program, debug=False, **kwargs)
     except Exception as exc:  # noqa: BLE001 - benchmark harness must classify all failures.
         queue.put(
             {
