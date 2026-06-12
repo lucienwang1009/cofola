@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import math
+from pathlib import Path
 from typing import Union
 
 from loguru import logger
@@ -11,6 +12,7 @@ from wfomc.algo import LinearOrderEncoding
 from cofola.backend.base import Backend
 from cofola.backend.asp.backend import ASPBackend
 from cofola.backend.coso.backend import CoSoBackend
+from cofola.backend.essence.backend import EssenceBackend
 from cofola.backend.wfomc.backend import WFOMCBackend
 from cofola.frontend import validate_problem
 from cofola.frontend.problem import Problem
@@ -47,6 +49,8 @@ def _make_backend(
     debug: bool = False,
     algo: AlgoChoice = None,
     linear_order_encoding: LinearOrderEncodingChoice = None,
+    conjure_dir: str | Path | None = None,
+    java_bin: str | Path | None = None,
 ) -> Backend:
     if isinstance(backend, Backend):
         return backend
@@ -61,7 +65,15 @@ def _make_backend(
         return CoSoBackend(debug=debug)
     if normalized == "asp":
         return ASPBackend(debug=debug)
-    raise ValueError(f"Unknown backend {backend!r}. Expected 'wfomc', 'coso', or 'asp'.")
+    if normalized == "essence":
+        return EssenceBackend(
+            conjure_dir=conjure_dir,
+            java_bin=java_bin,
+            debug=debug,
+        )
+    raise ValueError(
+        f"Unknown backend {backend!r}. Expected 'wfomc', 'coso', 'asp', or 'essence'."
+    )
 
 
 def solve(
@@ -71,6 +83,8 @@ def solve(
     backend: BackendChoice = "wfomc",
     algo: AlgoChoice = None,
     linear_order_encoding: LinearOrderEncodingChoice = None,
+    conjure_dir: str | Path | None = None,
+    java_bin: str | Path | None = None,
 ) -> int:
     """Solve a combinatorics problem.
 
@@ -83,6 +97,10 @@ def solve(
         "recursive", "propositional"). Defaults to FASTv2.
     :param linear_order_encoding: Only consulted when algo == PROPOSITIONAL;
         picks how the order axioms are encoded ("pin" or "axioms").
+    :param conjure_dir: Directory containing Conjure/Savile Row tools for
+        the Essence backend. If omitted, COFOLA_CONJURE_DIR and PATH are used.
+    :param java_bin: Java executable for the Essence backend. If omitted,
+        COFOLA_JAVA_BIN and PATH are used.
     :return: the answer
     """
     setup_logging(debug)
@@ -95,6 +113,8 @@ def solve(
         debug=debug,
         algo=algo,
         linear_order_encoding=linear_order_encoding,
+        conjure_dir=conjure_dir,
+        java_bin=java_bin,
     )
     schedule = PlaningPipeline(solver_backend.planning_profile()).process(problem)
     return sum(
@@ -109,6 +129,8 @@ def parse_and_solve(
     backend: BackendChoice = "wfomc",
     algo: AlgoChoice = None,
     linear_order_encoding: LinearOrderEncodingChoice = None,
+    conjure_dir: str | Path | None = None,
+    java_bin: str | Path | None = None,
 ) -> int:
     """Parse .cfl source text and solve the combinatorics problem.
 
@@ -128,6 +150,8 @@ def parse_and_solve(
         backend=backend,
         algo=algo,
         linear_order_encoding=linear_order_encoding,
+        conjure_dir=conjure_dir,
+        java_bin=java_bin,
     )
 
 
@@ -139,7 +163,7 @@ def parse_args():
     parser.add_argument('--debug', '-d', action='store_true', help='debug mode')
     parser.add_argument(
         '--backend',
-        choices=('wfomc', 'coso', 'asp'),
+        choices=('wfomc', 'coso', 'asp', 'essence'),
         default='wfomc',
         help='solver backend to use',
     )
@@ -160,6 +184,18 @@ def parse_args():
         help='How the propositional counter encodes order axioms (LEQ / PRED / '
              'CIRCULAR_PRED). Ignored by other algorithms. Default: pin.',
     )
+    parser.add_argument(
+        '--conjure-dir',
+        type=Path,
+        default=None,
+        help='Directory containing Conjure/Savile Row tools for --backend essence.',
+    )
+    parser.add_argument(
+        '--java-bin',
+        type=Path,
+        default=None,
+        help='Java executable for --backend essence. Defaults to java on PATH.',
+    )
     return parser.parse_args()
 
 
@@ -176,5 +212,7 @@ def main():
         backend=args.backend,
         algo=args.algo,
         linear_order_encoding=args.linear_order_encoding,
+        conjure_dir=args.conjure_dir,
+        java_bin=args.java_bin,
     )
     logger.info('Answer: {}', res)
