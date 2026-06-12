@@ -17,6 +17,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+asp = [
+    "clingo>=5.8",
+]
 coso = [
     "coso",
 ]

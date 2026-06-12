@@ -1,7 +1,7 @@
 # Benchmark Scripts
 
 Reproducible runners comparing Cofola's WFOMC backend, propositional WFOMC,
-CoSo, and CoSo's ASP/Essence baseline encodings.
+CoSo, the direct-ASP backend, and CoSo's Essence baseline encoding.
 
 ## Setup on a clean server
 
@@ -69,15 +69,19 @@ uv run which ganak && uv run ganak --help | head -1
 
 Skip this step if you only run `--backends wfomc coso`.
 
-### 4. CoSo baselines: `asp` and `essence` (optional)
+### 4. `asp` backend and the `essence` baseline (optional)
 
-Both baselines come with `uv sync --extra coso` (step 2), which installs the
-`coso` package together with `clingo` and `portion`.
+- **`asp`** is a first-class Cofola backend that translates each problem to ASP
+  and counts stable models with `clingo`. Install it with its own extra:
 
-- **`asp`** needs nothing further: Cofola translates each problem to ASP and
-  counts models with the Python `clingo` package.
-- **`essence`** additionally runs Conjure plus Savile Row/Minion, so it needs a
-  Java 11 runtime plus the Conjure tools.
+  ```bash
+  uv sync --extra asp        # installs clingo only (no coso/portion stack)
+  uv run python -c "import clingo; print('asp extra ok')"
+  ```
+
+- **`essence`** is a CoSo baseline that runs Conjure plus Savile Row/Minion, so
+  it needs the `coso` extra (step 2) plus a Java 11 runtime and the Conjure
+  tools.
 
 Install Java and Conjure for `essence`. The versions below match CoSo's
 [`install_tools.sh`](https://github.com/PietroTotis/CoSo/blob/master/install_tools.sh),
@@ -128,12 +132,15 @@ uv run pytest tests/benchmarks/test_benchmark_cases.py tests/benchmarks/test_ben
 uv run python -m scripts.benchmarks.run --suite real --backends wfomc --timeout 30
 ```
 
-Add `propositionalwfomc` once Ganak is on `PATH`, and `coso asp essence` once
-the CoSo extra (and, for `essence`, Java + Conjure) are installed.
+Add `propositionalwfomc` once Ganak is on `PATH`, `asp` once `--extra asp` is
+installed, and `coso essence` once the `coso` extra (and, for `essence`, Java +
+Conjure) are installed.
 
 ### Troubleshooting
 
-- `ModuleNotFoundError` for `coso`/`clingo`/`portion`: rerun
+- `ModuleNotFoundError` for `clingo` (the `asp` backend): rerun
+  `uv sync --extra asp` and invoke through `uv run`.
+- `ModuleNotFoundError` for `coso`/`portion`: rerun
   `uv sync --extra coso --group dev` and invoke through `uv run`.
 - `GanakError`: ensure `ganak` is on `PATH` (`uv run which ganak`) and runs
   standalone (`ganak --help`).
@@ -169,10 +176,12 @@ uv run python -m scripts.benchmarks.run \
   --timeout 100
 ```
 
-`propositionalwfomc` runs the WFOMC backend with `--algo=propositional`.
-The external CoSo baselines are `asp` and `essence`; SharpSAT is not part of
-this runner. ASP/Essence wrong answers and backend errors are reported as
-`unsolved`, since these baselines should only count cases they solve correctly.
+`propositionalwfomc` runs the WFOMC backend with `--algo=propositional`, and
+`asp` runs the first-class direct-ASP backend (held to the same correctness
+standard — wrong answers are reported as `wrong`, not `unsolved`). The only
+external baseline is `essence`; SharpSAT is not part of this runner. Essence
+wrong answers and backend errors are reported as `unsolved`, since the baseline
+should only count cases it solves correctly.
 Essence needs Conjure/Savile Row and Java; their locations are
 environment-specific and have no built-in default, so point the runner at them
 with `--conjure-dir` (required for the `essence` baseline) and `--java-bin`
