@@ -189,6 +189,7 @@ name = "cofola"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "clingo" },
     { name = "lark" },
     { name = "loguru" },
     { name = "numpy" },
@@ -198,9 +199,6 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-asp = [
-    { name = "clingo" },
-]
 coso = [
     { name = "coso" },
 ]
@@ -214,7 +212,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "clingo", marker = "extra == 'asp'", specifier = ">=5.8" },
+    { name = "clingo", specifier = ">=5.8" },
     { name = "coso", marker = "extra == 'coso'", git = "https://github.com/PietroTotis/CoSo.git" },
     { name = "lark", specifier = ">=1.2" },
     { name = "loguru", specifier = ">=0.7" },
@@ -223,7 +221,7 @@ requires-dist = [
     { name = "sympy", specifier = ">=1.12" },
     { name = "wfomc", git = "https://github.com/yuanhong-wang/WFOMC.git?branch=devel" },
 ]
-provides-extras = ["asp", "coso"]
+provides-extras = ["coso"]
 
 [package.metadata.requires-dev]
 dev = [

@@ -1,29 +1,13 @@
-"""Thin wrapper around the optional clingo dependency for the ASP backend."""
+"""Run an ASP program with clingo for the ASP backend."""
 from __future__ import annotations
 
-from importlib import import_module
+import clingo
 
-__all__ = ["ASPSolverError", "run_clingo"]
-
-
-class ASPSolverError(Exception):
-    """Raised when the optional clingo solver cannot be invoked."""
+__all__ = ["run_clingo"]
 
 
 def run_clingo(program: str) -> int:
-    """Count the stable models of an ASP ``program`` with clingo.
-
-    clingo is an optional dependency (it brings a solver stack), so it is
-    imported only when the ASP backend is actually used.
-    """
-    try:
-        clingo = import_module("clingo")
-    except ImportError as exc:  # pragma: no cover - exercised only without the extra
-        raise ASPSolverError(
-            "clingo is not installed. Install the optional backend with "
-            "`uv sync --extra asp` before using `--backend asp`."
-        ) from exc
-
+    """Count the stable models of an ASP ``program`` with clingo."""
     ctl = clingo.Control(["--warn=none", "--models=0"])
     ctl.add("base", [], program)
     ctl.ground([("base", [])])
