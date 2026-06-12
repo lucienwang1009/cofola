@@ -89,6 +89,34 @@ a in Z
             "B = bag(a: 2, b: 2)\nX = choose(B)\nY = choose(B)\nZ = X & Y\n|Z| == 4\n"
         ) == 1
 
+    def test_partition_of_bag_with_variable_singletons(self) -> None:
+        """Partitioning a non-base bag whose singleton entities have variable
+        membership must not force the singletons out of every part.
+
+        Regression: the partition multiplicity loop tied each singleton's part
+        counts to the source's multiplicity variable via `_bag_entity_expr`,
+        which is unbound (read as 0) for singletons in a chosen/derived bag —
+        contradicting the coverage/exactly-one constraints and collapsing the
+        count to 0. Singleton membership is already pinned by those constraints.
+        """
+        # choose 2 of 3 singletons, partition into 2 parts.
+        # sum over size-2 sub-bags (3 of them) of 2-partitions (2 each) = 6.
+        assert parse_and_solve(
+            "B = bag(a, b, c)\nC = choose(B, 2)\nP = partition(C, 2)\n"
+        ) == 6
+        # Same through an intersection (the original failing benchmark shape).
+        assert parse_and_solve(
+            "B = bag(a, b, c)\nC = choose(B, 2)\nI = C & B\nP = partition(I, 2)\n"
+        ) == 6
+
+    def test_partition_singletons_kept_in_symmetry_breaking(self) -> None:
+        """Parts distinguished only by which singleton they hold are one
+        unordered partition — the singleton vars must stay in the part-symmetry
+        comparison, so e.g. {a, c:2} | {b, c:2} is not double counted.
+        """
+        # bag(a:1, b:1, c:4) into 2 parts: 10 unordered (the ordered count is 20).
+        assert parse_and_solve("B = bag(a: 1, b: 1, c: 4)\nP = partition(B, 2)\n") == 10
+
     def test_bag_union_preserves_max_multiplicity_for_dynamic_sources(self) -> None:
         """Bag union should constrain multiplicities with max(left, right)."""
         assert parse_and_solve(
