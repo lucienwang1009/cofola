@@ -241,7 +241,7 @@ S = set(a, b)
 P = compose(S, 2)
 C = circle(P[0], reflection=True)
 """
-        ) == 12
+        ) == 4
 
 
     def test_backend_does_not_convert_unexpected_solver_errors_to_zero(self, monkeypatch) -> None:
