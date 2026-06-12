@@ -177,6 +177,7 @@ name = "cofola"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "clingo" },
     { name = "lark" },
     { name = "loguru" },
     { name = "numpy" },
@@ -199,6 +200,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "clingo", specifier = ">=5.8" },
     { name = "coso", marker = "extra == 'coso'", git = "https://github.com/PietroTotis/CoSo.git" },
     { name = "lark", specifier = ">=1.2" },
     { name = "loguru", specifier = ">=0.7" },
@@ -1292,7 +1294,6 @@ source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "six" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/88/88/8c7a1183bd8fdb9eeb3d847ddbbcefeaa825f0d02592e096bb031a6a3011/python_sat-1.9.dev4.tar.gz", hash = "sha256:341d4ea9de4dde2f67bb3531a93c48e185196b8ff03cd21e13f6e184f4592283", size = 6027798, upload-time = "2026-05-21T14:02:58.633Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9d/fb/7114c6883dfa3de63bea096fba979097b7b876ffdad5461d31a2f4f8cfe0/python_sat-1.9.dev4-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:fff25c139a6484d10172a3ee324b2f410167a1fd7d40872b62c48d35994ea01c", size = 2565724, upload-time = "2026-05-21T14:01:45.243Z" },
     { url = "https://files.pythonhosted.org/packages/b3/55/08b08b1392f8dbb405f7f46a97fc3dd8e00f262aa6f9129d383264cbeffb/python_sat-1.9.dev4-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:d447dda637b2211b66da5b44df6a079aa9469249b36f0ff91ad30f0e784c2359", size = 2317569, upload-time = "2026-05-21T14:01:46.861Z" },

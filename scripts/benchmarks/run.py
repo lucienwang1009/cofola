@@ -57,7 +57,7 @@ BACKEND_CHOICES = (
     "asp",
     "essence",
 )
-EXTERNAL_COSO_BASELINES = {"asp", "essence"}
+EXTERNAL_COSO_BASELINES = {"essence"}
 
 
 def parse_args() -> argparse.Namespace:
