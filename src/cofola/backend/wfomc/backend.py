@@ -29,6 +29,11 @@ __all__ = ["WFOMC_GLOBAL_PASSES", "WFOMC_LOCAL_PASSES", "WFOMCBackend"]
 WFOMC_GLOBAL_PASSES = (
     FixedPointPass(ConstantFolder),
     FixedPointPass(FullChoiceOptimizer),
+    # Aliasing a full-source choice (e.g. choose(B, |B|) -> B) can turn a derived
+    # object into a constant-foldable one (B & B, B + B, ...). Fold again so the
+    # result collapses to a base object that MergeIdenticalObjects can dedup,
+    # instead of leaving a dangling reference when the derived object is dropped.
+    FixedPointPass(ConstantFolder),
     MergeIdenticalObjects,
 )
 
