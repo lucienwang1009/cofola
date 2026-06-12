@@ -144,6 +144,19 @@ row = sequence(S)
         ) == 0
 
 
+    def test_sequence_of_composition_part_constrains_part_size(self) -> None:
+        """Full sequence over a dynamic composition part must fix the part size."""
+        assert parse_and_solve(
+            """
+set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)
+compose_0 = compose(set_0, 3)
+sequence_0 = sequence(compose_0[2])
+|compose_0[2]| > 0
+(e_8, e_6) in sequence_0
+"""
+        ) == 26608
+
+
     def test_local_coverage_quantifies_only_sequence_occurrences(self) -> None:
         """for each A ranges over A occurrences in the sequence, not all A entities."""
         source = """

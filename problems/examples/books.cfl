@@ -1,0 +1,6 @@
+math_books = set(math1, math2)
+physics_books = set(physics)
+books = set(math1, math2, physics, book4...13)
+arr = sequence(books)
+arr.together(math_books)
+arr.before(math_books, physics_books)
