@@ -1553,7 +1553,7 @@
       "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-2-constraintcount-2-63932c1283bda3af",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncompose_0 = compose(set_0, 3)\nsequence_0 = sequence(compose_0[2])\n|compose_0[2]| > 0\n(e_8, e_6) in sequence_0",
-      "expected": 483414,
+      "expected": 26608,
       "tags": [
         "synthetic",
         "family=entitycount-8-operatorcount-2-constraintcount-2",

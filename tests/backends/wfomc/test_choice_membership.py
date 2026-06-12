@@ -119,6 +119,17 @@ row = sequence(S)
         ) == 5
 
 
+    def test_tuple_of_composition_part_constrains_part_size(self) -> None:
+        """Full tuple over a dynamic composition part must fix the part size."""
+        assert parse_and_solve(
+            """
+S = set(a, b)
+P = compose(S, 2)
+T = tuple(P[0])
+"""
+        ) == 5
+
+
     def test_full_size_bag_choose_tuple_matches_full_tuple(self) -> None:
         """Full-size bag tuple choices should share the compact tuple encoding."""
         full_tuple = """
