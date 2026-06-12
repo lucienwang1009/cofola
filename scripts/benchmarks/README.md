@@ -69,15 +69,10 @@ uv run which ganak && uv run ganak --help | head -1
 
 Skip this step if you only run `--backends wfomc coso`.
 
-### 4. `asp` backend and the `essence` baseline (optional)
+### 4. `essence` baseline (optional)
 
-- **`asp`** is a first-class Cofola backend that translates each problem to ASP
-  and counts stable models with `clingo`. Install it with its own extra:
-
-  ```bash
-  uv sync --extra asp        # installs clingo only (no coso/portion stack)
-  uv run python -c "import clingo; print('asp extra ok')"
-  ```
+The **`asp`** backend needs nothing further — `clingo` is a core dependency
+installed by `uv sync` (step 2), so `--backends asp` works out of the box.
 
 - **`essence`** is a CoSo baseline that runs Conjure plus Savile Row/Minion, so
   it needs the `coso` extra (step 2) plus a Java 11 runtime and the Conjure
@@ -132,14 +127,14 @@ uv run pytest tests/benchmarks/test_benchmark_cases.py tests/benchmarks/test_ben
 uv run python -m scripts.benchmarks.run --suite real --backends wfomc --timeout 30
 ```
 
-Add `propositionalwfomc` once Ganak is on `PATH`, `asp` once `--extra asp` is
-installed, and `coso essence` once the `coso` extra (and, for `essence`, Java +
-Conjure) are installed.
+Add `asp` directly (`clingo` ships with `uv sync`), `propositionalwfomc` once
+Ganak is on `PATH`, and `coso essence` once the `coso` extra (and, for
+`essence`, Java + Conjure) are installed.
 
 ### Troubleshooting
 
-- `ModuleNotFoundError` for `clingo` (the `asp` backend): rerun
-  `uv sync --extra asp` and invoke through `uv run`.
+- `ModuleNotFoundError` for `clingo`: rerun `uv sync` (clingo is a core
+  dependency) and invoke through `uv run`.
 - `ModuleNotFoundError` for `coso`/`portion`: rerun
   `uv sync --extra coso --group dev` and invoke through `uv run`.
 - `GanakError`: ensure `ganak` is on `PATH` (`uv run which ganak`) and runs

@@ -115,6 +115,54 @@ C = circle(A)
 """
         ) == 6
 
+    def test_circle_of_bag_quotients_rotations(self) -> None:
+        """Circular arrangements of a multiset, up to rotation only."""
+        assert _solve(
+            """
+A = bag(a: 2, b: 2, c: 1)
+C = circle(A)
+"""
+        ) == 6
+
+    def test_circle_of_bag_with_reflection_quotients_dihedral(self) -> None:
+        """Reflection additionally merges chiral arrangements of a multiset.
+
+        These are exactly the cases where counting symmetric/palindromic
+        bracelets correctly matters: reflection reduces the rotation count.
+        """
+        # bag(a:2,b:2,c:1): 6 rotation classes -> 4 bracelets.
+        assert _solve(
+            """
+A = bag(a: 2, b: 2, c: 1)
+C = circle(A, reflection=True)
+"""
+        ) == 4
+        # bag(a:2,b:1,c:1): 3 -> 2.
+        assert _solve(
+            """
+A = bag(a: 2, b: 1, c: 1)
+C = circle(A, reflection=True)
+"""
+        ) == 2
+        # bag(a:2,b:2,c:2): 16 -> 11.
+        assert _solve(
+            """
+A = bag(a: 2, b: 2, c: 2)
+C = circle(A, reflection=True)
+"""
+        ) == 11
+
+    def test_circle_of_bag_with_reflection_and_pattern(self) -> None:
+        """Adjacency patterns compose with reflection over a multiset circle."""
+        # bag(a:2,b:2,c:1), reflection, with some a adjacent to c: 3 of the 4.
+        assert _solve(
+            """
+A = bag(a: 2, b: 2, c: 1)
+C = circle(A, reflection=True)
+next_to(a, c) in C
+"""
+        ) == 3
+
     def test_circle_next_to_wraps_around_boundary(self) -> None:
         assert _solve(
             """
