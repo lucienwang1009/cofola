@@ -9,6 +9,7 @@ from wfomc import Algo
 from wfomc.algo import LinearOrderEncoding
 
 from cofola.backend.base import Backend
+from cofola.backend.asp.backend import ASPBackend
 from cofola.backend.coso.backend import CoSoBackend
 from cofola.backend.wfomc.backend import WFOMCBackend
 from cofola.frontend import validate_problem
@@ -58,7 +59,9 @@ def _make_backend(
         )
     if normalized == "coso":
         return CoSoBackend(debug=debug)
-    raise ValueError(f"Unknown backend {backend!r}. Expected 'wfomc' or 'coso'.")
+    if normalized == "asp":
+        return ASPBackend(debug=debug)
+    raise ValueError(f"Unknown backend {backend!r}. Expected 'wfomc', 'coso', or 'asp'.")
 
 
 def solve(
@@ -136,7 +139,7 @@ def parse_args():
     parser.add_argument('--debug', '-d', action='store_true', help='debug mode')
     parser.add_argument(
         '--backend',
-        choices=('wfomc', 'coso'),
+        choices=('wfomc', 'coso', 'asp'),
         default='wfomc',
         help='solver backend to use',
     )

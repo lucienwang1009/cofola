@@ -7,6 +7,7 @@ from scripts.benchmarks.run import (
     STATUS_SOLVED,
     STATUS_TIMEOUT,
     STATUS_UNSOLVED,
+    STATUS_WRONG,
     _backend_worker_args,
     _growing_domain,
     _growing_skip_key,
@@ -45,10 +46,23 @@ def test_misspelled_propostionalwfomc_alias_is_accepted() -> None:
     assert algo == "propositional"
 
 
-def test_external_baseline_wrong_answer_is_unsolved() -> None:
+def test_asp_wrong_answer_is_wrong() -> None:
     row = _row_from_payload(
         _case(expected=3),
         backend="asp",
+        payload={"ok": True, "result": 2},
+        elapsed=0.1,
+    )
+
+    assert row["status"] == STATUS_WRONG
+    assert row["result"] == 2
+    assert row["error_type"] == "WrongAnswer"
+
+
+def test_external_baseline_wrong_answer_is_unsolved() -> None:
+    row = _row_from_payload(
+        _case(expected=3),
+        backend="essence",
         payload={"ok": True, "result": 2},
         elapsed=0.1,
     )
