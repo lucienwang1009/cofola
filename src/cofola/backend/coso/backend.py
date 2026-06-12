@@ -38,6 +38,11 @@ from cofola.planing.pipeline import PlanningProfile
 __all__ = ["COSO_GLOBAL_PASSES", "COSO_LOCAL_PASSES", "CoSoBackend"]
 
 
+# Unlike WFOMC_GLOBAL_PASSES, CoSo represents choices natively and never aliases
+# full-source choices (no FullChoiceOptimizer). It therefore cannot expose the
+# constant-foldable objects (e.g. B & B from choose(B, |B|) -> B) that would
+# require a second ConstantFolder pass before MergeIdenticalObjects, so no
+# post-alias re-fold is needed here.
 COSO_GLOBAL_PASSES = (
     FixedPointPass(ConstantFolder),
     MergeIdenticalObjects,
