@@ -447,16 +447,16 @@ class ASPEncoder(object):
             self._emit_size_constraint(constraint)
         elif isinstance(constraint, MembershipConstraint):
             self._emit_membership_constraint(constraint)
-        elif isinstance(constraint, SubsetConstraint):
-            self._emit_subset_constraint(constraint)
-        elif isinstance(constraint, BagSubsetConstraint):
-            self._emit_bag_subset_constraint(constraint)
+        elif isinstance(constraint, (SubsetConstraint, BagSubsetConstraint)):
+            self._emit_multiplicity_subset(
+                constraint.sub, constraint.sup, positive=constraint.positive
+            )
         elif isinstance(constraint, DisjointConstraint):
             self._emit_disjoint_constraint(constraint)
-        elif isinstance(constraint, EqualityConstraint):
-            self._emit_equality_constraint(constraint)
-        elif isinstance(constraint, BagEqConstraint):
-            self._emit_bag_equality_constraint(constraint)
+        elif isinstance(constraint, (EqualityConstraint, BagEqConstraint)):
+            self._emit_multiplicity_equality(
+                constraint.left, constraint.right, positive=constraint.positive
+            )
         elif isinstance(constraint, TupleIndexEq):
             self._emit_tuple_index_eq(constraint)
         elif isinstance(constraint, TupleIndexMembership):
@@ -491,21 +491,21 @@ class ASPEncoder(object):
         else:
             self.lines.append(f":- mult({constraint.container.id},{eid},N), N > 0.")
 
-    def _emit_subset_constraint(self, constraint: SubsetConstraint) -> None:
+    def _emit_multiplicity_subset(
+        self,
+        sub: ObjRef,
+        sup: ObjRef,
+        *,
+        positive: bool,
+    ) -> None:
+        # Works for both set and bag subset: a violation is any entity whose
+        # multiplicity in ``sub`` exceeds its multiplicity in ``sup``. For sets
+        # (multiplicities in {0, 1}) this reduces to "in sub but not in sup".
         pred = self._violation_predicate()
         self.lines.append(
-            f"{pred} :- entity(E), mult({constraint.sub.id},E,N), N > 0, "
-            f"mult({constraint.sup.id},E,0)."
+            f"{pred} :- entity(E), mult({sub.id},E,N), mult({sup.id},E,M), N > M."
         )
-        self._constrain_violation(pred, positive=constraint.positive)
-
-    def _emit_bag_subset_constraint(self, constraint: BagSubsetConstraint) -> None:
-        pred = self._violation_predicate()
-        self.lines.append(
-            f"{pred} :- entity(E), mult({constraint.sub.id},E,N), "
-            f"mult({constraint.sup.id},E,M), N > M."
-        )
-        self._constrain_violation(pred, positive=constraint.positive)
+        self._constrain_violation(pred, positive=positive)
 
     def _emit_disjoint_constraint(self, constraint: DisjointConstraint) -> None:
         pred = self._violation_predicate()
@@ -515,21 +515,21 @@ class ASPEncoder(object):
         )
         self._constrain_violation(pred, positive=constraint.positive)
 
-    def _emit_equality_constraint(self, constraint: EqualityConstraint) -> None:
+    def _emit_multiplicity_equality(
+        self,
+        left: ObjRef,
+        right: ObjRef,
+        *,
+        positive: bool,
+    ) -> None:
+        # Works for both set and bag equality: a violation is any entity whose
+        # multiplicity differs between the two objects. For sets (multiplicities
+        # in {0, 1}) this reduces to "differ in membership".
         pred = self._violation_predicate()
         self.lines.append(
-            f"{pred} :- entity(E), mult({constraint.left.id},E,N), "
-            f"mult({constraint.right.id},E,M), N != M."
+            f"{pred} :- entity(E), mult({left.id},E,N), mult({right.id},E,M), N != M."
         )
-        self._constrain_violation(pred, positive=constraint.positive)
-
-    def _emit_bag_equality_constraint(self, constraint: BagEqConstraint) -> None:
-        pred = self._violation_predicate()
-        self.lines.append(
-            f"{pred} :- entity(E), mult({constraint.left.id},E,N), "
-            f"mult({constraint.right.id},E,M), N != M."
-        )
-        self._constrain_violation(pred, positive=constraint.positive)
+        self._constrain_violation(pred, positive=positive)
 
     def _emit_tuple_index_eq(self, constraint: TupleIndexEq) -> None:
         if constraint.positive:
