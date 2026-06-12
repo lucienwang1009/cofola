@@ -117,6 +117,23 @@ a in Z
         # bag(a:1, b:1, c:4) into 2 parts: 10 unordered (the ordered count is 20).
         assert parse_and_solve("B = bag(a: 1, b: 1, c: 4)\nP = partition(B, 2)\n") == 10
 
+    def test_full_source_choice_alias_keeps_derived_consumers_valid(self) -> None:
+        """Aliasing a full-source choice must not leave a dangling reference.
+
+        `choose(B, |B|)` is aliased to `B`, turning a derived consumer into a
+        constant-foldable object (`B & B`). Regression: the fold/merge that
+        removes it ran before the alias, so the object was dropped while a
+        constraint still referenced it -> `No predicate for ref` at encode time.
+        """
+        # |choose(B, |B|) & B| == 2 reduces to |B| == 2 -> 1 (no crash).
+        assert parse_and_solve(
+            "B = bag(a: 1, b: 1)\nC = choose(B, 2)\nI = C & B\n|I| == 2\n"
+        ) == 1
+        # partition over the same full-choice intersection reduces to partition(B, 2).
+        assert parse_and_solve(
+            "B = bag(a: 1, b: 1)\nC = choose(B, 2)\nI = C & B\nP = partition(I, 2)\n"
+        ) == 2
+
     def test_bag_union_preserves_max_multiplicity_for_dynamic_sources(self) -> None:
         """Bag union should constrain multiplicities with max(left, right)."""
         assert parse_and_solve(
