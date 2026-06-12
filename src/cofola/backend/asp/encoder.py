@@ -430,16 +430,23 @@ class ASPEncoder(object):
             )
 
     def _emit_size_bounds(self) -> None:
-        for ref, _ in self.problem.defs:
+        for ref, defn in self.problem.defs:
+            # Base objects have constant multiplicities, so their size is fixed
+            # by construction — no bound is needed.
+            if isinstance(defn, (SetInit, BagInit)):
+                continue
+            exact = self._exact_size(ref)
+            if exact is not None:
+                # An exact size already pins the total; the max-size bound
+                # (max_size >= exact) would be redundant with `!= exact`.
+                self.lines.append(
+                    f":- #sum {{ K,E : mult({ref.id},E,K) }} != {exact}."
+                )
+                continue
             info = self._info(ref)
             if info is not None and info.max_size < sys.maxsize // 4:
                 self.lines.append(
                     f":- #sum {{ K,E : mult({ref.id},E,K) }} > {info.max_size}."
-                )
-            exact = self._exact_size(ref)
-            if exact is not None:
-                self.lines.append(
-                    f":- #sum {{ K,E : mult({ref.id},E,K) }} != {exact}."
                 )
 
     def _emit_constraint(self, constraint: object) -> None:
