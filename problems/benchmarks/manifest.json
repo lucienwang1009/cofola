@@ -5806,7 +5806,7 @@
       "suite": "synthetic",
       "case_id": "entitycount-10-operatorcount-1-constraintcount-2-0e826c127e923b9f",
       "program": "bag_0 = bag(e_10: 3, e_2: 2, e_4: 1, e_7: 3, e_8: 1)\nsequence_0 = sequence(bag_0)\nsequence_0.before(e_4, e_2)\nnext_to(e_2, e_10) in sequence_0",
-      "expected": 0,
+      "expected": 13100,
       "tags": [
         "synthetic",
         "family=entitycount-10-operatorcount-1-constraintcount-2",
@@ -6452,7 +6452,7 @@
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-1-61023f0a4782cc24",
       "program": "bag_0 = bag(e_1: 1, e_3: 2, e_6: 3)\nsequence_0 = sequence(bag_0)\n(e_6, e_3) in sequence_0",
-      "expected": 0,
+      "expected": 48,
       "tags": [
         "synthetic",
         "family=entitycount-6-operatorcount-1-constraintcount-1",
@@ -6588,7 +6588,7 @@
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-2-7fb97b49ac44c5e6",
       "program": "bag_0 = bag(e_2: 2, e_3: 1, e_5: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\nnot circle_0.together(set(e_3, e_2, e_5))\nnext_to(e_3, e_2) in circle_0",
-      "expected": 0,
+      "expected": 6,
       "tags": [
         "synthetic",
         "family=entitycount-6-operatorcount-1-constraintcount-2",
@@ -6741,7 +6741,7 @@
       "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-2-constraintcount-0-a6c415e0db3545b3",
       "program": "bag_0 = bag(e_2: 1, e_3: 2, e_4: 1, e_6: 2)\npartition_0 = partition(bag_0, 2)\ncircle_0 = circle(bag_0, reflection=True)",
-      "expected": 270,
+      "expected": 288,
       "tags": [
         "synthetic",
         "family=entitycount-6-operatorcount-2-constraintcount-0",
@@ -7370,7 +7370,7 @@
       "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-3-constraintcount-0-72dc9c872895f815",
       "program": "bag_0 = bag(e_1: 1, e_4: 2, e_6: 1, e_7: 2, e_8: 2)\nchoose_0 = choose(bag_0, 5)\nbag_inter_0 = choose_0 & bag_0\npartition_0 = partition(bag_inter_0, 2)",
-      "expected": 0,
+      "expected": 241,
       "tags": [
         "synthetic",
         "family=entitycount-8-operatorcount-3-constraintcount-0",
