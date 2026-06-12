@@ -189,6 +189,7 @@ name = "cofola"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "clingo" },
     { name = "lark" },
     { name = "loguru" },
     { name = "numpy" },
@@ -211,6 +212,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "clingo", specifier = ">=5.8" },
     { name = "coso", marker = "extra == 'coso'", git = "https://github.com/PietroTotis/CoSo.git" },
     { name = "lark", specifier = ">=1.2" },
     { name = "loguru", specifier = ">=0.7" },
