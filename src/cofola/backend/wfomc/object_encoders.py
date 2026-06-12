@@ -890,13 +890,11 @@ def _encode_partition(
                 f"\\forall X: (({context.singletons_pred}(X) & {source_pred}(X)) -> ({exactly_one_formula}))"
             )
 
-        # Entity multiplicity partitioning (singletons included: multi=1 → weighting=(var,1))
+        # Entity multiplicity partitioning.
         ordered_vars = [[] for _ in range(len(parts))]
         for entity in bag_info.dis_entities:
             multi = bag_info.p_entities_multiplicity[entity]
             entity_pred = _encode_entity_in_ctx(entity, context)
-
-            multi_var = _bag_entity_expr(defn.source, entity, analysis, context)
 
             partitioned_vars = []
             for idx, part in enumerate(parts):
@@ -911,7 +909,16 @@ def _encode_partition(
                 if not is_composition:
                     ordered_vars[idx].append(var)
 
-            context.validator.append(Eq(sum(partitioned_vars), multi_var))
+            # Non-singleton entities: the per-part multiplicities must sum to the
+            # source multiplicity. A singleton has no multiplicity variable in a
+            # derived source (only a 0/1 membership), and that membership is
+            # already pinned by the coverage and exactly-one constraints above,
+            # so the sum constraint would be redundant — and reading the source's
+            # (unbound) singleton variable as 0 here would wrongly force the
+            # singleton out of every part.
+            if entity not in context.singletons:
+                multi_var = _bag_entity_expr(defn.source, entity, analysis, context)
+                context.validator.append(Eq(sum(partitioned_vars), multi_var))
 
         # Symmetry breaking for unordered partitions
         if not is_composition:
