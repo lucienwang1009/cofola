@@ -1,12 +1,12 @@
 # Benchmark Scripts
 
 Reproducible runners comparing Cofola's WFOMC backend, propositional WFOMC,
-CoSo, the direct-ASP backend, and CoSo's Essence baseline encoding.
+CoSo, the direct-ASP backend, and the direct Essence/Conjure backend.
 
 ## Setup on a clean server
 
 How to provision a fresh Linux server with nothing preinstalled so it can run
-the full benchmark suite, including the optional CoSo and Essence baselines.
+the full benchmark suite, including the optional CoSo and Essence backends.
 Every tool location is configurable — there are no hardcoded paths.
 
 ### 1. System packages
@@ -69,55 +69,38 @@ uv run which ganak && uv run ganak --help | head -1
 
 Skip this step if you only run `--backends wfomc coso`.
 
-### 4. `essence` baseline (optional)
+### 4. `asp` and `essence` backends (optional)
 
 The **`asp`** backend needs nothing further — `clingo` is a core dependency
 installed by `uv sync` (step 2), so `--backends asp` works out of the box.
 
-- **`essence`** is a CoSo baseline that runs Conjure plus Savile Row/Minion, so
-  it needs the `coso` extra (step 2) plus a Java 11 runtime and the Conjure
-  tools.
+- **`essence`** is a first-class Cofola backend that emits Essence models and
+  counts all solutions with Conjure plus Savile Row/Minion. It has no Python
+  solver dependency, but it needs Java and the Conjure tools.
 
-Install Java and Conjure for `essence`. The versions below match CoSo's
-[`install_tools.sh`](https://github.com/PietroTotis/CoSo/blob/master/install_tools.sh),
-which Cofola's Essence translator targets:
+Install Java and Conjure for `essence`. The helper below downloads Conjure's
+platform-specific `with-solvers` bundle (Linux or macOS) and creates one
+directory containing the `conjure` binary plus Savile Row/Minion:
 
 ```bash
 # any JDK/JRE 11 works; e.g. the distro package:
 sudo apt-get install -y openjdk-11-jre-headless
 java -version                                # expect 11.x
 
-# Conjure v2.3.0 plus bundled solvers (Savile Row + Minion).
-# The linux-solvers zip contains Savile Row/Minion but not the `conjure`
-# executable, so install both archives and expose them through one directory.
-mkdir -p "$HOME/tools" && cd "$HOME/tools"
-wget -q https://github.com/conjure-cp/conjure/releases/download/v2.3.0/conjure-v2.3.0-linux.zip
-wget -q https://github.com/conjure-cp/conjure/releases/download/v2.3.0/conjure-v2.3.0-linux-solvers.zip
-unzip -q conjure-v2.3.0-linux.zip            # -> conjure-v2.3.0-linux/
-unzip -q conjure-v2.3.0-linux-solvers.zip    # -> conjure-v2.3.0-linux-solvers/
-
-mkdir -p conjure-v2.3.0-combined
-ln -sfn "$HOME/tools/conjure-v2.3.0-linux/conjure" conjure-v2.3.0-combined/conjure
-for f in savilerow savilerow.jar minion glucose glucose-syrup \
-         bc_minisat_all_release nbc_minisat_all_release lingeling \
-         fzn-chuffed fzn-gecode open-wbo lib; do
-  ln -sfn "$HOME/tools/conjure-v2.3.0-linux-solvers/$f" "conjure-v2.3.0-combined/$f"
-done
-
-"$HOME/tools/conjure-v2.3.0-combined/conjure" --version
-cd -
+uv run cofola-install-conjure --install-dir "$HOME/tools/cofola-conjure"
+"$HOME/tools/cofola-conjure/conjure-v2.6.0-linux-combined/conjure" --version
 ```
 
 `--conjure-dir` must point at the directory holding the `conjure` binary (it is
 prepended to `PATH` so the Savile Row and Minion binaries next to it are found):
 
 ```bash
---conjure-dir "$HOME/tools/conjure-v2.3.0-combined"   # required for essence
---java-bin /usr/bin/java                              # optional; otherwise java from PATH
+--conjure-dir "$HOME/tools/cofola-conjure/conjure-v2.6.0-linux-combined"
+--java-bin /usr/bin/java
 ```
 
 > CoSo's `install_tools.sh` also installs sharpSAT, gringo, and the lp2*
-> normalisers for CoSo's own pipeline; Cofola's `asp`/`essence` baselines do not
+> normalisers for CoSo's own pipeline; Cofola's `asp`/`essence` backends do not
 > use those — only `clingo` (for `asp`) and Conjure + Java (for `essence`).
 
 ### 5. Smoke test
@@ -128,8 +111,8 @@ uv run python -m scripts.benchmarks.run --suite real --backends wfomc --timeout 
 ```
 
 Add `asp` directly (`clingo` ships with `uv sync`), `propositionalwfomc` once
-Ganak is on `PATH`, and `coso essence` once the `coso` extra (and, for
-`essence`, Java + Conjure) are installed.
+Ganak is on `PATH`, `coso` once the `coso` extra is installed, and `essence`
+once Java + Conjure are installed.
 
 ### Troubleshooting
 
@@ -139,8 +122,8 @@ Ganak is on `PATH`, and `coso essence` once the `coso` extra (and, for
   `uv sync --extra coso --group dev` and invoke through `uv run`.
 - `GanakError`: ensure `ganak` is on `PATH` (`uv run which ganak`) and runs
   standalone (`ganak --help`).
-- Essence reports missing Java: pass `--java-bin /path/to/java`, or put `java`
-  on `PATH`; pass `--conjure-dir /path/to/conjure`.
+- Essence reports missing Java or Conjure: pass `--java-bin /path/to/java`, or
+  put `java` on `PATH`; pass `--conjure-dir /path/to/conjure-dir`.
 
 ## Suites
 
@@ -172,15 +155,13 @@ uv run python -m scripts.benchmarks.run \
 ```
 
 `propositionalwfomc` runs the WFOMC backend with `--algo=propositional`, and
-`asp` runs the first-class direct-ASP backend (held to the same correctness
-standard — wrong answers are reported as `wrong`, not `unsolved`). The only
-external baseline is `essence`; SharpSAT is not part of this runner. Essence
-wrong answers and backend errors are reported as `unsolved`, since the baseline
-should only count cases it solves correctly.
+`asp` runs the first-class direct-ASP backend and `essence` runs the
+first-class Essence/Conjure backend. Both are held to the same correctness
+standard: wrong answers are reported as `wrong`, not `unsolved`. SharpSAT is not
+part of this runner.
 Essence needs Conjure/Savile Row and Java; their locations are
-environment-specific and have no built-in default, so point the runner at them
-with `--conjure-dir` (required for the `essence` baseline) and `--java-bin`
-(optional; otherwise `java` is taken from `PATH`).
+environment-specific, so point the runner at them with `--conjure-dir` when
+Conjure is not on `PATH` and `--java-bin` when Java is not on `PATH`.
 
 For growing-domain cases, the runner uses monotone timeout propagation by
 default: after a backend times out for one family at domain size `n`, larger

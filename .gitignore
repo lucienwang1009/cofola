@@ -168,5 +168,6 @@ problems/all_results.csv
 .worktrees/
 .serena/
 .claude/
+.tools/
 AGENTS.md
 CLAUDE.md

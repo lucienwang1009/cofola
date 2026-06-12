@@ -21,9 +21,11 @@ dependencies = [
 coso = [
     "coso",
 ]
+essence = []
 
 [project.scripts]
 cofola = "cofola.solver:main"
+cofola-install-conjure = "cofola.backend.essence.install:main"
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
