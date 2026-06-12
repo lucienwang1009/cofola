@@ -43,7 +43,7 @@ T = sequence(P[0])
                 for constraint in component.constraints
             )
             branch_sizes.append(_source_size_equalities(constraints, part))
-        assert sorted(branch_sizes) == [{0}, {1}, {2}]
+        assert sorted(branch_sizes, key=lambda s: tuple(sorted(s))) == [{0}, {1}, {2}]
 
 
     def test_fixed_tuple_size_materializes_source_size_before_lowering(self) -> None:
