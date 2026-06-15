@@ -6,7 +6,6 @@ from scripts.benchmarks.cases import BenchmarkCase
 from scripts.benchmarks.run import (
     STATUS_SOLVED,
     STATUS_TIMEOUT,
-    STATUS_UNSOLVED,
     STATUS_WRONG,
     _backend_worker_args,
     _growing_domain,
@@ -59,7 +58,7 @@ def test_asp_wrong_answer_is_wrong() -> None:
     assert row["error_type"] == "WrongAnswer"
 
 
-def test_external_baseline_wrong_answer_is_unsolved() -> None:
+def test_essence_wrong_answer_is_wrong() -> None:
     row = _row_from_payload(
         _case(expected=3),
         backend="essence",
@@ -67,12 +66,12 @@ def test_external_baseline_wrong_answer_is_unsolved() -> None:
         elapsed=0.1,
     )
 
-    assert row["status"] == STATUS_UNSOLVED
+    assert row["status"] == STATUS_WRONG
     assert row["result"] == 2
     assert row["error_type"] == "WrongAnswer"
 
 
-def test_external_baseline_error_is_unsolved() -> None:
+def test_essence_error_is_error() -> None:
     row = _row_from_payload(
         _case(expected=3),
         backend="essence",
@@ -84,7 +83,7 @@ def test_external_baseline_error_is_unsolved() -> None:
         elapsed=0.1,
     )
 
-    assert row["status"] == STATUS_UNSOLVED
+    assert row["status"] == STATUS_ERROR
     assert row["result"] == ""
     assert row["error_type"] == "CoSoEncodingError"
 

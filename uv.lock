@@ -221,7 +221,7 @@ requires-dist = [
     { name = "sympy", specifier = ">=1.12" },
     { name = "wfomc", git = "https://github.com/yuanhong-wang/WFOMC.git?branch=devel" },
 ]
-provides-extras = ["coso"]
+provides-extras = ["coso", "essence"]
 
 [package.metadata.requires-dev]
 dev = [
