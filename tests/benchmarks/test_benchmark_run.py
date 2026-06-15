@@ -83,7 +83,7 @@ def test_essence_error_is_error() -> None:
         elapsed=0.1,
     )
 
-    assert row["status"] == "error"
+    assert row["status"] == STATUS_ERROR
     assert row["result"] == ""
     assert row["error_type"] == "CoSoEncodingError"
 
