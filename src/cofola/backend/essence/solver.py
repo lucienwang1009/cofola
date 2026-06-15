@@ -1,8 +1,8 @@
 """Thin wrapper around the external Conjure/Savile Row toolchain."""
 from __future__ import annotations
 
-import os
 import json
+import os
 import shutil
 import signal
 import subprocess
@@ -11,6 +11,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 __all__ = ["EssenceSolverConfig", "EssenceSolverError", "run_conjure"]
+
+_TERMINATION_GRACE_SECONDS = 2.0
 
 
 class EssenceSolverError(Exception):
@@ -67,8 +69,7 @@ def run_conjure(program: str, config: EssenceSolverConfig | None = None) -> int:
         try:
             stdout, stderr = proc.communicate(timeout=config.timeout)
         except subprocess.TimeoutExpired as exc:
-            os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
-            proc.wait()
+            _terminate_process_group(proc)
             timeout = config.timeout if config.timeout is not None else 0.0
             raise TimeoutError(f"Essence timed out after {timeout:.3f}s") from exc
 
@@ -84,6 +85,38 @@ def run_conjure(program: str, config: EssenceSolverConfig | None = None) -> int:
             raise EssenceSolverError("Conjure did not produce model000001.solutions")
         solutions = solution_file.read_text()
         return solutions.count("Count:") or solutions.count("$ Solution:")
+
+
+def _terminate_process_group(proc: subprocess.Popen[str]) -> None:
+    """Stop Conjure and any Savile Row/solver children without hanging."""
+
+    if proc.poll() is not None:
+        return
+    try:
+        pgid = os.getpgid(proc.pid)
+    except ProcessLookupError:
+        return
+
+    try:
+        os.killpg(pgid, signal.SIGTERM)
+    except ProcessLookupError:
+        return
+    try:
+        proc.communicate(timeout=_TERMINATION_GRACE_SECONDS)
+        return
+    except subprocess.TimeoutExpired:
+        pass
+
+    try:
+        os.killpg(pgid, signal.SIGKILL)
+    except ProcessLookupError:
+        return
+    try:
+        proc.communicate(timeout=_TERMINATION_GRACE_SECONDS)
+    except subprocess.TimeoutExpired:
+        # Avoid defeating the caller's timeout. The benchmark harness still has
+        # its outer process kill as a last resort if the OS refuses to reap.
+        return
 
 
 def _summarize_output(stderr: str, stdout: str, limit: int = 8) -> str:

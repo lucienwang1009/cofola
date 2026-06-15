@@ -108,7 +108,10 @@ def _link_or_copy(source: Path, target: Path) -> None:
     if not source.exists():
         raise FileNotFoundError(source)
     if target.exists() or target.is_symlink():
-        target.unlink()
+        if target.is_dir() and not target.is_symlink():
+            shutil.rmtree(target)
+        else:
+            target.unlink()
     try:
         target.symlink_to(source)
     except OSError:
