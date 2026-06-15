@@ -4,6 +4,7 @@ import argparse
 
 from scripts.benchmarks.cases import BenchmarkCase
 from scripts.benchmarks.run import (
+    STATUS_ERROR,
     STATUS_SOLVED,
     STATUS_TIMEOUT,
     STATUS_WRONG,

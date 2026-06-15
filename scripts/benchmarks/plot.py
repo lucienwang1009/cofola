@@ -255,13 +255,16 @@ def plot_runtime_distribution(rows: list[dict[str, str]]) -> Figure:
     for ax, suite in zip(axes, suites):
         for backend in sorted({row["backend"] for row in rows if row["suite"] == suite}):
             values = sorted(
-                parse_float(row["elapsed_sec"])
-                for row in rows
-                if row["suite"] == suite
-                and row["backend"] == backend
-                and row["status"] in {"solved", "solved_unchecked"}
+                value
+                for value in (
+                    parse_float(row["elapsed_sec"])
+                    for row in rows
+                    if row["suite"] == suite
+                    and row["backend"] == backend
+                    and row["status"] in {"solved", "solved_unchecked"}
+                )
+                if value is not None and value > 0
             )
-            values = [value for value in values if value is not None and value > 0]
             if not values:
                 continue
             ax.plot(
