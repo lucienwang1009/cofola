@@ -1,5 +1,14 @@
 """Self-contained CoSo external baselines for the benchmark runner.
 
+.. note::
+    **Retained for reference only — no longer wired into the benchmark runner.**
+    These CoLa-to-ASP and CoLa-to-Essence translators produced the original
+    external-baseline numbers; the runner now uses Cofola's first-class ``asp``
+    and ``essence`` backends (``cofola.backend.asp`` / ``cofola.backend.essence``)
+    instead. This module is kept as a documented reference for how CoSo's CoLa
+    output maps onto ASP and Essence, and still requires the ``coso`` extra
+    (``coso`` / ``clingo`` / ``portion``) to import.
+
 The translators are local to Cofola and use the installed ``coso`` package only
 for CoLa parsing/data structures. They intentionally do not import
 ``coso.src.tester`` from a source checkout.

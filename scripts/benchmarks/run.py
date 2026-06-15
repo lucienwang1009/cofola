@@ -227,7 +227,6 @@ def main() -> None:
             suites=args.suite,
             real_path=args.real_path,
             ids=ids,
-            synthetic_seed=args.synthetic_seed,
             growing_min_domain=args.growing_min_domain,
             growing_max_domain=args.growing_max_domain,
             growing_domain_step=args.growing_domain_step,
