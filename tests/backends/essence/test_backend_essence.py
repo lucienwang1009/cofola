@@ -1,6 +1,13 @@
 """Direct Essence backend encoding and routing tests."""
 from __future__ import annotations
 
+import os
+import shutil
+import signal
+import subprocess
+import sys
+from pathlib import Path
+
 import pytest
 
 from cofola.backend.essence.backend import (
@@ -15,6 +22,24 @@ from cofola.parser.parser import parse
 from cofola.planing.analysis.entities import AnalysisResult, BagInfo, SetInfo
 from cofola.planing.pipeline import PlaningPipeline
 from cofola.solver import parse_and_solve
+
+
+def _available_conjure_dir() -> Path | None:
+    env_dir = os.environ.get("COFOLA_CONJURE_DIR")
+    if env_dir is not None:
+        configured = Path(env_dir)
+        if (configured / "conjure").exists():
+            return configured
+
+    repo_root = Path(__file__).resolve().parents[3]
+    local_conjures = (repo_root / ".tools" / "conjure").glob(
+        "conjure-v*-*-combined/conjure"
+    )
+    for conjure in sorted(local_conjures):
+        return conjure.parent
+
+    found = shutil.which("conjure")
+    return Path(found).parent if found is not None else None
 
 
 def _encode_single_component(source: str) -> str:
@@ -209,3 +234,71 @@ B = choose(A)
     assert result == 3
     assert len(seen) == 1
     assert "find o_1 : set (size 2) of Entity" in seen[0]
+
+
+def test_timeout_cleanup_escalates_to_sigkill(monkeypatch: pytest.MonkeyPatch) -> None:
+    import cofola.backend.essence.solver as solver_module
+
+    monkeypatch.setattr(solver_module, "_TERMINATION_GRACE_SECONDS", 0.1)
+    proc = subprocess.Popen(
+        [
+            sys.executable,
+            "-c",
+            (
+                "import signal, time\n"
+                "signal.signal(signal.SIGTERM, signal.SIG_IGN)\n"
+                "time.sleep(30)\n"
+            ),
+        ],
+        start_new_session=True,
+    )
+    try:
+        solver_module._terminate_process_group(proc)
+        assert proc.wait(timeout=1) != 0
+    finally:
+        if proc.poll() is None:
+            os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
+            proc.wait(timeout=1)
+
+
+def test_conjure_installer_copy_fallback_replaces_existing_directory(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from cofola.backend.essence.install import _link_or_copy
+
+    source = tmp_path / "source"
+    source.mkdir()
+    (source / "new.txt").write_text("new")
+    target = tmp_path / "target"
+    target.mkdir()
+    (target / "old.txt").write_text("old")
+
+    def fail_symlink(self, target, target_is_directory=False):
+        raise OSError("symlinks unavailable")
+
+    monkeypatch.setattr(Path, "symlink_to", fail_symlink)
+
+    _link_or_copy(source, target)
+
+    assert not (target / "old.txt").exists()
+    assert (target / "new.txt").read_text() == "new"
+
+
+def test_essence_backend_solves_tiny_model_with_real_conjure() -> None:
+    conjure_dir = _available_conjure_dir()
+    if conjure_dir is None:
+        pytest.skip("Conjure is not installed")
+    if shutil.which("java") is None and os.environ.get("COFOLA_JAVA_BIN") is None:
+        pytest.skip("Java is not installed")
+
+    result = parse_and_solve(
+        """
+A = set(a, b, c)
+B = choose(A)
+|B| == 2
+""",
+        backend=EssenceBackend(conjure_dir=conjure_dir, timeout=15.0),
+    )
+
+    assert result == 3
