@@ -361,8 +361,10 @@ def run_case(
     worker_timeout = timeout
     join_timeout = timeout
     if backend == "essence":
-        worker_timeout = max(0.1, timeout - 2.0)
-        join_timeout = timeout + 5.0
+        from cofola.backend.essence.solver import _TERMINATION_GRACE_SECONDS
+
+        worker_timeout = max(0.1, timeout - _TERMINATION_GRACE_SECONDS)
+        join_timeout = timeout + _TERMINATION_GRACE_SECONDS + 3.0
     process = mp.Process(
         target=_solve_worker,
         args=(
