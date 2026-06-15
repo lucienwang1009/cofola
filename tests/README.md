@@ -26,6 +26,10 @@ tests/
 │   │   ├── test_sequence_patterns.py   # sequence/circle pattern syntax + semantics
 │   │   ├── test_choice_membership.py   # choice objects, bag negation, tuple membership
 │   │   └── test_encoding_boundaries.py # encoding invariants + error boundaries
+│   ├── asp/
+│   │   └── test_backend_asp.py         # direct ASP/clingo encoding, routing, counting
+│   ├── essence/
+│   │   └── test_backend_essence.py     # direct Essence/Conjure encoding, routing, counting
 │   └── test_backend_coso.py            # CoSo encoding, routing, fallback (needs `coso` extra)
 └── benchmarks/
     ├── test_benchmark_cases.py    # generated benchmark discovery + manifest round trips

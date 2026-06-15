@@ -27,7 +27,8 @@ map):
   focused modules for reference utilities, analysis inference, optimization
   passes, lowering passes, analysis boundaries, and transform invariants.
 - `tests/backends/` — `wfomc/` (profile, collection semantics, sequence
-  patterns, choice/membership, encoding boundaries) and `test_backend_coso.py`.
+  patterns, choice/membership, encoding boundaries), `asp/test_backend_asp.py`,
+  `essence/test_backend_essence.py`, and `test_backend_coso.py`.
 - `tests/benchmarks/` — benchmark case discovery and runner behavior, plus
   `test_all_problems.py`, which runs representative `.cfl` examples from
   `problems/real/corpus.json` (examples tagged `benchmark` by default; set
@@ -45,7 +46,7 @@ specific internal transformation or encoding invariant.
 parser      .cfl text -> frontend Problem
 frontend    immutable problem model, refs, constraints, validation
 planing     analyses, simplification, lowering, decomposition, solve schedule
-backend     WFOMC encoding, solving, decoding
+backend     encoding, solving, decoding (wfomc default; coso/asp/essence optional)
 ```
 
 The frontend `Problem` is the shared model. The planning layer transforms it but

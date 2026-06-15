@@ -103,7 +103,7 @@ The solve path is:
   -> parser
   -> frontend Problem + type checking
   -> planing pipeline: analyses, simplification, lowering, decomposition
-  -> WFOMC backend encoding
+  -> backend encoding (WFOMC by default; coso/asp/essence optional)
   -> decoded integer count
 ```
 
@@ -124,7 +124,10 @@ uv run pyright
 See [Development Guide](docs/development.md) for test organization and backend
 notes.
 
-## WFOMC Backend
+## Backends
 
-Cofola currently uses the `for_cofola` branch of
-[yuanhong-wang/WFOMC](https://github.com/yuanhong-wang/WFOMC).
+The default backend is WFOMC, built on the `devel` branch of
+[yuanhong-wang/WFOMC](https://github.com/yuanhong-wang/WFOMC). Alternative
+backends can be selected with `--backend`: `coso` (CoLa/CoSo), `asp` (clingo),
+and `essence` (Conjure/Savile Row). See
+[scripts/benchmarks/README.md](scripts/benchmarks/README.md) for their setup.
