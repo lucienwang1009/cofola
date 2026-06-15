@@ -90,7 +90,14 @@ def _extract(archive: Path, destination: Path) -> None:
             logger.info("Using existing {}", marker)
         else:
             logger.info("Extracting {}", archive)
-            zf.extractall(destination)
+            dest = destination.resolve()
+            for member in zf.infolist():
+                target = (dest / member.filename).resolve()
+                if not target.is_relative_to(dest):
+                    raise RuntimeError(
+                        f"Refusing to extract outside destination: {member.filename}"
+                    )
+            zf.extractall(dest)
         _restore_zip_modes(zf, destination)
 
 
