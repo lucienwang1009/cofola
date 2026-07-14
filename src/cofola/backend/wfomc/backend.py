@@ -1,10 +1,15 @@
 """WFOMC backend — implements Backend ABC using the wfomc library."""
 from __future__ import annotations
 
-from wfomc import Algo
 from loguru import logger
 
 from cofola.backend.base import Backend
+from cofola.backend.wfomc.api import (
+    Algo,
+    LinearOrderEncoding,
+    UnaryEvidenceStrategy,
+    contains_linear_order_axiom,
+)
 from cofola.backend.wfomc.solver import solve_wfomc
 from cofola.backend.wfomc.encoder import encode
 from cofola.frontend.problem import Problem
@@ -24,12 +29,16 @@ class WFOMCBackend(Backend):
     def __init__(
         self,
         algo: Algo = Algo.FASTv2,
-        use_partition_constraint: bool = True,
+        unary_evidence_strategy: UnaryEvidenceStrategy = UnaryEvidenceStrategy.AUTO,
         lifted: bool = False,
+        linear_order_encoding: LinearOrderEncoding | str | None = None,
     ) -> None:
         self.algo = algo
-        self.use_partition_constraint = use_partition_constraint
+        self.unary_evidence_strategy = unary_evidence_strategy
         self.lifted = lifted
+        # Only consulted when algo == Algo.PROPOSITIONAL; ignored otherwise.
+        # None lets the wfomc library use its default (PIN).
+        self.linear_order_encoding = linear_order_encoding
 
     def solve(
         self,
@@ -53,21 +62,27 @@ class WFOMCBackend(Backend):
         wfomc_problem, decoder = encode(problem, analysis, self.lifted)
 
         algo = self.algo
-        use_partition_constraint = self.use_partition_constraint
-        if wfomc_problem.contain_linear_order_axiom() and \
-                algo != Algo.INCREMENTAL and algo != Algo.RECURSIVE:
+        unary_evidence_strategy = self.unary_evidence_strategy
+        _order_capable = (Algo.INCREMENTAL, Algo.RECURSIVE, Algo.PROPOSITIONAL)
+        if contains_linear_order_axiom(wfomc_problem) and algo not in _order_capable:
             logger.warning(
                 'Linear order axiom with the predicate LEQ is found, '
-                'while the algorithm is not INCREMENTAL or RECURSIVE. '
+                'while the algorithm does not support it '
+                '(supported: INCREMENTAL, RECURSIVE, PROPOSITIONAL). '
                 'Switching to INCREMENTAL algorithm...'
             )
             algo = Algo.INCREMENTAL
-            use_partition_constraint = True
+            unary_evidence_strategy = UnaryEvidenceStrategy.AUTO
 
         logger.debug("WFOMCBackend: algo={}", algo)
 
         try:
-            raw = solve_wfomc(wfomc_problem, algo, use_partition_constraint)
+            raw = solve_wfomc(
+                wfomc_problem,
+                algo,
+                unary_evidence_strategy,
+                linear_order_encoding=self.linear_order_encoding,
+            )
         except IndexError as exc:
             # WFOMC library crashes on degenerate problems (e.g. empty domains).
             # Treat as unsatisfiable → 0.

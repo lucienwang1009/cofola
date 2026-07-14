@@ -3,8 +3,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 
-from wfomc import MultinomialCoefficients, WFOMCProblem
-
+from cofola.backend.wfomc.api import EncodedProblem
 from cofola.backend.wfomc.constraint_encoders import _encode_constraint
 from cofola.backend.wfomc.context import Context
 from cofola.backend.wfomc.decoder import Decoder
@@ -24,7 +23,7 @@ def encode(
     problem: Problem,
     analysis: AnalysisResult,
     lifted: bool = False,
-) -> tuple[WFOMCProblem, Decoder]:
+) -> tuple[EncodedProblem, Decoder]:
     """Encode a planning Problem + AnalysisResult to a WFOMC problem and decoder."""
     logger.debug("encode: {} objects to encode", len(list(problem.iter_objects())))
 
@@ -39,8 +38,6 @@ def encode(
             info.indis_entities = {}
 
     context = Context(problem, encoding_analysis)
-    MultinomialCoefficients.setup(len(context.domain))
-
     logger.debug("WFOMC encode: singletons={}", context.singletons)
 
     if context.singletons:

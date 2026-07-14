@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
-from sympy import Eq, var
-from wfomc import Expr, Pred
+from sympy import Eq, Expr, var
+
+from cofola.backend.wfomc.api import Pred
 
 
 AUX_PRED_PREFIX = "_cofola_aux_"

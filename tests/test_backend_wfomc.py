@@ -2,10 +2,13 @@
 from __future__ import annotations
 
 import pytest
-from wfomc import Algo
+from flint import fmpq
+from sympy import Eq, var
 
+from cofola.backend.wfomc.api import Algo, WFOMCResult, top
 from cofola.backend.wfomc.backend import WFOMCBackend
 from cofola.backend.wfomc.context import Context
+from cofola.backend.wfomc.decoder import Decoder
 from cofola.backend.wfomc.encoder import encode
 from cofola.frontend import (
     BagEqConstraint,
@@ -21,6 +24,17 @@ from cofola.frontend import (
 )
 from cofola.planing.analysis.entities import AnalysisResult, BagInfo, SetInfo
 from cofola.solver import parse_and_solve
+
+
+def test_constant_result_treats_absent_weight_generators_as_zero() -> None:
+    generator = var("v_absent")
+
+    accepted = Decoder(1, [generator], [Eq(generator, 0)], [])
+    rejected = Decoder(1, [generator], [Eq(generator, 1)], [])
+
+    result = WFOMCResult(fmpq(1))
+    assert accepted.decode_result(result) == 1
+    assert rejected.decode_result(result) == 0
 
 
 def test_bag_difference_counts_leftover_multiplicities() -> None:
@@ -307,8 +321,7 @@ def test_backend_does_not_convert_unexpected_solver_errors_to_zero(monkeypatch) 
             return iter(())
 
     class FakeProblem(object):
-        def contain_linear_order_axiom(self) -> bool:
-            return False
+        sentence = top
 
     class FakeDecoder(object):
         def decode_result(self, result: object) -> int:
@@ -317,7 +330,12 @@ def test_backend_does_not_convert_unexpected_solver_errors_to_zero(monkeypatch) 
     def fake_encode(problem: object, analysis: object, lifted: bool):
         return FakeProblem(), FakeDecoder()
 
-    def fake_solve_wfomc(problem: object, algo: Algo, use_partition_constraint: bool):
+    def fake_solve_wfomc(
+        problem: object,
+        algo: Algo,
+        unary_evidence_strategy: object,
+        linear_order_encoding: object = None,
+    ):
         raise ValueError("backend bug")
 
     import cofola.backend.wfomc.backend as backend_module

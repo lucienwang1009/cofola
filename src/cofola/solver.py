@@ -4,7 +4,6 @@ import argparse
 import math
 
 from loguru import logger
-
 from cofola.frontend import validate_problem
 from cofola.frontend.problem import Problem
 from cofola.log import setup_logging
