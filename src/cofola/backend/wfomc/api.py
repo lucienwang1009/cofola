@@ -9,11 +9,19 @@ from __future__ import annotations
 
 from enum import Enum
 from fractions import Fraction
-from typing import Any, Mapping, TypeAlias
+from importlib import import_module
+from typing import TYPE_CHECKING, Any, Mapping, TypeAlias, cast
 
 from sympy import Expr, Poly, sympify
 from wfomc import WFOMCResult
-from wfomc.algo import LinearOrderEncoding
+
+if TYPE_CHECKING:
+    from wfomc import LinearOrderEncoding
+else:
+    try:
+        from wfomc import LinearOrderEncoding
+    except ImportError:
+        LinearOrderEncoding = import_module("wfomc.algo").LinearOrderEncoding
 
 
 EncodedProblem: TypeAlias = Any
@@ -90,6 +98,15 @@ else:
         forall,
         true,
     )
+
+    try:
+        from wfomc import (
+            Domain as _NativeDomain,
+            ProblemInstance as _NativeProblemInstance,
+        )
+    except ImportError:
+        _NativeDomain = None
+        _NativeProblemInstance = None
 
     USING_NATIVE_API = True
     top = true()
@@ -180,11 +197,25 @@ if USING_NATIVE_API:
                 for literal in sorted(unary_evidence, key=str)
             )
         )
-        return _NativeProblem(
+        native_weights = _native_weights(weights)
+        native_evidence = _NativeEvidence(unary=_NativeUnaryEvidence(literals))
+        if _NativeDomain is not None and _NativeProblemInstance is not None:
+            return _NativeProblemInstance(
+                problem=_NativeProblem(
+                    sentence=sentence,
+                    weights=native_weights,
+                    evidence=native_evidence,
+                ),
+                domain=_NativeDomain(
+                    elements=frozenset(domain),
+                    circular_order_size=circle_len,
+                ),
+            )
+        return cast(Any, _NativeProblem)(
             sentence=sentence,
             domain=frozenset(domain),
-            weights=_native_weights(weights),
-            evidence=_NativeEvidence(unary=_NativeUnaryEvidence(literals)),
+            weights=native_weights,
+            evidence=native_evidence,
             circular_order_size=circle_len,
         )
 
@@ -291,7 +322,11 @@ else:
 def contains_linear_order_axiom(problem: EncodedProblem) -> bool:
     """Whether Cofola encoded the distinguished ``LEQ`` predicate."""
 
-    return any(str(predicate) == "LEQ" for predicate in problem.sentence.preds())
+    logical_problem = getattr(problem, "problem", problem)
+    return any(
+        str(predicate) == "LEQ"
+        for predicate in logical_problem.sentence.preds()
+    )
 
 
 __all__ = [

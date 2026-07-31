@@ -41,7 +41,7 @@ reportPossiblyUnboundVariable = "warning"
 reportReturnType = "warning"
 
 [tool.uv.sources]
-wfomc = { git = "https://github.com/yuanhong-wang/WFOMC.git", branch = "for_cofola" }
+wfomc = { git = "https://github.com/yuanhong-wang/WFOMC.git", branch = "devel" }
 
 [build-system]
 requires = ["hatchling"]
