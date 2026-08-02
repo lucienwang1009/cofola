@@ -10,10 +10,9 @@ from __future__ import annotations
 from enum import Enum
 from fractions import Fraction
 from importlib import import_module
-from typing import TYPE_CHECKING, Any, Mapping, TypeAlias, cast
+from typing import TYPE_CHECKING, Any, Iterable, Iterator, Mapping, TypeAlias, cast
 
 from sympy import Expr, Poly, sympify
-from wfomc import WFOMCResult
 
 if TYPE_CHECKING:
     from wfomc import LinearOrderEncoding
@@ -21,11 +20,118 @@ else:
     try:
         from wfomc import LinearOrderEncoding
     except ImportError:
-        LinearOrderEncoding = import_module("wfomc.algo").LinearOrderEncoding
+        try:
+            LinearOrderEncoding = import_module("wfomc.algo").LinearOrderEncoding
+        except AttributeError:
+            class LinearOrderEncoding(Enum):
+                """Order encodings unavailable in pre-propositional WFOMC."""
+
+                PIN = "pin"
+                AXIOMS = "axioms"
 
 
 EncodedProblem: TypeAlias = Any
 EvidenceFormula: TypeAlias = Any
+
+
+def _numeric_value(value: object) -> Fraction | float | None:
+    """Convert a scalar returned by any supported WFOMC version."""
+
+    if isinstance(value, Fraction):
+        return value
+    if isinstance(value, bool):
+        return Fraction(int(value), 1)
+    if isinstance(value, int):
+        return Fraction(value, 1)
+    if isinstance(value, float):
+        return value
+
+    numerator = getattr(value, "p", None)
+    denominator = getattr(value, "q", None)
+    if numerator is not None and denominator is not None:
+        return Fraction(int(numerator), int(denominator))
+    return None
+
+
+class WFOMCResult(object):
+    """Version-independent view of a WFOMC solver result.
+
+    Typed WFOMC releases return their own ``WFOMCResult`` wrapper, while
+    legacy releases return a FLINT scalar or multivariate polynomial directly.
+    Cofola wraps either representation here so the decoder never imports or
+    inspects version-specific result classes.
+    """
+
+    def __init__(self, value: object) -> None:
+        self._value = value.raw if isinstance(value, WFOMCResult) else value
+
+    @property
+    def raw(self) -> object:
+        return self._value
+
+    def is_zero(self) -> bool:
+        check = getattr(self._value, "is_zero", None)
+        return bool(check()) if callable(check) else self._value == 0
+
+    def is_polynomial(self) -> bool:
+        check = getattr(self._value, "is_polynomial", None)
+        if callable(check):
+            return bool(check())
+        return callable(getattr(self._value, "context", None)) and callable(
+            getattr(self._value, "terms", None)
+        )
+
+    def is_constant(self) -> bool:
+        check = getattr(self._value, "is_constant", None)
+        if callable(check):
+            return bool(check())
+        return _numeric_value(self._value) is not None
+
+    def constant_value(self) -> Fraction | float | None:
+        get_constant = getattr(self._value, "constant_value", None)
+        if callable(get_constant):
+            constant = get_constant()
+            if constant is None:
+                return None
+            normalized = _numeric_value(constant)
+            if normalized is None:
+                raise TypeError(f"Unsupported constant type: {type(constant)}")
+            return normalized
+
+        scalar = _numeric_value(self._value)
+        if scalar is not None:
+            return scalar
+        if self.is_polynomial() and self.is_constant():
+            leading_coefficient = getattr(self._value, "leading_coefficient", None)
+            if callable(leading_coefficient):
+                return _numeric_value(leading_coefficient())
+        return None
+
+    def variable_names(self) -> tuple[str, ...]:
+        get_names = getattr(self._value, "variable_names", None)
+        if callable(get_names):
+            return tuple(str(name) for name in cast(Iterable[object], get_names()))
+        if not self.is_polynomial():
+            return ()
+        get_context = getattr(self._value, "context")
+        return tuple(get_context().names())
+
+    def terms(self) -> Iterator[tuple[tuple[int, ...], Fraction | float]]:
+        get_terms = getattr(self._value, "terms", None)
+        if not callable(get_terms):
+            raise TypeError(f"Unsupported result type: {type(self._value)}")
+        raw_terms = cast(Iterable[tuple[Iterable[int], object]], get_terms())
+        for degrees, coefficient in raw_terms:
+            normalized = _numeric_value(coefficient)
+            if normalized is None:
+                raise TypeError(f"Unsupported coefficient type: {type(coefficient)}")
+            yield tuple(int(degree) for degree in degrees), normalized
+
+    def __str__(self) -> str:
+        return str(self._value)
+
+    def __repr__(self) -> str:
+        return f"WFOMCResult({self._value!r})"
 
 
 class Algo(Enum):
@@ -73,15 +179,24 @@ except ImportError:
         Const,
         Formula,
         Pred,
-        UnaryEvidenceStrategy as _LegacyUnaryEvidenceStrategy,
         WFOMCProblem as _LegacyProblem,
-        exactly_one_qf,
+        X,
+        exactly_one_qf as _legacy_exactly_one_qf,
         exclusive,
         fol_parse as parse,
         to_sc2 as _legacy_to_sc2,
         top,
         wfomc as _legacy_solve,
     )
+
+    try:
+        from wfomc import UnaryEvidenceStrategy as _LegacyUnaryEvidenceStrategy
+    except ImportError:
+        from wfomc import UnaryEvidenceEncoding as _LegacyUnaryEvidenceEncoding
+
+        _LegacyUnaryEvidenceStrategy = None
+    else:
+        _LegacyUnaryEvidenceEncoding = None
 
     USING_NATIVE_API = False
 else:
@@ -233,22 +348,24 @@ if USING_NATIVE_API:
         )
         if isinstance(linear_order_encoding, str):
             linear_order_encoding = LinearOrderEncoding(linear_order_encoding)
-        return _native_solve(
-            problem,
-            algo=_NativeAlgoName(algo.value),
-            options=_NativeAlgoOptions(
-                evidence_strategy=evidence_strategy,
-                linear_order_encoding=linear_order_encoding,
-            ),
+        return WFOMCResult(
+            _native_solve(
+                problem,
+                algo=_NativeAlgoName(algo.value),
+                options=_NativeAlgoOptions(
+                    evidence_strategy=evidence_strategy,
+                    linear_order_encoding=linear_order_encoding,
+                ),
+            )
         )
 
 
     def exactly_one_qf(predicates: list[Pred]) -> Formula:
-        if len(predicates) == 1:
-            return top
         if not predicates:
             raise ValueError("exactly_one_qf requires at least one predicate")
         literals = tuple(predicate(X) for predicate in predicates)
+        if len(literals) == 1:
+            return literals[0]
         pairwise = tuple(
             ~(left & right)
             for index, left in enumerate(literals)
@@ -275,6 +392,14 @@ if USING_NATIVE_API:
         )
 
 else:
+
+    def exactly_one_qf(predicates: list[Pred]) -> Formula:
+        if not predicates:
+            raise ValueError("exactly_one_qf requires at least one predicate")
+        if len(predicates) == 1:
+            return predicates[0](X)
+        return _legacy_exactly_one_qf(predicates)
+
 
     def normalize_sentence(sentence: Formula) -> Formula:
         return _legacy_to_sc2(sentence)
@@ -309,13 +434,32 @@ else:
         unary_evidence_strategy: UnaryEvidenceStrategy,
         linear_order_encoding: LinearOrderEncoding | str | None,
     ) -> WFOMCResult:
-        return _legacy_solve(
-            problem,
-            _LegacyAlgo(algo.value),
-            unary_evidence_strategy=_LegacyUnaryEvidenceStrategy(
-                unary_evidence_strategy.value
-            ),
-            linear_order_encoding=linear_order_encoding,
+        legacy_algo = _LegacyAlgo(algo.value)
+        if _LegacyUnaryEvidenceStrategy is None:
+            encoding_name = (
+                "PC"
+                if unary_evidence_strategy is UnaryEvidenceStrategy.AUTO
+                and algo in (Algo.FASTv2, Algo.INCREMENTAL)
+                else "CCS"
+            )
+            assert _LegacyUnaryEvidenceEncoding is not None
+            return WFOMCResult(
+                _legacy_solve(
+                    problem,
+                    legacy_algo,
+                    getattr(_LegacyUnaryEvidenceEncoding, encoding_name),
+                )
+            )
+
+        return WFOMCResult(
+            _legacy_solve(
+                problem,
+                legacy_algo,
+                unary_evidence_strategy=_LegacyUnaryEvidenceStrategy(
+                    unary_evidence_strategy.value
+                ),
+                linear_order_encoding=linear_order_encoding,
+            )
         )
 
 
