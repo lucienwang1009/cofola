@@ -6,13 +6,12 @@ from pathlib import Path
 from typing import Union
 
 from loguru import logger
-from wfomc import Algo
-from wfomc.algo import LinearOrderEncoding
 
 from cofola.backend.base import Backend
 from cofola.backend.asp.backend import ASPBackend
 from cofola.backend.coso.backend import CoSoBackend
 from cofola.backend.essence.backend import EssenceBackend
+from cofola.backend.wfomc.api import Algo, LinearOrderEncoding
 from cofola.backend.wfomc.backend import WFOMCBackend
 from cofola.frontend import validate_problem
 from cofola.frontend.problem import Problem

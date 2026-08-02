@@ -240,7 +240,7 @@ not ((a, b) in row)
 
         positive_problem, positive_decoder = positive
         negative_problem, negative_decoder = negative
-        assert len(positive_problem.weights) == 1
+        assert len(positive_problem.problem.weights) == 1
         assert len(positive_decoder.validator) == 1
-        assert len(negative_problem.weights) == 0
+        assert len(negative_problem.problem.weights) == 0
         assert len(negative_decoder.validator) == 0
