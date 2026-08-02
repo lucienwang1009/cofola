@@ -1,7 +1,7 @@
 """Shared helpers for WFOMC encoding."""
 from __future__ import annotations
 
-from wfomc import Const, fol_parse as parse
+from cofola.backend.wfomc.api import Const, parse
 
 import cofola.frontend.constraints as ir_cst
 import cofola.frontend.objects as ir_obj

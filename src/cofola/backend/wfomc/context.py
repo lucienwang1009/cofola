@@ -7,15 +7,17 @@ from __future__ import annotations
 
 from typing import Any, TypeAlias
 
-from wfomc import (
-    AtomicFormula,
+from cofola.backend.wfomc.api import (
     Const,
+    EncodedProblem,
+    EvidenceFormula,
     Formula,
     Pred,
     Rational,
-    WFOMCProblem,
-    fol_parse as parse,
-    to_sc2,
+    build_problem,
+    evidence_parts,
+    normalize_sentence,
+    parse,
     top,
 )
 
@@ -36,7 +38,7 @@ class Context:
     """Context for encoding a planning problem to a WFOMC problem.
 
     Holds all state built up during object/constraint encoding,
-    then produces a (WFOMCProblem, Decoder) pair via build().
+    then produces an (EncodedProblem, Decoder) pair via build().
 
     Attributes:
         problem: The immutable planning Problem being encoded.
@@ -80,7 +82,7 @@ class Context:
         # Accumulated WFOMC components
         self.sentence: Formula = top
         self.weighting: dict[Pred, tuple] = {}
-        self.unary_evidence: set[AtomicFormula] = set()
+        self.unary_evidence: set[EvidenceFormula] = set()
         self.overcount: Rational = Rational(1, 1)
         self.validator: list = []
         self.indis_vars: list = []
@@ -567,35 +569,37 @@ class Context:
     def prune_evidence(self) -> None:
         """Remove unary evidence atoms whose predicates are not in the sentence.
 
-        Should be called during build() before constructing WFOMCProblem.
+        Should be called during build() before constructing EncodedProblem.
 
         IMPLEMENTATION:
             used_preds = self.sentence.preds()
             self.unary_evidence = {e for e in self.unary_evidence if e.pred in used_preds}
         """
         used_preds = self.sentence.preds()
-        self.unary_evidence = {e for e in self.unary_evidence if e.pred in used_preds}
+        self.unary_evidence = {
+            evidence
+            for evidence in self.unary_evidence
+            if evidence_parts(evidence)[0] in used_preds
+        }
 
-    def build(self) -> tuple[WFOMCProblem, Decoder]:
-        """Finalise encoding and return the (WFOMCProblem, Decoder) pair.
+    def build(self) -> tuple[EncodedProblem, Decoder]:
+        """Finalise encoding and return the (EncodedProblem, Decoder) pair.
 
         Steps:
-        1. Convert sentence to SC2 form: self.sentence = to_sc2(self.sentence)
+        1. Normalize the sentence for the selected WFOMC API generation.
         2. Prune unused evidence: self.prune_evidence()
         3. Rename domain constants with 'c_' prefix (WFOMC convention)
         4. Rename evidence atom arguments with 'c_' prefix
-        5. Construct WFOMCProblem(sentence, new_domain, weighting,
-                                   unary_evidence=new_evidence,
-                                   circle_len=self.circle_len)
+        5. Construct the adapter-owned encoded problem.
         6. Construct Decoder(self.overcount, self.gen_vars,
                               self.validator, self.indis_vars)
         7. Return (wfomc_problem, decoder)
 
         Returns:
-            Tuple of (WFOMCProblem, Decoder).
+            Tuple of (EncodedProblem, Decoder).
         """
         logger.debug(
-            "Context.build: sentence (pre-sc2):\n  {}",
+            "Context.build: sentence (before normalization):\n  {}",
             self.sentence,
         )
         logger.debug(
@@ -613,9 +617,9 @@ class Context:
         if self.sentence == top:
             dummy_pred = self.create_aux_pred(1)
             self.sentence = parse(f"\\forall X: (~{dummy_pred}(X))")
-        self.sentence = to_sc2(self.sentence)
+        self.sentence = normalize_sentence(self.sentence)
         logger.debug(
-            "Context.build: sentence (post-sc2):\n  {}",
+            "Context.build: sentence (after normalization):\n  {}",
             self.sentence,
         )
         self.prune_evidence()
@@ -627,12 +631,12 @@ class Context:
         new_unary_evidence = set()
         for const in self.domain:
             new_domain.add(Const(f"c_{const.name}"))
-        for atom in self.unary_evidence:
-            new_unary_evidence.add(
-                AtomicFormula(atom.pred, (Const(f"c_{atom.args[0].name}"),), atom.positive)
-            )
+        for literal in self.unary_evidence:
+            predicate, constant, positive = evidence_parts(literal)
+            renamed = predicate(Const(f"c_{constant.name}"))
+            new_unary_evidence.add(renamed if positive else ~renamed)
         logger.debug(
-            "Context.build: WFOMCProblem:\n"
+            "Context.build: EncodedProblem:\n"
             "  sentence: {}\n"
             "  domain: {}\n"
             "  weighting: {}\n"
@@ -644,11 +648,11 @@ class Context:
             sorted(str(a) for a in new_unary_evidence),
             self.circle_len,
         )
-        wfomc_problem = WFOMCProblem(
+        wfomc_problem = build_problem(
             self.sentence,
             new_domain,
             self.weighting,
-            unary_evidence=new_unary_evidence,
+            new_unary_evidence,
             circle_len=self.circle_len,
         )
         decoder = Decoder(

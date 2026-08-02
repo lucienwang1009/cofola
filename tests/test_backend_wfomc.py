@@ -1,11 +1,23 @@
 """WFOMC backend boundary and semantic regression tests."""
 from __future__ import annotations
 
-import pytest
-from wfomc import Algo
+from fractions import Fraction
 
+import pytest
+from flint import fmpq, fmpq_mpoly_ctx
+from sympy import Eq, var
+
+from cofola.backend.wfomc.api import (
+    Algo,
+    Pred,
+    WFOMCResult,
+    exactly_one_qf,
+    parse,
+    top,
+)
 from cofola.backend.wfomc.backend import WFOMCBackend
 from cofola.backend.wfomc.context import Context
+from cofola.backend.wfomc.decoder import Decoder
 from cofola.backend.wfomc.encoder import encode
 from cofola.frontend import (
     BagEqConstraint,
@@ -21,6 +33,50 @@ from cofola.frontend import (
 )
 from cofola.planing.analysis.entities import AnalysisResult, BagInfo, SetInfo
 from cofola.solver import parse_and_solve
+
+
+def test_constant_result_treats_absent_weight_generators_as_zero() -> None:
+    generator = var("v_absent")
+
+    accepted = Decoder(1, [generator], [Eq(generator, 0)], [])
+    rejected = Decoder(1, [generator], [Eq(generator, 1)], [])
+
+    result = WFOMCResult(fmpq(1))
+    assert accepted.decode_result(result) == 1
+    assert rejected.decode_result(result) == 0
+
+
+def test_result_adapter_wraps_legacy_polynomials() -> None:
+    arithmetic = fmpq_mpoly_ctx.get(("legacy_x",), "lex")
+    raw_result = arithmetic.from_dict({(2,): fmpq(3), (0,): fmpq(1, 2)})
+
+    result = WFOMCResult(raw_result)
+
+    assert result.is_polynomial()
+    assert not result.is_constant()
+    assert result.variable_names() == ("legacy_x",)
+    assert list(result.terms()) == [
+        ((2,), Fraction(3, 1)),
+        ((0,), Fraction(1, 2)),
+    ]
+
+
+def test_exactly_one_qf_requires_its_only_predicate() -> None:
+    predicate = Pred("P", 1)
+
+    assert exactly_one_qf([predicate]) == parse("P(X)")
+    assert exactly_one_qf([predicate]) != top
+
+
+def test_exactly_one_qf_preserves_multi_predicate_semantics() -> None:
+    left = Pred("P", 1)
+    right = Pred("Q", 1)
+
+    assert exactly_one_qf([left, right]) == parse(
+        "(P(X) | Q(X)) & ~(P(X) & Q(X))"
+    )
+    with pytest.raises(ValueError, match="at least one predicate"):
+        exactly_one_qf([])
 
 
 def test_bag_difference_counts_leftover_multiplicities() -> None:
@@ -307,8 +363,7 @@ def test_backend_does_not_convert_unexpected_solver_errors_to_zero(monkeypatch) 
             return iter(())
 
     class FakeProblem(object):
-        def contain_linear_order_axiom(self) -> bool:
-            return False
+        sentence = top
 
     class FakeDecoder(object):
         def decode_result(self, result: object) -> int:
@@ -317,7 +372,12 @@ def test_backend_does_not_convert_unexpected_solver_errors_to_zero(monkeypatch) 
     def fake_encode(problem: object, analysis: object, lifted: bool):
         return FakeProblem(), FakeDecoder()
 
-    def fake_solve_wfomc(problem: object, algo: Algo, use_partition_constraint: bool):
+    def fake_solve_wfomc(
+        problem: object,
+        algo: Algo,
+        unary_evidence_strategy: object,
+        linear_order_encoding: object = None,
+    ):
         raise ValueError("backend bug")
 
     import cofola.backend.wfomc.backend as backend_module

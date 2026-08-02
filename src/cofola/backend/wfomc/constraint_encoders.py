@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from sympy import Eq, Ge, Gt, Le, Lt, Ne, Or, false
-from wfomc import Const, fol_parse as parse
+from cofola.backend.wfomc.api import Const, parse
 
 import cofola.frontend.constraints as ir_cst
 import cofola.frontend.objects as ir_obj
@@ -426,12 +426,27 @@ def _encode_together_pattern(
     name = context.problem.get_name(group_ref) or f"obj_{group_ref.id}"
     first_pred = create_aux_pred(1, f"{name}_first")
 
-    # Define first(X) as the first element of the group in the sequence.
-    # source_pred(Y) is omitted from the ∀Y-guard because pred_pred already
-    # restricts both arguments to the sequence domain.
+    # Define first(X) as A(X) & ∀Y B(X,Y), split into the two C2 clauses
+    # below.  Keeping the nested universal underneath a biconditional is
+    # logically fine, but a generic Scott normalization introduces an extra
+    # unary marker.  On predecessor problems that marker multiplies the number
+    # of cells handled by incremental WFOMC.  The split form is equivalent on
+    # the non-empty domains supported by WFOMC and exposes the witness directly:
+    #
+    #   ∀X∀Y: first(X) -> A(X) & B(X,Y)
+    #   ∀X∃Y: first(X) | ~(A(X) & B(X,Y))
+    #
+    # pred_pred already restricts both arguments to the sequence domain, so the
+    # source predicate is intentionally omitted from B's guard.
+    body = (
+        f"{obj_pred}(X) & {domain_pred}(X) & "
+        f"({obj_pred}(Y) -> ~{pred_pred}(Y,X))"
+    )
     context.sentence = context.sentence & parse(
-        f"\\forall X: ({first_pred}(X) <-> ({obj_pred}(X) & {domain_pred}(X) & "
-        f"(\\forall Y: ({obj_pred}(Y) -> ~{pred_pred}(Y,X)))))"
+        f"\\forall X: (\\forall Y: ({first_pred}(X) -> ({body})))"
+    )
+    context.sentence = context.sentence & parse(
+        f"\\forall X: (\\exists Y: ({first_pred}(X) | ~({body})))"
     )
 
     # Create variable for counting first elements
