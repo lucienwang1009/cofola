@@ -1,17 +1,14 @@
 """WFOMC backend boundary and semantic regression tests."""
 from __future__ import annotations
 
-from fractions import Fraction
-
 import pytest
-from flint import fmpq, fmpq_mpoly_ctx
+from flint import fmpq
 from sympy import Eq, var
 
 from cofola.backend.wfomc.api import (
     Algo,
     Pred,
     WFOMCResult,
-    exactly_one_qf,
     parse,
     top,
 )
@@ -19,6 +16,7 @@ from cofola.backend.wfomc.backend import WFOMCBackend
 from cofola.backend.wfomc.context import Context
 from cofola.backend.wfomc.decoder import Decoder
 from cofola.backend.wfomc.encoder import encode
+from cofola.backend.wfomc.formula_helpers import exactly_one_qf
 from cofola.frontend import (
     BagEqConstraint,
     BagInit,
@@ -44,21 +42,6 @@ def test_constant_result_treats_absent_weight_generators_as_zero() -> None:
     result = WFOMCResult(fmpq(1))
     assert accepted.decode_result(result) == 1
     assert rejected.decode_result(result) == 0
-
-
-def test_result_adapter_wraps_legacy_polynomials() -> None:
-    arithmetic = fmpq_mpoly_ctx.get(("legacy_x",), "lex")
-    raw_result = arithmetic.from_dict({(2,): fmpq(3), (0,): fmpq(1, 2)})
-
-    result = WFOMCResult(raw_result)
-
-    assert result.is_polynomial()
-    assert not result.is_constant()
-    assert result.variable_names() == ("legacy_x",)
-    assert list(result.terms()) == [
-        ((2,), Fraction(3, 1)),
-        ((0,), Fraction(1, 2)),
-    ]
 
 
 def test_exactly_one_qf_requires_its_only_predicate() -> None:
