@@ -5,7 +5,8 @@ import math
 from functools import reduce
 
 from sympy import Eq, Max, Min
-from cofola.backend.wfomc.api import Const, exactly_one_qf, exclusive, parse
+from cofola.backend.wfomc.api import Const, parse
+from cofola.backend.wfomc.formula_helpers import exactly_one_qf, exclusive
 
 import cofola.frontend.objects as ir_obj
 from cofola.backend.wfomc.context import Context
