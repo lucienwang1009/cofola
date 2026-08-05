@@ -156,6 +156,9 @@ def write_paper_outputs(args: argparse.Namespace, rows: list[dict[str, str]]) ->
     figures = {
         "real_cactus": plot_paper.plot_cactus(real_rows, suite_label="real"),
         "synthetic_cactus": plot_paper.plot_cactus(synth_rows, suite_label="synthetic"),
+        "synthetic_object_summary": plot_paper.plot_object_summary(
+            synth_rows, synth_types,
+        ),
         "growing_family_runtime": plot_paper.plot_growing_runtime(
             growing_rows, timeout_sec=args.timeout_sec,
         ),

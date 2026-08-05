@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 from cofola.parser.parser import parse
 from scripts.benchmarks.cases import (
@@ -9,6 +10,7 @@ from scripts.benchmarks.cases import (
     load_saved_cases,
     old_synthetic_cases,
     save_cases,
+    select_cases,
     synthetic_cases,
 )
 
@@ -73,3 +75,14 @@ def test_saved_benchmark_manifest_round_trips_cases(tmp_path) -> None:
         assert program_path.exists()
         assert record["program_sha256"]
     assert (tmp_path / "manifest.csv").exists()
+
+
+def test_full_manifest_matches_canonical_suites() -> None:
+    """The checked-in full manifest must not drift from the canonical inputs."""
+    expected = select_cases(
+        suites=("all",),
+        real_path=Path("problems/real/corpus.json"),
+    )
+    actual = load_saved_cases(Path("problems/benchmarks/manifest.json"))
+
+    assert actual == expected

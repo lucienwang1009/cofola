@@ -3818,7 +3818,7 @@
     {
       "suite": "real",
       "case_id": "307",
-      "program": "letters = set(A, B, C)\nword = choose_replace_sequence(letters, 7)\nnot ((A, B) in word) and not ((B, C) in word) and not ((C, A) in word)",
+      "program": "letters = set(A, B, C)\nword = choose_replace_sequence(letters, 7)\n(A, B) not in word and (B, C) not in word and (C, A) not in word",
       "expected": 192,
       "tags": [
         "set",
@@ -3829,7 +3829,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/307.cfl",
-      "program_sha256": "23017afa7f8cf45a5b001420933aa1d0f866fe07ee0cdd5b3757aa175cf8964c"
+      "program_sha256": "ac514479758b6fb737c130c06b06b25c3913aab8b06daff7d32c257309ebc1c9"
     },
     {
       "suite": "real",

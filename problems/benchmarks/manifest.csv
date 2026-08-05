@@ -264,7 +264,7 @@ real,303,60,circle;reflection,problems/real/corpus.json,real/303.cfl,b69f4090d44
 real,304,1848,set;choose;intersection;size constraint,problems/real/corpus.json,real/304.cfl,651b1a0e253545f52cb09caca4a45a913f1ec547ce5bdb957328a629cc874532
 real,305,1050,set;choose;intersection;size constraint,problems/real/corpus.json,real/305.cfl,777cb522097c2bfd8add6372f670bed521440f86c34dcf4b4e4cbbf4554efc9e
 real,306,6840,set;choose;multiple choosing;difference,problems/real/corpus.json,real/306.cfl,9e7ae187e7097999ca5e714010be212feaaf746cdfaae6e4c40f2036032f4e52
-real,307,192,set;sequence;choose_replace_permute;pred;not constraint,problems/real/corpus.json,real/307.cfl,23017afa7f8cf45a5b001420933aa1d0f866fe07ee0cdd5b3757aa175cf8964c
+real,307,192,set;sequence;choose_replace_permute;pred;not constraint,problems/real/corpus.json,real/307.cfl,ac514479758b6fb737c130c06b06b25c3913aab8b06daff7d32c257309ebc1c9
 real,308,33800000,set;sequence;TAG;choose_replace;next_to;timeout,problems/real/corpus.json,real/308.cfl,c51bdc867c650f2b8c16b88b1451725eb4a7575bd0a19754b1bada48d83b086c
 real,309,6,set;circle;next_to;reflection,problems/real/corpus.json,real/309.cfl,1b815d5d622fffd8b64b90e19a2f4b812f2a30cfc8f6b092f9b89d767977a304
 real,325,452,set;choose_replace_permute;tuple;in;not constraint;compare element,problems/real/corpus.json,real/325.cfl,4f99470dd0074bdbb460bcc4bc623c6ac8c7df6d504031717c6be1e68552d6ae

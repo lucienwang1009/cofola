@@ -11,6 +11,8 @@ Figures (default prefix ``experiment``):
   solved).
 * ``experiment_synthetic_cactus.pdf`` -- analogous cactus plot on the
   synthetic suite.
+* ``experiment_synthetic_object_summary.pdf`` -- per-object-type coverage
+  bubbles coloured by average solved runtime on the synthetic suite.
 * ``experiment_growing_family_runtime.pdf`` -- one-panel-per-family
   runtime plot using the extended ``domain in {5, 10, ..., 100}`` results.
   Instances on which a backend timed out, raised an error, or returned a wrong
@@ -52,6 +54,7 @@ from pathlib import Path
 from typing import Iterable
 
 import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
 from matplotlib.figure import Figure
 
 
@@ -153,6 +156,7 @@ def main() -> None:
     figs = {
         "real_cactus": plot_cactus(real_rows, suite_label="real"),
         "synthetic_cactus": plot_cactus(synth_rows, suite_label="synthetic"),
+        "synthetic_object_summary": plot_object_summary(synth_rows, synth_types),
         "growing_family_runtime": plot_growing_runtime(
             growing_rows, timeout_sec=args.timeout_sec,
         ),
@@ -364,6 +368,91 @@ def print_per_object_table(
             else:
                 cells.append(f"{solved}\\,({avg:.2f}s)")
         print(f"{BACKEND_LABELS[b]} & " + " & ".join(cells) + " \\\\")
+
+
+# ---------------------------------------------------------------------------
+# Synthetic object-type summary: coverage bubbles coloured by solved runtime
+# ---------------------------------------------------------------------------
+
+def plot_object_summary(
+    rows: list[dict[str, str]],
+    case_types: dict[str, set[str]],
+) -> Figure:
+    """Plot per-backend coverage and runtime for each synthetic object type."""
+    configure_matplotlib()
+    stats = per_object_stats(rows, case_types)
+    backends = backends_present(rows)
+    averages = [
+        float(stats[backend][object_type]["avg_sec"])
+        for backend in backends
+        for object_type in OBJECT_TYPES
+        if int(stats[backend][object_type]["solved"]) > 0
+        and not math.isnan(float(stats[backend][object_type]["avg_sec"]))
+    ]
+    lower = max(0.05, min(averages) * 0.8) if averages else 0.1
+    upper = max(1.0, max(averages) * 1.2) if averages else 1.0
+    norm = LogNorm(vmin=lower, vmax=upper)
+    cmap = plt.get_cmap("viridis_r")
+
+    fig, ax = plt.subplots(figsize=(7.2, 3.3))
+    for y, backend in enumerate(backends):
+        for x, object_type in enumerate(OBJECT_TYPES):
+            cell = stats[backend][object_type]
+            solved = int(cell["solved"])
+            average = float(cell["avg_sec"])
+            if solved == 0 or math.isnan(average):
+                ax.text(x, y, "--", ha="center", va="center", color="#777777")
+                continue
+            rgba = cmap(norm(average))
+            ax.scatter(
+                x,
+                y,
+                s=max(20, solved * 18),
+                c=[rgba],
+                edgecolors="#555555",
+                linewidths=0.4,
+                zorder=2,
+            )
+            luminance = 0.2126 * rgba[0] + 0.7152 * rgba[1] + 0.0722 * rgba[2]
+            ax.text(
+                x,
+                y,
+                str(solved),
+                ha="center",
+                va="center",
+                color="black" if luminance > 0.58 else "white",
+                fontsize=7,
+                zorder=3,
+            )
+
+    totals = [
+        int(stats[backends[0]][object_type]["total"])
+        for object_type in OBJECT_TYPES
+    ]
+    ax.set_xticks(
+        range(len(OBJECT_TYPES)),
+        [
+            f"{object_type}\n({total})"
+            for object_type, total in zip(OBJECT_TYPES, totals)
+        ],
+    )
+    ax.set_yticks(
+        range(len(backends)),
+        [BACKEND_LABELS.get(backend, backend) for backend in backends],
+    )
+    ax.set_xlim(-0.6, len(OBJECT_TYPES) - 0.4)
+    ax.set_ylim(len(backends) - 0.5, -0.5)
+    ax.set_xlabel("Object type (synthetic instances containing type)")
+    ax.set_ylabel("Backend")
+    ax.grid(True, color="#dddddd", linewidth=0.5, alpha=0.55)
+
+    mappable = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
+    mappable.set_array([])
+    colorbar = fig.colorbar(mappable, ax=ax, pad=0.025, fraction=0.035)
+    colorbar.set_label("Avg. runtime (s, log)")
+    colorbar.ax.minorticks_on()
+    fig.tight_layout(pad=0.8)
+    return fig
 
 
 # ---------------------------------------------------------------------------

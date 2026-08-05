@@ -23,6 +23,16 @@ S subset T
         assert parse_and_solve(program) == 1
         assert parse_and_solve(program, algo="propositional") == 1
 
+    def test_folded_full_choice_keeps_weighted_singleton_evidence(self) -> None:
+        """A folded tautology must retain degrees used by size validators."""
+        program = """
+defective = set(d0...2)
+working = set(w0...3)
+purchase = choose(defective + working, 5)
+|purchase & defective| >= 2
+"""
+        assert parse_and_solve(program) == 1
+
 
     def test_bag_difference_counts_leftover_multiplicities(self) -> None:
         """Bag difference should use max(left - right, 0), not support difference."""
