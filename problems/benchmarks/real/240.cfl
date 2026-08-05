@@ -1,7 +1,0 @@
-England = set(E0...3)
-Germany = set(G0...4)
-France = set(F0...2)
-table = circle(England + Germany + France)
-table.together(England)
-table.together(Germany)
-table.together(France)

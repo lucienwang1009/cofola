@@ -34,7 +34,6 @@ from cofola.frontend.objects import (
     BagPartDef,
     BagSupport,
     BagUnion,
-    CircleDef,
     CompositionDef,
     Entity,
     FuncDef,
@@ -171,7 +170,7 @@ class EssenceEncoder(object):
                     f"(freq({self._name(defn.source)}, {e}) > 0)"
                 )
             )
-        elif isinstance(defn, (TupleDef, SequenceDef, CircleDef)):
+        elif isinstance(defn, (TupleDef, SequenceDef)):
             self._emit_ordered(ref, defn)
         elif isinstance(defn, (PartitionDef, CompositionDef)):
             self._emit_grouped(ref, defn)
@@ -215,7 +214,7 @@ class EssenceEncoder(object):
     def _emit_ordered(
         self,
         ref: ObjRef,
-        defn: TupleDef | SequenceDef | CircleDef,
+        defn: TupleDef | SequenceDef,
     ) -> None:
         size = self._exact_size(ref)
         if size is None:
@@ -245,15 +244,6 @@ class EssenceEncoder(object):
                     if comparator == "<="
                     else f"{self._mult(ref, e)} = {self._mult(defn.source, e)}"
                 )
-            )
-
-        if isinstance(defn, CircleDef):
-            distinct_source = self._kind(defn.source) == "set" and not defn.replace
-            self._emit_circle_canonical(
-                ref,
-                size,
-                reflection=defn.reflection,
-                distinct_source=distinct_source,
             )
 
     def _emit_grouped(
@@ -292,35 +282,6 @@ class EssenceEncoder(object):
     def _emit_partition_canonical(self, parts: list[ObjRef]) -> None:
         for left, right in zip(parts, parts[1:], strict=False):
             self._add(self._lex_geq(self._part_lex_terms(left), self._part_lex_terms(right)))
-
-    def _emit_circle_canonical(
-        self,
-        ref: ObjRef,
-        size: int,
-        *,
-        reflection: bool,
-        distinct_source: bool,
-    ) -> None:
-        if size <= 1:
-            return
-        if distinct_source:
-            own = self._name(ref)
-            for pos in range(2, size + 1):
-                self._add(f"{own}(1) <= {own}({pos})")
-            if reflection and size > 2:
-                self._add(f"{own}(2) < {own}({size})")
-            return
-        identity = self._sequence_terms(ref, list(range(1, size + 1)))
-        for shift in range(1, size):
-            rotated = [((pos + shift - 1) % size) + 1 for pos in range(1, size + 1)]
-            self._add(self._lex_leq(identity, self._sequence_terms(ref, rotated)))
-        if reflection:
-            for shift in range(size):
-                reflected = [
-                    ((shift - (pos - 1)) % size) + 1
-                    for pos in range(1, size + 1)
-                ]
-                self._add(self._lex_leq(identity, self._sequence_terms(ref, reflected)))
 
     def _emit_constraint(self, constraint: object) -> None:
         if isinstance(constraint, SizeConstraint):
@@ -459,22 +420,13 @@ class EssenceEncoder(object):
             raise AssertionError(type(pattern).__name__)
         size = self._required_exact_size(constraint.seq)
         group_at = lambda pos: self._arg_at(constraint.seq, pos, pattern.group)
-        if self._is_circle(constraint.seq):
-            transitions = []
-            for left, right in self._successor_pairs(constraint.seq):
-                transitions.append(
-                    f"toInt(({group_at(left)} /\\ !({group_at(right)})) \\/ "
-                    f"(!({group_at(left)}) /\\ {group_at(right)}))"
-                )
-            gap = f"sum([{', '.join(transitions)}]) > 2" if transitions else "false"
-        else:
-            gaps = [
-                f"({group_at(left)} /\\ {group_at(right)} /\\ !({group_at(mid)}))"
-                for left in range(1, size + 1)
-                for mid in range(left + 1, size + 1)
-                for right in range(mid + 1, size + 1)
-            ]
-            gap = self._or(gaps)
+        gaps = [
+            f"({group_at(left)} /\\ {group_at(right)} /\\ !({group_at(mid)}))"
+            for left in range(1, size + 1)
+            for mid in range(left + 1, size + 1)
+            for right in range(mid + 1, size + 1)
+        ]
+        gap = self._or(gaps)
         self._add(f"!({gap})" if constraint.positive else gap)
 
     def _emit_local_pattern(self, constraint: SequencePatternConstraint) -> None:
@@ -609,10 +561,7 @@ class EssenceEncoder(object):
 
     def _successor_pairs(self, seq: ObjRef) -> list[tuple[int, int]]:
         size = self._required_exact_size(seq)
-        pairs = [(pos, pos + 1) for pos in range(1, size)]
-        if self._is_circle(seq) and size > 1:
-            pairs.append((size, 1))
-        return pairs
+        return [(pos, pos + 1) for pos in range(1, size)]
 
     def _arg_at(self, seq: ObjRef, pos: int, arg: ObjRef | Entity) -> str:
         value = f"{self._name(seq)}({pos})"
@@ -691,9 +640,6 @@ class EssenceEncoder(object):
             )
         raise EssenceEncodingError(f"ref={ref.id} has no multiplicity view.")
 
-    def _sequence_terms(self, ref: ObjRef, positions: list[int]) -> list[str]:
-        return [f"{self._name(ref)}({pos})" for pos in positions]
-
     def _part_lex_terms(self, ref: ObjRef) -> list[str]:
         return [self._mult(ref, self._entity_id(entity)) for entity in self.entities]
 
@@ -734,9 +680,6 @@ class EssenceEncoder(object):
             if isinstance(defn, (SetPartDef, BagPartDef)) and defn.partition == partition:
                 parts.append((defn.index, ref))
         return [ref for _index, ref in sorted(parts)]
-
-    def _is_circle(self, ref: ObjRef) -> bool:
-        return isinstance(self.problem.get_object(ref), CircleDef)
 
     def _required_exact_size(self, ref: ObjRef) -> int:
         exact = self._exact_size(ref)

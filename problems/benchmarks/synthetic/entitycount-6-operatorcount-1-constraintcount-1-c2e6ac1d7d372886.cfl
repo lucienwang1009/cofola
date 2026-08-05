@@ -1,3 +1,0 @@
-bag_0 = bag(e_1: 1, e_4: 1, e_5: 1, e_6: 3)
-circle_0 = circle(bag_0, reflection=True)
-not (next_to(e_5, e_1) in circle_0)

@@ -57,7 +57,6 @@ from cofola.frontend.constraints import (
 )
 from cofola.frontend.objects import (
     BagInit,
-    CircleDef,
     Ordered,
     SequenceDef,
     SetInit,
@@ -230,7 +229,7 @@ def _size_eq(ref: ObjRef, size: int) -> SizeConstraint:
 
 
 def _full_ordered_source(defn: object) -> ObjRef | None:
-    if not isinstance(defn, (TupleDef, SequenceDef, CircleDef)):
+    if not isinstance(defn, (TupleDef, SequenceDef)):
         return None
     if defn.choose or defn.replace:
         return None

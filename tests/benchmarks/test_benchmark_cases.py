@@ -30,7 +30,7 @@ def test_growing_cases_include_mathcounts_and_fourletter_families() -> None:
 def test_synthetic_cases_load_materialized_benchmark_manifest() -> None:
     cases = synthetic_cases()
 
-    assert len(cases) == 100
+    assert len(cases) == 82
     assert all(case.expected is not None for case in cases)
     assert all("entitycount=" in ";".join(case.tags) for case in cases)
     assert {case.source for case in cases} == {"problems/benchmarks/synthetic/manifest.json"}

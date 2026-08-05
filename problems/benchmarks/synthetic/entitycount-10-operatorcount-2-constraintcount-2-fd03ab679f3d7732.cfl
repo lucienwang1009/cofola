@@ -1,5 +1,0 @@
-set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)
-circle_0 = circle(set_0)
-choose_0 = choose(set_0, 5)
-circle_0.together(set(e_5, e_7, e_4))
-e_3 in choose_0

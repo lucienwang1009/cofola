@@ -1,4 +1,0 @@
-people = set(Alice, Bob, Eve, other0...5)
-seating = circle(people)
-not_next_to = set(Alice, Bob, Eve)
-not (next_to(not_next_to, not_next_to) in seating)

@@ -83,7 +83,6 @@ OBJECT_TYPES = (
     "bag",
     "tuple",
     "sequence",
-    "circle",
     "partition",
     "composition",
 )
@@ -248,8 +247,6 @@ OBJECT_TYPE_PATTERNS = {
               r"\bchoose_replace_tuple\s*\("),
     "sequence": (r"\bsequence\s*\(", r"\bchoose_sequence\s*\(",
                  r"\bchoose_replace_sequence\s*\("),
-    "circle": (r"\bcircle\s*\(", r"\bchoose_circle\s*\(",
-               r"\bchoose_replace_circle\s*\("),
     "partition": (r"\bpartition\s*\(",),
     "composition": (r"\bcompose\s*\(",),
 }

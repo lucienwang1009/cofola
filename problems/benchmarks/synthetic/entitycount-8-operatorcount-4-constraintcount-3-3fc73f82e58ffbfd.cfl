@@ -1,8 +1,0 @@
-bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_4: 1, e_5: 1, e_7: 1, e_8: 2)
-choose_0 = choose(bag_0, 4)
-circle_0 = circle(choose_0)
-compose_0 = compose(choose_0, 3)
-circle_1 = circle(compose_0[0])
-not circle_0.together(set(e_5, e_1, e_2))
-|compose_0[1]| + |choose_0| == 1
-circle_1.together(set(e_2, e_3, e_5))

@@ -23,7 +23,7 @@ tests/
 │   ├── wfomc/
 │   │   ├── test_profile.py             # backend planning-profile declaration
 │   │   ├── test_collection_semantics.py  # set / bag / choice semantics
-│   │   ├── test_sequence_patterns.py   # sequence/circle pattern syntax + semantics
+│   │   ├── test_sequence_patterns.py   # sequence pattern syntax + semantics
 │   │   ├── test_choice_membership.py   # choice objects, bag negation, tuple membership
 │   │   └── test_encoding_boundaries.py # encoding invariants + error boundaries
 │   ├── asp/

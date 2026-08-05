@@ -26,7 +26,6 @@ from cofola.frontend.objects import (
     BagDifference,
     BagIntersection,
     BagChoose,
-    CircleDef,
     CompositionDef,
     Entity,
     ObjRef,
@@ -92,7 +91,6 @@ _CONFIG_TYPES = (
     BagChoose,
     TupleDef,
     SequenceDef,
-    CircleDef,
     PartitionDef,
     CompositionDef,
 )
@@ -209,8 +207,6 @@ def _config_spec(ref: ObjRef, problem: Problem, analysis: AnalysisResult) -> _Co
             "CoSo backend does not support Cofola sequence objects; "
             "use TupleDef/tuple(...) for CoSo-compatible ordered arrangements."
         )
-    if isinstance(defn, CircleDef):
-        raise CoSoEncodingError("CoSo backend does not support Cofola circle objects.")
     if isinstance(defn, PartitionDef):
         return _ConfigSpec(ref, "partition", defn.source, defn.num_parts)
     if isinstance(defn, CompositionDef):

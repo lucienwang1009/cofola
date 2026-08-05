@@ -1,3 +1,0 @@
-people = set(p0...7)
-sat_people = choose(people, 6)
-table = circle(sat_people)

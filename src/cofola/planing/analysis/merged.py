@@ -5,7 +5,7 @@ from copy import deepcopy
 
 from loguru import logger
 
-from cofola.frontend.objects import CircleDef, ObjRef, SequenceDef, TupleDef
+from cofola.frontend.objects import ObjRef, SequenceDef, TupleDef
 from cofola.planing.pass_manager import AnalysisPass
 from cofola.frontend.problem import Problem
 from cofola.planing.analysis.entities import EntityAnalysis, AnalysisResult, BagInfo, SetInfo
@@ -155,7 +155,7 @@ class MergedAnalysis(AnalysisPass[AnalysisResult]):
         while changed:
             changed = False
             for ref, defn in problem.defs:
-                if not isinstance(defn, (TupleDef, SequenceDef, CircleDef)):
+                if not isinstance(defn, (TupleDef, SequenceDef)):
                     continue
                 if defn.choose or defn.replace:
                     continue

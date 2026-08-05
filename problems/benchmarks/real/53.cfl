@@ -1,6 +1,0 @@
-Democrats = set(D0...5)
-Republicans = set(R0...5)
-committee = Democrats + Republicans + set(Independent)
-table = circle(committee)
-table.together(Democrats)
-table.together(Republicans)

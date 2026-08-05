@@ -72,7 +72,7 @@ S = supp(B)
 
 The support of a bag is the set of entities whose multiplicity is positive.
 
-### Tuples, Sequences, And Circles
+### Tuples And Sequences
 
 ```cfl
 T = tuple(S)
@@ -82,12 +82,9 @@ T = choose_replace_tuple(S, 3)
 Seq = sequence(S)
 Seq = choose_sequence(S, 2)
 Seq = choose_replace_sequence(S, 3)
-
-Ring = circle(S)
-Bracelet = circle(S, reflection=True)
 ```
 
-Tuples support indexed constraints such as `T[0] == a`. Sequences and circles
+Tuples support indexed constraints such as `T[0] == a`. Sequences
 support relative positional constraints such as `a < b in Seq`.
 
 ### Partitions And Compositions
@@ -185,8 +182,6 @@ Seq.count(next_to(a, b)) >= 1
 Seq.count((a, b)) == 0
 ```
 
-Circles reject strict ordering patterns like `a < b`.
-
 ### Logic
 
 ```cfl
@@ -200,7 +195,7 @@ The planner expands supported logical structure before backend solving.
 ## Validation Notes
 
 - Object names cannot use reserved keywords such as `set`, `bag`, `choose`,
-  `tuple`, `sequence`, `circle`, `partition`, or `compose`.
+  `tuple`, `sequence`, `partition`, or `compose`.
 - Undefined object names are rejected during parsing.
 - Type mismatches are rejected before solving.
 - Hand-built Python `Problem` objects should be checked with

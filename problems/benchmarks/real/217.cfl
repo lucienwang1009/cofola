@@ -1,2 +1,0 @@
-people = set(p0...8)
-table = circle(people)

@@ -1,6 +1,6 @@
 {
   "format": "cofola-benchmark-manifest-v1",
-  "num_cases": 472,
+  "num_cases": 429,
   "cases": [
     {
       "suite": "real",
@@ -124,21 +124,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/7.cfl",
       "program_sha256": "ab30ef3760896b4a639faeabb3cbc261cd46bd44152bdfa7c52740194984e1e1"
-    },
-    {
-      "suite": "real",
-      "case_id": "8",
-      "program": "Democrats = set(D0...5)\nRepublicans = set(R0...5)\ntable = circle(Democrats + Republicans)\ntable.together(Democrats)\ntable.together(Republicans)",
-      "expected": 14400,
-      "tags": [
-        "set",
-        "circle",
-        "together",
-        "benchmark"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/8.cfl",
-      "program_sha256": "5403c8f0d51e66cc3988bbd4163816937c6de16bb22fb16fedd3c4bc4d6e2ccb"
     },
     {
       "suite": "real",
@@ -427,22 +412,6 @@
     },
     {
       "suite": "real",
-      "case_id": "33",
-      "program": "people = set(Pierre, Thomas, Rosa, other0...5)\ntable = circle(people)\nnext_to(Pierre, Thomas) in table\nnot (next_to(Rosa, Pierre) in table)\nnot (next_to(Rosa, Thomas) in table)",
-      "expected": 960,
-      "tags": [
-        "set",
-        "circle",
-        "next_to",
-        "not constraint",
-        "benchmark"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/33.cfl",
-      "program_sha256": "737a9dc89690a307efbb135e2637d3fc7ad538ec1b60db910cd8e04db2a9c537"
-    },
-    {
-      "suite": "real",
       "case_id": "34",
       "program": "creatures = bag(crocodile: 4, catfish, squid: 2)\norder = sequence(creatures)\nnot ((crocodile, crocodile) in order)",
       "expected": 3,
@@ -499,20 +468,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/38.cfl",
       "program_sha256": "d52c84a0fd4bec754c10a890335ddd756d11e9f73ed8e78d79b6984fed5bf2f7"
-    },
-    {
-      "suite": "real",
-      "case_id": "39",
-      "program": "together_people = set(Pierre, Rosa, Thomas)\npeople = together_people + set(other0...5)\ntable = circle(people)\ntable.together(together_people)",
-      "expected": 720,
-      "tags": [
-        "set",
-        "circle",
-        "together"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/39.cfl",
-      "program_sha256": "8eb98299aee428eaae63d437ff79a372e5193c20412e7fff2f96a7361a3187fb"
     },
     {
       "suite": "real",
@@ -621,21 +576,6 @@
     },
     {
       "suite": "real",
-      "case_id": "47",
-      "program": "people = set(Pierre, Rosa, Thomas, other0...4)\nnot_next_to = set(Pierre, Rosa, Thomas)\ntable = circle(people)\nnot (next_to(not_next_to,not_next_to) in table)",
-      "expected": 144,
-      "tags": [
-        "set",
-        "circle",
-        "next_to",
-        "not constraint"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/47.cfl",
-      "program_sha256": "87af382802b805e08a94b6581144d327115b48f477f987272343194f97913378"
-    },
-    {
-      "suite": "real",
       "case_id": "48",
       "program": "copies = bag(Geometry: 3, Number_Theory: 4)\narrangement = tuple(copies)",
       "expected": 35,
@@ -672,20 +612,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/50.cfl",
       "program_sha256": "5ce0941a5718a1281f35f6f59c1d76e5d411004660f12b266282d0731809247e"
-    },
-    {
-      "suite": "real",
-      "case_id": "53",
-      "program": "Democrats = set(D0...5)\nRepublicans = set(R0...5)\ncommittee = Democrats + Republicans + set(Independent)\ntable = circle(committee)\ntable.together(Democrats)\ntable.together(Republicans)",
-      "expected": 28800,
-      "tags": [
-        "set",
-        "circle",
-        "together"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/53.cfl",
-      "program_sha256": "5aab7ab22c5d204cddd28f9347aa29df9d8d71ef4e351298d583c7526a39d4bd"
     },
     {
       "suite": "real",
@@ -846,20 +772,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/66.cfl",
       "program_sha256": "8bd0c4dca39c7ebe5447fe00ff7dc3d08f8725b91c2be34d4f4cbc446b1681ae"
-    },
-    {
-      "suite": "real",
-      "case_id": "67",
-      "program": "people = set(p0...7)\nsat_people = choose(people, 6)\ntable = circle(sat_people)",
-      "expected": 840,
-      "tags": [
-        "set",
-        "choose",
-        "circle"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/67.cfl",
-      "program_sha256": "fe57445eb14709313eb16bd398c8af4f68d359e95a17e9a7de6cfb1ae28611ac"
     },
     {
       "suite": "real",
@@ -1038,20 +950,6 @@
     },
     {
       "suite": "real",
-      "case_id": "82",
-      "program": "people = set(John, Sam, other0...4)\ntable = circle(people)\nnext_to(John, Sam) in table",
-      "expected": 48,
-      "tags": [
-        "set",
-        "circle",
-        "next_to"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/82.cfl",
-      "program_sha256": "41d6ff21504f9f8f66bdd93d751f26e1e67deefae1f410283862b8170f1dd9f4"
-    },
-    {
-      "suite": "real",
       "case_id": "83",
       "program": "teacher_committee = set(teacher0...4)\nnon_teacher_committee = set(non_teacher0...6)\ncommittee = teacher_committee + non_teacher_committee\nsubcommittees = choose(committee, 4)\n|subcommittees & teacher_committee| > 0",
       "expected": 195,
@@ -1122,20 +1020,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/87.cfl",
       "program_sha256": "83de40865e665cf9eb81abf15bbbfc8f070cafde77247d56279c1c3927a49b78"
-    },
-    {
-      "suite": "real",
-      "case_id": "90",
-      "program": "beads = set(bead0...8)\nnecklace = choose_circle(beads, 5, reflection=True)",
-      "expected": 672,
-      "tags": [
-        "circle",
-        "reflection",
-        "benchmark"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/90.cfl",
-      "program_sha256": "13410e741dd08a1419f200e8baae7f78390e3faca48b469e2e17bc0054b3f817"
     },
     {
       "suite": "real",
@@ -1449,19 +1333,6 @@
     },
     {
       "suite": "real",
-      "case_id": "113",
-      "program": "politicians = set(D0...5) + set(R0...5)\ntable = circle(politicians)",
-      "expected": 362880,
-      "tags": [
-        "set",
-        "circle"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/113.cfl",
-      "program_sha256": "3dfc3298cb2138df8e8d55cdad034197a5a6246a12b58a3d1c81c706e0f99185"
-    },
-    {
-      "suite": "real",
       "case_id": "114",
       "program": "colors = set(color0...7)\nchoice = choose(colors, 2)",
       "expected": 21,
@@ -1553,19 +1424,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/121.cfl",
       "program_sha256": "bf8cf7872ab58631772ed9602c8632552b0fabadcc392604d65b9f936b50709b"
-    },
-    {
-      "suite": "real",
-      "case_id": "122",
-      "program": "keys = set(key0...5)\nkeychain = circle(keys, reflection=True)",
-      "expected": 12,
-      "tags": [
-        "circle",
-        "reflection"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/122.cfl",
-      "program_sha256": "aa5bed1c0c74fcbf6a7d2d769c5acaae563b487ce3b7ef17dc2111c5023d7fac"
     },
     {
       "suite": "real",
@@ -1756,21 +1614,6 @@
     },
     {
       "suite": "real",
-      "case_id": "137",
-      "program": "people = set(Alice, Bob, other0...6)\ntable = circle(people)\nnot (next_to(Alice, Bob) in table)",
-      "expected": 3600,
-      "tags": [
-        "set",
-        "circle",
-        "next_to",
-        "not constraint"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/137.cfl",
-      "program_sha256": "1425b46ce67f1d06d656128f8b5f705330b2e1111dba13d87639397636bae8aa"
-    },
-    {
-      "suite": "real",
       "case_id": "138",
       "program": "teachers = set(teacher0...5)\nparents = set(parent0...7)\nstudents = set(student0...6)\nsubcommittee = choose(teachers, 2) + choose(parents, 3) + choose(students, 3)",
       "expected": 7000,
@@ -1910,21 +1753,6 @@
     },
     {
       "suite": "real",
-      "case_id": "149",
-      "program": "Democrats = set(D0...5)\nRepublicans = set(R0...5)\ntable = circle(Democrats + Republicans)\nnot (next_to(Democrats, Democrats) in table)\nnot (next_to(Republicans, Republicans) in table)",
-      "expected": 2880,
-      "tags": [
-        "set",
-        "circle",
-        "pred",
-        "succ"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/149.cfl",
-      "program_sha256": "a6351c31090d6d6a14eede008f904542e8f3a3a100422ab7375cdde8ade939f4"
-    },
-    {
-      "suite": "real",
       "case_id": "151",
       "program": "boys = set(boy0...10)\ngirls = set(girl0...10)\nmembers = boys + girls\npresident = choose(members, 1)\nvice_president = choose(members - president, 1)\npresident_and_vice_president = president + vice_president\n(president_and_vice_president subset boys) or (president_and_vice_president subset girls)",
       "expected": 180,
@@ -1965,32 +1793,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/153.cfl",
       "program_sha256": "836d0d2e64fe32e15f1b4ddde79539533967d0e385013ebcf88155415f264d8e"
-    },
-    {
-      "suite": "real",
-      "case_id": "154",
-      "program": "beads_and_knot = set(bead0...4, knot)\nbracelet = circle(beads_and_knot, reflection=True)",
-      "expected": 12,
-      "tags": [
-        "circle",
-        "reflection"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/154.cfl",
-      "program_sha256": "05e0d794c3cbf41acecc20ddadd6f88ddc0b4e2ebc3c7c53c2a708c07ad17a60"
-    },
-    {
-      "suite": "real",
-      "case_id": "155",
-      "program": "people = set(p0...9)\nround_table = circle(people)",
-      "expected": 40320,
-      "tags": [
-        "set",
-        "circle"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/155.cfl",
-      "program_sha256": "41cd6bd27bc3f50f39f291d5fc6041d890bb8d3f7ad0e42071117670401223ec"
     },
     {
       "suite": "real",
@@ -2624,21 +2426,6 @@
     },
     {
       "suite": "real",
-      "case_id": "206",
-      "program": "plates = bag(blue: 5, red: 2, green: 2, orange: 1)\narrangement = circle(plates)\nnot (next_to(green, green) in arrangement)",
-      "expected": 588,
-      "tags": [
-        "set",
-        "circle",
-        "pred",
-        "not constraint"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/206.cfl",
-      "program_sha256": "d42641c3b78f4b3e80482d69b77e95dcb1a04bd1f9865af29a814fde0c3a17e4"
-    },
-    {
-      "suite": "real",
       "case_id": "207",
       "program": "German = set(G0...6)\nFrench = set(F0...5)\nItalian = set(I0...3)\nAll = German + French + Italian\nchairs = sequence(All)\nchairs.together(German)\nchairs.together(French)\nchairs.together(Italian)",
       "expected": 3110400,
@@ -2683,19 +2470,6 @@
     },
     {
       "suite": "real",
-      "case_id": "210",
-      "program": "people = set(p0...5)\ntable = circle(people)",
-      "expected": 24,
-      "tags": [
-        "set",
-        "circle"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/210.cfl",
-      "program_sha256": "cb90c921c8a12b4fb88b82ac79d0bdef3629ecf51178fc6b28240709a9b24654"
-    },
-    {
-      "suite": "real",
       "case_id": "211",
       "program": "students = set(student0...6)\ncommittee = choose(students, 4)",
       "expected": 15,
@@ -2720,19 +2494,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/212.cfl",
       "program_sha256": "1b26919a38ab790d38958aab5f743f5219c961b8f0f596212df8767049af6da3"
-    },
-    {
-      "suite": "real",
-      "case_id": "214",
-      "program": "breads = bag(orange: 3, black: 3, teal: 1)\nbracelet = circle(breads, reflection=True)",
-      "expected": 10,
-      "tags": [
-        "circle",
-        "reflection"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/214.cfl",
-      "program_sha256": "99b2e1d046ec2b4024793d574ecb7a95a6e5c31c2de1ea58ea2b70757f5218fd"
     },
     {
       "suite": "real",
@@ -2763,19 +2524,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/216.cfl",
       "program_sha256": "cc76aeca11eda4da94dbaffe9a494d6ed1fabf81de5d798d7bc7d49b334e6563"
-    },
-    {
-      "suite": "real",
-      "case_id": "217",
-      "program": "people = set(p0...8)\ntable = circle(people)",
-      "expected": 5040,
-      "tags": [
-        "set",
-        "circle"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/217.cfl",
-      "program_sha256": "4c97e6ddff37f0dc547f3cd66ae1ba2254a6db85680224725268c11b654a24b3"
     },
     {
       "suite": "real",
@@ -2955,19 +2703,6 @@
     },
     {
       "suite": "real",
-      "case_id": "236",
-      "program": "beads = set(bead0...5)\nbracelet = circle(beads, reflection=True)",
-      "expected": 12,
-      "tags": [
-        "circle",
-        "reflection"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/236.cfl",
-      "program_sha256": "1a2698c9113269d05d47e3f3c0b1759be6725d77278f1a62c5bf65a14f74887e"
-    },
-    {
-      "suite": "real",
       "case_id": "237",
       "program": "math_books = set(math1, math2)\nbooks = math_books + set(other0...4)\nstack = tuple(books)\nstack[0] in math_books\nstack[5] in math_books",
       "expected": 48,
@@ -3007,20 +2742,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/239.cfl",
       "program_sha256": "0b26d75fb7e32f80ea01f66da271ea4a002766eee2a41c66ab9200027ed344f9"
-    },
-    {
-      "suite": "real",
-      "case_id": "240",
-      "program": "England = set(E0...3)\nGermany = set(G0...4)\nFrance = set(F0...2)\ntable = circle(England + Germany + France)\ntable.together(England)\ntable.together(Germany)\ntable.together(France)",
-      "expected": 576,
-      "tags": [
-        "set",
-        "circle",
-        "together"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/240.cfl",
-      "program_sha256": "b10e0c21e53a6a9cc2f7320ffa4492eb47c1e0e4decf1baf47b7ef1e13c01ec6"
     },
     {
       "suite": "real",
@@ -3260,19 +2981,6 @@
     },
     {
       "suite": "real",
-      "case_id": "260",
-      "program": "seats = set(seats0...7)\narrangement = circle(seats)",
-      "expected": 720,
-      "tags": [
-        "set",
-        "circle"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/260.cfl",
-      "program_sha256": "bf33b7ea6913a327710fc091d3e84338d27508428d252acc10ca9dc41945e59b"
-    },
-    {
-      "suite": "real",
       "case_id": "261",
       "program": "locations = set(0...5)\nvisit = choose(locations, 3)",
       "expected": 10,
@@ -3355,20 +3063,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/268.cfl",
       "program_sha256": "a8927a2c6ad30725862245e5177b1598607b1c9c5b689bb5adf00d03915592ff"
-    },
-    {
-      "suite": "real",
-      "case_id": "269",
-      "program": "tribe = set(mother, wife, chief, other0...5)\narrangement = circle(tribe)\nnext_to(mother, chief) in arrangement\nnext_to(chief, wife) in arrangement",
-      "expected": 240,
-      "tags": [
-        "set",
-        "circle",
-        "next_to"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/269.cfl",
-      "program_sha256": "a74bd83e82a9580daf7b2af9aea17001edd933c4cd1481028bb1f13aa817c44d"
     },
     {
       "suite": "real",
@@ -3518,21 +3212,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/281.cfl",
       "program_sha256": "1a205c19964db5d54ac6205723f607d5423e81a8700c78d33f9a91817d0d003d"
-    },
-    {
-      "suite": "real",
-      "case_id": "284",
-      "program": "people = set(Alice, Bob, Eve, other0...5)\nseating = circle(people)\nnot_next_to = set(Alice, Bob, Eve)\nnot (next_to(not_next_to, not_next_to) in seating)",
-      "expected": 1440,
-      "tags": [
-        "set",
-        "circle",
-        "next_to",
-        "not constraint"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/284.cfl",
-      "program_sha256": "5e6e575e64d17d4a5a684d8b5092122fd7af86b750562898ff0ca1ca99144a91"
     },
     {
       "suite": "real",
@@ -3759,19 +3438,6 @@
     },
     {
       "suite": "real",
-      "case_id": "303",
-      "program": "beads = set(bead0...6)\nbracelet = circle(beads, reflection=True)",
-      "expected": 60,
-      "tags": [
-        "circle",
-        "reflection"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/303.cfl",
-      "program_sha256": "b69f4090d442053a4860fa3462607aa06fe9703a5bf892a86eac846f4df62390"
-    },
-    {
-      "suite": "real",
       "case_id": "304",
       "program": "players = set(Alicia, Amanda, Anna, other0...11)\ntriplets = set(Alicia, Amanda, Anna)\nstarters = choose(players, 6)\n|starters & triplets| <= 1",
       "expected": 1848,
@@ -3818,7 +3484,7 @@
     {
       "suite": "real",
       "case_id": "307",
-      "program": "letters = set(A, B, C)\nword = choose_replace_sequence(letters, 7)\nnot ((A, B) in word) and not ((B, C) in word) and not ((C, A) in word)",
+      "program": "letters = set(A, B, C)\nword = choose_replace_sequence(letters, 7)\n(A, B) not in word and (B, C) not in word and (C, A) not in word",
       "expected": 192,
       "tags": [
         "set",
@@ -3829,7 +3495,7 @@
       ],
       "source": "problems/real/corpus.json",
       "program_path": "real/307.cfl",
-      "program_sha256": "23017afa7f8cf45a5b001420933aa1d0f866fe07ee0cdd5b3757aa175cf8964c"
+      "program_sha256": "ac514479758b6fb737c130c06b06b25c3913aab8b06daff7d32c257309ebc1c9"
     },
     {
       "suite": "real",
@@ -3847,21 +3513,6 @@
       "source": "problems/real/corpus.json",
       "program_path": "real/308.cfl",
       "program_sha256": "c51bdc867c650f2b8c16b88b1451725eb4a7575bd0a19754b1bada48d83b086c"
-    },
-    {
-      "suite": "real",
-      "case_id": "309",
-      "program": "keys = set(house_key, car_key, key0...3)\narrangement = circle(keys, reflection=True)\nnext_to(house_key, car_key) in arrangement",
-      "expected": 6,
-      "tags": [
-        "set",
-        "circle",
-        "next_to",
-        "reflection"
-      ],
-      "source": "problems/real/corpus.json",
-      "program_path": "real/309.cfl",
-      "program_sha256": "1b815d5d622fffd8b64b90e19a2f4b812f2a30cfc8f6b092f9b89d767977a304"
     },
     {
       "suite": "real",
@@ -5770,23 +5421,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-10-operatorcount-1-constraintcount-0-d4483e8ad18aedcd",
-      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0, reflection=True)",
-      "expected": 181440,
-      "tags": [
-        "synthetic",
-        "family=entitycount-10-operatorcount-1-constraintcount-0",
-        "entitycount=10",
-        "operatorcount=1",
-        "constraintcount=0",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-10-operatorcount-1-constraintcount-0-d4483e8ad18aedcd.cfl",
-      "program_sha256": "613ea06997266b76b5c87195562e8c1c7342491f17bb5dfbac202efc20f767b5"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-10-operatorcount-1-constraintcount-1-086334d2e41765e0",
       "program": "bag_0 = bag(e_1: 1, e_10: 2, e_2: 1, e_3: 1, e_5: 1, e_6: 2, e_8: 1, e_9: 1)\npartition_0 = partition(bag_0, 3)\n|part| < 1 for part in partition_0",
       "expected": 0,
@@ -5906,23 +5540,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-10-operatorcount-2-constraintcount-1-186ea0802266995e",
-      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0)\nchoose_tuple_0 = choose_replace_tuple(set_0, 11)\nchoose_tuple_0.count(e_4) > 9",
-      "expected": 36288000,
-      "tags": [
-        "synthetic",
-        "family=entitycount-10-operatorcount-2-constraintcount-1",
-        "entitycount=10",
-        "operatorcount=2",
-        "constraintcount=1",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-10-operatorcount-2-constraintcount-1-186ea0802266995e.cfl",
-      "program_sha256": "0eb9e2405ddaad79a6106908bdc1659374e3acf100d393c9af90dd1c0ba7938f"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-10-operatorcount-2-constraintcount-1-c82180be14e8bc6b",
       "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_0 = choose(set_0, 4)\nchoose_tuple_0 = choose_replace_tuple(choose_0, 8)\nset_0 subset choose_0",
       "expected": 0,
@@ -5971,23 +5588,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-10-operatorcount-2-constraintcount-2-31681e42853edb27.cfl",
       "program_sha256": "3a87710f8bc661939cb7d432af07a1c5f52c6a5ba1410666931f0d5c92c6a724"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-10-operatorcount-2-constraintcount-2-fd03ab679f3d7732",
-      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0)\nchoose_0 = choose(set_0, 5)\ncircle_0.together(set(e_5, e_7, e_4))\ne_3 in choose_0",
-      "expected": 3810240,
-      "tags": [
-        "synthetic",
-        "family=entitycount-10-operatorcount-2-constraintcount-2",
-        "entitycount=10",
-        "operatorcount=2",
-        "constraintcount=2",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-10-operatorcount-2-constraintcount-2-fd03ab679f3d7732.cfl",
-      "program_sha256": "6ee9d5484546499a2619c780307fe0318c637e8a9da1f3625300d8254f3048df"
     },
     {
       "suite": "synthetic",
@@ -6144,23 +5744,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-12-operatorcount-1-constraintcount-0-ce7572d4f8850d38",
-      "program": "bag_0 = bag(e_11: 1, e_12: 2, e_3: 1, e_5: 4, e_8: 3, e_9: 1)\ncircle_0 = circle(bag_0)",
-      "expected": 138600,
-      "tags": [
-        "synthetic",
-        "family=entitycount-12-operatorcount-1-constraintcount-0",
-        "entitycount=12",
-        "operatorcount=1",
-        "constraintcount=0",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-12-operatorcount-1-constraintcount-0-ce7572d4f8850d38.cfl",
-      "program_sha256": "20b85f898d8cc85e5b42e78788d90d2d54521938407f78759ed0a0bfb95902fb"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-12-operatorcount-1-constraintcount-1-08fe511b37ff8c8b",
       "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_tuple_0 = choose_replace_tuple(set_0, 6)\nchoose_tuple_0.count(e_2) <= 6",
       "expected": 2985984,
@@ -6260,23 +5843,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-12-operatorcount-1-constraintcount-2-8a245475e7f46331.cfl",
       "program_sha256": "94a76f5a1419f51d4873e2da0316e7126355602ae3ea531edda5c604b04a95cb"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-12-operatorcount-2-constraintcount-1-e92b0c267ac36aa3",
-      "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0, reflection=True)\ntuple_0 = tuple(set_0)\ntuple_0[10] == e_4",
-      "expected": 796675461120000,
-      "tags": [
-        "synthetic",
-        "family=entitycount-12-operatorcount-2-constraintcount-1",
-        "entitycount=12",
-        "operatorcount=2",
-        "constraintcount=1",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-12-operatorcount-2-constraintcount-1-e92b0c267ac36aa3.cfl",
-      "program_sha256": "ea0589fbdcd7fb94e4febef36b4e54c013b9fec57010b122f1c5d2f4c54686d6"
     },
     {
       "suite": "synthetic",
@@ -6399,23 +5965,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-1-constraintcount-0-a5a3a6aefe6d08e4",
-      "program": "bag_0 = bag(e_2: 2, e_4: 1, e_5: 2, e_6: 1)\ncircle_0 = circle(bag_0)",
-      "expected": 30,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-1-constraintcount-0",
-        "entitycount=6",
-        "operatorcount=1",
-        "constraintcount=0",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-6-operatorcount-1-constraintcount-0-a5a3a6aefe6d08e4.cfl",
-      "program_sha256": "4b42efb168b85517a0a626a0ddedda3441fee2f3e008c04bd0a46b77d7652ebd"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-0-bbf49737f1c1e12b",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nchoose_replace_0 = choose_replace(set_0, 9)",
       "expected": 2002,
@@ -6518,23 +6067,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-1-constraintcount-1-c2e6ac1d7d372886",
-      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 1, e_6: 3)\ncircle_0 = circle(bag_0, reflection=True)\nnot (next_to(e_5, e_1) in circle_0)",
-      "expected": 6,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-1-constraintcount-1",
-        "entitycount=6",
-        "operatorcount=1",
-        "constraintcount=1",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-6-operatorcount-1-constraintcount-1-c2e6ac1d7d372886.cfl",
-      "program_sha256": "5b4e0e208ac2ebc18a22b74b6be226c875e19fd8d4a38e6384c88e6304750472"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-2-0fd8b0e226dabf0f",
       "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 2, e_5: 1, e_6: 1)\nsequence_0 = sequence(bag_0)\nnot (next_to(e_6, e_1) in sequence_0)\nsequence_0.together(set(e_4, e_5, e_2))",
       "expected": 24,
@@ -6583,23 +6115,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-6-operatorcount-1-constraintcount-2-7e57ff6a67665b60.cfl",
       "program_sha256": "afbc417e85b3e65ff30df43e91ce14efee0d9fb91d9a3ab98149a5f3ea24c31e"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-1-constraintcount-2-7fb97b49ac44c5e6",
-      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_5: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\nnot circle_0.together(set(e_3, e_2, e_5))\nnext_to(e_3, e_2) in circle_0",
-      "expected": 6,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-1-constraintcount-2",
-        "entitycount=6",
-        "operatorcount=1",
-        "constraintcount=2",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-6-operatorcount-1-constraintcount-2-7fb97b49ac44c5e6.cfl",
-      "program_sha256": "44925d4e9779bb930f196862dca4a12a9cea93b680cc7c7f0967bed6118cd434"
     },
     {
       "suite": "synthetic",
@@ -6671,23 +6186,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-1-constraintcount-3-ae6115d84e6b3da5",
-      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_4: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\ncircle_0.together(set(e_6, e_2))\nnot (next_to(e_2, e_6) in circle_0)\nnext_to(e_6, e_4) in circle_0",
-      "expected": 0,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-1-constraintcount-3",
-        "entitycount=6",
-        "operatorcount=1",
-        "constraintcount=3",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-6-operatorcount-1-constraintcount-3-ae6115d84e6b3da5.cfl",
-      "program_sha256": "2a7a110dd6a6f5cde9a1385c7da82b67aa3b6014e3d15a408224435ac2b9e303"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-3-d52ce2f6630783d1",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\ncompose_0 = compose(set_0, 3)\ncompose_0[1] disjoint compose_0[2]\nset_0 subset compose_0[0]\ncompose_0[1] subset compose_0[2]",
       "expected": 1,
@@ -6736,23 +6234,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-6-operatorcount-2-constraintcount-0-7b7123ffc129aed7.cfl",
       "program_sha256": "863a68e112a1ce8b70be647e5b14d50d0038cb08aa427a30e77f8e7b05af8392"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-2-constraintcount-0-a6c415e0db3545b3",
-      "program": "bag_0 = bag(e_2: 1, e_3: 2, e_4: 1, e_6: 2)\npartition_0 = partition(bag_0, 2)\ncircle_0 = circle(bag_0, reflection=True)",
-      "expected": 288,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-2-constraintcount-0",
-        "entitycount=6",
-        "operatorcount=2",
-        "constraintcount=0",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-6-operatorcount-2-constraintcount-0-a6c415e0db3545b3.cfl",
-      "program_sha256": "7ad4746cfc24730e1d59383f9f98e1f7c8fc23e343d8b314b34b4da1413a1d68"
     },
     {
       "suite": "synthetic",
@@ -6892,23 +6373,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-2-constraintcount-2-9222f8b87ab8c7e1",
-      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 3, e_6: 1)\ncircle_0 = circle(bag_0)\nchoose_0 = choose(bag_0, 4)\nnot (next_to(e_6, e_4) in circle_0)\nnext_to(e_1, e_4) in circle_0",
-      "expected": 42,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-2-constraintcount-2",
-        "entitycount=6",
-        "operatorcount=2",
-        "constraintcount=2",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-6-operatorcount-2-constraintcount-2-9222f8b87ab8c7e1.cfl",
-      "program_sha256": "fe2a8130cf0eb90cc361c831f4191ce01a86e129380445df9273298e7bef18e2"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-2-constraintcount-2-cec10f42ac958b3a",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nsequence_0 = sequence(set_0)\ntuple_0 = tuple(set_0)\nsequence_0.before(e_2, e_3)\n(e_1, e_2) in sequence_0",
       "expected": 43200,
@@ -7008,23 +6472,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-6-operatorcount-4-constraintcount-2-2a3bc365b5f360e2.cfl",
       "program_sha256": "9000541f8e37cf29e0e7d4c5819be8216a354534f40f371b591360239ed43488"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-4-constraintcount-2-30ea8e562dd6146f",
-      "program": "bag_0 = bag(e_2: 1, e_3: 2, e_4: 1, e_5: 1, e_6: 1)\ncircle_0 = circle(bag_0, reflection=True)\nchoose_0 = choose(bag_0, 2)\nbag_union_0 = bag_0 + choose_0\nchoose_1 = choose(choose_0, 2)\nchoose_0 disjoint bag_union_0\ne_4 in choose_1",
-      "expected": 0,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-4-constraintcount-2",
-        "entitycount=6",
-        "operatorcount=4",
-        "constraintcount=2",
-        "depth=2"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-6-operatorcount-4-constraintcount-2-30ea8e562dd6146f.cfl",
-      "program_sha256": "e475654a921c4864dffa0d3e3b1b74ece5423680d54f62066cfd0a45646f2a18"
     },
     {
       "suite": "synthetic",
@@ -7130,40 +6577,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-8-operatorcount-1-constraintcount-2-db03d03a3ac2b0cb",
-      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\nnot (next_to(e_7, e_2) in circle_0)\nnot circle_0.together(set(e_2, e_5))",
-      "expected": 1200,
-      "tags": [
-        "synthetic",
-        "family=entitycount-8-operatorcount-1-constraintcount-2",
-        "entitycount=8",
-        "operatorcount=1",
-        "constraintcount=2",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-8-operatorcount-1-constraintcount-2-db03d03a3ac2b0cb.cfl",
-      "program_sha256": "7deff342468d4781ce20ffecf2372f18e479f724a77aad0cd1ccca2f1ae1cb21"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-8-operatorcount-1-constraintcount-2-eec0c01b36b41b1f",
-      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 1, e_7: 4, e_8: 1)\ncircle_0 = circle(bag_0)\nnot (next_to(e_8, e_7) in circle_0)\nnot (next_to(e_4, e_1) in circle_0)",
-      "expected": 26,
-      "tags": [
-        "synthetic",
-        "family=entitycount-8-operatorcount-1-constraintcount-2",
-        "entitycount=8",
-        "operatorcount=1",
-        "constraintcount=2",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-8-operatorcount-1-constraintcount-2-eec0c01b36b41b1f.cfl",
-      "program_sha256": "e25e2d5c08fd36166f613780905ff7e9bb7bc8ad4c80e86a0bdbb33f013252f1"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-1-constraintcount-3-164e13afbb530e28",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\nchoose_replace_0 = choose_replace(set_0, 12)\nsupp(choose_replace_0) disjoint set_0\ne_3 in choose_replace_0\nchoose_replace_0.count(e_8) < 2",
       "expected": 0,
@@ -7195,23 +6608,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-8-operatorcount-1-constraintcount-3-3aa3bc2e6e53fdfc.cfl",
       "program_sha256": "bb87df8680b9e73a5c54df0d2c2e10da189513c05bf157b946483a96725508b6"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-8-operatorcount-2-constraintcount-0-9f8cd64698bc8227",
-      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\ntuple_0 = tuple(set_0)",
-      "expected": 101606400,
-      "tags": [
-        "synthetic",
-        "family=entitycount-8-operatorcount-2-constraintcount-0",
-        "entitycount=8",
-        "operatorcount=2",
-        "constraintcount=0",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-8-operatorcount-2-constraintcount-0-9f8cd64698bc8227.cfl",
-      "program_sha256": "40df02b899904d54aca46f41a07eebefed2921bfe9205a23f8e712ad76efc8cd"
     },
     {
       "suite": "synthetic",
@@ -7317,23 +6713,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-8-operatorcount-2-constraintcount-2-b12cf609fc4486f4",
-      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\ncompose_0 = compose(set_0, 7)\ncompose_0[3] subset compose_0[6]\n|compose_0[2]| < 4",
-      "expected": 4102875000,
-      "tags": [
-        "synthetic",
-        "family=entitycount-8-operatorcount-2-constraintcount-2",
-        "entitycount=8",
-        "operatorcount=2",
-        "constraintcount=2",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-8-operatorcount-2-constraintcount-2-b12cf609fc4486f4.cfl",
-      "program_sha256": "8ba685907f6c665defc7781b2e0f2ecf282b1340424dd3189d1521c532b2cbc5"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-2-constraintcount-2-c10eeaa09f64764d",
       "program": "bag_0 = bag(e_1: 1, e_2: 1, e_5: 1, e_7: 4, e_8: 1)\nsequence_0 = sequence(bag_0)\nchoose_0 = choose(bag_0, 3)\nnext_to(e_2, e_5) in sequence_0\nchoose_0 disjoint bag_0",
       "expected": 0,
@@ -7402,23 +6781,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-8-operatorcount-4-constraintcount-1-779bc0f3453144e6",
-      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0)\nchoose_0 = choose(set_0, 7)\nchoose_1 = choose(choose_0, 7)\nset_union_0 = choose_1 + set_0\nchoose_0 subset choose_1",
-      "expected": 40320,
-      "tags": [
-        "synthetic",
-        "family=entitycount-8-operatorcount-4-constraintcount-1",
-        "entitycount=8",
-        "operatorcount=4",
-        "constraintcount=1",
-        "depth=3"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-8-operatorcount-4-constraintcount-1-779bc0f3453144e6.cfl",
-      "program_sha256": "dc20c61f0c79d76ff3b61c204f386a30c7b2cc8f7467cba94dca4c9de5b3e44d"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-4-constraintcount-1-a7c2eb240bb648b6",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\nchoose_0 = choose(set_0, 8)\ncompose_0 = compose(choose_0, 4)\nchoose_tuple_0 = choose_replace_tuple(compose_0[2], 6)\ncompose_1 = compose(compose_0[2], 4)\ncompose_1[2] subset compose_1[0]",
       "expected": 24367868928,
@@ -7433,23 +6795,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "synthetic/entitycount-8-operatorcount-4-constraintcount-1-a7c2eb240bb648b6.cfl",
       "program_sha256": "b9b7af8b8aedbd87913b917165b7ad3b4ad1f5519f3c941a48e48cd736f2472b"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-8-operatorcount-4-constraintcount-3-3fc73f82e58ffbfd",
-      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_4: 1, e_5: 1, e_7: 1, e_8: 2)\nchoose_0 = choose(bag_0, 4)\ncircle_0 = circle(choose_0)\ncompose_0 = compose(choose_0, 3)\ncircle_1 = circle(compose_0[0])\nnot circle_0.together(set(e_5, e_1, e_2))\n|compose_0[1]| + |choose_0| == 1\ncircle_1.together(set(e_2, e_3, e_5))",
-      "expected": 0,
-      "tags": [
-        "synthetic",
-        "family=entitycount-8-operatorcount-4-constraintcount-3",
-        "entitycount=8",
-        "operatorcount=4",
-        "constraintcount=3",
-        "depth=3"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "synthetic/entitycount-8-operatorcount-4-constraintcount-3-3fc73f82e58ffbfd.cfl",
-      "program_sha256": "753bdba71b0714bd072519c1e1a382e49553494b8597ee0a6a6fe6721d49a285"
     }
   ]
 }

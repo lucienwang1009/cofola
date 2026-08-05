@@ -34,7 +34,6 @@ from cofola.frontend.objects import (
     BagPartDef,
     BagSupport,
     BagUnion,
-    CircleDef,
     CompositionDef,
     Entity,
     FuncDef,
@@ -152,7 +151,7 @@ class ASPEncoder(object):
             self._emit_bag_binary(ref, defn.left, defn.right, "sub")
         elif isinstance(defn, BagSupport):
             self._emit_bag_support(ref, defn.source)
-        elif isinstance(defn, (TupleDef, SequenceDef, CircleDef)):
+        elif isinstance(defn, (TupleDef, SequenceDef)):
             self._emit_ordered(ref, defn)
         elif isinstance(defn, (PartitionDef, CompositionDef)):
             self._emit_grouped(ref, defn)
@@ -276,7 +275,7 @@ class ASPEncoder(object):
     def _emit_ordered(
         self,
         ref: ObjRef,
-        defn: TupleDef | SequenceDef | CircleDef,
+        defn: TupleDef | SequenceDef,
     ) -> None:
         size = self._exact_size(ref)
         if size is None:
@@ -301,9 +300,6 @@ class ASPEncoder(object):
             self.lines.append(
                 f":- mult({ref.id},E,N), mult({defn.source.id},E,SN), N {comparator} SN."
             )
-        if isinstance(defn, CircleDef):
-            self._emit_circle_canonical(ref, size, reflection=defn.reflection)
-
     def _emit_grouped(
         self,
         ref: ObjRef,
@@ -358,55 +354,6 @@ class ASPEncoder(object):
                 f"mult({left.id},{eid},N), mult({right.id},{eid},N)."
             )
         self.lines.append(f":- part_lex_smaller({tag}).")
-
-    def _emit_circle_canonical(
-        self,
-        ref: ObjRef,
-        size: int,
-        *,
-        reflection: bool,
-    ) -> None:
-        if size <= 1:
-            return
-        for shift in range(1, size):
-            self._emit_lex_not_smaller_transform(
-                ref,
-                size,
-                shift=shift,
-                reflected=False,
-            )
-        if reflection:
-            for shift in range(size):
-                self._emit_lex_not_smaller_transform(
-                    ref,
-                    size,
-                    shift=shift,
-                    reflected=True,
-                )
-
-    def _emit_lex_not_smaller_transform(
-        self,
-        ref: ObjRef,
-        size: int,
-        *,
-        shift: int,
-        reflected: bool,
-    ) -> None:
-        tag = self._new_aux_id()
-        self.lines.append(f"same_prefix({ref.id},{tag},{shift},0).")
-        for pos in range(size):
-            other = (shift - pos) % size if reflected else (pos + shift) % size
-            self.lines.append(
-                f"lex_smaller({ref.id},{tag},{shift}) :- "
-                f"same_prefix({ref.id},{tag},{shift},{pos}), "
-                f"at({ref.id},{pos},E1), at({ref.id},{other},E2), E2 < E1."
-            )
-            self.lines.append(
-                f"same_prefix({ref.id},{tag},{shift},{pos + 1}) :- "
-                f"same_prefix({ref.id},{tag},{shift},{pos}), "
-                f"at({ref.id},{pos},E), at({ref.id},{other},E)."
-            )
-        self.lines.append(f":- lex_smaller({ref.id},{tag},{shift}).")
 
     def _emit_multiplicity_choice(
         self,
@@ -602,38 +549,11 @@ class ASPEncoder(object):
         gap = f"gap_{tag}"
         for body in self._arg_entity_bodies(pattern.group, "E"):
             self.lines.append(f"{group}(E) :- {', '.join(body)}.")
-        if self._is_circle(constraint.seq):
-            group_pos = f"group_pos_{tag}"
-            nongroup_pos = f"nongroup_pos_{tag}"
-            transition = f"transition_{tag}"
-            transition_count = f"transition_count_{tag}"
-            self.lines.append(
-                f"{group_pos}(P) :- at({constraint.seq.id},P,E), {group}(E)."
-            )
-            self.lines.append(
-                f"{nongroup_pos}(P) :- pos({constraint.seq.id},P), not {group_pos}(P)."
-            )
-            for relation in self._successor_bodies(constraint.seq, "P", "Q"):
-                relation_body = ", ".join(relation)
-                self.lines.append(
-                    f"{transition}(P,Q) :- {group_pos}(P), {nongroup_pos}(Q), "
-                    f"{relation_body}."
-                )
-                self.lines.append(
-                    f"{transition}(P,Q) :- {nongroup_pos}(P), {group_pos}(Q), "
-                    f"{relation_body}."
-                )
-            self.lines.append(
-                f"{transition_count}(N) :- num(N), "
-                f"N = #count {{ P,Q : {transition}(P,Q) }}."
-            )
-            self.lines.append(f"{gap} :- {transition_count}(N), N > 2.")
-        else:
-            self.lines.append(
-                f"{gap} :- at({constraint.seq.id},P1,E1), {group}(E1), "
-                f"at({constraint.seq.id},P2,E2), {group}(E2), P1 < PM, PM < P2, "
-                f"at({constraint.seq.id},PM,EM), not {group}(EM)."
-            )
+        self.lines.append(
+            f"{gap} :- at({constraint.seq.id},P1,E1), {group}(E1), "
+            f"at({constraint.seq.id},P2,E2), {group}(E2), P1 < PM, PM < P2, "
+            f"at({constraint.seq.id},PM,EM), not {group}(EM)."
+        )
         if constraint.positive:
             self.lines.append(f":- {gap}.")
         else:
@@ -689,13 +609,13 @@ class ASPEncoder(object):
         if isinstance(pattern, PredecessorPattern):
             first = pattern.first
             second = pattern.second
-            relation_bodies = self._successor_bodies(seq, "P", "Q")
+            relation_bodies = self._successor_bodies("P", "Q")
         elif isinstance(pattern, NextToPattern):
             first = pattern.first
             second = pattern.second
             relation_bodies = (
-                self._successor_bodies(seq, "P", "Q")
-                + self._successor_bodies(seq, "Q", "P")
+                self._successor_bodies("P", "Q")
+                + self._successor_bodies("Q", "P")
             )
         else:
             raise AssertionError(type(pattern).__name__)
@@ -709,17 +629,8 @@ class ASPEncoder(object):
             self.lines.append(f"{match}(P,Q) :- {', '.join(body)}.")
         return match
 
-    def _successor_bodies(self, seq: ObjRef, left_pos: str, right_pos: str) -> list[list[str]]:
-        bodies = [[f"{right_pos} = {left_pos} + 1"]]
-        if self._is_circle(seq):
-            size = self._exact_size(seq)
-            if size is None:
-                raise ASPEncodingError(
-                    f"Circle ref={seq.id} needs an exact size for adjacency constraints."
-                )
-            if size > 1:
-                bodies.append([f"{left_pos} = {size - 1}", f"{right_pos} = 0"])
-        return bodies
+    def _successor_bodies(self, left_pos: str, right_pos: str) -> list[list[str]]:
+        return [[f"{right_pos} = {left_pos} + 1"]]
 
     def _value_expr(self, atom: object, var: str) -> _ValueExpr:
         if isinstance(atom, ObjRef):
@@ -813,9 +724,6 @@ class ASPEncoder(object):
             if isinstance(defn, (SetPartDef, BagPartDef)) and defn.partition == partition:
                 parts.append((defn.index, ref))
         return [ref for _index, ref in sorted(parts)]
-
-    def _is_circle(self, ref: ObjRef) -> bool:
-        return isinstance(self.problem.get_object(ref), CircleDef)
 
     def _new_aux_id(self) -> int:
         value = self.aux_counter

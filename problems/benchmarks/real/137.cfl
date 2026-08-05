@@ -1,3 +1,0 @@
-people = set(Alice, Bob, other0...6)
-table = circle(people)
-not (next_to(Alice, Bob) in table)

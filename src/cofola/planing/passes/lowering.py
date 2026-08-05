@@ -9,7 +9,7 @@ The lowering steps convert high-level constructs to primitive objects that the
 WFOMC encoder can handle:
 
 - TupleDef → FuncDef + SetInit(indices)
-- Linear sequence/circle choices → explicit choose objects or flatten domains
+- Linear sequence choices → explicit choose objects or flatten domains
 - FuncDef with injective → FuncDef + SizeConstraint
 """
 
@@ -136,7 +136,7 @@ class TupleDefLoweringStep(LoweringStep):
 
 
 class LinearDefLoweringStep(LoweringStep):
-    """Lower one linear sequence/circle choice or flatten-domain requirement."""
+    """Lower one linear sequence choice or flatten-domain requirement."""
 
     name = "linear-def-lowering"
 
@@ -187,7 +187,7 @@ class LoweringPass(TransformPass):
 
     The lowering steps transform:
     - TupleDef → indices SetInit + FuncDef(indices → source)
-    - Linear SequenceDef/CircleDef choices → choose objects or flatten domains
+    - Linear SequenceDef choices → choose objects or flatten domains
     - FuncDef(injective=True) → FuncDef + SizeConstraint
 
     The lowering process creates new objects and constraints, and updates
@@ -876,21 +876,12 @@ class LoweringPass(TransformPass):
                 )
                 chosen_ref = self._new_ref()
                 chosen_defn = SetChooseReplace(source=defn.source, size=size)
-                if isinstance(defn, CircleDef):
-                    new_seq_defn = CircleDef(
-                        source=chosen_ref,
-                        choose=False,
-                        replace=False,
-                        size=size,
-                        reflection=defn.reflection,
-                    )
-                else:
-                    new_seq_defn = SequenceDef(
-                        source=chosen_ref,
-                        choose=False,
-                        replace=False,
-                        size=size,
-                    )
+                new_seq_defn = SequenceDef(
+                    source=chosen_ref,
+                    choose=False,
+                    replace=False,
+                    size=size,
+                )
 
                 new_defs = list(problem.defs)
                 new_defs.append((chosen_ref, chosen_defn))

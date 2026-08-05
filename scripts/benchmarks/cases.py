@@ -104,7 +104,7 @@ def _write_manifest_csv(path: Path, records: list[dict[str, Any]]) -> None:
         "program_sha256",
     )
     with path.open("w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fields)
+        writer = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         for record in records:
             row = {field: record.get(field, "") for field in fields}

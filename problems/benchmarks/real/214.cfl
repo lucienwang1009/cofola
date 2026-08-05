@@ -1,2 +1,0 @@
-breads = bag(orange: 3, black: 3, teal: 1)
-bracelet = circle(breads, reflection=True)

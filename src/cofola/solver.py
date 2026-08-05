@@ -180,8 +180,8 @@ def parse_args():
         type=LinearOrderEncoding,
         choices=list(LinearOrderEncoding),
         default=None,
-        help='How the propositional counter encodes order axioms (LEQ / PRED / '
-             'CIRCULAR_PRED). Ignored by other algorithms. Default: pin.',
+        help='How the propositional counter encodes order axioms. '
+             'Ignored by other algorithms. Default: pin.',
     )
     parser.add_argument(
         '--conjure-dir',

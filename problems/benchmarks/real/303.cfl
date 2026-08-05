@@ -1,2 +1,0 @@
-beads = set(bead0...6)
-bracelet = circle(beads, reflection=True)

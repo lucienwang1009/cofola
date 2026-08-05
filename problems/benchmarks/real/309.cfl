@@ -1,3 +1,0 @@
-keys = set(house_key, car_key, key0...3)
-arrangement = circle(keys, reflection=True)
-next_to(house_key, car_key) in arrangement

@@ -1,6 +1,6 @@
 {
   "format": "cofola-benchmark-manifest-v1",
-  "num_cases": 100,
+  "num_cases": 82,
   "cases": [
     {
       "suite": "synthetic",
@@ -18,23 +18,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-10-operatorcount-1-constraintcount-0-0d34b0a7cd86b50e.cfl",
       "program_sha256": "082b5315b912d042acd275031605d727ecc90e25524b0ed67ca42e9209b118c3"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-10-operatorcount-1-constraintcount-0-d4483e8ad18aedcd",
-      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0, reflection=True)",
-      "expected": 181440,
-      "tags": [
-        "synthetic",
-        "family=entitycount-10-operatorcount-1-constraintcount-0",
-        "entitycount=10",
-        "operatorcount=1",
-        "constraintcount=0",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-10-operatorcount-1-constraintcount-0-d4483e8ad18aedcd.cfl",
-      "program_sha256": "613ea06997266b76b5c87195562e8c1c7342491f17bb5dfbac202efc20f767b5"
     },
     {
       "suite": "synthetic",
@@ -157,23 +140,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-10-operatorcount-2-constraintcount-1-186ea0802266995e",
-      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0)\nchoose_tuple_0 = choose_replace_tuple(set_0, 11)\nchoose_tuple_0.count(e_4) > 9",
-      "expected": 36288000,
-      "tags": [
-        "synthetic",
-        "family=entitycount-10-operatorcount-2-constraintcount-1",
-        "entitycount=10",
-        "operatorcount=2",
-        "constraintcount=1",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-10-operatorcount-2-constraintcount-1-186ea0802266995e.cfl",
-      "program_sha256": "0eb9e2405ddaad79a6106908bdc1659374e3acf100d393c9af90dd1c0ba7938f"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-10-operatorcount-2-constraintcount-1-c82180be14e8bc6b",
       "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_0 = choose(set_0, 4)\nchoose_tuple_0 = choose_replace_tuple(choose_0, 8)\nset_0 subset choose_0",
       "expected": 0,
@@ -222,23 +188,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-10-operatorcount-2-constraintcount-2-31681e42853edb27.cfl",
       "program_sha256": "3a87710f8bc661939cb7d432af07a1c5f52c6a5ba1410666931f0d5c92c6a724"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-10-operatorcount-2-constraintcount-2-fd03ab679f3d7732",
-      "program": "set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0)\nchoose_0 = choose(set_0, 5)\ncircle_0.together(set(e_5, e_7, e_4))\ne_3 in choose_0",
-      "expected": 3810240,
-      "tags": [
-        "synthetic",
-        "family=entitycount-10-operatorcount-2-constraintcount-2",
-        "entitycount=10",
-        "operatorcount=2",
-        "constraintcount=2",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-10-operatorcount-2-constraintcount-2-fd03ab679f3d7732.cfl",
-      "program_sha256": "6ee9d5484546499a2619c780307fe0318c637e8a9da1f3625300d8254f3048df"
     },
     {
       "suite": "synthetic",
@@ -395,23 +344,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-12-operatorcount-1-constraintcount-0-ce7572d4f8850d38",
-      "program": "bag_0 = bag(e_11: 1, e_12: 2, e_3: 1, e_5: 4, e_8: 3, e_9: 1)\ncircle_0 = circle(bag_0)",
-      "expected": 138600,
-      "tags": [
-        "synthetic",
-        "family=entitycount-12-operatorcount-1-constraintcount-0",
-        "entitycount=12",
-        "operatorcount=1",
-        "constraintcount=0",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-12-operatorcount-1-constraintcount-0-ce7572d4f8850d38.cfl",
-      "program_sha256": "20b85f898d8cc85e5b42e78788d90d2d54521938407f78759ed0a0bfb95902fb"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-12-operatorcount-1-constraintcount-1-08fe511b37ff8c8b",
       "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\nchoose_tuple_0 = choose_replace_tuple(set_0, 6)\nchoose_tuple_0.count(e_2) <= 6",
       "expected": 2985984,
@@ -511,23 +443,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-12-operatorcount-1-constraintcount-2-8a245475e7f46331.cfl",
       "program_sha256": "94a76f5a1419f51d4873e2da0316e7126355602ae3ea531edda5c604b04a95cb"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-12-operatorcount-2-constraintcount-1-e92b0c267ac36aa3",
-      "program": "set_0 = set(e_1, e_10, e_11, e_12, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)\ncircle_0 = circle(set_0, reflection=True)\ntuple_0 = tuple(set_0)\ntuple_0[10] == e_4",
-      "expected": 796675461120000,
-      "tags": [
-        "synthetic",
-        "family=entitycount-12-operatorcount-2-constraintcount-1",
-        "entitycount=12",
-        "operatorcount=2",
-        "constraintcount=1",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-12-operatorcount-2-constraintcount-1-e92b0c267ac36aa3.cfl",
-      "program_sha256": "ea0589fbdcd7fb94e4febef36b4e54c013b9fec57010b122f1c5d2f4c54686d6"
     },
     {
       "suite": "synthetic",
@@ -650,23 +565,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-1-constraintcount-0-a5a3a6aefe6d08e4",
-      "program": "bag_0 = bag(e_2: 2, e_4: 1, e_5: 2, e_6: 1)\ncircle_0 = circle(bag_0)",
-      "expected": 30,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-1-constraintcount-0",
-        "entitycount=6",
-        "operatorcount=1",
-        "constraintcount=0",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-6-operatorcount-1-constraintcount-0-a5a3a6aefe6d08e4.cfl",
-      "program_sha256": "4b42efb168b85517a0a626a0ddedda3441fee2f3e008c04bd0a46b77d7652ebd"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-0-bbf49737f1c1e12b",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nchoose_replace_0 = choose_replace(set_0, 9)",
       "expected": 2002,
@@ -769,23 +667,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-1-constraintcount-1-c2e6ac1d7d372886",
-      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 1, e_6: 3)\ncircle_0 = circle(bag_0, reflection=True)\nnot (next_to(e_5, e_1) in circle_0)",
-      "expected": 6,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-1-constraintcount-1",
-        "entitycount=6",
-        "operatorcount=1",
-        "constraintcount=1",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-6-operatorcount-1-constraintcount-1-c2e6ac1d7d372886.cfl",
-      "program_sha256": "5b4e0e208ac2ebc18a22b74b6be226c875e19fd8d4a38e6384c88e6304750472"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-2-0fd8b0e226dabf0f",
       "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 2, e_5: 1, e_6: 1)\nsequence_0 = sequence(bag_0)\nnot (next_to(e_6, e_1) in sequence_0)\nsequence_0.together(set(e_4, e_5, e_2))",
       "expected": 24,
@@ -834,23 +715,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-6-operatorcount-1-constraintcount-2-7e57ff6a67665b60.cfl",
       "program_sha256": "afbc417e85b3e65ff30df43e91ce14efee0d9fb91d9a3ab98149a5f3ea24c31e"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-1-constraintcount-2-7fb97b49ac44c5e6",
-      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_5: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\nnot circle_0.together(set(e_3, e_2, e_5))\nnext_to(e_3, e_2) in circle_0",
-      "expected": 6,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-1-constraintcount-2",
-        "entitycount=6",
-        "operatorcount=1",
-        "constraintcount=2",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-6-operatorcount-1-constraintcount-2-7fb97b49ac44c5e6.cfl",
-      "program_sha256": "44925d4e9779bb930f196862dca4a12a9cea93b680cc7c7f0967bed6118cd434"
     },
     {
       "suite": "synthetic",
@@ -922,23 +786,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-1-constraintcount-3-ae6115d84e6b3da5",
-      "program": "bag_0 = bag(e_2: 2, e_3: 1, e_4: 1, e_6: 2)\ncircle_0 = circle(bag_0, reflection=True)\ncircle_0.together(set(e_6, e_2))\nnot (next_to(e_2, e_6) in circle_0)\nnext_to(e_6, e_4) in circle_0",
-      "expected": 0,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-1-constraintcount-3",
-        "entitycount=6",
-        "operatorcount=1",
-        "constraintcount=3",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-6-operatorcount-1-constraintcount-3-ae6115d84e6b3da5.cfl",
-      "program_sha256": "2a7a110dd6a6f5cde9a1385c7da82b67aa3b6014e3d15a408224435ac2b9e303"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-1-constraintcount-3-d52ce2f6630783d1",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\ncompose_0 = compose(set_0, 3)\ncompose_0[1] disjoint compose_0[2]\nset_0 subset compose_0[0]\ncompose_0[1] subset compose_0[2]",
       "expected": 1,
@@ -987,23 +834,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-6-operatorcount-2-constraintcount-0-7b7123ffc129aed7.cfl",
       "program_sha256": "863a68e112a1ce8b70be647e5b14d50d0038cb08aa427a30e77f8e7b05af8392"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-2-constraintcount-0-a6c415e0db3545b3",
-      "program": "bag_0 = bag(e_2: 1, e_3: 2, e_4: 1, e_6: 2)\npartition_0 = partition(bag_0, 2)\ncircle_0 = circle(bag_0, reflection=True)",
-      "expected": 288,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-2-constraintcount-0",
-        "entitycount=6",
-        "operatorcount=2",
-        "constraintcount=0",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-6-operatorcount-2-constraintcount-0-a6c415e0db3545b3.cfl",
-      "program_sha256": "7ad4746cfc24730e1d59383f9f98e1f7c8fc23e343d8b314b34b4da1413a1d68"
     },
     {
       "suite": "synthetic",
@@ -1143,23 +973,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-2-constraintcount-2-9222f8b87ab8c7e1",
-      "program": "bag_0 = bag(e_1: 1, e_4: 1, e_5: 3, e_6: 1)\ncircle_0 = circle(bag_0)\nchoose_0 = choose(bag_0, 4)\nnot (next_to(e_6, e_4) in circle_0)\nnext_to(e_1, e_4) in circle_0",
-      "expected": 42,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-2-constraintcount-2",
-        "entitycount=6",
-        "operatorcount=2",
-        "constraintcount=2",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-6-operatorcount-2-constraintcount-2-9222f8b87ab8c7e1.cfl",
-      "program_sha256": "fe2a8130cf0eb90cc361c831f4191ce01a86e129380445df9273298e7bef18e2"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-6-operatorcount-2-constraintcount-2-cec10f42ac958b3a",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)\nsequence_0 = sequence(set_0)\ntuple_0 = tuple(set_0)\nsequence_0.before(e_2, e_3)\n(e_1, e_2) in sequence_0",
       "expected": 43200,
@@ -1259,23 +1072,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-6-operatorcount-4-constraintcount-2-2a3bc365b5f360e2.cfl",
       "program_sha256": "9000541f8e37cf29e0e7d4c5819be8216a354534f40f371b591360239ed43488"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-6-operatorcount-4-constraintcount-2-30ea8e562dd6146f",
-      "program": "bag_0 = bag(e_2: 1, e_3: 2, e_4: 1, e_5: 1, e_6: 1)\ncircle_0 = circle(bag_0, reflection=True)\nchoose_0 = choose(bag_0, 2)\nbag_union_0 = bag_0 + choose_0\nchoose_1 = choose(choose_0, 2)\nchoose_0 disjoint bag_union_0\ne_4 in choose_1",
-      "expected": 0,
-      "tags": [
-        "synthetic",
-        "family=entitycount-6-operatorcount-4-constraintcount-2",
-        "entitycount=6",
-        "operatorcount=4",
-        "constraintcount=2",
-        "depth=2"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-6-operatorcount-4-constraintcount-2-30ea8e562dd6146f.cfl",
-      "program_sha256": "e475654a921c4864dffa0d3e3b1b74ece5423680d54f62066cfd0a45646f2a18"
     },
     {
       "suite": "synthetic",
@@ -1381,40 +1177,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-8-operatorcount-1-constraintcount-2-db03d03a3ac2b0cb",
-      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\nnot (next_to(e_7, e_2) in circle_0)\nnot circle_0.together(set(e_2, e_5))",
-      "expected": 1200,
-      "tags": [
-        "synthetic",
-        "family=entitycount-8-operatorcount-1-constraintcount-2",
-        "entitycount=8",
-        "operatorcount=1",
-        "constraintcount=2",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-8-operatorcount-1-constraintcount-2-db03d03a3ac2b0cb.cfl",
-      "program_sha256": "7deff342468d4781ce20ffecf2372f18e479f724a77aad0cd1ccca2f1ae1cb21"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-8-operatorcount-1-constraintcount-2-eec0c01b36b41b1f",
-      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_4: 1, e_7: 4, e_8: 1)\ncircle_0 = circle(bag_0)\nnot (next_to(e_8, e_7) in circle_0)\nnot (next_to(e_4, e_1) in circle_0)",
-      "expected": 26,
-      "tags": [
-        "synthetic",
-        "family=entitycount-8-operatorcount-1-constraintcount-2",
-        "entitycount=8",
-        "operatorcount=1",
-        "constraintcount=2",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-8-operatorcount-1-constraintcount-2-eec0c01b36b41b1f.cfl",
-      "program_sha256": "e25e2d5c08fd36166f613780905ff7e9bb7bc8ad4c80e86a0bdbb33f013252f1"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-1-constraintcount-3-164e13afbb530e28",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\nchoose_replace_0 = choose_replace(set_0, 12)\nsupp(choose_replace_0) disjoint set_0\ne_3 in choose_replace_0\nchoose_replace_0.count(e_8) < 2",
       "expected": 0,
@@ -1446,23 +1208,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-8-operatorcount-1-constraintcount-3-3aa3bc2e6e53fdfc.cfl",
       "program_sha256": "bb87df8680b9e73a5c54df0d2c2e10da189513c05bf157b946483a96725508b6"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-8-operatorcount-2-constraintcount-0-9f8cd64698bc8227",
-      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\ntuple_0 = tuple(set_0)",
-      "expected": 101606400,
-      "tags": [
-        "synthetic",
-        "family=entitycount-8-operatorcount-2-constraintcount-0",
-        "entitycount=8",
-        "operatorcount=2",
-        "constraintcount=0",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-8-operatorcount-2-constraintcount-0-9f8cd64698bc8227.cfl",
-      "program_sha256": "40df02b899904d54aca46f41a07eebefed2921bfe9205a23f8e712ad76efc8cd"
     },
     {
       "suite": "synthetic",
@@ -1568,23 +1313,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-8-operatorcount-2-constraintcount-2-b12cf609fc4486f4",
-      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0, reflection=True)\ncompose_0 = compose(set_0, 7)\ncompose_0[3] subset compose_0[6]\n|compose_0[2]| < 4",
-      "expected": 4102875000,
-      "tags": [
-        "synthetic",
-        "family=entitycount-8-operatorcount-2-constraintcount-2",
-        "entitycount=8",
-        "operatorcount=2",
-        "constraintcount=2",
-        "depth=1"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-8-operatorcount-2-constraintcount-2-b12cf609fc4486f4.cfl",
-      "program_sha256": "8ba685907f6c665defc7781b2e0f2ecf282b1340424dd3189d1521c532b2cbc5"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-2-constraintcount-2-c10eeaa09f64764d",
       "program": "bag_0 = bag(e_1: 1, e_2: 1, e_5: 1, e_7: 4, e_8: 1)\nsequence_0 = sequence(bag_0)\nchoose_0 = choose(bag_0, 3)\nnext_to(e_2, e_5) in sequence_0\nchoose_0 disjoint bag_0",
       "expected": 0,
@@ -1653,23 +1381,6 @@
     },
     {
       "suite": "synthetic",
-      "case_id": "entitycount-8-operatorcount-4-constraintcount-1-779bc0f3453144e6",
-      "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\ncircle_0 = circle(set_0)\nchoose_0 = choose(set_0, 7)\nchoose_1 = choose(choose_0, 7)\nset_union_0 = choose_1 + set_0\nchoose_0 subset choose_1",
-      "expected": 40320,
-      "tags": [
-        "synthetic",
-        "family=entitycount-8-operatorcount-4-constraintcount-1",
-        "entitycount=8",
-        "operatorcount=4",
-        "constraintcount=1",
-        "depth=3"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-8-operatorcount-4-constraintcount-1-779bc0f3453144e6.cfl",
-      "program_sha256": "dc20c61f0c79d76ff3b61c204f386a30c7b2cc8f7467cba94dca4c9de5b3e44d"
-    },
-    {
-      "suite": "synthetic",
       "case_id": "entitycount-8-operatorcount-4-constraintcount-1-a7c2eb240bb648b6",
       "program": "set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)\nchoose_0 = choose(set_0, 8)\ncompose_0 = compose(choose_0, 4)\nchoose_tuple_0 = choose_replace_tuple(compose_0[2], 6)\ncompose_1 = compose(compose_0[2], 4)\ncompose_1[2] subset compose_1[0]",
       "expected": 24367868928,
@@ -1684,23 +1395,6 @@
       "source": "problems/benchmarks/synthetic/manifest.json",
       "program_path": "entitycount-8-operatorcount-4-constraintcount-1-a7c2eb240bb648b6.cfl",
       "program_sha256": "b9b7af8b8aedbd87913b917165b7ad3b4ad1f5519f3c941a48e48cd736f2472b"
-    },
-    {
-      "suite": "synthetic",
-      "case_id": "entitycount-8-operatorcount-4-constraintcount-3-3fc73f82e58ffbfd",
-      "program": "bag_0 = bag(e_1: 1, e_2: 1, e_3: 1, e_4: 1, e_5: 1, e_7: 1, e_8: 2)\nchoose_0 = choose(bag_0, 4)\ncircle_0 = circle(choose_0)\ncompose_0 = compose(choose_0, 3)\ncircle_1 = circle(compose_0[0])\nnot circle_0.together(set(e_5, e_1, e_2))\n|compose_0[1]| + |choose_0| == 1\ncircle_1.together(set(e_2, e_3, e_5))",
-      "expected": 0,
-      "tags": [
-        "synthetic",
-        "family=entitycount-8-operatorcount-4-constraintcount-3",
-        "entitycount=8",
-        "operatorcount=4",
-        "constraintcount=3",
-        "depth=3"
-      ],
-      "source": "problems/benchmarks/synthetic/manifest.json",
-      "program_path": "entitycount-8-operatorcount-4-constraintcount-3-3fc73f82e58ffbfd.cfl",
-      "program_sha256": "753bdba71b0714bd072519c1e1a382e49553494b8597ee0a6a6fe6721d49a285"
     }
   ]
 }

@@ -14,7 +14,6 @@ from cofola.frontend.objects import (
     BagChoose,
     BagIntersection,
     BagPartDef,
-    CircleDef,
     CompositionDef,
     Entity,
     ObjRef,
@@ -57,8 +56,8 @@ class _CoSoForAllPartsLoweringPass(LoweringPass):
 
 # CoSo can directly represent tuple/permutation configurations with absolute
 # positional and counting constraints. Preserve frontend TupleDef nodes instead
-# of lowering them to FuncDef, and let the encoder reject sequence/circle
-# constructs with relative positional constraints.
+# of lowering them to FuncDef, and let the encoder reject sequence constructs
+# with relative positional constraints.
 COSO_LOCAL_PASSES = (
     FixedPointPass(_CoSoForAllPartsLoweringPass),
     SizeConstraintFolder,
@@ -72,7 +71,6 @@ _CONFIG_DEFS = (
     BagChoose,
     TupleDef,
     SequenceDef,
-    CircleDef,
     PartitionDef,
     CompositionDef,
 )

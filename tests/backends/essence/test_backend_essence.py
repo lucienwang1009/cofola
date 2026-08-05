@@ -138,20 +138,6 @@ row.before(a, b)
     assert "o_1(1) = " in model
 
 
-def test_set_circle_uses_minimum_representative_canonical_order() -> None:
-    model = _encode_single_component(
-        """
-S = set(a, b, c, d)
-table = circle(S, reflection=True)
-"""
-    )
-
-    assert "find o_1 : sequence (size 4) of Entity" in model
-    assert "o_1(1) <= o_1(2)" in model
-    assert "o_1(1) <= o_1(4)" in model
-    assert "o_1(2) < o_1(4)" in model
-
-
 def test_composition_uses_native_part_sets_with_coverage_constraint() -> None:
     model = _encode_single_component(
         """

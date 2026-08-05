@@ -48,7 +48,7 @@ _SIZE_EMBEDDABLE_DEFS = (
     SequenceDef,
 )
 
-_ORDERED_DEFS = (TupleDef, SequenceDef, CircleDef)
+_ORDERED_DEFS = (TupleDef, SequenceDef)
 
 
 def _eval_comparator(comp: str, lhs: int, rhs: int) -> bool:

@@ -1,4 +1,4 @@
-"""WFOMC sequence/circle pattern syntax and semantic regressions."""
+"""WFOMC sequence pattern syntax and semantic regressions."""
 from __future__ import annotations
 
 from cofola.backend.wfomc.backend import WFOMCBackend

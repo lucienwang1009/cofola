@@ -1,3 +1,0 @@
-plates = bag(blue: 5, red: 2, green: 2, orange: 1)
-arrangement = circle(plates)
-not (next_to(green, green) in arrangement)

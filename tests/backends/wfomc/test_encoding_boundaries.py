@@ -17,7 +17,6 @@ from cofola.backend.wfomc.context import Context
 from cofola.backend.wfomc.decoder import Decoder
 from cofola.backend.wfomc.encoder import encode
 from cofola.backend.wfomc.formula_helpers import exactly_one_qf
-from cofola.backend.wfomc.object_encoders import _circle_symmetry_factor
 from cofola.frontend import (
     BagEqConstraint,
     BagInit,
@@ -35,7 +34,6 @@ from cofola.planing.analysis.entities import (
     BagInfo,
     SetInfo,
 )
-from cofola.solver import parse_and_solve
 
 
 class TestWFOMCEncodingBoundaries(object):
@@ -125,7 +123,7 @@ class TestWFOMCEncodingBoundaries(object):
             singletons={a},
         )
 
-        with pytest.raises(ValueError, match="at most one sequence-like object"):
+        with pytest.raises(ValueError, match="at most one sequence object"):
             Context(problem, analysis)
 
 
@@ -228,20 +226,6 @@ class TestWFOMCEncodingBoundaries(object):
 
         with pytest.raises(TypeError, match="Unknown sequence pattern type"):
             encode(problem, analysis)
-
-
-    def test_empty_circle_branch_uses_unit_symmetry_factor(self) -> None:
-        """Empty circles are legal and should not create a zero decoder overcount."""
-        assert _circle_symmetry_factor(0, reflection=True) == 1
-        assert _circle_symmetry_factor(1, reflection=True) == 1
-
-        assert parse_and_solve(
-            """
-S = set(a, b)
-P = compose(S, 2)
-C = circle(P[0], reflection=True)
-"""
-        ) == 4
 
 
     def test_backend_does_not_convert_unexpected_solver_errors_to_zero(self, monkeypatch) -> None:

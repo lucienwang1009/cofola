@@ -1,2 +1,0 @@
-beads_and_knot = set(bead0...4, knot)
-bracelet = circle(beads_and_knot, reflection=True)

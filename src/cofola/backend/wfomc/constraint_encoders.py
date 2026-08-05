@@ -246,8 +246,8 @@ def _get_seq_entity_pred(
 
 def _get_seq_domain_pred(seq_ref: ObjRef, context: Context) -> object:
     seq_defn = context.problem.get_object(seq_ref)
-    if not isinstance(seq_defn, (ir_obj.SequenceDef, ir_obj.CircleDef)):
-        raise TypeError("Sequence pattern constraints require a sequence or circle")
+    if not isinstance(seq_defn, ir_obj.SequenceDef):
+        raise TypeError("Sequence pattern constraints require a sequence")
     return context.get_pred(
         seq_defn.flatten if seq_defn.flatten is not None else seq_defn.source
     )
