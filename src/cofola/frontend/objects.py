@@ -62,9 +62,9 @@ RefOrEntity = ObjRef | Entity
 #
 # Group mixins (correspond to the spec's flat unions):
 #   SetLike  = {SET, BAG}                — `e in X` containers
-#   Linear   = {SEQUENCE, CIRCLE}        — sequence-like
+#   Linear   = {SEQUENCE}                — sequence-like
 #   Grouped  = {PARTITION, COMPOSITION}  — partition-like
-#   Ordered  = {TUPLE, SEQUENCE, CIRCLE} — index-addressable
+#   Ordered  = {TUPLE, SEQUENCE}         — index-addressable
 #
 # Leaf-type bases:
 #   ObjDef         — root of every object definition
@@ -75,7 +75,7 @@ RefOrEntity = ObjRef | Entity
 #                    BagAdditiveUnion, BagIntersection, BagDifference,
 #                    BagPartDef
 #   FuncObjDef     — concrete: FuncDef, FuncInverse
-#   TupleDef, SequenceDef, CircleDef (Phase C),
+#   TupleDef, SequenceDef (Phase C),
 #   PartitionDef, CompositionDef (Phase D) are themselves the spec-type
 #   markers (single concrete class per type).
 #
@@ -91,7 +91,7 @@ class SetLike:
 
 
 class Linear:
-    """Marker for linear spec types (SEQUENCE ∪ CIRCLE)."""
+    """Marker for linear spec types (SEQUENCE)."""
 
     __slots__ = ()
 
@@ -103,7 +103,7 @@ class Grouped:
 
 
 class Ordered:
-    """Marker for ordered spec types (TUPLE ∪ SEQUENCE ∪ CIRCLE)."""
+    """Marker for ordered spec types (TUPLE ∪ SEQUENCE)."""
 
     __slots__ = ()
 
@@ -383,7 +383,7 @@ class TupleDef(ObjDef, Ordered):
 
 @dataclass(frozen=True, slots=True)
 class SequenceDef(ObjDef, Linear, Ordered):
-    """A linear (non-circular) sequence definition.
+    """A sequence definition.
 
     Example: seq S = sequence of A
              seq S = choose 3 sequence from A
@@ -394,22 +394,6 @@ class SequenceDef(ObjDef, Linear, Ordered):
     replace: bool = False
     size: int | None = None
     flatten: ObjRef | None = None  # SetInit of position-index entities for Bag sources
-
-
-@dataclass(frozen=True, slots=True)
-class CircleDef(ObjDef, Linear, Ordered):
-    """A circular sequence (rotation-equivalence; optional reflection symmetry).
-
-    Example: circle C = circle of A
-             circle C = circle of A reflectional
-    """
-
-    source: ObjRef
-    choose: bool = False
-    replace: bool = False
-    size: int | None = None
-    reflection: bool = False
-    flatten: ObjRef | None = None
 
 
 # =============================================================================
@@ -470,4 +454,4 @@ class BagPartDef(BagObjDef, PartDef):
 # `ContainerObjDef` is kept as a union alias for type hints; runtime
 # isinstance checks use the base classes directly. After Phase F, this
 # alias may be retired in favour of `(SetLike, Ordered)` checks.
-ContainerObjDef = SetObjDef | TupleDef | SequenceDef | CircleDef
+ContainerObjDef = SetObjDef | TupleDef | SequenceDef

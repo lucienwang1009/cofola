@@ -27,7 +27,6 @@ from cofola.frontend.objects import (
     SetChoose,
     BagChoose,
     SetChooseReplace,
-    CircleDef,
     TupleDef,
     SequenceDef,
 )
@@ -45,7 +44,6 @@ _SIZE_EMBEDDABLE_DEFS = (
     SetChooseReplace,
     TupleDef,
     SequenceDef,
-    CircleDef,
 )
 
 

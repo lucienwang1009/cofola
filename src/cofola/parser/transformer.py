@@ -51,12 +51,6 @@ class CommonTransformer(Transformer):
     def gt(self, args):
         return ">"
 
-    def true(self, args):
-        return True
-
-    def false(self, args):
-        return False
-
     def INT(self, args):
         return int(args)
 

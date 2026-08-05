@@ -91,3 +91,18 @@ def test_can_load_problems(all_problems):
     assert "program" in first_problem
     assert "answer" in first_problem
     assert "tags" in first_problem
+
+
+def test_circle_problems_are_not_marked_encodable(all_problems):
+    """Legacy circle programs remain as corpus data, but are unsupported."""
+    circle_problems = {
+        problem_id: data
+        for problem_id, data in all_problems.items()
+        if "circle" in data.get("tags", [])
+    }
+
+    assert circle_problems
+    assert all(
+        "unencodeable" in data.get("tags", [])
+        for data in circle_problems.values()
+    )

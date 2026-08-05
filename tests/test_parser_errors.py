@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import pytest
-from lark.exceptions import VisitError
+from lark.exceptions import UnexpectedInput, VisitError
 
 from cofola.parser import CofolaParsingError
 from cofola.parser.parser import parse
@@ -42,13 +42,6 @@ S = set(a, b)
 |p| == 1 for p in partition(S, 2)
 """,
         "requires a named partition",
-    ),
-    (
-        "reserved_circle_identifier",
-        """
-circle = set(a, b)
-""",
-        "reserved keyword",
     ),
     (
         "duplicate_object_name",
@@ -110,6 +103,28 @@ P = partition(S, 2)
 """
 
     parse(program)
+
+
+def test_circle_is_available_as_an_identifier() -> None:
+    """The removed object operator must not leave a stale reserved keyword."""
+    problem = parse("circle = set(a, b)")
+
+    assert any(name == "circle" for _, name in problem.names)
+
+
+@pytest.mark.parametrize(
+    "program",
+    [
+        "S = set(a, b)\nC = circle(S)",
+        "S = set(a, b)\nC = choose_circle(S, 1)",
+        "S = set(a, b)\nC = choose_replace_circle(S, 2)",
+        "S = set(a, b)\nC = sequence(S, reflection=True)",
+    ],
+)
+def test_circle_syntax_is_rejected(program: str) -> None:
+    """Circle constructors and their reflection option are no longer syntax."""
+    with pytest.raises(UnexpectedInput):
+        parse(program)
 
 
 def test_tuple_membership_workaround_uses_tuple_count() -> None:

@@ -101,7 +101,7 @@ def _encode_object(
             _encode_func_inverse_image(ref, defn, context)
 
         # ── Sequences ─────────────────────────────────────────────────────────
-        case ir_obj.SequenceDef() | ir_obj.CircleDef():
+        case ir_obj.SequenceDef():
             _encode_sequence(ref, defn, analysis, context)
 
         # ── Partitions ────────────────────────────────────────────────────────
@@ -646,14 +646,11 @@ def _encode_sequence(
     - Encode entity predicates with multiplicity variables
     - Apply overcount correction
     """
-    is_circle = isinstance(defn, ir_obj.CircleDef)
     logger.debug(
-        "_encode_sequence: ref={}, source={}, size={}, circular={}, reflection={}",
+        "_encode_sequence: ref={}, source={}, size={}",
         ref.id,
         defn.source.id,
         defn.size,
-        is_circle,
-        is_circle and defn.reflection,
     )
     domain_size = len(context.domain)
     # Check if source is a set or bag
@@ -770,20 +767,6 @@ def _encode_sequence(
             )
     else:
         raise ValueError(f"Sequence source {defn.source} is neither a set nor a bag")
-
-    # Handle circular and reflection
-    if isinstance(defn, ir_obj.CircleDef):
-        source_exact: int | None = None
-        if set_info is not None and set_info.exact_size is not None:
-            source_exact = set_info.exact_size
-        elif bag_info is not None and bag_info.exact_size is not None:
-            source_exact = bag_info.exact_size
-        circle_size = defn.size or source_exact or domain_size
-        context.circle_len = circle_size
-        context.overcount = context.overcount * circle_size
-        if defn.reflection:
-            context.overcount = context.overcount * 2
-
 
 # =============================================================================
 # Partition encoder

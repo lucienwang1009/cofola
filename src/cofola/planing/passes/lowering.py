@@ -21,8 +21,6 @@ from cofola.frontend.objects import (
     Grouped,
     TupleDef,
     SequenceDef,
-    CircleDef,
-    Linear,
     FuncDef,
     SetInit,
     BagInit,
@@ -644,10 +642,10 @@ class LoweringPass(TransformPass):
         Returns:
             Tuple of (new Problem, whether any changes were made).
         """
-        # Find a SequenceDef/CircleDef that needs lowering
+        # Find a SequenceDef that needs lowering
         for ref in problem.refs():
             defn = problem.get_object(ref)
-            if not isinstance(defn, Linear):
+            if not isinstance(defn, SequenceDef):
                 continue
 
             source_defn = problem.get_object(defn.source)
@@ -677,22 +675,13 @@ class LoweringPass(TransformPass):
                         size=size,
                     )
 
-                # Update the sequence/circle def to not choose; preserve sibling class
-                if isinstance(defn, CircleDef):
-                    new_seq_defn = CircleDef(
-                        source=chosen_ref,
-                        choose=False,
-                        replace=False,
-                        size=size,
-                        reflection=defn.reflection,
-                    )
-                else:
-                    new_seq_defn = SequenceDef(
-                        source=chosen_ref,
-                        choose=False,
-                        replace=False,
-                        size=size,
-                    )
+                # Update the sequence def to not choose.
+                new_seq_defn = SequenceDef(
+                    source=chosen_ref,
+                    choose=False,
+                    replace=False,
+                    size=size,
+                )
 
                 new_defs = list(problem.defs)
                 new_defs.append((chosen_ref, chosen_defn))
@@ -723,23 +712,13 @@ class LoweringPass(TransformPass):
                 idx_entities = frozenset(Entity(f"{IDX_PREFIX}{i}") for i in range(size))
                 flatten_ref = self._new_ref()
                 flatten_defn = SetInit(entities=idx_entities)
-                if isinstance(defn, CircleDef):
-                    new_seq_defn = CircleDef(
-                        source=defn.source,
-                        choose=defn.choose,
-                        replace=defn.replace,
-                        size=size,
-                        reflection=defn.reflection,
-                        flatten=flatten_ref,
-                    )
-                else:
-                    new_seq_defn = SequenceDef(
-                        source=defn.source,
-                        choose=defn.choose,
-                        replace=defn.replace,
-                        size=size,
-                        flatten=flatten_ref,
-                    )
+                new_seq_defn = SequenceDef(
+                    source=defn.source,
+                    choose=defn.choose,
+                    replace=defn.replace,
+                    size=size,
+                    flatten=flatten_ref,
+                )
                 new_defs = list(problem.defs)
                 new_defs.append((flatten_ref, flatten_defn))
                 new_defs = [(r, d) if r != ref else (ref, new_seq_defn) for r, d in new_defs]

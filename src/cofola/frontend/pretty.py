@@ -41,7 +41,6 @@ from cofola.frontend.objects import (
     BagPartDef,
     BagSupport,
     BagUnion,
-    CircleDef,
     CompositionDef,
     FuncDef,
     FuncImage,
@@ -176,17 +175,6 @@ def _fmt_defn(defn: object, problem: Problem) -> str:
                 rep_s = " (replace)" if rep else ""
                 return f"choose {sz_s}seq from {n(src)}{rep_s}"
             return f"seq({n(src)})"
-        case CircleDef(source=src, choose=ch, replace=rep, size=sz, reflection=refl):
-            flags = ["circle"]
-            if refl:
-                flags.append("reflect")
-            if ch:
-                sz_s = f"{sz} " if sz is not None else ""
-                rep_s = " (replace)" if rep else ""
-                base = f"choose {sz_s}seq from {n(src)}{rep_s}"
-            else:
-                base = f"seq({n(src)})"
-            return f"{base} [{', '.join(flags)}]"
         case PartitionDef(source=src, num_parts=np_):
             return f"partition({n(src)}, into={np_})"
         case CompositionDef(source=src, num_parts=np_):

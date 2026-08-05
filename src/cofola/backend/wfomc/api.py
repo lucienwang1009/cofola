@@ -138,8 +138,6 @@ def build_problem(
     domain: set[Const],
     weights: Mapping[Pred, tuple[object, object]],
     unary_evidence: set[EvidenceFormula],
-    *,
-    circle_len: int,
 ) -> EncodedProblem:
     """Translate Cofola's encoded state to WFOMC's typed input model."""
 
@@ -156,10 +154,7 @@ def build_problem(
             weights=_native_weights(weights),
             evidence=_NativeEvidence(unary=_NativeUnaryEvidence(literals)),
         ),
-        domain=_NativeDomain(
-            elements=frozenset(domain),
-            circular_order_size=circle_len,
-        ),
+        domain=_NativeDomain(elements=frozenset(domain)),
     )
 
 

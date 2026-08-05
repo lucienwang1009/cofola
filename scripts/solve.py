@@ -44,7 +44,7 @@ if __name__ == '__main__':
             'timeout', 'unencodeable'
         ]
         # checked = [
-        #     'circle', 'sequence'
+        #     'sequence'
         # ]
         checked = None
         if any(tag in tags for tag in unchecked) \

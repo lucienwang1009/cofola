@@ -86,17 +86,7 @@ T == S
 """,
         "Set",
     ),
-    # 8) Circle with `<` pattern — circles reject ordering patterns.
-    (
-        "circle_less_than",
-        """
-S = set(a, b, c, d)
-C = circle(S)
-a < b in C
-""",
-        "Circle",
-    ),
-    # 9) seq.count(together(...)) — together has no count variant.
+    # 8) seq.count(together(...)) — together has no count variant.
     (
         "seq_count_together",
         """
@@ -106,7 +96,7 @@ seq.count(together(S)) > 0
 """,
         "together",
     ),
-    # 10) Indexing into an unordered Partition — must use Composition.
+    # 9) Indexing into an unordered Partition — must use Composition.
     (
         "partition_indexing",
         """
@@ -116,7 +106,7 @@ P = partition(S, 2)
 """,
         "unordered Partition",
     ),
-    # 11) T[i] in tuple — TupleIndexMembership requires SET_LIKE container.
+    # 10) T[i] in tuple — TupleIndexMembership requires SET_LIKE container.
     (
         "tuple_index_in_tuple",
         """
@@ -127,7 +117,7 @@ T1[0] in T2
 """,
         "TupleIndexMembership",
     ),
-    # 12) Bag-source choose-with-replacement ordered collections are unsupported.
+    # 11) Bag-source choose-with-replacement ordered collections are unsupported.
     (
         "choose_replace_tuple_from_bag",
         """
@@ -141,14 +131,6 @@ T = choose_replace_tuple(B, 3)
         """
 B = bag(a: 2)
 seq = choose_replace_sequence(B, 3)
-""",
-        "choose-with-replacement from a Bag",
-    ),
-    (
-        "choose_replace_circle_from_bag",
-        """
-B = bag(a: 2)
-C = choose_replace_circle(B, 3)
 """,
         "choose-with-replacement from a Bag",
     ),
