@@ -28,7 +28,6 @@ from cofola.frontend.constraints import (
 from cofola.frontend.objects import (
     BagObjDef,
     BagPartDef,
-    CircleDef,
     CompositionDef,
     FuncObjDef,
     Grouped,
@@ -100,16 +99,15 @@ _FRIENDLY_NAME: dict[type, str] = {
     BagObjDef: "Bag",
     TupleDef: "Tuple",
     SequenceDef: "Sequence",
-    CircleDef: "Circle",
     PartitionDef: "Partition",
     CompositionDef: "Composition",
     FuncObjDef: "Function",
     Entity: "Entity",
     int: "Int",
     SetLike: "Bag or Set",
-    Linear: "Circle or Sequence",
+    Linear: "Sequence",
     Grouped: "Composition or Partition",
-    Ordered: "Circle or Sequence or Tuple",
+    Ordered: "Sequence or Tuple",
 }
 
 
@@ -176,7 +174,7 @@ class TypeChecker:
     def _check_ordered_semantics(self, ref: ObjRef, defn: object) -> None:
         """Validate ordered-object rules that depend on multiple fields."""
 
-        if not isinstance(defn, (TupleDef, SequenceDef, CircleDef)):
+        if not isinstance(defn, (TupleDef, SequenceDef)):
             return
         if not (defn.choose and defn.replace):
             return

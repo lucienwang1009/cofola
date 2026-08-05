@@ -29,7 +29,7 @@ from cofola.backend.wfomc.utils import create_aux_pred, create_cofola_pred, crea
 from cofola.backend.wfomc.decoder import Decoder
 
 from cofola.frontend.problem import Problem
-from cofola.frontend.objects import CircleDef, Linear, PartDef
+from cofola.frontend.objects import PartDef, SequenceDef
 from cofola.planing.analysis.entities import AnalysisResult
 from cofola.frontend.objects import ObjRef, Entity as IREntity
 
@@ -62,8 +62,6 @@ class Context:
         sequence_ref: ObjRef of the unique SequenceDef, or None if no sequence.
         leq_pred: Global 'LEQ' binary predicate (linear order).
         pred_pred: Global 'PRED' binary predicate (predecessor for linear sequences).
-        circular_pred: Global 'CIRCULAR_PRED' binary predicate (predecessor for circles).
-        circle_len: Number of elements in the domain (used for circular sequences).
     """
 
     def __init__(self, problem: Problem, analysis: AnalysisResult) -> None:
@@ -110,8 +108,6 @@ class Context:
         # Global linear-order / predecessor predicates (shared by all sequences)
         self.leq_pred: Pred = Pred('LEQ', 2)
         self.pred_pred: Pred = Pred('PRED', 2)
-        self.circular_pred: Pred = Pred('CIRCULAR_PRED', 2)
-        self.circle_len: int = len(self.domain)
 
         # Singletons predicate (set during _encode_singleton if singletons exist)
         self.singletons_pred: Pred | None = None
@@ -124,17 +120,15 @@ class Context:
     # =========================================================================
 
     def _find_sequence_ref(self) -> ObjRef | None:
-        """Return the ObjRef of the first sequence-like def (SequenceDef or
-        CircleDef) in the problem, or None.
-        """
+        """Return the ObjRef of the first SequenceDef, or None."""
         sequence_refs = []
         for ref in self.problem.refs():
             defn = self.problem.get_object(ref)
-            if isinstance(defn, Linear):
+            if isinstance(defn, SequenceDef):
                 sequence_refs.append(ref)
         if len(sequence_refs) > 1:
             raise ValueError(
-                "WFOMC backend expects at most one sequence-like object per component"
+                "WFOMC backend expects at most one sequence object per component"
             )
         return sequence_refs[0] if sequence_refs else None
 
@@ -361,8 +355,6 @@ class Context:
     def get_predecessor_pred(self, seq_ref: ObjRef) -> Pred:
         """Get the sequence-restricted PRED predicate for a SequenceDef.
 
-        For circular sequences uses self.circular_pred; otherwise self.pred_pred.
-
         Creates:
             ∀X∀Y: (seq_PRED(X,Y) ↔ (source_pred(X) ∧ source_pred(Y) ∧ PRED(X,Y)))
 
@@ -375,7 +367,6 @@ class Context:
         IMPLEMENTATION:
             defn = problem.get_object(seq_ref)  # SequenceDef
             source_pred = get_pred(defn.source)
-            pred_pred = self.circular_pred if isinstance(defn, CircleDef) else self.pred_pred
             seq_pred_name = f"{_get_name(seq_ref)}_PRED"
             Create pred and add sentence as with get_leq_pred but using pred_pred.
         """
@@ -383,12 +374,11 @@ class Context:
             return self.ref2predecessor_pred[seq_ref]
         defn = self.problem.get_object(seq_ref)
         domain_pred = self.get_pred(defn.flatten if defn.flatten is not None else defn.source)
-        pred_pred = self.circular_pred if isinstance(defn, CircleDef) else self.pred_pred
         seq_pred_name = f"{self._get_name(seq_ref)}_PRED"
         seq_pred = self.create_pred(seq_pred_name, 2)
         self.sentence = self.sentence & parse(
             f"\\forall X: (\\forall Y: ({seq_pred}(X,Y) <-> "
-            f"({domain_pred}(X) & {domain_pred}(Y) & {pred_pred}(X,Y))))"
+            f"({domain_pred}(X) & {domain_pred}(Y) & {self.pred_pred}(X,Y))))"
         )
         self.ref2predecessor_pred[seq_ref] = seq_pred
         return seq_pred
@@ -640,20 +630,17 @@ class Context:
             "  sentence: {}\n"
             "  domain: {}\n"
             "  weighting: {}\n"
-            "  evidence: {}\n"
-            "  circle_len: {}",
+            "  evidence: {}",
             self.sentence,
             sorted(str(c) for c in new_domain),
             {str(p): (str(w[0]), str(w[1])) for p, w in self.weighting.items()},
             sorted(str(a) for a in new_unary_evidence),
-            self.circle_len,
         )
         wfomc_problem = build_problem(
             self.sentence,
             new_domain,
             self.weighting,
             new_unary_evidence,
-            circle_len=self.circle_len,
         )
         decoder = Decoder(
             self.overcount,

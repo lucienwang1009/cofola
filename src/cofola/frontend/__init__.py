@@ -52,9 +52,8 @@ from .objects import (
     FuncDef,
     # Tuples
     TupleDef,
-    # Sequences / circles
+    # Sequences
     SequenceDef,
-    CircleDef,
     # Partitions / compositions
     PartitionDef,
     CompositionDef,
@@ -163,9 +162,8 @@ __all__ = [
     "FuncDef",
     # Tuple objects
     "TupleDef",
-    # Sequence / circle objects
+    # Sequence objects
     "SequenceDef",
-    "CircleDef",
     # Partition / composition objects
     "PartitionDef",
     "CompositionDef",

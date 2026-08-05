@@ -25,7 +25,7 @@ cofola_grammar = r"""
         | PARTITION
         | PERMUTE
         | CHOOSE_PERMUTE
-        | CHOOSE_REPLACE_PERMUTE) left_parenthesis object ("," INT)? ("," "reflection" "=" bool)? right_parenthesis
+        | CHOOSE_REPLACE_PERMUTE) left_parenthesis object ("," INT)? right_parenthesis
     binary_operations: object (UNION_OP | ADDITIVE_UNION_OP | INTERSECTION_OP | DIFFERENCE_OP) object
     indexing: object left_square_bracket INT right_square_bracket
 
@@ -78,9 +78,9 @@ cofola_grammar = r"""
     identity: CNAME
     CHOOSE: "choose"
     CHOOSE_REPLACE: "choose_replace"
-    PERMUTE: "tuple" | "sequence" | "circle"
-    CHOOSE_PERMUTE: "choose_tuple" | "choose_sequence" | "choose_circle"
-    CHOOSE_REPLACE_PERMUTE: "choose_replace_tuple" | "choose_replace_sequence" | "choose_replace_circle"
+    PERMUTE: "tuple" | "sequence"
+    CHOOSE_PERMUTE: "choose_tuple" | "choose_sequence"
+    CHOOSE_REPLACE_PERMUTE: "choose_replace_tuple" | "choose_replace_sequence"
     SUPP: "supp"
     UNION_OP: "+"
     ADDITIVE_UNION_OP: "++"
@@ -125,10 +125,6 @@ common_grammar = r"""
     LT: "<"
     GT: ">"
     LCASE_CNAME: LCASE_LETTER ("_"|LCASE_LETTER|DIGIT)*
-    ?bool: true | false
-    true: "true" | "True"
-    false: "false" | "False"
-
     %import common.LCASE_LETTER
     %import common.UCASE_LETTER
     %import common.CNAME

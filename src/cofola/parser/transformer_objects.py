@@ -24,7 +24,6 @@ from cofola.frontend.objects import (
     BagPartDef,
     BagSupport,
     BagUnion,
-    CircleDef,
     CompositionDef,
     Grouped,
     Linear,
@@ -58,9 +57,6 @@ _ORDERED_COLLECTION_OPS = {
     "sequence": (SequenceDef, False, False),
     "choose_sequence": (SequenceDef, True, False),
     "choose_replace_sequence": (SequenceDef, True, True),
-    "circle": (CircleDef, False, False),
-    "choose_circle": (CircleDef, True, False),
-    "choose_replace_circle": (CircleDef, True, True),
 }
 
 _BAG_BINARY_OPS = {
@@ -85,7 +81,6 @@ def _resolve_collection_operation(
     source: ObjRef,
     source_defn: ObjDef | None,
     size: int | None,
-    op_arg: bool,
 ) -> ObjRef:
     is_bag = isinstance(source_defn, BagObjDef)
 
@@ -111,14 +106,6 @@ def _resolve_collection_operation(
     op_spec = _ORDERED_COLLECTION_OPS.get(op_type)
     if op_spec is not None:
         cls, choose, replace = op_spec
-        if cls is CircleDef:
-            return builder.add(cls(
-                source=source,
-                choose=choose,
-                replace=replace,
-                size=size,
-                reflection=op_arg,
-            ))
         return builder.add(cls(
             source=source,
             choose=choose,
@@ -263,19 +250,7 @@ class ObjectTransformerMixin:
         op_type = str(args[0])
         obj = args[2]
 
-        if len(args) == 4:
-            size = None
-            op_arg = False
-        elif len(args) == 5:
-            if isinstance(args[3], bool):
-                size = None
-                op_arg = args[3]
-            else:
-                size = args[3]
-                op_arg = False
-        else:
-            size = args[3]
-            op_arg = args[4]
+        size = None if len(args) == 4 else args[3]
 
         return _resolve_collection_operation(
             builder=self.builder,
@@ -283,7 +258,6 @@ class ObjectTransformerMixin:
             source=obj,
             source_defn=self._defn_of(obj),
             size=size,
-            op_arg=op_arg,
         )
 
     def binary_operations(self, args):

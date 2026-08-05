@@ -62,7 +62,6 @@ P = partition(S, 2)       # unordered parts
 C = compose(S, 2)         # ordered parts
 Tup = choose_tuple(S, 2)
 Seq = sequence(S)
-Ring = circle(S, reflection=True)
 
 |T| == 2
 a in T

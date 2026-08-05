@@ -124,7 +124,8 @@
       "set",
       "circle",
       "together",
-      "benchmark"
+      "benchmark",
+      "unencodeable"
     ],
     "program": "Democrats = set(D0...5)\nRepublicans = set(R0...5)\ntable = circle(Democrats + Republicans)\ntogether(Democrats) in table\ntogether(Republicans) in table"
   },
@@ -452,7 +453,8 @@
       "circle",
       "next_to",
       "not constraint",
-      "benchmark"
+      "benchmark",
+      "unencodeable"
     ],
     "program": "people = set(Pierre, Thomas, Rosa, other0...5)\ntable = circle(people)\nnext_to(Pierre, Thomas) in table\nnext_to(Rosa, Pierre) not in table\nnext_to(Rosa, Thomas) not in table"
   },
@@ -532,7 +534,8 @@
     "tags": [
       "set",
       "circle",
-      "together"
+      "together",
+      "unencodeable"
     ],
     "program": "together_people = set(Pierre, Rosa, Thomas)\npeople = together_people + set(other0...5)\ntable = circle(people)\ntogether(together_people) in table"
   },
@@ -644,7 +647,8 @@
       "set",
       "circle",
       "next_to",
-      "not constraint"
+      "not constraint",
+      "unencodeable"
     ],
     "program": "people = set(Pierre, Rosa, Thomas, other0...4)\nnot_next_to = set(Pierre, Rosa, Thomas)\ntable = circle(people)\nnext_to(not_next_to,not_next_to) not in table"
   },
@@ -717,7 +721,8 @@
     "tags": [
       "set",
       "circle",
-      "together"
+      "together",
+      "unencodeable"
     ],
     "program": "Democrats = set(D0...5)\nRepublicans = set(R0...5)\ncommittee = Democrats + Republicans + set(Independent)\ntable = circle(committee)\ntogether(Democrats) in table\ntogether(Republicans) in table"
   },
@@ -903,7 +908,8 @@
     "tags": [
       "set",
       "choose",
-      "circle"
+      "circle",
+      "unencodeable"
     ],
     "program": "people = set(p0...7)\nsat_people = choose(people, 6)\ntable = circle(sat_people)"
   },
@@ -1103,7 +1109,8 @@
     "tags": [
       "set",
       "circle",
-      "next_to"
+      "next_to",
+      "unencodeable"
     ],
     "program": "people = set(John, Sam, other0...4)\ntable = circle(people)\nnext_to(John, Sam) in table"
   },
@@ -1208,7 +1215,8 @@
     "tags": [
       "circle",
       "reflection",
-      "benchmark"
+      "benchmark",
+      "unencodeable"
     ],
     "program": "beads = set(bead0...8)\nnecklace = choose_circle(beads, 5, reflection=True)"
   },
@@ -1508,7 +1516,8 @@
     "answer": "362880",
     "tags": [
       "set",
-      "circle"
+      "circle",
+      "unencodeable"
     ],
     "program": "politicians = set(D0...5) + set(R0...5)\ntable = circle(politicians)"
   },
@@ -1619,7 +1628,8 @@
     "answer": "12",
     "tags": [
       "circle",
-      "reflection"
+      "reflection",
+      "unencodeable"
     ],
     "program": "keys = set(key0...5)\nkeychain = circle(keys, reflection=True)"
   },
@@ -1819,7 +1829,8 @@
       "set",
       "circle",
       "next_to",
-      "not constraint"
+      "not constraint",
+      "unencodeable"
     ],
     "program": "people = set(Alice, Bob, other0...6)\ntable = circle(people)\nnext_to(Alice, Bob) not in table"
   },
@@ -1974,7 +1985,8 @@
       "set",
       "circle",
       "pred",
-      "succ"
+      "succ",
+      "unencodeable"
     ],
     "program": "Democrats = set(D0...5)\nRepublicans = set(R0...5)\ntable = circle(Democrats + Republicans)\nnext_to(Democrats, Democrats) not in table\nnext_to(Republicans, Republicans) not in table"
   },
@@ -2038,7 +2050,8 @@
     "answer": "12",
     "tags": [
       "circle",
-      "reflection"
+      "reflection",
+      "unencodeable"
     ],
     "program": "beads_and_knot = set(bead0...4, knot)\nbracelet = circle(beads_and_knot, reflection=True)"
   },
@@ -2050,7 +2063,8 @@
     "answer": "40320",
     "tags": [
       "set",
-      "circle"
+      "circle",
+      "unencodeable"
     ],
     "program": "people = set(p0...9)\nround_table = circle(people)"
   },
@@ -2739,7 +2753,8 @@
       "set",
       "circle",
       "pred",
-      "not constraint"
+      "not constraint",
+      "unencodeable"
     ],
     "program": "plates = bag(blue: 5, red: 2, green: 2, orange: 1)\narrangement = circle(plates)\nnext_to(green, green) not in arrangement"
   },
@@ -2792,7 +2807,8 @@
     "answer": "24",
     "tags": [
       "set",
-      "circle"
+      "circle",
+      "unencodeable"
     ],
     "program": "people = set(p0...5)\ntable = circle(people)"
   },
@@ -2842,7 +2858,8 @@
     "answer": "10",
     "tags": [
       "circle",
-      "reflection"
+      "reflection",
+      "unencodeable"
     ],
     "program": "breads = bag(orange: 3, black: 3, teal: 1)\nbracelet = circle(breads, reflection=True)"
   },
@@ -2882,7 +2899,8 @@
     "answer": "5040",
     "tags": [
       "set",
-      "circle"
+      "circle",
+      "unencodeable"
     ],
     "program": "people = set(p0...8)\ntable = circle(people)"
   },
@@ -3145,7 +3163,8 @@
     "answer": "12",
     "tags": [
       "circle",
-      "reflection"
+      "reflection",
+      "unencodeable"
     ],
     "program": "beads = set(bead0...5)\nbracelet = circle(beads, reflection=True)"
   },
@@ -3197,7 +3216,8 @@
     "tags": [
       "set",
       "circle",
-      "together"
+      "together",
+      "unencodeable"
     ],
     "program": "England = set(E0...3)\nGermany = set(G0...4)\nFrance = set(F0...2)\ntable = circle(England + Germany + France)\ntogether(England) in table\ntogether(Germany) in table\ntogether(France) in table"
   },
@@ -3466,7 +3486,8 @@
     "answer": "720",
     "tags": [
       "set",
-      "circle"
+      "circle",
+      "unencodeable"
     ],
     "program": "seats = set(seats0...7)\narrangement = circle(seats)"
   },
@@ -3582,7 +3603,8 @@
     "tags": [
       "set",
       "circle",
-      "next_to"
+      "next_to",
+      "unencodeable"
     ],
     "program": "tribe = set(mother, wife, chief, other0...5)\narrangement = circle(tribe)\nnext_to(mother, chief) in arrangement\nnext_to(chief, wife) in arrangement"
   },
@@ -3784,7 +3806,8 @@
       "set",
       "circle",
       "next_to",
-      "not constraint"
+      "not constraint",
+      "unencodeable"
     ],
     "program": "people = set(Alice, Bob, Eve, other0...5)\nseating = circle(people)\nnot_next_to = set(Alice, Bob, Eve)\nnext_to(not_next_to, not_next_to) not in seating"
   },
@@ -4027,7 +4050,8 @@
     "answer": "60",
     "tags": [
       "circle",
-      "reflection"
+      "reflection",
+      "unencodeable"
     ],
     "program": "beads = set(bead0...6)\nbracelet = circle(beads, reflection=True)"
   },
@@ -4114,7 +4138,8 @@
       "set",
       "circle",
       "next_to",
-      "reflection"
+      "reflection",
+      "unencodeable"
     ],
     "program": "keys = set(house_key, car_key, key0...3)\narrangement = circle(keys, reflection=True)\nnext_to(house_key, car_key) in arrangement"
   },

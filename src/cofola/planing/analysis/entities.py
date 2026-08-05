@@ -24,7 +24,6 @@ from cofola.frontend.objects import (
     BagIntersection,
     BagDifference,
     BagSupport,
-    CircleDef,
     FuncDef,
     FuncImage,
     FuncInverseImage,
@@ -687,7 +686,7 @@ class EntityAnalysis(AnalysisPass[AnalysisResult]):
     def _analyze_ordered_collection(
         self,
         ref: ObjRef,
-        defn: TupleDef | SequenceDef | CircleDef,
+        defn: TupleDef | SequenceDef,
         state: _AnalysisState,
     ) -> None:
         """Shared analysis for TupleDef and SequenceDef.

@@ -27,9 +27,6 @@ RESERVED_KEYWORDS = [
     "sequence",
     "choose_sequence",
     "choose_replace_sequence",
-    "circle",
-    "choose_circle",
-    "choose_replace_circle",
     "together",
     "next_to",
     "not",
@@ -37,10 +34,6 @@ RESERVED_KEYWORDS = [
     "or",
     "dedup_count",
     "for",
-    "true",
-    "false",
-    "True",
-    "False",
 ]
 
 RESERVED_PREFIXES = [

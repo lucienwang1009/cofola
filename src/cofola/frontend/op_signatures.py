@@ -49,7 +49,6 @@ from cofola.frontend.objects import (
     BagPartDef,
     BagSupport,
     BagUnion,
-    CircleDef,
     CompositionDef,
     FuncImage,
     FuncInverseImage,
@@ -121,23 +120,6 @@ class Signature:
 # ---------------------------------------------------------------------------
 # Spec-prescribed extra predicates
 # ---------------------------------------------------------------------------
-
-
-def _circle_pattern_supported(node: object, problem: _ObjectResolver) -> Optional[str]:
-    """Circles only support `together` and `next_to` / adjacency patterns
-    (and the implicit identity patterns). They reject `<` and predecessor
-    patterns (which require a fixed starting position).
-    """
-    seq_ref = getattr(node, "seq")
-    seq_defn = problem.get_object(seq_ref)
-    if not isinstance(seq_defn, CircleDef):
-        return None
-    pattern = getattr(node, "pattern")
-    if isinstance(pattern, LessThanPattern):
-        return "Circle does not support `<` pattern"
-    if isinstance(pattern, PredecessorPattern):
-        return "Circle does not support predecessor pattern (e1, e2)"
-    return None
 
 
 def _disjoint_same_kind(node: object, problem: _ObjectResolver) -> Optional[str]:
@@ -247,11 +229,8 @@ SIGNATURES: dict[type, Signature] = {
     TupleDef: Signature(
         params=(Param(SetLike, "source", field="source"),),
     ),
-    # Sequences/circles: source must be SetLike (same rationale).
+    # Sequences: source must be SetLike (same rationale).
     SequenceDef: Signature(
-        params=(Param(SetLike, "source", field="source"),),
-    ),
-    CircleDef: Signature(
         params=(Param(SetLike, "source", field="source"),),
     ),
     # Partitions/compositions: source must be SetLike.
@@ -321,7 +300,6 @@ SIGNATURES: dict[type, Signature] = {
     ),
     SequencePatternConstraint: Signature(
         params=(Param(Linear, "seq", field="seq"),),
-        extra=(_circle_pattern_supported,),
     ),
     FuncPairConstraint: Signature(
         params=(Param(FuncObjDef, "func", field="func"),),
@@ -342,7 +320,7 @@ SIGNATURES: dict[type, Signature] = {
     ),
     SeqPatternCountAtom: Signature(
         params=(Param(Linear, "seq", field="seq"),),
-        extra=(_circle_pattern_supported, _no_together_count),
+        extra=(_no_together_count,),
     ),
     # ------------------------------------------------------------------
     # Sequence patterns themselves: the type-check on their fields runs

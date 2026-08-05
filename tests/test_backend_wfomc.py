@@ -231,7 +231,7 @@ def test_context_rejects_multiple_sequences_in_one_component() -> None:
         singletons={a},
     )
 
-    with pytest.raises(ValueError, match="at most one sequence-like object"):
+    with pytest.raises(ValueError, match="at most one sequence object"):
         Context(problem, analysis)
 
 

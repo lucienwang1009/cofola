@@ -173,7 +173,7 @@ class ConstraintTransformerMixin:
 
     def seq_constraint(self, args):
         pattern, is_in, obj = args
-        # TypeChecker enforces that `seq` is a Sequence/Circle via the
+        # TypeChecker enforces that `seq` is a Sequence via the
         # SequencePatternConstraint signature.
         return SequencePatternConstraint(seq=obj, pattern=pattern, positive=is_in)
 
