@@ -62,6 +62,23 @@ def test_exactly_one_qf_preserves_multi_predicate_semantics() -> None:
         exactly_one_qf([])
 
 
+def test_full_choice_keeps_weighted_source_evidence_for_decoder() -> None:
+    """Constant folding must not prune evidence for weighted predicates.
+
+    The full-size choice is folded into its source. The source predicates then
+    disappear from the sentence, but the decoder still consumes their
+    polynomial degrees to recover the unique full selection.
+    """
+    assert parse_and_solve(
+        """
+defective = set(d0...2)
+working = set(w0...3)
+purchase = choose(defective + working, 5)
+|purchase & defective| >= 2
+"""
+    ) == 1
+
+
 def test_bag_difference_counts_leftover_multiplicities() -> None:
     """Bag difference should use max(left - right, 0), not support difference."""
     assert parse_and_solve(

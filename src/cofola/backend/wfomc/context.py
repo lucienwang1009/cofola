@@ -557,19 +557,20 @@ class Context:
         return var
 
     def prune_evidence(self) -> None:
-        """Remove unary evidence atoms whose predicates are not in the sentence.
+        """Remove evidence irrelevant to both the sentence and weighted output.
 
         Should be called during build() before constructing EncodedProblem.
 
-        IMPLEMENTATION:
-            used_preds = self.sentence.preds()
-            self.unary_evidence = {e for e in self.unary_evidence if e.pred in used_preds}
+        A weighted predicate may disappear from the sentence after constant
+        folding while its polynomial degree is still consumed by the decoder.
+        Its ground evidence must survive so WFOMC retains that predicate in the
+        result polynomial.
         """
-        used_preds = self.sentence.preds()
+        relevant_preds = self.sentence.preds() | self.weighting.keys()
         self.unary_evidence = {
             evidence
             for evidence in self.unary_evidence
-            if evidence_parts(evidence)[0] in used_preds
+            if evidence_parts(evidence)[0] in relevant_preds
         }
 
     def build(self) -> tuple[EncodedProblem, Decoder]:
