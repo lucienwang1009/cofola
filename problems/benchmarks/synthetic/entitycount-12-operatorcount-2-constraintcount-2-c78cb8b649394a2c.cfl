@@ -1,5 +1,0 @@
-bag_0 = bag(e_10: 1, e_11: 1, e_12: 1, e_2: 2, e_3: 1, e_4: 1, e_5: 1, e_6: 1, e_9: 3)
-choose_0 = choose(bag_0, 5)
-choose_1 = choose(choose_0, 4)
-e_4 in choose_1
-e_12 in choose_1

@@ -61,16 +61,29 @@ def load_saved_cases(path: Path) -> list[BenchmarkCase]:
     return cases
 
 
-def save_cases(cases: Iterable[BenchmarkCase], directory: Path) -> None:
-    """Persist benchmarks as reusable .cfl files plus JSON/CSV manifests."""
+def save_cases(
+    cases: Iterable[BenchmarkCase],
+    directory: Path,
+    *,
+    suite_subdirectories: bool = True,
+) -> None:
+    """Persist benchmarks as reusable .cfl files plus JSON/CSV manifests.
+
+    Multi-suite manifests use one subdirectory per suite by default.  A
+    dedicated single-suite directory can opt into a flat layout so its
+    manifest and programs remain self-contained.
+    """
 
     case_list = list(cases)
     directory.mkdir(parents=True, exist_ok=True)
     records: list[dict[str, Any]] = []
     for case in case_list:
-        suite_dir = directory / _safe_path_part(case.suite)
-        suite_dir.mkdir(parents=True, exist_ok=True)
-        program_rel = Path(_safe_path_part(case.suite)) / f"{_safe_path_part(case.case_id)}.cfl"
+        if suite_subdirectories:
+            suite_dir = directory / _safe_path_part(case.suite)
+            suite_dir.mkdir(parents=True, exist_ok=True)
+            program_rel = Path(_safe_path_part(case.suite)) / f"{_safe_path_part(case.case_id)}.cfl"
+        else:
+            program_rel = Path(f"{_safe_path_part(case.case_id)}.cfl")
         program_text = case.program.strip() + "\n"
         (directory / program_rel).write_text(program_text)
         records.append(
@@ -315,6 +328,99 @@ def growing_domain_cases(
                     f"domain={domain}",
                 ),
                 source="BANANA bag tuple",
+            )
+        )
+
+    for domain in domains:
+        team_size = 4
+        cases.append(
+            BenchmarkCase(
+                suite="growing",
+                case_id=f"nested_choice_{domain:03d}",
+                program="\n".join(
+                    (
+                        f"people = set(p0...{domain})",
+                        f"team = choose(people, {team_size})",
+                        "captain = choose(team, 1)",
+                    )
+                ),
+                expected=math.comb(domain, team_size) * team_size,
+                tags=(
+                    "nested_choice",
+                    "set",
+                    "choose",
+                    "dependent_configuration",
+                    "outside_cola_fragment",
+                    "growing",
+                    "family=nested_choice",
+                    f"domain={domain}",
+                ),
+                source="choose a team and then its captain",
+            )
+        )
+
+    for domain in domains:
+        selected_size = 4
+        cases.append(
+            BenchmarkCase(
+                suite="growing",
+                case_id=f"selected_pairs_{domain:03d}",
+                program="\n".join(
+                    (
+                        f"people = set(p0...{domain})",
+                        f"selected = choose(people, {selected_size})",
+                        "groups = partition(selected, 2)",
+                        "|part| == 2 for part in groups",
+                    )
+                ),
+                expected=math.comb(domain, selected_size) * 3,
+                tags=(
+                    "selected_pairs",
+                    "set",
+                    "choose",
+                    "partition",
+                    "dependent_configuration",
+                    "outside_cola_fragment",
+                    "growing",
+                    "family=selected_pairs",
+                    f"domain={domain}",
+                ),
+                source="choose four people and partition them into pairs",
+            )
+        )
+
+    for domain in domains:
+        selected_size = 5
+        cases.append(
+            BenchmarkCase(
+                suite="growing",
+                case_id=f"selected_sequence_{domain:03d}",
+                program="\n".join(
+                    (
+                        f"items = set(a0...{domain})",
+                        f"picked = choose(items, {selected_size})",
+                        "row = sequence(picked)",
+                        "next_to(a0, a1) in row",
+                    )
+                ),
+                expected=(
+                    math.comb(domain - 2, selected_size - 2)
+                    * 2
+                    * math.factorial(selected_size - 1)
+                ),
+                tags=(
+                    "selected_sequence",
+                    "set",
+                    "choose",
+                    "sequence",
+                    "adjacency",
+                    "dependent_configuration",
+                    "outside_cola_fragment",
+                    "growing",
+                    "family=selected_sequence",
+                    f"domain={domain}",
+                ),
+                source="choose five items, order them, and keep two adjacent",
             )
         )
 

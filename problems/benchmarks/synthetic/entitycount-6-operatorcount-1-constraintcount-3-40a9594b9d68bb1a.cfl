@@ -1,5 +1,0 @@
-bag_0 = bag(e_1: 1, e_3: 2, e_5: 2, e_6: 1)
-choose_0 = choose(bag_0, 2)
-choose_0.count(e_1) > 1
-e_3 in choose_0
-e_6 in choose_0

@@ -1,0 +1,4 @@
+items = set(a0...55)
+picked = choose(items, 5)
+row = sequence(picked)
+next_to(a0, a1) in row

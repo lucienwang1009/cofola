@@ -1,2 +1,0 @@
-set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)
-choose_replace_0 = choose_replace(set_0, 9)

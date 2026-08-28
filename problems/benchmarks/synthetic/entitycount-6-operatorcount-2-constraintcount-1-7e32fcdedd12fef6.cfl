@@ -1,4 +1,0 @@
-bag_0 = bag(e_2: 1, e_4: 1, e_5: 1, e_6: 3)
-compose_0 = compose(bag_0, 3)
-compose_1 = compose(compose_0[2], 4)
-compose_1[0] disjoint compose_1[0]

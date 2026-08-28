@@ -1,0 +1,4 @@
+left = set(a0...5)
+right = set(b0...3)
+picked = choose(left + right, 5)
+|picked & left| == 3

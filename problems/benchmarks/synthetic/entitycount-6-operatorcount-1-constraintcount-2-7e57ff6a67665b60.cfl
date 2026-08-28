@@ -1,4 +1,0 @@
-set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6)
-tuple_0 = tuple(set_0)
-tuple_0[2] == e_1
-tuple_0[4] == e_2

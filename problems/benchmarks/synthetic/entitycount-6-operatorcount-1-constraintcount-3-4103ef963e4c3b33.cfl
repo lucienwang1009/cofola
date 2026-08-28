@@ -1,5 +1,0 @@
-bag_0 = bag(e_3: 2, e_4: 1, e_6: 3)
-partition_0 = partition(bag_0, 2)
-|part| < 1 for part in partition_0
-|part| > 3 for part in partition_0
-|part| != 2 for part in partition_0

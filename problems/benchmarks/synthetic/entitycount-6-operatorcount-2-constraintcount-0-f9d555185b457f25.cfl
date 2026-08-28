@@ -1,3 +1,0 @@
-bag_0 = bag(e_1: 1, e_3: 2, e_4: 1, e_5: 1, e_6: 1)
-choose_tuple_0 = choose_tuple(bag_0, 5)
-compose_0 = compose(bag_0, 2)

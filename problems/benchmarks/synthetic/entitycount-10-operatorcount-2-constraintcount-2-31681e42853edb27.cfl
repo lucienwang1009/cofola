@@ -1,5 +1,0 @@
-set_0 = set(e_1, e_10, e_2, e_3, e_4, e_5, e_6, e_7, e_8, e_9)
-partition_0 = partition(set_0, 4)
-choose_tuple_0 = choose_replace_tuple(set_0, 17)
-|part| > 3 for part in partition_0
-|part| != 1 for part in partition_0

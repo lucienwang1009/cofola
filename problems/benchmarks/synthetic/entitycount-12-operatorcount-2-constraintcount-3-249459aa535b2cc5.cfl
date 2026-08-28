@@ -1,6 +1,0 @@
-bag_0 = bag(e_10: 2, e_11: 1, e_12: 1, e_4: 3, e_5: 1, e_6: 1, e_7: 2, e_8: 1)
-partition_0 = partition(bag_0, 6)
-partition_1 = partition(bag_0, 7)
-|part| > 2 for part in partition_0
-|part| < 1 for part in partition_1
-|part| > 2 for part in partition_1

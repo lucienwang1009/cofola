@@ -1,5 +1,0 @@
-bag_0 = bag(e_1: 1, e_2: 1, e_5: 1, e_7: 4, e_8: 1)
-sequence_0 = sequence(bag_0)
-choose_0 = choose(bag_0, 3)
-next_to(e_2, e_5) in sequence_0
-choose_0 disjoint bag_0

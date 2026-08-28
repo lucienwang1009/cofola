@@ -1,5 +1,0 @@
-set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)
-compose_0 = compose(set_0, 3)
-sequence_0 = sequence(compose_0[2])
-|compose_0[2]| > 0
-(e_8, e_6) in sequence_0

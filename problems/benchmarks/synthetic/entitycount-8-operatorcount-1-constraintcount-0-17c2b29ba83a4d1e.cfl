@@ -1,2 +1,0 @@
-bag_0 = bag(e_1: 1, e_2: 1, e_4: 2, e_5: 1, e_7: 2, e_8: 1)
-sequence_0 = sequence(bag_0)

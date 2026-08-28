@@ -1,0 +1,4 @@
+items = set(e0...8)
+groups = compose(items, 2)
+|groups[0]| == 3
+|groups[1]| == 5

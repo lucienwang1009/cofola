@@ -1,5 +1,0 @@
-set_0 = set(e_1, e_2, e_3, e_4, e_5, e_6, e_7, e_8)
-tuple_0 = tuple(set_0)
-choose_tuple_0 = choose_tuple(set_0, 7)
-tuple_0[6] == e_5
-tuple_0[7] == e_5

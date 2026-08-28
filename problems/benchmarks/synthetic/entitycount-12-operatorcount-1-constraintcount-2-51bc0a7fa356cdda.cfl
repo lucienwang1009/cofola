@@ -1,4 +1,0 @@
-bag_0 = bag(e_10: 2, e_12: 2, e_2: 2, e_4: 1, e_6: 2, e_7: 1, e_8: 2)
-choose_0 = choose(bag_0, 7)
-bag_0 subset choose_0
-choose_0.count(e_10) > 1

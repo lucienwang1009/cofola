@@ -1,5 +1,0 @@
-bag_0 = bag(e_1: 1, e_3: 1, e_4: 1, e_5: 1, e_6: 2)
-choose_0 = choose(bag_0, 2)
-choose_tuple_0 = choose_tuple(choose_0, 2)
-bag_0 subset choose_0
-e_5 in choose_0
