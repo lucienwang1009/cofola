@@ -218,7 +218,8 @@ class BagClassification(AnalysisPass[AnalysisResult]):
         Entities with the same multiplicity > 1 can be indistinguishable.
         Entities already marked as distinguishable stay that way.
         """
-        # Group entities by multiplicity
+        # Rebuild the groups from this bag's own (possibly tightened) bounds.
+        info.indis_entities = {}
         mult_to_entities: dict[int, set[Entity]] = {}
 
         for entity, mult in info.p_entities_multiplicity.items():
@@ -273,8 +274,9 @@ class BagClassification(AnalysisPass[AnalysisResult]):
         if isinstance(defn, BagChoose):
             src_info = analysis.bag_info.get(defn.source)
             if src_info is not None:
-                info.dis_entities = src_info.dis_entities.copy()
-                info.indis_entities = {k: v.copy() for k, v in src_info.indis_entities.items()}
+                possible_entities = set(info.p_entities_multiplicity)
+                info.dis_entities = src_info.dis_entities & possible_entities
+                self._classify_by_multiplicity(info)
 
         elif isinstance(defn, BagUnion):
             left_info = analysis.bag_info.get(defn.left)

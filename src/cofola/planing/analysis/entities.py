@@ -72,6 +72,22 @@ class BagInfo:
     indis_entities: dict[int, set[Entity]] = field(default_factory=dict)
     exact_size: int | None = None
 
+    def tighten_max_size(self, bound: int) -> bool:
+        """Tighten total size and the implied per-entity upper bounds."""
+        changed = False
+        max_size = min(self.max_size, bound)
+        if max_size != self.max_size:
+            self.max_size = max_size
+            changed = True
+
+        for entity, multiplicity in self.p_entities_multiplicity.items():
+            tightened = min(multiplicity, self.max_size)
+            if tightened != multiplicity:
+                self.p_entities_multiplicity[entity] = tightened
+                changed = True
+
+        return changed
+
 
 @dataclass
 class AnalysisResult:
@@ -185,13 +201,17 @@ class _AnalysisState:
                 )
                 exact_size = max_size
 
-        self.bag_info[ref] = BagInfo(
+            max_size = min(max_size, exact_size)
+
+        info = BagInfo(
             p_entities_multiplicity=multiplicities,
             max_size=max_size,
             dis_entities=set(dis_entities or set()),
             indis_entities={k: set(v) for k, v in (indis_entities or {}).items()},
             exact_size=exact_size,
         )
+        info.tighten_max_size(max_size)
+        self.bag_info[ref] = info
 
 
 class EntityAnalysis(AnalysisPass[AnalysisResult]):
