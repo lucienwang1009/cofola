@@ -110,3 +110,28 @@ def test_substitute_preserves_all_aliases_and_target_canonical_name() -> None:
     assert (ObjRef(9), "C") in renamed.names
     assert (ObjRef(9), "alias") in renamed.names
     assert renamed.get_loc(ObjRef(9)) == problem.get_loc(choice)
+
+
+@pytest.mark.parametrize("alias_count", [0, 1, 1000])
+def test_substitute_preserves_order_and_deduplicates_existing_aliases(alias_count: int) -> None:
+    problem = parse("S = set(a,b)\nC = choose(S,2)\nU = set(c)")
+    source, choice, unrelated = (ref for ref, _ in problem.defs)
+    retained_names = ((unrelated, "C"), (source, "S")) + tuple(
+        (source, f"alias_{i}") for i in range(alias_count)
+    )
+    choice_names = ((choice, "C"), (choice, "S")) + tuple(
+        (choice, f"alias_{i}") for i in range(2 * alias_count)
+    )
+    original_names = choice_names + retained_names
+    problem = replace(problem, names=original_names)
+
+    result = problem.substitute(choice, source)
+
+    # Existing target aliases are not re-added, while a matching name on an
+    # unrelated ref must not suppress an alias. Retained names stay first.
+    assert result.names == retained_names + ((source, "C"),) + tuple(
+        (source, f"alias_{i}") for i in range(alias_count, 2 * alias_count)
+    )
+    assert result.get_name(source) == "S"
+    assert result.get_name(unrelated) == "C"
+    assert problem.names == original_names
