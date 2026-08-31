@@ -210,6 +210,70 @@ T = choose(S)
     assert merged.set_info[chosen].max_size == 1
 
 
+def test_entity_analysis_caps_bag_choice_multiplicities_by_size() -> None:
+    """A fixed choice size bounds every per-entity multiplicity."""
+    problem = parse("""
+B = bag(a: 100, b: 100)
+C = choose(B, 2)
+""")
+    source = _ref_named(problem, "B")
+    chosen = _ref_named(problem, "C")
+
+    analysis = AnalysisManager(problem).get(EntityAnalysis)
+
+    assert set(analysis.bag_info[source].p_entities_multiplicity.values()) == {100}
+    assert analysis.bag_info[chosen].max_size == 2
+    assert analysis.bag_info[chosen].exact_size == 2
+    assert set(analysis.bag_info[chosen].p_entities_multiplicity.values()) == {2}
+
+
+def test_merged_analysis_caps_multiplicities_by_inferred_max_size() -> None:
+    """An LP-derived bag-size bound also bounds every multiplicity."""
+    problem = parse("""
+B = bag(a: 100, b: 100)
+C = choose(B)
+|C| <= 2
+""")
+    chosen = _ref_named(problem, "C")
+
+    analysis = AnalysisManager(problem).get(MergedAnalysis)
+
+    assert not analysis.unsatisfiable
+    assert analysis.bag_info[chosen].max_size == 2
+    assert set(analysis.bag_info[chosen].p_entities_multiplicity.values()) == {2}
+
+
+def test_single_item_bag_choice_has_unit_multiplicity_bounds() -> None:
+    """Choosing one item leaves no entity with multiplicity above one."""
+    problem = parse("""
+B = bag(a: 100, b: 100)
+C = choose(B, 1)
+""")
+    chosen = _ref_named(problem, "C")
+
+    info = AnalysisManager(problem).get(EntityAnalysis).bag_info[chosen]
+
+    assert info.max_size == 1
+    assert info.exact_size == 1
+    assert set(info.p_entities_multiplicity.values()) == {1}
+
+
+def test_bag_classification_uses_tightened_child_multiplicities() -> None:
+    """A chosen bag must not retain its source's stale multiplicity class."""
+    problem = parse("""
+B = bag(a: 100, b: 100)
+C = choose(B, 2)
+""")
+    chosen = _ref_named(problem, "C")
+
+    analysis = AnalysisManager(problem).get(BagClassification)
+    info = analysis.bag_info[chosen]
+
+    assert set(info.p_entities_multiplicity.values()) == {2}
+    assert info.indis_entities == {2: set(info.p_entities_multiplicity)}
+    assert info.dis_entities == set()
+
+
 def test_constant_folder_returns_same_problem_when_unchanged() -> None:
     """No-op constant folding should not invalidate analyses by identity churn."""
     ref = ObjRef(0)
@@ -553,6 +617,18 @@ C = choose(B, 3)
     assert analysis.unsatisfiable
 
 
+def test_fixed_bag_conflicting_with_size_bound_is_unsatisfiable() -> None:
+    """Tightening must not reinterpret a fixed BagInit as a smaller bag."""
+    problem = parse("""
+B = bag(a: 2)
+|B| <= 1
+""")
+
+    analysis = AnalysisManager(problem).get(MergedAnalysis)
+
+    assert analysis.unsatisfiable
+
+
 def test_entity_analysis_set_difference_keeps_conservative_capacity() -> None:
     """A disjoint RHS does not shrink the possible size of a set difference."""
     problem = parse("""
@@ -611,7 +687,10 @@ T = choose_tuple(A, 3)
         if info.exact_size is not None:
             assert 0 <= info.exact_size <= info.max_size
     for info in analysis.bag_info.values():
-        assert all(mult >= 0 for mult in info.p_entities_multiplicity.values())
+        assert all(
+            0 <= mult <= info.max_size
+            for mult in info.p_entities_multiplicity.values()
+        )
         assert 0 <= info.max_size <= sum(info.p_entities_multiplicity.values())
         if info.exact_size is not None:
             assert 0 <= info.exact_size <= info.max_size

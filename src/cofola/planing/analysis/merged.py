@@ -56,8 +56,7 @@ class MergedAnalysis(AnalysisPass[AnalysisResult]):
                 logger.debug("  MergedAnalysis set ref={}: max_size → {}", ref.id, set_info[ref].max_size)
             elif ref in bag_info:
                 info = bag_info[ref]
-                info.max_size = min(info.max_size, size)
-                self._cap_bag_multiplicities(info)
+                info.tighten_max_size(size)
                 logger.debug("  MergedAnalysis bag ref={}: max_size → {}", ref.id, info.max_size)
 
         for ref, exact in sizes.exact_sizes.items():
@@ -80,8 +79,7 @@ class MergedAnalysis(AnalysisPass[AnalysisResult]):
                     )
                     return self._unsat_result(base, set_info=set_info, bag_info=bag_info)
                 info.exact_size = exact
-                info.max_size = min(info.max_size, exact)
-                self._cap_bag_multiplicities(info)
+                info.tighten_max_size(exact)
 
         if self._has_size_conflict(set_info, bag_info):
             return self._unsat_result(base, set_info=set_info, bag_info=bag_info)
@@ -109,16 +107,6 @@ class MergedAnalysis(AnalysisPass[AnalysisResult]):
             singletons=base.singletons,
             unsatisfiable=True,
         )
-
-    @staticmethod
-    def _cap_bag_multiplicities(info: BagInfo) -> None:
-        """Keep each per-entity multiplicity compatible with bag max_size."""
-
-        for entity in info.p_entities_multiplicity:
-            info.p_entities_multiplicity[entity] = min(
-                info.p_entities_multiplicity[entity],
-                info.max_size,
-            )
 
     @staticmethod
     def _has_size_conflict(

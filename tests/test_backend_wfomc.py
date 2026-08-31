@@ -92,6 +92,13 @@ D = B - C
     ) == 1
 
 
+def test_small_choice_from_high_multiplicity_bag() -> None:
+    """Choice size should cap irrelevant polynomial multiplicity degrees."""
+    assert parse_and_solve(
+        "B = bag(a: 100, b: 100)\nC = choose(B, 2)\n"
+    ) == 3
+
+
 def test_bag_union_preserves_max_multiplicity_for_dynamic_sources() -> None:
     """Bag union should constrain multiplicities with max(left, right)."""
     assert parse_and_solve(
