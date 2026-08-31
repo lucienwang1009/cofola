@@ -212,7 +212,7 @@ def test_fixed_tuple_size_materializes_source_size_before_lowering() -> None:
     assert _source_size_equalities(constraints, ordered.source) == {1}
 
 
-def test_replacement_sequence_from_derived_set_uses_bag_choice() -> None:
+def test_replacement_sequence_from_derived_set_uses_set_choose_replace() -> None:
     problem = parse(
         "S = set(a, b, c)\nC = choose(S, 2)\nQ = choose_replace_sequence(C, 4)\n"
     )
