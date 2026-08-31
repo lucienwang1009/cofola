@@ -97,7 +97,7 @@ C = compose(S, 2)    # ordered parts
 Apply one constraint to every part of a named partition or composition:
 
 ```cfl
-(|part| > 0) for part in P
+|part| > 0 for part in P
 ```
 
 Indexing unordered partitions is rejected. Use `compose` when part order matters.

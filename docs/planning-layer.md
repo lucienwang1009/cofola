@@ -22,7 +22,7 @@ Input:
 
 Output:
 
-- a `SolveSchedule` containing backend-ready `(Problem, BagClassification)`
+- a `SolveSchedule` containing backend-ready `(Problem, AnalysisResult)`
   components
 
 The planning layer may transform the problem, split it into Shannon branches,

@@ -126,5 +126,5 @@ notes.
 
 ## WFOMC Backend
 
-Cofola currently uses the `for_cofola` branch of
+Cofola currently uses the `devel` branch of
 [yuanhong-wang/WFOMC](https://github.com/yuanhong-wang/WFOMC).
