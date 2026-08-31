@@ -54,7 +54,7 @@ from cofola.frontend.constraints import (
     TupleIndexEq,
     TupleIndexMembership,
 )
-from cofola.frontend.objects import BagInit, Ordered, SetInit
+from cofola.frontend.objects import BagInit, Ordered, SequenceDef, SetInit, TupleDef
 from cofola.frontend.pretty import fmt_analysis, fmt_problem
 from cofola.frontend.problem import Problem
 from cofola.frontend.utils import constraint_refs
@@ -210,6 +210,27 @@ def _decompose_into_components(problem: Problem) -> list[Problem]:
 # ---------------------------------------------------------------------------
 # Pipeline
 # ---------------------------------------------------------------------------
+
+def _size_eq(ref: ObjRef, size: int) -> SizeConstraint:
+    return SizeConstraint(terms=((ref, 1),), comparator="==", rhs=size)
+
+
+def _full_ordered_source(defn: object) -> ObjRef | None:
+    if not isinstance(defn, (TupleDef, SequenceDef)):
+        return None
+    if defn.choose or defn.replace:
+        return None
+    return defn.source
+
+
+def _has_size_eq(problem: Problem, ref: ObjRef, size: int) -> bool:
+    return _size_eq(ref, size) in problem.constraints
+
+
+def _is_dynamic_size_source(problem: Problem, ref: ObjRef) -> bool:
+    source_defn = problem.get_object(ref)
+    return source_defn is not None and not isinstance(source_defn, (SetInit, BagInit))
+
 
 class PlaningPipeline:
     """Planing pipeline — the sole planning-layer interface.
@@ -384,6 +405,9 @@ class PlaningPipeline:
         produces a new OrConstraint.
         """
         if not any(isinstance(c, _COMPOUND) for c in problem.constraints):
+            materialized, changed = self._materialize_full_ordered_source_sizes(problem)
+            if changed:
+                return self._collect_branches(materialized)
             # Size-range decomposition: if a TupleDef/SequenceDef has no fixed
             # exact_size, enumerate k=0..max_size, add SizeConstraint(|T|==k),
             # and recurse per branch.  Each sub-problem has an atomic equality,
@@ -449,6 +473,45 @@ class PlaningPipeline:
     # Internal: size-range decomposition for variable-size ordered collections
     # ------------------------------------------------------------------
 
+    def _materialize_full_ordered_source_sizes(self, problem: Problem) -> tuple[Problem, bool]:
+        """Persist inferred |source| == k facts for full ordered objects."""
+        dynamic_sources = [
+            (ref, source)
+            for ref, defn in problem.defs
+            if (source := _full_ordered_source(defn)) is not None
+            and _is_dynamic_size_source(problem, source)
+        ]
+        if not dynamic_sources:
+            return problem, False
+
+        analysis = AnalysisManager(problem).get(MergedAnalysis)
+        if analysis.unsatisfiable:
+            return problem, False
+
+        extra_constraints: list[SizeConstraint] = []
+        seen = set(problem.constraints)
+        for ref, source in dynamic_sources:
+            info = analysis.set_info.get(ref) or analysis.bag_info.get(ref)
+            if info is None or info.exact_size is None:
+                continue
+
+            source_eq = _size_eq(source, info.exact_size)
+            if source_eq in seen:
+                continue
+            seen.add(source_eq)
+            extra_constraints.append(source_eq)
+
+        if not extra_constraints:
+            return problem, False
+
+        logger.info(
+            "[Decompose] materialized {} full ordered source size constraint(s)",
+            len(extra_constraints),
+        )
+        return dc_replace(
+            problem, constraints=problem.constraints + tuple(extra_constraints),
+        ), True
+
     def _decompose_ordered_sizes(self, problem: Problem) -> list[SolveBranch] | None:
         """Enumerate valid sizes for the first variable-size TupleDef/SequenceDef.
 
@@ -491,8 +554,16 @@ class PlaningPipeline:
             )
             branches: list[SolveBranch] = []
             for k in range(0, max_s + 1):
-                size_eq = SizeConstraint(terms=((ref, 1),), comparator="==", rhs=k)
-                sub_prob = dc_replace(problem, constraints=problem.constraints + (size_eq,))
+                size_constraints: list[SizeConstraint] = []
+                if not _has_size_eq(problem, ref, k):
+                    size_constraints.append(_size_eq(ref, k))
+                source = _full_ordered_source(defn)
+                if source is not None and _is_dynamic_size_source(problem, source):
+                    if not _has_size_eq(problem, source, k):
+                        size_constraints.append(_size_eq(source, k))
+                sub_prob = dc_replace(
+                    problem, constraints=problem.constraints + tuple(size_constraints),
+                )
                 branches.extend(self._collect_branches(sub_prob))
             return branches
 

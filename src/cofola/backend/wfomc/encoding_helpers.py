@@ -121,7 +121,21 @@ def _bag_entity_expr(
         return 0
     if isinstance(context.problem.get_object(bag_ref), ir_obj.BagInit):
         return bag_info.p_entities_multiplicity.get(entity, 0)
-    return context.get_entity_var(bag_ref, entity)
+
+    var = context.get_entity_var(bag_ref, entity)
+    if entity in context.singletons:
+        # Chosen/derived bags encode singletons through membership, not through
+        # a multiplicity weight. Bind that membership when a numeric count is
+        # needed (e.g. for matching a flattened sequence to its source).
+        pred = context.get_entity_pred(bag_ref, entity)
+        if pred not in context.weighting:
+            bag_pred = context.get_pred(bag_ref)
+            entity_pred = _encode_entity_in_ctx(entity, context)
+            context.sentence = context.sentence & parse(
+                f"\\forall X: ({pred}(X) <-> ({bag_pred}(X) & {entity_pred}(X)))"
+            )
+            context.weighting[pred] = (var, 1)
+    return var
 
 
 def _get_bag_count_var(
