@@ -471,9 +471,18 @@ def _encode_bag_difference(
     """Encode a BagDifference node: ref = max(left - right, 0) per entity."""
     obj_pred = context.get_pred(ref, create=True, use=False)
     left_pred = context.get_pred(defn.left)
+    right_pred = context.get_pred(defn.right)
     context.sentence = context.sentence & parse(
         f"\\forall X: ({obj_pred}(X) -> {left_pred}(X))"
     )
+    # Singleton entities have no multiplicity variable. For 0/1 multiplicities,
+    # max(left - right, 0) is exactly left membership and not right membership.
+    if context.singletons_pred is not None:
+        sp = context.singletons_pred
+        context.sentence = context.sentence & parse(
+            f"\\forall X: ({sp}(X) -> "
+            f"({obj_pred}(X) <-> ({left_pred}(X) & ~{right_pred}(X))))"
+        )
     bag_info = analysis.bag_info[ref]
     for entity in bag_info.dis_entities:
         if entity in context.singletons:
@@ -855,13 +864,11 @@ def _encode_partition(
                 f"\\forall X: (({context.singletons_pred}(X) & {source_pred}(X)) -> ({exactly_one_formula}))"
             )
 
-        # Entity multiplicity partitioning (singletons included: multi=1 → weighting=(var,1))
+        # Entity multiplicity partitioning.
         ordered_vars = [[] for _ in range(len(parts))]
         for entity in bag_info.dis_entities:
             multi = bag_info.p_entities_multiplicity[entity]
             entity_pred = _encode_entity_in_ctx(entity, context)
-
-            multi_var = _bag_entity_expr(defn.source, entity, analysis, context)
 
             partitioned_vars = []
             for idx, part in enumerate(parts):
@@ -876,7 +883,13 @@ def _encode_partition(
                 if not is_composition:
                     ordered_vars[idx].append(var)
 
-            context.validator.append(Eq(sum(partitioned_vars), multi_var))
+            # Singleton source membership is already fixed by coverage and
+            # exactly-one constraints. Its source multiplicity variable is
+            # unbound for chosen/derived bags, so do not compare against it.
+            # Keep singleton part variables above for part-symmetry breaking.
+            if entity not in context.singletons:
+                multi_var = _bag_entity_expr(defn.source, entity, analysis, context)
+                context.validator.append(Eq(sum(partitioned_vars), multi_var))
 
         # Symmetry breaking for unordered partitions
         if not is_composition:

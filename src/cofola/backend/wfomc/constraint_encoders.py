@@ -6,7 +6,7 @@ from cofola.backend.wfomc.api import Const, parse
 
 import cofola.frontend.constraints as ir_cst
 import cofola.frontend.objects as ir_obj
-from cofola.backend.wfomc.context import Context
+from cofola.backend.wfomc.context import Context, Expr
 from cofola.backend.wfomc.encoding_helpers import (
     _bag_entity_expr,
     _encode_entity_in_ctx,
@@ -304,6 +304,18 @@ def _encode_sequence_pattern_constraint(
             raise TypeError(f"Unknown sequence pattern type: {type(c.pattern).__name__}")
 
 
+def _count_singleton_violations(name: str, body: str, context: Context) -> Expr:
+    """Return the count of singleton domain elements satisfying ``body``."""
+    pred = create_aux_pred(1, name)
+    context.sentence = context.sentence & parse(
+        f"\\forall X: ({pred}(X) <-> ({body}))"
+    )
+    # The predicate name is unique even when callers reuse the same prefix.
+    var = context.create_var(str(pred))
+    context.weighting[pred] = (var, 1)
+    return var
+
+
 def _encode_bag_subset_constraint(
     c: ir_cst.BagSubsetConstraint,
     analysis: AnalysisResult,
@@ -317,8 +329,10 @@ def _encode_bag_subset_constraint(
 
     entities = set(sub_info.p_entities_multiplicity) | set(sup_info.p_entities_multiplicity)
     comparisons = []
+    has_singleton = False
     for entity in entities:
         if entity in context.singletons:
+            has_singleton = True
             continue
         sub_var = _bag_entity_expr(c.sub, entity, analysis, context)
         sup_var = _bag_entity_expr(c.sup, entity, analysis, context)
@@ -326,6 +340,26 @@ def _encode_bag_subset_constraint(
             context.validator.append(sub_var <= sup_var)
         else:
             comparisons.append(sub_var > sup_var)
+
+    # Singleton multiplicities are represented by membership atoms, not
+    # per-entity multiplicity variables. Compare them over the singleton domain.
+    if has_singleton and context.singletons_pred is not None:
+        sp = context.singletons_pred
+        p_sub = context.get_pred(c.sub)
+        p_sup = context.get_pred(c.sup)
+        if c.positive:
+            context.sentence = context.sentence & parse(
+                f"\\forall X: (({sp}(X) & {p_sub}(X)) -> {p_sup}(X))"
+            )
+        else:
+            comparisons.append(
+                _count_singleton_violations(
+                    f"bag_subset_viol_{c.sub.id}_{c.sup.id}",
+                    f"{sp}(X) & {p_sub}(X) & ~{p_sup}(X)",
+                    context,
+                ) > 0
+            )
+
     if not c.positive:
         context.validator.append(Or(*comparisons) if comparisons else false)
 
@@ -344,8 +378,10 @@ def _encode_bag_eq_constraint(
     # Get all entities from both bags
     all_entities = set(left_info.p_entities_multiplicity) | set(right_info.p_entities_multiplicity)
     comparisons = []
+    has_singleton = False
     for entity in all_entities:
         if entity in context.singletons:
+            has_singleton = True
             continue
         left_var = _bag_entity_expr(c.left, entity, analysis, context)
         right_var = _bag_entity_expr(c.right, entity, analysis, context)
@@ -353,6 +389,25 @@ def _encode_bag_eq_constraint(
             context.validator.append(Eq(left_var, right_var))
         else:
             comparisons.append(Ne(left_var, right_var))
+
+    if has_singleton and context.singletons_pred is not None:
+        sp = context.singletons_pred
+        p_left = context.get_pred(c.left)
+        p_right = context.get_pred(c.right)
+        if c.positive:
+            context.sentence = context.sentence & parse(
+                f"\\forall X: ({sp}(X) -> ({p_left}(X) <-> {p_right}(X)))"
+            )
+        else:
+            comparisons.append(
+                _count_singleton_violations(
+                    f"bag_eq_viol_{c.left.id}_{c.right.id}",
+                    f"{sp}(X) & (({p_left}(X) & ~{p_right}(X)) "
+                    f"| (~{p_left}(X) & {p_right}(X)))",
+                    context,
+                ) > 0
+            )
+
     if not c.positive:
         context.validator.append(Or(*comparisons) if comparisons else false)
 
