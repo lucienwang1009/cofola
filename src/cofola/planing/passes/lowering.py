@@ -420,6 +420,7 @@ class LoweringPass(TransformPass):
             indices_ref = self._new_ref()
             indices_defn = SetInit(entities=idx_entities)
             mapping_ref = self._new_ref()
+            inverse_image_cache: dict[Entity, ObjRef] = {}
 
             if is_bag_source:
                 # ── choose=False + Bag ──────────────────────────────────────
@@ -452,6 +453,7 @@ class LoweringPass(TransformPass):
                         (inv_img_ref, FuncInverseImage(func=mapping_ref, argument=entity))
                     )
                     inv_img_refs.append(inv_img_ref)
+                    inverse_image_cache[entity] = inv_img_ref
 
                     # BagInit → fixed int; derived bags → BagCountAtom
                     if isinstance(source_defn, BagInit):
@@ -506,7 +508,9 @@ class LoweringPass(TransformPass):
 
             # Rewrite constraints referencing this TupleDef
             new_constraints, extra_defs = self._lower_tuple_constraints(
-                tuple(new_constraints), ref, mapping_ref, indices_ref, size
+                tuple(new_constraints), ref, mapping_ref, indices_ref, size,
+                is_bag_source=is_bag_source,
+                inverse_image_cache=inverse_image_cache,
             )
             new_defs.extend(extra_defs)
 
@@ -530,6 +534,10 @@ class LoweringPass(TransformPass):
         indices_ref: ObjRef,
         size: int,
         extra_defs: list,
+        image_cache: dict[tuple[ObjRef, ObjRef], ObjRef],
+        *,
+        is_bag_source: bool,
+        inverse_image_cache: dict[Entity, ObjRef],
     ) -> object | None:
         """Lower a single atomic constraint that may reference tuple_ref.
 
@@ -552,8 +560,23 @@ class LoweringPass(TransformPass):
                 positive=c.positive,
             )
         elif isinstance(c, MembershipConstraint) and c.container == tuple_ref:
-            new_image_ref = self._new_ref()
-            extra_defs.append((new_image_ref, FuncImage(func=mapping_ref, argument=indices_ref)))
+            if is_bag_source:
+                inverse_ref = inverse_image_cache.get(c.entity)
+                if inverse_ref is None:
+                    inverse_ref = self._new_ref()
+                    inverse_image_cache[c.entity] = inverse_ref
+                    extra_defs.append((inverse_ref, FuncInverseImage(func=mapping_ref, argument=c.entity)))
+                return SizeConstraint(
+                    terms=((inverse_ref, 1),),
+                    comparator=">" if c.positive else "==",
+                    rhs=0,
+                )
+            image_key = (mapping_ref, indices_ref)
+            new_image_ref = image_cache.get(image_key)
+            if new_image_ref is None:
+                new_image_ref = self._new_ref()
+                image_cache[image_key] = new_image_ref
+                extra_defs.append((new_image_ref, FuncImage(func=mapping_ref, argument=indices_ref)))
             return MembershipConstraint(
                 entity=c.entity,
                 container=new_image_ref,
@@ -596,6 +619,9 @@ class LoweringPass(TransformPass):
         mapping_ref: ObjRef,
         indices_ref: ObjRef,
         size: int,
+        *,
+        is_bag_source: bool,
+        inverse_image_cache: dict[Entity, ObjRef],
     ) -> tuple[tuple, list]:
         """Lower atomic constraints that reference a just-lowered TupleDef.
 
@@ -604,6 +630,8 @@ class LoweringPass(TransformPass):
             FuncPairConstraint(mapping, Entity("idx_i"), e)
         - MembershipConstraint(entity=e, container=T) →
             MembershipConstraint(entity=e, container=FuncImage(mapping, indices))
+            for set sources, or a size constraint on FuncInverseImage(mapping, e)
+            for bag sources
         - TupleIndexMembership(tuple_ref=T, index=i, container=C) →
             FuncPairConstraint(mapping, Entity("idx_i"), C)
 
@@ -611,18 +639,21 @@ class LoweringPass(TransformPass):
         runs inside LOCAL_PASSES, after Shannon expansion has flattened all
         compound constraints to atomic form.
 
-        Duplicate FuncImage defs created here are later merged by
-        MergeIdenticalObjects, which runs after LoweringPass in LOCAL_PASSES.
+        Reuse the tuple image across memberships, and reuse bag inverse images
+        already created for multiplicity constraints (including repeated membership).
 
         Returns:
             (new_constraints, extra_defs_to_add)
         """
         extra_defs: list = []
+        image_cache: dict[tuple[ObjRef, ObjRef], ObjRef] = {}
 
         new_constraints = tuple(
             lowered for c in constraints
             if (lowered := self._lower_one_constraint(
-                c, tuple_ref, mapping_ref, indices_ref, size, extra_defs
+                c, tuple_ref, mapping_ref, indices_ref, size, extra_defs, image_cache,
+                is_bag_source=is_bag_source,
+                inverse_image_cache=inverse_image_cache,
             )) is not None
         )
         return new_constraints, extra_defs

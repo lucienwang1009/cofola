@@ -251,9 +251,9 @@ SIGNATURES: dict[type, Signature] = {
     # Constraints
     # ------------------------------------------------------------------
     MembershipConstraint: Signature(
-        # `e in X` is only allowed for set-like containers per spec.
+        # Tuple membership is lowered to membership/counts in the mapping.
         # (entity is typed by construction; not validated here.)
-        params=(Param(SetLike, "container", field="container"),),
+        params=(Param((SetLike, TupleDef), "container", field="container"),),
     ),
     SubsetConstraint: Signature(
         # Pure SubsetConstraint is for SETs only (BagSubsetConstraint covers
