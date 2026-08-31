@@ -521,14 +521,29 @@ def _encode_less_than_pattern(
     context: Context,
 ) -> None:
     """Encode a LessThanPattern: left appears before right in seq."""
-    _encode_sequence_relation_universal(
-        seq_ref,
-        pattern.left,
-        pattern.right,
-        context.get_leq_pred(seq_ref),
-        positive,
-        context,
+    left_pred = _get_seq_entity_pred(pattern.left, seq_ref, context)
+    right_pred = _get_seq_entity_pred(pattern.right, seq_ref, context)
+    seq_defn = context.problem.get_object(seq_ref)
+    if not isinstance(seq_defn, ir_obj.SequenceDef):
+        raise TypeError("Sequence pattern constraints require a sequence")
+    domain_pred = context.get_pred(
+        seq_defn.flatten if seq_defn.flatten is not None else seq_defn.source
     )
+    relation_pred = context.get_lt_pred(seq_ref)
+    pair = (
+        f"{left_pred}(X) & {domain_pred}(X) & "
+        f"{right_pred}(Y) & {domain_pred}(Y)"
+    )
+    if positive:
+        context.sentence = context.sentence & parse(
+            f"\\forall X: (\\forall Y: (({pair}) -> {relation_pred}(X,Y)))"
+        )
+    else:
+        # Negating a universal order requires one in-sequence counterexample,
+        # not the absence of every correctly ordered pair.
+        context.sentence = context.sentence & parse(
+            f"\\exists X: (\\exists Y: ({pair} & ~{relation_pred}(X,Y)))"
+        )
 
 
 def _encode_predecessor_pattern(
@@ -577,8 +592,9 @@ def _encode_sequence_relation_universal(
 ) -> None:
     """Encode an asserted sequence relation with universal pattern semantics.
 
-    Pattern constraints such as ``A < B in seq`` mean every matching left
-    occurrence stands in the relation to every matching right occurrence.
+    Local pattern constraints retain their existing universal semantics:
+    every matching left occurrence stands in the relation to every matching
+    right occurrence. Global order is handled separately above.
     Negative constraints mean the pattern has no occurrences, so every matching
     pair must fail the relation.
     """
@@ -637,8 +653,8 @@ def _get_seq_pattern_count_var(
                 seq_ref,
                 pattern.left,
                 pattern.right,
-                "leq",
-                context.get_leq_pred(seq_ref),
+                "lt",
+                context.get_lt_pred(seq_ref),
                 context,
             )
 
