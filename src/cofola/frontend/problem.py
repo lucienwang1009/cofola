@@ -166,6 +166,9 @@ class Problem:
         Returns:
             A new Problem with the substitution applied.
         """
+        if old_ref == new_ref:
+            return self
+
         def sub(ref: ObjRef) -> ObjRef:
             return new_ref if ref == old_ref else ref
 
@@ -187,9 +190,13 @@ class Problem:
             cast(Constraint, map_refs(c, sub)) for c in self.constraints
         )
 
-        # Keep names
+        # Preserve every alias, keeping the target's canonical name first.
         new_names = tuple(
             (ref, name) for ref, name in self.names if ref != old_ref
+        )
+        new_names += tuple(
+            (new_ref, name) for ref, name in self.names
+            if ref == old_ref and (new_ref, name) not in new_names
         )
 
         new_locs = list((ref, loc) for ref, loc in self.locs if ref != old_ref)

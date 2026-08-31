@@ -255,6 +255,67 @@ class ConstantFolder(TransformPass):
         return tuple(sorted(result.items(), key=lambda x: x[0].name))
 
 
+class FullChoiceOptimizer(TransformPass):
+    """Simplify choices proven to select their entire source.
+
+    Full set/bag choices alias the source; full ordered choices become
+    permutations. Both sizes must be exact, either from definitions or
+    unconditional cardinality constraints. An unsized ordered choice remains
+    variable-sized: a known source size alone is not a requested choice size.
+    Replacement choices are never identities.
+    """
+
+    required_analyses = [MergedAnalysis]
+
+    def run(self, problem: Problem, am=None) -> Problem:
+        analysis = (am or AnalysisManager(problem)).get(MergedAnalysis)
+        if analysis.unsatisfiable:
+            raise UnsatisfiableConstraint("MergedAnalysis reported unsatisfiable size facts")
+
+        substitutions: dict[ObjRef, ObjRef] = {}
+        updated_defs: dict[ObjRef, ObjDef] = {}
+        for ref, defn in problem.iter_objects():
+            if not isinstance(defn, (SetChoose, BagChoose, TupleDef, SequenceDef)):
+                continue
+            if isinstance(defn, (TupleDef, SequenceDef)) and (not defn.choose or defn.replace):
+                continue
+
+            source_info = analysis.set_info.get(defn.source) or analysis.bag_info.get(defn.source)
+            if source_info is None or source_info.exact_size is None:
+                continue
+            own_info = analysis.set_info.get(ref) or analysis.bag_info.get(ref)
+            requested_size = defn.size
+            if requested_size is None and own_info is not None:
+                requested_size = own_info.exact_size
+            if requested_size != source_info.exact_size:
+                continue
+
+            if isinstance(defn, (SetChoose, BagChoose)):
+                substitutions[ref] = defn.source
+                logger.debug("FullChoiceOptimizer: alias ref={} to source={}", ref.id, defn.source.id)
+            else:
+                updated_defs[ref] = dc_replace(defn, choose=False, size=requested_size)
+                logger.debug("FullChoiceOptimizer: full-source ordered ref={}", ref.id)
+
+        if not substitutions and not updated_defs:
+            return problem
+
+        result = dc_replace(problem, defs=tuple(
+            (ref, updated_defs.get(ref, defn)) for ref, defn in problem.defs
+        ))
+        for old_ref in substitutions:
+            target = old_ref
+            seen: set[ObjRef] = set()
+            while target in substitutions:
+                if target in seen:
+                    raise ValueError("Cyclic full-choice source dependencies")
+                seen.add(target)
+                target = substitutions[target]
+            # Resolve the entire chain before removing any intermediate ref.
+            result = result.substitute(old_ref, target)
+        return result
+
+
 class SizeConstraintFolder(TransformPass):
     """Substitutes known exact sizes into SizeConstraints.
 
@@ -348,11 +409,10 @@ class SizeConstraintFolder(TransformPass):
                 # All terms substituted: evaluate the purely numerical result.
                 if _eval_comparator(c.comparator, 0, rhs):
                     # Trivially true: try to drop the constraint.
-                    # We can only safely drop if every folded ObjRef term is a
-                    # SetChoose / BagChoose / SetChooseReplace whose size field is
-                    # None — in that case we embed the exact size into the def so
-                    # the encoder can still constrain the WFOMC weight via defn.size
-                    # without needing a SizeConstraint.
+                    # Each term must have a size-bearing definition that already
+                    # enforces this size, or can retain it by embedding it now.
+                    # Other inferred facts (e.g. PartDef sizes) still require the
+                    # original constraint in the backend.
                     embeddings = self._size_embeddings(problem, folded_obj_refs)
                     if embeddings is not None:
                         updated_defs.update(embeddings)
@@ -407,7 +467,9 @@ class SizeConstraintFolder(TransformPass):
             if not isinstance(defn, _SIZE_EMBEDDABLE_DEFS):
                 return None
             if defn.size is not None:
-                return None
+                if defn.size != exact_size:
+                    return None
+                continue
 
             embeddings[ref] = dc_replace(defn, size=exact_size)
             logger.debug(

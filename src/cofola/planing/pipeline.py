@@ -70,7 +70,7 @@ from cofola.planing.pass_manager import (
 )
 from cofola.planing.passes.lowering import LoweringPass
 from cofola.planing.passes.merge_identical import MergeIdenticalObjects
-from cofola.planing.passes.optimize import ConstantFolder, SizeConstraintFolder
+from cofola.planing.passes.optimize import ConstantFolder, FullChoiceOptimizer, SizeConstraintFolder
 from cofola.planing.passes.simplify import SimplifyPass
 
 
@@ -241,6 +241,9 @@ class PlaningPipeline:
     """
 
     GLOBAL_PASSES = [
+        FixedPointPass(ConstantFolder),
+        FixedPointPass(FullChoiceOptimizer),
+        # Aliasing a choice can expose constant expressions such as B & B.
         FixedPointPass(ConstantFolder),
         MergeIdenticalObjects,
     ]
