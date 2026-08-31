@@ -11,9 +11,8 @@ COFOLA_ALL_TESTS=1 uv run pytest tests/test_all_problems.py
 uv run pyright
 ```
 
-`uv run pyright` requires the `pyright` executable to be available in the
-environment. The current `dev` dependency group contains `pytest`; install or
-add Pyright separately when type checking locally.
+The `dev` dependency group includes both `pytest` and `pyright`; `uv sync`
+installs them for the commands above.
 
 ## Test Layout
 
