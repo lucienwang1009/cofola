@@ -58,7 +58,8 @@ def _get_bag_size_expr(
 
     Mirrors Bag.encode_size_var from the reference implementation.
 
-    The total size of a bag is:
+    Fixed BagInit sizes are literal sums: their encoder intentionally creates
+    no multiplicity variables. For other bags, the total size is:
       - Sum of entity vars for non-singleton distinguishable entities
       - A singleton contribution counted via bag_singletons_pred (if singletons exist)
       - Sum of indistinguishable entity vars (usually empty for lifted=False)
@@ -72,8 +73,12 @@ def _get_bag_size_expr(
         context: Context.
 
     Returns:
-        Sympy expression (or int 0) for the total bag multiplicity.
+        Sympy expression or integer for the total bag multiplicity.
     """
+    defn = context.problem.get_object(ref)
+    if isinstance(defn, ir_obj.BagInit):
+        return sum(multiplicity for _, multiplicity in defn.entity_multiplicity)
+
     # Sum entity vars for non-singleton distinguishable entities.
     # These vars are created by _encode_bag_choose / _encode_bag_additive_union etc.
     entity_vars = context.get_entity_var(ref)  # dict[IREntity, Expr]
