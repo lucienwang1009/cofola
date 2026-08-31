@@ -42,6 +42,18 @@ Source locations are frontend diagnostic metadata. Planning passes may preserve
 `locs` when convenient, but `locs` are not part of the planning correctness
 contract.
 
+## Full-Source Choices
+
+`FullChoiceOptimizer` runs between two rounds of constant folding. It removes
+set/bag choices proven to select every source element and converts full-length
+tuple/sequence choices into permutations. Both the source and choice sizes must
+be exact, from definitions or unconditional size constraints. Names remain
+available as aliases after references are substituted.
+
+An omitted choice size does not mean full selection: `choose_tuple(S)` and
+`choose_sequence(S)` still range over all admissible lengths. Partial and
+replacement choices are not rewritten as identities.
+
 ## Size Atom Policy
 
 `SizeConstraint.terms` can contain raw object refs or derived size atoms.
