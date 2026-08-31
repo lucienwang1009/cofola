@@ -99,6 +99,78 @@ def test_small_choice_from_high_multiplicity_bag() -> None:
     ) == 3
 
 
+@pytest.mark.parametrize(
+    ("source", "constraint", "expected"),
+    [
+        ("bag(a: 1)", "sub subset sup", 3),
+        ("bag(a: 1)", "not sub subset sup", 1),
+        ("bag(a: 1)", "sub == sup", 2),
+        ("bag(a: 1)", "sub != sup", 2),
+        ("bag(a: 1, b: 2)", "sub subset sup", 18),
+        ("bag(a: 1, b: 2)", "not sub subset sup", 18),
+        ("bag(a: 1, b: 2)", "sub == sup", 6),
+        ("bag(a: 1, b: 2)", "sub != sup", 30),
+    ],
+)
+def test_bag_relations_constrain_singleton_entities(
+    source: str, constraint: str, expected: int,
+) -> None:
+    """Bag relations must compare singleton membership as well as multiplicities."""
+    assert parse_and_solve(
+        f"B = {source}\nsub = choose(B)\nsup = choose(B)\n{constraint}\n"
+    ) == expected
+
+
+@pytest.mark.parametrize(("membership", "expected"), [("in", 1), ("not in", 3)])
+def test_bag_difference_subtracts_singleton_entities(
+    membership: str, expected: int,
+) -> None:
+    """For a singleton, membership in X - Y means membership in X and not Y."""
+    assert parse_and_solve(
+        "B = bag(a: 1)\nX = choose(B)\nY = choose(B)\nZ = X - Y\n"
+        f"a {membership} Z\n"
+    ) == expected
+
+
+@pytest.mark.parametrize(
+    ("operation", "size", "expected"), [("X + Y", 1, 6), ("X & Y", 4, 1)]
+)
+def test_derived_bag_tracks_equal_multiplicity_entities(
+    operation: str, size: int, expected: int,
+) -> None:
+    """A derived bag must keep entities its sources classify as indistinguishable."""
+    assert parse_and_solve(
+        "B = bag(a: 2, b: 2)\nX = choose(B)\nY = choose(B)\n"
+        f"Z = {operation}\n|Z| == {size}\n"
+    ) == expected
+
+
+@pytest.mark.parametrize(
+    ("operation", "expected"), [("X + Y", 1), ("X & Y", 5), ("X - Y", 6)]
+)
+def test_empty_derived_bag_size_is_satisfiable(operation: str, expected: int) -> None:
+    """Empty derived bags still count models with zero multiplicity degrees."""
+    assert parse_and_solve(
+        "B = bag(a: 2)\nX = choose(B)\nY = choose(B)\n"
+        f"Z = {operation}\n|Z| == 0\n"
+    ) == expected
+
+
+@pytest.mark.parametrize("derived", ["I = C", "I = C & B"])
+def test_partition_of_bag_with_variable_singletons(derived: str) -> None:
+    """Part counts must not force a chosen source's singletons out of every part."""
+    assert parse_and_solve(
+        f"B = bag(a, b, c)\nC = choose(B, 2)\n{derived}\nP = partition(I, 2)\n"
+    ) == 6
+
+
+def test_partition_singletons_kept_in_symmetry_breaking() -> None:
+    """Parts that differ only in singleton content still need symmetry breaking."""
+    assert parse_and_solve(
+        "B = bag(a: 1, b: 1, c: 4)\nP = partition(B, 2)\n"
+    ) == 10
+
+
 def test_bag_union_preserves_max_multiplicity_for_dynamic_sources() -> None:
     """Bag union should constrain multiplicities with max(left, right)."""
     assert parse_and_solve(

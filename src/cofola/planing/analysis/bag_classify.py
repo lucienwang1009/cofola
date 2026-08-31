@@ -278,32 +278,12 @@ class BagClassification(AnalysisPass[AnalysisResult]):
                 info.dis_entities = src_info.dis_entities & possible_entities
                 self._classify_by_multiplicity(info)
 
-        elif isinstance(defn, BagUnion):
-            left_info = analysis.bag_info.get(defn.left)
-            right_info = analysis.bag_info.get(defn.right)
-            if left_info is not None and right_info is not None:
-                info.dis_entities = left_info.dis_entities | right_info.dis_entities
-                info.indis_entities = {}
-
-        elif isinstance(defn, BagAdditiveUnion):
-            # These are non-liftable, already handled by step 2
-            left_info = analysis.bag_info.get(defn.left)
-            right_info = analysis.bag_info.get(defn.right)
-            if left_info is not None and right_info is not None:
-                info.dis_entities = left_info.dis_entities | right_info.dis_entities
-                info.indis_entities = {}
-
-        elif isinstance(defn, (BagIntersection, BagDifference)):
-            # These are non-liftable, already handled by step 2.
-            # dis_entities must be restricted to entities that actually appear
-            # in the result: intersection result drops entities not in both bags,
-            # difference result drops entities from the right bag.
-            left_info = analysis.bag_info.get(defn.left)
-            right_info = analysis.bag_info.get(defn.right)
-            if left_info is not None and right_info is not None:
-                combined = left_info.dis_entities | right_info.dis_entities
-                info.dis_entities = combined & info.p_entities_multiplicity.keys()
-                info.indis_entities = {}
+        elif isinstance(defn, (BagUnion, BagAdditiveUnion, BagIntersection, BagDifference)):
+            # These operations are encoded non-lifted: every possible result
+            # entity needs a multiplicity variable, even when a source keeps
+            # that entity in indis_entities rather than dis_entities.
+            info.dis_entities = set(info.p_entities_multiplicity)
+            info.indis_entities = {}
 
         elif isinstance(defn, PartDef):
             partition_defn = problem.get_object(defn.partition)
