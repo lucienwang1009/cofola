@@ -6,7 +6,7 @@ from lark.exceptions import UnexpectedInput, VisitError
 
 from cofola.parser import CofolaParsingError
 from cofola.parser.parser import parse
-from cofola.frontend import Entity, SizeConstraint, TupleCountAtom
+from cofola.frontend import Entity, MembershipConstraint
 
 
 PARSING_ERROR_CASES: list[tuple[str, str, str]] = [
@@ -127,8 +127,8 @@ def test_circle_syntax_is_rejected(program: str) -> None:
         parse(program)
 
 
-def test_tuple_membership_workaround_uses_tuple_count() -> None:
-    """Tuple membership syntax is parsed as tuple count constraints."""
+def test_tuple_membership_uses_membership_constraints() -> None:
+    """Text and Python APIs share the same tuple membership representation."""
     problem = parse("""
 S = set(a, b)
 T = tuple(S)
@@ -138,14 +138,6 @@ b not in T
     tuple_ref = next(ref for ref, name in problem.names if name == "T")
 
     assert problem.constraints == (
-        SizeConstraint(
-            terms=((TupleCountAtom(tuple_ref=tuple_ref, count_obj=Entity("a")), 1),),
-            comparator=">",
-            rhs=0,
-        ),
-        SizeConstraint(
-            terms=((TupleCountAtom(tuple_ref=tuple_ref, count_obj=Entity("b")), 1),),
-            comparator="==",
-            rhs=0,
-        ),
+        MembershipConstraint(entity=Entity("a"), container=tuple_ref, positive=True),
+        MembershipConstraint(entity=Entity("b"), container=tuple_ref, positive=False),
     )
