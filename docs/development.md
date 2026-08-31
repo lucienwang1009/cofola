@@ -11,8 +11,7 @@ COFOLA_ALL_TESTS=1 uv run pytest tests/test_all_problems.py
 uv run pyright
 ```
 
-The `dev` dependency group includes both `pytest` and `pyright`; `uv sync`
-installs them for the commands above.
+The `dev` dependency group includes both `pytest` and `pyright`; install it (for example, `uv sync --group dev`) before running the commands above.
 
 ## Test Layout
 
