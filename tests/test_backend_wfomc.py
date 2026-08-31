@@ -13,6 +13,7 @@ from cofola.backend.wfomc.api import (
     top,
 )
 from cofola.backend.wfomc.backend import WFOMCBackend
+from cofola.backend.wfomc.constraint_encoders import _count_singleton_violations
 from cofola.backend.wfomc.context import Context
 from cofola.backend.wfomc.decoder import Decoder
 from cofola.backend.wfomc.encoder import encode
@@ -119,6 +120,48 @@ def test_bag_relations_constrain_singleton_entities(
     assert parse_and_solve(
         f"B = {source}\nsub = choose(B)\nsup = choose(B)\n{constraint}\n"
     ) == expected
+
+
+def test_singleton_violation_counts_use_distinct_variables() -> None:
+    """Repeated helper calls must not share a generating variable."""
+    context = Context(
+        Problem(defs=(), constraints=(), names=()),
+        AnalysisResult(set_info={}, bag_info={}, all_entities=set(), singletons=set()),
+    )
+
+    first = _count_singleton_violations("bag_eq_viol_1_2", "P(X)", context)
+    second = _count_singleton_violations("bag_eq_viol_1_2", "P(X)", context)
+
+    assert first != second
+    assert len(context.weighting) == 2
+    assert {positive for positive, _ in context.weighting.values()} == {first, second}
+
+
+@pytest.mark.parametrize(
+    ("object_name", "constraint"),
+    [
+        ("bag_subset_viol_1_2", "not sub subset sup"),
+        ("bag_eq_viol_1_2", "sub != sup"),
+    ],
+)
+def test_singleton_violation_counts_do_not_collide_with_object_names(
+    object_name: str, constraint: str,
+) -> None:
+    """Renaming an object to a violation-counter prefix must not change counts."""
+    for name in ("selection", object_name):
+        assert parse_and_solve(
+            "B = bag(a: 1)\nsub = choose(B)\nsup = choose(B)\n"
+            f"{name} = choose(supp(sub), 1)\n{constraint}\n"
+        ) == 1
+
+
+@pytest.mark.parametrize("repetitions", [1, 2, 3])
+def test_repeated_bag_inequality_preserves_count(repetitions: int) -> None:
+    """Repeating the same inequality must not affect the number of solutions."""
+    assert parse_and_solve(
+        "B = bag(a: 1, b: 2)\nsub = choose(B)\nsup = choose(B)\n"
+        + "sub != sup\n" * repetitions
+    ) == 30
 
 
 @pytest.mark.parametrize(("membership", "expected"), [("in", 1), ("not in", 3)])

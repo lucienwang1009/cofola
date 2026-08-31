@@ -310,7 +310,8 @@ def _count_singleton_violations(name: str, body: str, context: Context) -> Expr:
     context.sentence = context.sentence & parse(
         f"\\forall X: ({pred}(X) <-> ({body}))"
     )
-    var = context.create_var(name)
+    # The predicate name is unique even when callers reuse the same prefix.
+    var = context.create_var(str(pred))
     context.weighting[pred] = (var, 1)
     return var
 
