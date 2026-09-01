@@ -1,0 +1,4 @@
+letters = set(A, B, C, D, E)
+consonant = set(B, C, D)
+word = choose_replace_tuple(letters, 4)
+word.count(consonant) > 0

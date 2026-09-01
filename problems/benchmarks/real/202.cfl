@@ -1,0 +1,2 @@
+darts = bag(dart: 4)
+dartboards = partition(darts, 4)

@@ -1,0 +1,8 @@
+digits = set(0...10)
+hundreds = set(6...10)
+tens = set(5...8)
+units = set(2)
+number = choose_replace_tuple(digits, 3)
+number[0] in hundreds
+number[1] in tens
+number[2] in units

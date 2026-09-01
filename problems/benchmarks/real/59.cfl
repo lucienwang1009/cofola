@@ -1,0 +1,2 @@
+socks = set(blue, brown, black, red, purple)
+choice = choose(socks, 3)

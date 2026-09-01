@@ -1,0 +1,5 @@
+boys = set(boy0...6)
+girls = set(girl0...8)
+team = choose(boys + girls, 6)
+|team & boys| == 3
+|team & girls| == 3

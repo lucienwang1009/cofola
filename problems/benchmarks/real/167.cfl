@@ -1,0 +1,3 @@
+players = set(player0...16)
+goalie = choose(players, 1)
+regulars = choose(players - goalie, 10)

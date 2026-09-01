@@ -1,0 +1,3 @@
+colors = set(color0...6)
+outfit = choose_replace_tuple(colors, 3)
+outfit.dedup_count(colors) != 1

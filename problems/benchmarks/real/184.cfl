@@ -1,0 +1,2 @@
+members = set(member0...8)
+chosen = choose(members, 4)

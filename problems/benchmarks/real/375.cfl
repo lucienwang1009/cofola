@@ -1,0 +1,5 @@
+digits = set(0...10)
+even = set(0, 2, 4, 6, 8)
+integer = choose_tuple(digits, 4)
+integer[0] in set(4...7)
+integer[3] in even

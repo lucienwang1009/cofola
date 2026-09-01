@@ -1,0 +1,2 @@
+lamps = bag(lamp: 10)
+tables = partition(lamps, 3)

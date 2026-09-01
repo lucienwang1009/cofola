@@ -1,0 +1,6 @@
+red = set(r0...26)
+black = set(b0...26)
+cards = red + black
+chosen = choose(cards, 2)
+chosen subset red
+order = tuple(chosen)

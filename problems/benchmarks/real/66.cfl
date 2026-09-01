@@ -1,0 +1,8 @@
+schools = set(s0...3)
+school1 = set(member0...5)
+school2 = set(member5...10)
+school3 = set(member10...15)
+host = choose(schools, 1)
+reps1 = choose(school1, 2)
+reps2 = choose(school2, 1)
+reps3 = choose(school3, 1)

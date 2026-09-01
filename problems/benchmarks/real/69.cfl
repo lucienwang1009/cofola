@@ -1,0 +1,2 @@
+wombats = bag(hairy_nosed: 3, w1, w2, w3, w4)
+row = tuple(wombats)

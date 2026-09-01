@@ -1,0 +1,5 @@
+digits = set(0...10)
+number = choose_replace_tuple(digits, 3)
+number[0] != 0
+7 not in number
+9 not in number

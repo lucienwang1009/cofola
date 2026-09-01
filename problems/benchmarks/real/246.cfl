@@ -1,0 +1,2 @@
+marbles = set(0...7)
+chosen = choose(marbles, 3)

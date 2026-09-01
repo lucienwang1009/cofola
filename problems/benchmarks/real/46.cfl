@@ -1,0 +1,3 @@
+items = bag(chip: 3, cookie: 4)
+arrangement = tuple(items)
+(arrangement[0] == chip) or (arrangement[6] == chip)

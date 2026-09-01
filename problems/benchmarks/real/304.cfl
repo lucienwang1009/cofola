@@ -1,0 +1,4 @@
+players = set(Alicia, Amanda, Anna, other0...11)
+triplets = set(Alicia, Amanda, Anna)
+starters = choose(players, 6)
+|starters & triplets| <= 1

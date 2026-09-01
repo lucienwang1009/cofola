@@ -1,0 +1,2 @@
+deck = set(card0...52)
+hand = choose(deck, 5)

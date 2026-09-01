@@ -1,0 +1,4 @@
+digits = set(0...10)
+number = choose_replace_tuple(digits, 4)
+number[0] == 1
+number.dedup_count(digits) == 3

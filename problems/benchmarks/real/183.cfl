@@ -1,0 +1,6 @@
+boys = set(boy0...10)
+girls = set(girl0...10)
+president = choose(boys + girls, 1)
+vice = choose(boys + girls - president, 1)
+|(president + vice) & boys| == 1
+|(president + vice) & girls| == 1

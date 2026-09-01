@@ -1,0 +1,3 @@
+team = set(0...10)
+groups = partition(team, 2)
+|part| == 5 for part in groups

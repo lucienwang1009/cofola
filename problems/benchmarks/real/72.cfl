@@ -1,0 +1,3 @@
+team = set(member0...15)
+lineup = choose(team, 11)
+captains = choose(lineup, 2)

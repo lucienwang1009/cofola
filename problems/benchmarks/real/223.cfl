@@ -1,0 +1,2 @@
+letters = bag(E: 3, L: 1, V: 1, N: 1)
+word = tuple(letters)

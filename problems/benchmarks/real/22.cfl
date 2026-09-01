@@ -1,0 +1,5 @@
+vertical_lines = set(vertical0...4)
+horizontal_lines = set(horizontal0...4)
+chosen_lines = choose(vertical_lines + horizontal_lines, 4)
+|chosen_lines & vertical_lines| == 2
+|chosen_lines & horizontal_lines| == 2

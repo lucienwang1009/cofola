@@ -1,0 +1,3 @@
+digits = bag(4, 5, 5, 2, 0)
+number = tuple(digits)
+number[0] != 0

@@ -1,0 +1,5 @@
+digits = set(0...10)
+number = choose_replace_tuple(digits, 3)
+number[0] in set(0...8)
+number.count(0) != 3
+number.count(6) >= 2

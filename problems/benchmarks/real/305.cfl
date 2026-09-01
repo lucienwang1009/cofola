@@ -1,0 +1,5 @@
+alphabet = set(A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z)
+vowels = set(A, E, I, O, U)
+consonants = alphabet - vowels
+choices = choose(alphabet, 3)
+|choices & vowels| == 1 and |choices & consonants| == 2

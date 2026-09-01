@@ -1,0 +1,7 @@
+boys = set(boy0...10)
+girls = set(girl0...10)
+members = boys + girls
+president = choose(members, 1)
+vice_president = choose(members - president, 1)
+president_and_vice_president = president + vice_president
+(president_and_vice_president subset boys) or (president_and_vice_president subset girls)

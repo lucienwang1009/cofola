@@ -1,0 +1,6 @@
+males = set(m0...4)
+females = set(f4...8)
+members = males + females
+female_lead = choose(females, 1)
+male_lead = choose(males, 1)
+others = choose_tuple(members - female_lead - male_lead, 3)

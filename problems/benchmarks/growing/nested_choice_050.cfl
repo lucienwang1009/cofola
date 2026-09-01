@@ -1,0 +1,3 @@
+people = set(p0...50)
+team = choose(people, 4)
+captain = choose(team, 1)

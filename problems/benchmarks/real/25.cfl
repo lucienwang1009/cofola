@@ -1,0 +1,6 @@
+meat = set(beef, chicken, pork)
+vegetables = set(baked_beans, corn, potatoes, tomatoes)
+dessert = set(brownies, chocolate_cake, chocolate_pudding, ice_cream)
+chosen_meat = choose(meat, 1)
+chosen_vegetables = choose(vegetables, 2)
+chosen_dessert = choose(dessert, 1)

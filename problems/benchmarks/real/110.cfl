@@ -1,0 +1,5 @@
+European = set(E0...6)
+Asian = set(A0...4)
+North_American = set(NA0...3)
+African = set(Af0...7)
+commission = choose(European, 1) + choose(Asian, 1) + choose(North_American, 1) + choose(African, 1)

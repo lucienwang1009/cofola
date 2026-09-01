@@ -1,0 +1,4 @@
+items = bag(quarter: 3, nickel: 2, penny: 3)
+payment = choose(items)
+|payment| > 0
+payment.count(nickel) == 1

@@ -1,0 +1,2 @@
+gold_medals = bag(IMO:2, IPhO:2)
+row = tuple(gold_medals)

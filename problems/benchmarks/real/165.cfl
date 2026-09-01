@@ -1,0 +1,2 @@
+marbles = bag(red, green, blue, yellow:3)
+choice = choose(marbles, 2)

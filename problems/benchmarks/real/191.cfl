@@ -1,0 +1,6 @@
+men = set(man0...3)
+women = set(woman0...4)
+people = women + men
+groups = partition(people, 3)
+|part & men| > 0 for part in groups
+|part & women| > 0 for part in groups

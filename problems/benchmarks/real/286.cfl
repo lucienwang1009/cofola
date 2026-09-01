@@ -1,0 +1,4 @@
+candidates = set(candidate0...16)
+past_officers = set(candidate0...7)
+officers = choose(candidates, 5)
+|officers & past_officers| > 0

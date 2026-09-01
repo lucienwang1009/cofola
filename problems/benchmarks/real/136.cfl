@@ -1,0 +1,8 @@
+puppies = set(puppy0...15)
+kittens = set(kitten0...6)
+hamsters = set(hamster0...8)
+bought = choose(puppies + kittens + hamsters, 3)
+S = tuple(bought)
+|bought & puppies| <= 1
+|bought & kittens| <= 1
+|bought & hamsters| <= 1

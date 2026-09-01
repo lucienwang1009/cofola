@@ -1,0 +1,2 @@
+balls = bag(ball0:5)
+boxes = partition(balls, 3)

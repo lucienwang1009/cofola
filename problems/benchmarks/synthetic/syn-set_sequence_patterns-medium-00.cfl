@@ -1,0 +1,6 @@
+items = set(e0...12)
+row = sequence(items)
+next_to(e0, e1) in row
+row.before(e5, e3)
+row.before(e6, e9)
+row.before(e8, e10)

@@ -1,0 +1,4 @@
+candidates = set(condidate0...10)
+chairman = choose(candidates, 1)
+rest = choose(candidates - chairman)
+committee = chairman + rest

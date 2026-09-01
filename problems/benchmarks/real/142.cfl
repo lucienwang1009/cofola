@@ -1,0 +1,6 @@
+members = set(member0...10)
+chief = choose(members, 1)
+supporting_chief_A = choose(members - chief, 1)
+supporting_chief_B = choose(members - chief - supporting_chief_A, 1)
+inferior_officers_A = choose(members - chief - supporting_chief_A - supporting_chief_B, 2)
+inferior_officers_B = choose(members - chief - supporting_chief_A - supporting_chief_B - inferior_officers_A, 2)

@@ -1,0 +1,3 @@
+letters = set(A, B, C, D)
+word = choose_replace_tuple(letters, 3)
+A in word

@@ -1,0 +1,4 @@
+lights = set(light0...8)
+on = choose(lights)
+|on| <= 2
+|on| >= 1

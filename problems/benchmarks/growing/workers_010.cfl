@@ -1,0 +1,5 @@
+workers = set(w0...10)
+groups = compose(workers, 3)
+|groups[0]| == 5
+|groups[1]| == 3
+|groups[2]| == 2

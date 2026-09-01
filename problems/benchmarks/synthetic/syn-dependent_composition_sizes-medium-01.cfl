@@ -1,0 +1,7 @@
+items = set(e0...12)
+selected = choose(items, 11)
+groups = compose(selected, 4)
+|groups[0]| == 1
+|groups[1]| == 2
+|groups[2]| == 5
+|groups[3]| == 3

@@ -1,0 +1,2 @@
+copies = bag(Geometry: 3, Number_Theory: 4)
+arrangement = tuple(copies)

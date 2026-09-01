@@ -1,0 +1,6 @@
+items = set(e0...16)
+marked = set(e1, e2, e3, e4, e5)
+selected = choose(items, 6)
+row = choose_tuple(selected, 6)
+row[0] == e0
+row.count(marked) == 2

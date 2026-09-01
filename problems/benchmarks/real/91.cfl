@@ -1,0 +1,4 @@
+white_balls = set(white0...30)
+red_balls = set(red0...20)
+chosen_white = choose(white_balls, 3)
+chosen_red = choose(red_balls, 2)

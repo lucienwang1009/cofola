@@ -1,0 +1,4 @@
+letters = set(l0...26)
+digits = set(0...10)
+license1 = choose_tuple(letters, 2)
+license2 = choose_tuple(digits, 2)

@@ -1,0 +1,4 @@
+digits = set(0...10)
+integer = choose_replace_tuple(digits, 4)
+integer.count(0) < 4
+integer.count(set(2, 3, 4, 5)) == 0

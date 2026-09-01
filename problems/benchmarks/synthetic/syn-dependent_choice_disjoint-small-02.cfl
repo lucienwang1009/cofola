@@ -1,0 +1,5 @@
+people = set(e0...8)
+team = choose(people, 7)
+captain = choose(team, 1)
+committee = choose(team, 1)
+captain disjoint committee

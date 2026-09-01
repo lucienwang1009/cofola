@@ -1,0 +1,5 @@
+Republicans = set(Republican0...8)
+Democrats = set(Democrat0...6)
+subcommittee = choose(Republicans + Democrats)
+|subcommittee & Republicans| == 3
+|subcommittee & Democrats| == 2

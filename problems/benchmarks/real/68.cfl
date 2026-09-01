@@ -1,0 +1,4 @@
+exactly_one_color = set(red, green, blue)
+marbles = exactly_one_color + set(other0...9)
+choice = choose(marbles, 4)
+|choice & exactly_one_color| == 1
