@@ -14,8 +14,37 @@ from cofola.backend.wfomc.solver import solve_wfomc
 from cofola.backend.wfomc.encoder import encode
 from cofola.frontend.problem import Problem
 from cofola.planing.analysis.entities import AnalysisResult
+from cofola.planing.pass_manager import FixedPointPass
+from cofola.planing.passes.lowering import LoweringPass
+from cofola.planing.passes.merge_identical import MergeIdenticalObjects
+from cofola.planing.passes.optimize import (
+    ConstantFolder,
+    FullChoiceOptimizer,
+    SizeConstraintFolder,
+)
+from cofola.planing.passes.simplify import SimplifyPass
+from cofola.planing.pipeline import PlanningProfile
 
-__all__ = ["WFOMCBackend"]
+__all__ = ["WFOMC_GLOBAL_PASSES", "WFOMC_LOCAL_PASSES", "WFOMCBackend"]
+
+
+WFOMC_GLOBAL_PASSES = (
+    FixedPointPass(ConstantFolder),
+    FixedPointPass(FullChoiceOptimizer),
+    # Aliasing a full-source choice (e.g. choose(B, |B|) -> B) can turn a derived
+    # object into a constant-foldable one (B & B, B + B, ...). Fold again so the
+    # result collapses to a base object that MergeIdenticalObjects can dedup,
+    # instead of leaving a dangling reference when the derived object is dropped.
+    FixedPointPass(ConstantFolder),
+    MergeIdenticalObjects,
+)
+
+WFOMC_LOCAL_PASSES = (
+    SizeConstraintFolder,
+    FixedPointPass(LoweringPass),
+    MergeIdenticalObjects,
+    SimplifyPass,
+)
 
 
 class WFOMCBackend(Backend):
@@ -39,6 +68,14 @@ class WFOMCBackend(Backend):
         # Only consulted when algo == Algo.PROPOSITIONAL; ignored otherwise.
         # None lets the wfomc library use its default (PIN).
         self.linear_order_encoding = linear_order_encoding
+
+    def planning_profile(self) -> PlanningProfile:
+        """Return the WFOMC-compatible planning profile."""
+
+        return PlanningProfile(
+            global_passes=WFOMC_GLOBAL_PASSES,
+            local_passes=WFOMC_LOCAL_PASSES,
+        )
 
     def solve(
         self,

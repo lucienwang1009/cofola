@@ -1,10 +1,15 @@
-"""Lowering pass for the immutable planning problem.
+"""Lowering passes for the immutable planning problem.
 
-This module implements LoweringPass, which lowers high-level constructs
-to primitive objects that the WFOMC encoder can handle:
+This module implements ``LoweringPass`` as a fixed-point driver over
+fine-grained lowering steps.  The driver remains the public ``TransformPass``
+used by the planning pipeline so all lowering steps share one fixed-point scope
+and one lowering state.
+
+The lowering steps convert high-level constructs to primitive objects that the
+WFOMC encoder can handle:
 
 - TupleDef → FuncDef + SetInit(indices)
-- SequenceDef → (various transformations)
+- Linear sequence choices → explicit choose objects or flatten domains
 - FuncDef with injective → FuncDef + SizeConstraint
 """
 
@@ -58,6 +63,16 @@ from cofola.frontend.problem import Problem
 from cofola.planing.analysis.entities import AnalysisResult
 from cofola.planing.analysis.merged import MergedAnalysis
 
+__all__ = [
+    "ForAllPartsExpansionStep",
+    "InjectiveFunctionLoweringStep",
+    "LinearDefLoweringStep",
+    "LoweringPass",
+    "LoweringStep",
+    "TupleCountAtomLoweringStep",
+    "TupleDefLoweringStep",
+]
+
 
 IDX_PREFIX = "idx_"
 
@@ -70,12 +85,109 @@ class _TupleInfo:
     choose: bool
 
 
-class LoweringPass(TransformPass):
-    """Lowers high-level constructs to primitive objects.
+class LoweringStep(object):
+    """One semantic lowering rewrite used by :class:`LoweringPass`.
 
-    This pass transforms:
+    These are intentionally not standalone ``TransformPass`` classes.  They run
+    under one outer ``FixedPointPass(LoweringPass)`` so cross-step interactions
+    keep the same convergence behavior as the original monolithic lowering
+    pass.
+    """
+
+    name = "lowering-step"
+
+    def run(
+        self,
+        lowering: "LoweringPass",
+        problem: Problem,
+        analysis: AnalysisResult,
+    ) -> tuple[Problem, bool]:
+        """Run this lowering step once."""
+
+        raise NotImplementedError
+
+
+class ForAllPartsExpansionStep(LoweringStep):
+    """Expand ``ForAllParts`` constraints into concrete per-part constraints."""
+
+    name = "for-all-parts-expansion"
+
+    def run(
+        self,
+        lowering: "LoweringPass",
+        problem: Problem,
+        analysis: AnalysisResult,
+    ) -> tuple[Problem, bool]:
+        return lowering._try_lower_for_all_parts(problem)
+
+
+class TupleDefLoweringStep(LoweringStep):
+    """Lower one ``TupleDef`` into primitive function/set objects."""
+
+    name = "tuple-def-lowering"
+
+    def run(
+        self,
+        lowering: "LoweringPass",
+        problem: Problem,
+        analysis: AnalysisResult,
+    ) -> tuple[Problem, bool]:
+        return lowering._try_lower_tuples(problem, analysis)
+
+
+class LinearDefLoweringStep(LoweringStep):
+    """Lower one linear sequence choice or flatten-domain requirement."""
+
+    name = "linear-def-lowering"
+
+    def run(
+        self,
+        lowering: "LoweringPass",
+        problem: Problem,
+        analysis: AnalysisResult,
+    ) -> tuple[Problem, bool]:
+        return lowering._try_lower_sequences(problem, analysis)
+
+
+class InjectiveFunctionLoweringStep(LoweringStep):
+    """Lower one injective ``FuncDef`` into a size constraint on its image."""
+
+    name = "injective-function-lowering"
+
+    def run(
+        self,
+        lowering: "LoweringPass",
+        problem: Problem,
+        analysis: AnalysisResult,
+    ) -> tuple[Problem, bool]:
+        return lowering._try_lower_functions(problem, analysis)
+
+
+class TupleCountAtomLoweringStep(LoweringStep):
+    """Lower one size constraint term containing a ``TupleCountAtom``."""
+
+    name = "tuple-count-atom-lowering"
+
+    def run(
+        self,
+        lowering: "LoweringPass",
+        problem: Problem,
+        analysis: AnalysisResult,
+    ) -> tuple[Problem, bool]:
+        return lowering._try_lower_size_constraints(problem, analysis)
+
+
+class LoweringPass(TransformPass):
+    """Fixed-point driver for high-level construct lowering.
+
+    The driver applies fine-grained lowering steps in the original monolithic
+    order and returns after the first change.  The planning pipeline wraps this
+    driver in one ``FixedPointPass``; do not split these steps into independent
+    fixed-point passes unless the combined fixpoint semantics are re-proven.
+
+    The lowering steps transform:
     - TupleDef → indices SetInit + FuncDef(indices → source)
-    - SequenceDef → various transformations based on properties
+    - Linear SequenceDef choices → choose objects or flatten domains
     - FuncDef(injective=True) → FuncDef + SizeConstraint
 
     The lowering process creates new objects and constraints, and updates
@@ -83,12 +195,25 @@ class LoweringPass(TransformPass):
     """
 
     required_analyses = [MergedAnalysis]
+    STEP_CLASSES: tuple[type[LoweringStep], ...] = (
+        ForAllPartsExpansionStep,
+        TupleDefLoweringStep,
+        LinearDefLoweringStep,
+        InjectiveFunctionLoweringStep,
+        TupleCountAtomLoweringStep,
+    )
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        step_classes: tuple[type[LoweringStep], ...] | None = None,
+    ) -> None:
         self._ref_allocator: RefAllocator | None = None
         # FixedPointPass reuses one LoweringPass instance, so this survives
         # across iterations after the original TupleDef has been removed.
         self._lowered_tuple_info: dict[ObjRef, _TupleInfo] = {}
+        self._steps = tuple(
+            step_cls() for step_cls in (step_classes or self.STEP_CLASSES)
+        )
 
     def run(self, problem: Problem, am=None) -> PassResult:
         """Run one lowering step on a Problem.
@@ -127,26 +252,11 @@ class LoweringPass(TransformPass):
         Returns:
             Tuple of (new Problem, whether any changes were made).
         """
-        # Try lowering in order: ForAllParts, tuples, sequences, functions
-        result, changed = self._try_lower_for_all_parts(problem)
-        if changed:
-            return result, True
-
-        result, changed = self._try_lower_tuples(problem, analysis)
-        if changed:
-            return result, True
-
-        result, changed = self._try_lower_sequences(problem, analysis)
-        if changed:
-            return result, True
-
-        result, changed = self._try_lower_functions(problem, analysis)
-        if changed:
-            return result, True
-
-        result, changed = self._try_lower_size_constraints(problem, analysis)
-        if changed:
-            return result, True
+        for step in self._steps:
+            result, changed = step.run(self, problem, analysis)
+            if changed:
+                logger.debug("LoweringPass: {} changed the problem", step.name)
+                return result, True
 
         return problem, False
 
@@ -508,7 +618,11 @@ class LoweringPass(TransformPass):
 
             # Rewrite constraints referencing this TupleDef
             new_constraints, extra_defs = self._lower_tuple_constraints(
-                tuple(new_constraints), ref, mapping_ref, indices_ref, size,
+                tuple(new_constraints),
+                ref,
+                mapping_ref,
+                indices_ref,
+                size,
                 is_bag_source=is_bag_source,
                 inverse_image_cache=inverse_image_cache,
             )
@@ -565,7 +679,12 @@ class LoweringPass(TransformPass):
                 if inverse_ref is None:
                     inverse_ref = self._new_ref()
                     inverse_image_cache[c.entity] = inverse_ref
-                    extra_defs.append((inverse_ref, FuncInverseImage(func=mapping_ref, argument=c.entity)))
+                    extra_defs.append(
+                        (
+                            inverse_ref,
+                            FuncInverseImage(func=mapping_ref, argument=c.entity),
+                        )
+                    )
                 return SizeConstraint(
                     terms=((inverse_ref, 1),),
                     comparator=">" if c.positive else "==",
@@ -576,7 +695,9 @@ class LoweringPass(TransformPass):
             if new_image_ref is None:
                 new_image_ref = self._new_ref()
                 image_cache[image_key] = new_image_ref
-                extra_defs.append((new_image_ref, FuncImage(func=mapping_ref, argument=indices_ref)))
+                extra_defs.append(
+                    (new_image_ref, FuncImage(func=mapping_ref, argument=indices_ref))
+                )
             return MembershipConstraint(
                 entity=c.entity,
                 container=new_image_ref,
@@ -628,7 +749,7 @@ class LoweringPass(TransformPass):
         Replaces:
         - TupleIndexEq(tuple_ref=T, index=i, entity=e) →
             FuncPairConstraint(mapping, Entity("idx_i"), e)
-        - MembershipConstraint(entity=e, container=T) →
+        - Set-source MembershipConstraint(entity=e, container=T) →
             MembershipConstraint(entity=e, container=FuncImage(mapping, indices))
             for set sources, or a size constraint on FuncInverseImage(mapping, e)
             for bag sources
@@ -651,7 +772,13 @@ class LoweringPass(TransformPass):
         new_constraints = tuple(
             lowered for c in constraints
             if (lowered := self._lower_one_constraint(
-                c, tuple_ref, mapping_ref, indices_ref, size, extra_defs, image_cache,
+                c,
+                tuple_ref,
+                mapping_ref,
+                indices_ref,
+                size,
+                extra_defs,
+                image_cache,
                 is_bag_source=is_bag_source,
                 inverse_image_cache=inverse_image_cache,
             )) is not None
