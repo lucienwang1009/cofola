@@ -120,11 +120,13 @@ Comparators: `==`, `!=`, `<`, `<=`, `>`, `>=`.
 B.count(a) == 2
 T.count(a) > 0
 T.dedup_count(A) == 1
-Seq.count(a < b) == 1
+Seq.count(next_to(a, b)) == 1
 ```
 
-`dedup_count` is for tuples. `seq.count(together(...))` is rejected because
-`together` has no count variant.
+`dedup_count` is for tuples. Only adjacency patterns can be counted: the
+undirected `next_to(a, b)` and the directed predecessor pattern `(a, b)`.
+Counting an ordering pattern `a < b` (`before`) or `together(...)` is rejected,
+because those have no count variant.
 
 ### Relations
 
@@ -152,13 +154,30 @@ Tuple index constraints are lowered before backend encoding.
 
 ### Sequence Patterns
 
-```cfl
-a < b in Seq
-next_to(a, b) in Seq
-(a, b) in Seq          # predecessor: a immediately precedes b
-together(A) in Seq
+A pattern `p in Seq` holds when `p` occurs in the sequence; `p not in Seq`
+negates it.
 
-Seq.count(a < b) == 1
+```cfl
+a < b in Seq           # ordering: every a precedes every b
+next_to(a, b) in Seq   # undirected adjacency: a next to b in either order
+(a, b) in Seq          # predecessor: a immediately precedes b
+together(A) in Seq     # the members of A occupy one contiguous block
+
+a < b not in Seq       # any pattern may be negated
+```
+
+The ordering and `together` patterns also have equivalent method forms (there is
+no method form for `next_to` or the predecessor pattern):
+
+```cfl
+Seq.before(a, b)       # equivalent to: a < b in Seq
+Seq.together(A)        # equivalent to: together(A) in Seq
+```
+
+Only the adjacency patterns can be counted; ordering (`a < b`) and `together`
+cannot:
+
+```cfl
 Seq.count(next_to(a, b)) >= 1
 Seq.count((a, b)) == 0
 ```

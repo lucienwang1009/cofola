@@ -27,8 +27,8 @@ payment.count(nickel) == 1
 Run it:
 
 ```bash
-uv run cofola -i problems/others/bag.cfl
-uv run cofola -i problems/others/bag.cfl -d
+uv run cofola -i problems/examples/bag.cfl
+uv run cofola -i problems/examples/bag.cfl -d
 ```
 
 You can also solve source text or hand-built problems from Python:
@@ -103,7 +103,7 @@ The solve path is:
   -> parser
   -> frontend Problem + type checking
   -> planing pipeline: analyses, simplification, lowering, decomposition
-  -> WFOMC backend encoding
+  -> backend encoding (WFOMC by default; coso/asp/essence optional)
   -> decoded integer count
 ```
 
@@ -117,14 +117,17 @@ Useful commands:
 
 ```bash
 uv run pytest
-COFOLA_ALL_TESTS=1 uv run pytest tests/test_all_problems.py
+COFOLA_ALL_TESTS=1 uv run pytest tests/benchmarks/test_all_problems.py
 uv run pyright
 ```
 
 See [Development Guide](docs/development.md) for test organization and backend
 notes.
 
-## WFOMC Backend
+## Backends
 
-Cofola currently uses the `devel` branch of
-[yuanhong-wang/WFOMC](https://github.com/yuanhong-wang/WFOMC).
+The default backend is WFOMC, built on the `devel` branch of
+[yuanhong-wang/WFOMC](https://github.com/yuanhong-wang/WFOMC). Alternative
+backends can be selected with `--backend`: `coso` (CoLa/CoSo), `asp` (clingo),
+and `essence` (Conjure/Savile Row). See
+[scripts/benchmarks/README.md](scripts/benchmarks/README.md) for their setup.
