@@ -9,7 +9,7 @@ frontend `Problem` model; it does not define a separate IR data model.
 parser     .cfl source -> frontend Problem
 frontend   core problem model and validation
 planning   analysis, normalization, lowering, decomposition, solve scheduling
-backend    WFOMC encoding and execution
+backend    encoding and execution (wfomc default; coso/asp/essence optional)
 ```
 
 The package is named `cofola.planing` to match its architectural role.
