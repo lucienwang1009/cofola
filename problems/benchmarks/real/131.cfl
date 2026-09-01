@@ -1,0 +1,4 @@
+team = set(member0...10)
+linemen = set(member0...3)
+lineup = choose_tuple(team, 4)
+lineup[0] in linemen

@@ -1,0 +1,3 @@
+seven_graders = set(seven0...4)
+eight_graders = set(eight0...6)
+committee = choose(seven_graders, 1) + choose(eight_graders, 3)

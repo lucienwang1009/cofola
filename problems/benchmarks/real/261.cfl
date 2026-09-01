@@ -1,0 +1,2 @@
+locations = set(0...5)
+visit = choose(locations, 3)

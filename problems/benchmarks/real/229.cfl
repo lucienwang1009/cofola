@@ -1,0 +1,5 @@
+digits = set(0...10)
+x = choose(digits, 1)
+y = choose(digits, 1)
+(1 in x) or (0 in y) or (2 in y)
+(0 in x) or (2 in x) or (1 in y)

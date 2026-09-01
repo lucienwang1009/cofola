@@ -1,0 +1,8 @@
+teams = set(t0...4)
+team1 = set(member0...7)
+team2 = set(member7...14)
+team3 = set(member14...21)
+team4 = set(member21...28)
+host = choose(teams, 1)
+host_members = choose(team1, 3)
+non_host_members = choose(team2, 2) + choose(team3, 2) + choose(team4, 2)

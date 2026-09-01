@@ -1,0 +1,4 @@
+questions = set(0...10)
+t = choose(questions)
+f = questions - t
+|f| >= 3

@@ -1,0 +1,15 @@
+items = set(e0...16)
+selected = choose(items, 9)
+row = sequence(selected)
+e0 in selected
+e1 in selected
+e11 in selected
+e8 in selected
+e6 in selected
+e3 in selected
+e9 in selected
+e5 in selected
+next_to(e0, e1) in row
+row.before(e8, e11)
+row.before(e6, e3)
+row.before(e9, e5)

@@ -1,0 +1,2 @@
+people = set(Harry, Ron, Neville)
+finish = tuple(people)

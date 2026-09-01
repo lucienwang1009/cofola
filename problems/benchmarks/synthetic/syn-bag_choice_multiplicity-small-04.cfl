@@ -1,0 +1,3 @@
+stock = bag(e0: 2, e1, e2, e3, e4, e5, e6)
+picked = choose(stock, 7)
+picked.count(e0) == 2

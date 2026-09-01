@@ -1,0 +1,8 @@
+German = set(G0...6)
+French = set(F0...5)
+Italian = set(I0...3)
+All = German + French + Italian
+chairs = sequence(All)
+chairs.together(German)
+chairs.together(French)
+chairs.together(Italian)

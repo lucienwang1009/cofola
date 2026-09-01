@@ -1,0 +1,5 @@
+items = set(e0...12)
+marked = set(e1, e2, e3, e4, e5, e6, e7, e8, e9)
+row = choose_tuple(items, 7)
+row[0] == e0
+row.count(marked) == 5

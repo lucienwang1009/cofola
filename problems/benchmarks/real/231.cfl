@@ -1,0 +1,5 @@
+people = set(John, Wilma, Paul, other0...5)
+not_consecutive = set(John, Wilma, Paul)
+row = sequence(people)
+# (not (next_to(John, Wilma) in row)) or (not (next_to(John, Paul) in row)) or (not (next_to(Wilma, Paul) in row))
+not row.together(not_consecutive)

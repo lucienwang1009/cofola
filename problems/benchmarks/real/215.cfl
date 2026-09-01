@@ -1,0 +1,3 @@
+fruits = set(fruit0...15)
+soup = set(soup0...10)
+choices = choose(fruits, 2) + choose(soup, 3)

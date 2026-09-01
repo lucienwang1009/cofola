@@ -1,0 +1,5 @@
+workers = set(w0...65)
+groups = compose(workers, 3)
+|groups[0]| == 32
+|groups[1]| == 21
+|groups[2]| == 12

@@ -1,0 +1,2 @@
+letters = set(B, A1, N1, A2, N2, A3)
+word = tuple(letters)

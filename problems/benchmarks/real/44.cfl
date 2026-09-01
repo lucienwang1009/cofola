@@ -1,0 +1,3 @@
+screamers = set(Bob, Yogi) + set(other0...10)
+lineup = choose(screamers, 5)
+|lineup & set(Bob, Yogi)| != 2

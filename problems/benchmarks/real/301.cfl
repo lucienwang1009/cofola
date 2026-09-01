@@ -1,0 +1,3 @@
+planes = set(blue, red, white)
+take_off = tuple(planes)
+runways = compose(planes, 2)

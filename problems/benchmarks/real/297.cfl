@@ -1,0 +1,4 @@
+winner1 = choose(set(4, 5), 1)
+winner2 = choose(set(3, 4, 5) - winner1, 1)
+winner3 = choose(set(2, 3, 4, 5) - winner1 - winner2, 1)
+winner4 = choose(set(1, 2, 3, 4, 5) - winner1 - winner2 - winner3, 1)

@@ -1,0 +1,5 @@
+odds = set(1, 3, 5, 7, 9)
+evens = set(0, 2, 4, 6, 8)digits = odds + evens
+seq = choose_replace_sequence(digits, 6)
+not ((odds, odds) in seq)
+not ((evens, evens) in seq)

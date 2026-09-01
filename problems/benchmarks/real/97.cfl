@@ -1,0 +1,3 @@
+digits = set(1, 2, 3, 4, 5)
+chosen = choose(digits)
+5 in chosen

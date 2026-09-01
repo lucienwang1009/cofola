@@ -1,0 +1,4 @@
+left = set(a0...6)
+right = set(b0...6)
+picked = choose(left + right, 4)
+|picked & left| == 2

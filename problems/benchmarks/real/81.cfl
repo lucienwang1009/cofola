@@ -1,0 +1,5 @@
+boys = set(boy0...8)
+girls = set(girl0...6)
+quintet = choose(boys + girls, 5)
+|quintet & boys| == 3
+|quintet & girls| == 2

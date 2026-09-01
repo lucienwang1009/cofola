@@ -1,0 +1,4 @@
+plants = bag(basil: 2, aloe: 1)
+lamps = compose(plants, 2)
+white_lamps = partition(lamps[0], 2)
+red_lamps = partition(lamps[1], 2)

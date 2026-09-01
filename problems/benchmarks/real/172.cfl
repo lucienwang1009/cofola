@@ -1,0 +1,8 @@
+Spiderman = set(s0...6)
+Archie = set(a0...5)
+Garfield = set(g0...4)
+all = Spiderman + Archie + Garfield
+pile = sequence(all)
+pile.together(Spiderman)
+pile.together(Archie)
+pile.together(Garfield)

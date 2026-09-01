@@ -1,0 +1,6 @@
+coin = set(H, T)
+seq = choose_replace_sequence(coin, 15)
+seq.count((H, H)) == 2
+seq.count((H, T)) == 3
+seq.count((T, H)) == 4
+seq.count((T, T)) == 5
