@@ -385,11 +385,18 @@ class Context:
         return seq_pred
 
     def get_lt_pred(self, seq_ref: ObjRef) -> Pred:
-        """Return strict order restricted to positions in this sequence."""
+        """Get the strict sequence order predicate for a SequenceDef.
+
+        The global LEQ predicate is reflexive. Pattern constraints use strict
+        before semantics, so LT(X,Y) is derived from the sequence-restricted
+        order by excluding the reverse order.
+        """
         if seq_ref in self.ref2lt_pred:
             return self.ref2lt_pred[seq_ref]
+
         leq_pred = self.get_leq_pred(seq_ref)
-        lt_pred = self.create_pred(f"{self._get_name(seq_ref)}_LT", 2)
+        lt_name = f"{self._get_name(seq_ref)}_LT"
+        lt_pred = self.create_pred(lt_name, 2)
         self.sentence = self.sentence & parse(
             f"\\forall X: (\\forall Y: ({lt_pred}(X,Y) <-> "
             f"({leq_pred}(X,Y) & ~{leq_pred}(Y,X))))"
