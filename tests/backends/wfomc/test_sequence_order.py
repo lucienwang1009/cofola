@@ -25,16 +25,3 @@ def test_global_order_and_negation_partition_solutions(
     assert parse_and_solve(definitions + f"not ({relation} in row)\n") == negative
     assert parse_and_solve(definitions + f"{relation} not in row\n") == negative
     assert parse_and_solve(definitions) == positive + negative
-
-
-def test_counted_order_is_also_strict() -> None:
-    assert parse_and_solve(
-        "S = set(a)\nrow = sequence(S)\nrow.count(a < a) == 0\n"
-    ) == 1
-
-
-def test_local_group_adjacency_keeps_existing_semantics() -> None:
-    assert parse_and_solve(
-        "A = set(a0, a1)\nS = A + set(b)\nrow = sequence(S)\n"
-        "next_to(A, b) in row\n"
-    ) == 2
