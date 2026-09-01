@@ -20,6 +20,7 @@ from cofola.planing.analysis.entities import EntityAnalysis
 from cofola.planing.analysis.merged import MergedAnalysis
 from cofola.planing.pass_manager import AnalysisManager
 from cofola.planing.passes.lowering import LoweringPass
+from cofola.backend.wfomc import WFOMCBackend
 from cofola.planing.pipeline import PlaningPipeline
 from cofola.solver import parse_and_solve
 
@@ -180,7 +181,7 @@ def test_decomposed_sequence_size_branches_also_constrain_source() -> None:
     ordered = problem.get_object(_ref_named(problem, "T"))
     assert isinstance(ordered, SequenceDef)
 
-    schedule = PlaningPipeline().process(problem)
+    schedule = PlaningPipeline(WFOMCBackend().planning_profile()).process(problem)
 
     assert len(schedule.branches) == 3
     branch_sizes = []
@@ -201,7 +202,7 @@ def test_fixed_tuple_size_materializes_source_size_before_lowering() -> None:
     ordered = problem.get_object(_ref_named(problem, "T"))
     assert isinstance(ordered, TupleDef)
 
-    schedule = PlaningPipeline().process(problem)
+    schedule = PlaningPipeline(WFOMCBackend().planning_profile()).process(problem)
 
     assert len(schedule.branches) == 1
     constraints = tuple(

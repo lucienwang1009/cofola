@@ -127,8 +127,8 @@ def test_circle_syntax_is_rejected(program: str) -> None:
         parse(program)
 
 
-def test_tuple_membership_uses_membership_constraints() -> None:
-    """Text and Python APIs share the same tuple membership representation."""
+def test_tuple_membership_parses_as_membership_constraint() -> None:
+    """Tuple membership syntax should lower directly instead of using count atoms."""
     problem = parse("""
 S = set(a, b)
 T = tuple(S)
@@ -138,6 +138,66 @@ b not in T
     tuple_ref = next(ref for ref, name in problem.names if name == "T")
 
     assert problem.constraints == (
-        MembershipConstraint(entity=Entity("a"), container=tuple_ref, positive=True),
-        MembershipConstraint(entity=Entity("b"), container=tuple_ref, positive=False),
+        MembershipConstraint(
+            entity=Entity("a"),
+            container=tuple_ref,
+            positive=True,
+        ),
+        MembershipConstraint(
+            entity=Entity("b"),
+            container=tuple_ref,
+            positive=False,
+        ),
     )
+
+
+def test_pattern_not_in_does_not_accept_coverage_qualifier() -> None:
+    """Use explicit boolean not for negated coverage constraints."""
+    with pytest.raises(UnexpectedInput):
+        parse("""
+A = set(a0, a1)
+S = A + set(b)
+row = sequence(S)
+(A, b) not in row for each b
+""")
+
+
+def _capture_warnings(source: str) -> list[str]:
+    from loguru import logger
+
+    messages: list[str] = []
+    handler_id = logger.add(messages.append, level="WARNING", format="{message}")
+    try:
+        parse(source)
+    finally:
+        logger.remove(handler_id)
+    return messages
+
+
+@pytest.mark.parametrize(
+    "program",
+    [
+        "S = set(a, b)\nrow = sequence(S)\na < b in row\n",
+        "S = set(a, b)\nrow = sequence(S)\ntogether(set(a, b)) in row\n",
+    ],
+    ids=["less_than", "together"],
+)
+def test_global_pattern_in_form_warns_deprecated(program: str) -> None:
+    """`together(...) in seq` and `a < b in seq` are deprecated legacy spellings."""
+    messages = _capture_warnings(program)
+    assert any("deprecated" in m for m in messages)
+
+
+@pytest.mark.parametrize(
+    "program",
+    [
+        "S = set(a, b)\nrow = sequence(S)\nrow.before(a, b)\n",
+        "S = set(a, b)\nrow = sequence(S)\nrow.together(set(a, b))\n",
+        "S = set(a, b, c)\nrow = sequence(S)\n(a, b) in row\n",
+    ],
+    ids=["before_method", "together_method", "local_pattern"],
+)
+def test_method_and_local_forms_do_not_warn(program: str) -> None:
+    """The documented method form and local patterns emit no deprecation warning."""
+    messages = _capture_warnings(program)
+    assert not any("deprecated" in m for m in messages)

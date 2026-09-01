@@ -5,6 +5,7 @@ from dataclasses import replace
 
 import pytest
 
+from cofola.backend.wfomc import WFOMC_GLOBAL_PASSES
 from cofola.frontend import BagInit, ObjRef, SequenceDef, SetInit, TupleDef
 from cofola.parser.parser import parse
 from cofola.planing.pipeline import PlaningPipeline
@@ -12,7 +13,7 @@ from cofola.solver import parse_and_solve
 
 
 def _globals(text: str):
-    return PlaningPipeline.run_passes(parse(text), PlaningPipeline.GLOBAL_PASSES).problem
+    return PlaningPipeline.run_passes(parse(text), WFOMC_GLOBAL_PASSES).problem
 
 
 @pytest.mark.parametrize(("source", "size", "kind"), [
