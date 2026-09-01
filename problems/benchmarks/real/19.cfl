@@ -1,0 +1,2 @@
+B = bag(orange: 4)
+P = partition(B, 3)

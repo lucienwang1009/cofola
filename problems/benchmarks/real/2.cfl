@@ -1,0 +1,3 @@
+items = bag(quarter, nickel: 2, penny:3)
+payment = choose(items)
+|payment| > 0

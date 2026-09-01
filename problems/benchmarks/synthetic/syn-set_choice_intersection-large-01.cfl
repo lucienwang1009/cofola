@@ -1,0 +1,4 @@
+left = set(a0...8)
+right = set(b0...8)
+picked = choose(left + right, 8)
+|picked & left| == 6

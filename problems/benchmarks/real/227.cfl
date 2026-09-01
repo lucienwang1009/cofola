@@ -1,0 +1,4 @@
+letters = set(A, B, C, D, E)
+vowels = set(A, E)
+word = choose_replace_tuple(letters, 4)
+word.count(vowels) >= 1

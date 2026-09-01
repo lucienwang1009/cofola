@@ -1,0 +1,2 @@
+crayons = set(crayon0...12)
+selection = choose(crayons, 4)

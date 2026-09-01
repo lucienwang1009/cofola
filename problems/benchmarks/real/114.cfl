@@ -1,0 +1,2 @@
+colors = set(color0...7)
+choice = choose(colors, 2)

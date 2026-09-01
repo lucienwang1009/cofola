@@ -1,0 +1,4 @@
+alphabet = set(A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T)
+word = choose_replace_tuple(alphabet)
+|word| <= 4
+A in word

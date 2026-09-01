@@ -1,0 +1,5 @@
+items = set(e0...16)
+selected = choose(items, 9)
+groups = compose(selected, 2)
+|groups[0]| == 3
+|groups[1]| == 6

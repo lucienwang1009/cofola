@@ -1,0 +1,5 @@
+stock = bag(e0: 6, e1: 6, e2: 4)
+row = tuple(stock)
+markers = set(m0...5)
+witness = choose(markers, 3)
+m0 in witness

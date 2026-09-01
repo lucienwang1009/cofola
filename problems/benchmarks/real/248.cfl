@@ -1,0 +1,6 @@
+members = set(Penelope, Quentin, other0...20)
+chairman = choose(members, 1)
+vice_chairman = choose(members - chairman, 1)
+sergeant_at_arms = choose(members - chairman - vice_chairman, 1)
+officers = chairman + vice_chairman + sergeant_at_arms
+(set(Penelope, Quentin) subset officers) or (set(Penelope, Quentin) disjoint officers)

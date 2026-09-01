@@ -1,0 +1,3 @@
+letters = set(A, B, C)
+word = choose_replace_sequence(letters, 7)
+(A, B) not in word and (B, C) not in word and (C, A) not in word

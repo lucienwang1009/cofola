@@ -1,0 +1,5 @@
+men = set(man0...30)
+women = set(woman0...40)
+committee = choose(men + women, 7)
+|committee & men| == 3
+|committee & women| == 4

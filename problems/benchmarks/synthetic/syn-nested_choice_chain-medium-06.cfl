@@ -1,0 +1,5 @@
+people = set(e0...12)
+team = choose(people, 8)
+e0 in team
+shortlist = choose(team, 4)
+captain = choose(shortlist, 1)

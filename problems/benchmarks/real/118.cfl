@@ -1,0 +1,2 @@
+students = set(0...10)
+lunch = compose(students, 2)

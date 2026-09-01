@@ -1,0 +1,5 @@
+math_books = set(math0...3)
+english_books = set(english0...5)
+shelf = sequence(math_books + english_books)
+shelf.together(math_books)
+shelf.together(english_books)

@@ -1,0 +1,2 @@
+B = bag(ball: 5)
+C = compose(B, 2)

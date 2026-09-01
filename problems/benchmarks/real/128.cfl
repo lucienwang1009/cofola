@@ -1,0 +1,6 @@
+digits = set(0...10)
+greater_than_4 = set(5...10)
+code = choose_replace_tuple(digits, 5)
+code[0] in greater_than_4
+code[1] in greater_than_4
+code[2] in greater_than_4

@@ -1,0 +1,2 @@
+cousins = set(cousin0...4)
+rooms = partition(cousins, 4)

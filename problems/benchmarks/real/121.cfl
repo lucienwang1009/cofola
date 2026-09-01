@@ -1,0 +1,6 @@
+fruits = set(apple, banana, grape, strawberry, pineapple)
+conflict1 = set(strawberry, pineapple)
+conflict2 = set(grape, banana)
+salad = choose(fruits, 3)
+|conflict1 & salad| < 2
+|conflict2 & salad| < 2

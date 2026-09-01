@@ -1,0 +1,10 @@
+cats = set(Siamese, Persian, Calico, Minx)
+dogs = set(Poodle, Golden_Retriever)
+goldfish = set(g)
+pets = cats + dogs + goldfish
+kids = compose(pets, 7)
+|kids[0] & goldfish| == 0
+|kids[1] & goldfish| == 0
+|kids[2] & cats| == 1
+|kids[3] & cats| == 1
+|part| == 1 for part in kids

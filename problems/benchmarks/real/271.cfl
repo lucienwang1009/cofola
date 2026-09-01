@@ -1,0 +1,2 @@
+digits = bag(2: 2, 9: 2)
+integer = tuple(digits)

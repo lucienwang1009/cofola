@@ -1,0 +1,3 @@
+Republicans = set(Republican0...55)
+Democrats = set(Democrat0...45)
+committee = choose(Republicans, 3) + choose(Democrats, 2)

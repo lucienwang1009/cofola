@@ -1,0 +1,3 @@
+items = set(e0...8)
+groups = partition(items, 4)
+|part| >= 2 for part in groups

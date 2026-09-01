@@ -1,0 +1,4 @@
+triplets = set(Alicia, Amanda, Anna)
+players = triplets + set(other0...11)
+starters = choose(players, 6)
+triplets subset starters

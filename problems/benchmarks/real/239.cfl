@@ -1,0 +1,5 @@
+rolls = set(roll0...3)
+purchase = choose_replace(rolls, 6)
+purchase.count(roll0) >= 1
+purchase.count(roll1) >= 1
+purchase.count(roll2) >= 1

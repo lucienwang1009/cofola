@@ -1,0 +1,5 @@
+courses = set(English, Algebra, Geometry, History, Art, Latin)
+mathematics = set(Algebra, Geometry)
+program = choose(courses, 4)
+English in program
+|program & mathematics| >= 1

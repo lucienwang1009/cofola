@@ -1,0 +1,4 @@
+pants_colors = set(tan, black, blue, gray)
+shirts_hats_colors = pants_colors + set(white, yellow)
+outfit = choose(pants_colors, 1) + choose(shirts_hats_colors, 1) + choose(shirts_hats_colors, 1)
+|outfit| > 1

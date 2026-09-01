@@ -1,0 +1,4 @@
+members = set(Alex, Bob) + set(member0...18)
+officers = choose(members, 3)
+president_vice_treasurer = tuple(officers)
+(Bob not in officers) or (Alex not in officers)

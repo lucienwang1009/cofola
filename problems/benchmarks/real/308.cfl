@@ -1,0 +1,6 @@
+digits = set(0...10)
+letters = set(l0...26)
+chosen_digits = choose_replace(digits, 4)
+chosen_letters = choose_replace(letters, 2)
+license_plate = sequence(chosen_digits ++ chosen_letters)
+license_plate.together(supp(chosen_letters))

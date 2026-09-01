@@ -1,0 +1,7 @@
+person = set(Ali, Bonnie, Carlo, Dianna)
+driver = set(Bonnie, Carlo)
+front_person = choose(person, 2)
+back_person = person - front_person
+back_seats = tuple(back_person)
+driver_seat = choose(front_person, 1)
+driver_seat subset driver

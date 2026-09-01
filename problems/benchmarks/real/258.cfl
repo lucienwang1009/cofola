@@ -1,0 +1,2 @@
+students = set(student0...15)
+group = choose(students, 13)

@@ -1,0 +1,6 @@
+green = set(g0...2)
+red = set(r0...3)
+blue = set(b0)
+frogs = green + red + blue
+row = sequence(frogs)
+not (next_to(green,red) in row)

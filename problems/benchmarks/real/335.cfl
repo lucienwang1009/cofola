@@ -1,0 +1,6 @@
+digits = set(0...10)
+odds = set(1, 3, 5, 7, 9)
+number = choose_replace_tuple(digits, 3)
+number[0] != 0
+number[2] in odds
+number.dedup_count(digits) == 3

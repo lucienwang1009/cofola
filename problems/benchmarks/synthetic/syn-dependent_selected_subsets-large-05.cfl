@@ -1,0 +1,5 @@
+items = set(e0...16)
+selected = choose(items, 10)
+left = choose(selected, 7)
+right = choose(selected, 2)
+left disjoint right

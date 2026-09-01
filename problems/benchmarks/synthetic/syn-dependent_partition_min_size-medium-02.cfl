@@ -1,0 +1,4 @@
+items = set(e0...12)
+selected = choose(items, 11)
+groups = partition(selected, 2)
+|part| >= 1 for part in groups

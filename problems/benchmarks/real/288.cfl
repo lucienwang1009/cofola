@@ -1,0 +1,4 @@
+boys = set(boy0...7)
+girls = set(girl0...4)
+presentation_boys = choose(boys, 3)
+presentation_girls = choose(girls, 2)

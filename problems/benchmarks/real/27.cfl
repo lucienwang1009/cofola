@@ -1,0 +1,2 @@
+books = set(book0...6)
+chosen = choose(books, 4)

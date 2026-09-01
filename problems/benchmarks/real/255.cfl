@@ -1,0 +1,3 @@
+letters = bag(B, A, N, A, N, A)
+word = tuple(letters)
+word[0] != B

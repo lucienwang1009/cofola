@@ -1,0 +1,5 @@
+players = set(Steve, Danny, play0...8)
+teams = compose(players, 2)
+|teams[0]| == 5
+Steve in teams[0]
+Danny in teams[1]

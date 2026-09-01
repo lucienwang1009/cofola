@@ -1,0 +1,9 @@
+parents = set(Mr, Mrs)
+children = set(child1, child2, child3)
+family = parents + children
+front = choose(family, 2)
+back = family - front
+back_seats = tuple(back)
+driver = choose(front, 1)
+driver subset parents
+child1 not in front

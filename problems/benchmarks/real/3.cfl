@@ -1,0 +1,2 @@
+people = set(0...11)
+captains = choose(people, 3)

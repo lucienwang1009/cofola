@@ -1,0 +1,2 @@
+team = set(Lance, Sally, Joy, Fred)
+starters = choose(team, 3)

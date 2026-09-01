@@ -1,0 +1,3 @@
+fruit = bag(apple: 5, orange: 10)
+basket = choose(fruit)
+|basket| > 0

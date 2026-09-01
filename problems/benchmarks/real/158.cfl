@@ -1,0 +1,2 @@
+odd_digits = set(1, 3, 5, 7, 9)
+number = choose_replace_tuple(odd_digits, 3)

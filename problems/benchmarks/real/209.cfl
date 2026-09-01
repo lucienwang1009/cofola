@@ -1,0 +1,2 @@
+fruits = bag(apple: 3, orange: 2, banana: 2)
+eat = tuple(fruits)

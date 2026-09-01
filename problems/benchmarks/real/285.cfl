@@ -1,0 +1,2 @@
+balls = set(ball0...4)
+boxes = partition(balls, 3)

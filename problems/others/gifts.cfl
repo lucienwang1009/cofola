@@ -1,3 +1,0 @@
-children = set(chil1...11)
-gifts = set(gift1...11)
-gift_to_child = gifts ->| children

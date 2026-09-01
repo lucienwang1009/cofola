@@ -1,0 +1,5 @@
+workers = set(worker1...15)
+
+jobs = compose(workers, 3)
+jobs[1] = 7
+jobs[2] = 5

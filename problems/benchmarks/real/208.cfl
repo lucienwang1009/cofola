@@ -1,0 +1,6 @@
+letters = set(l0...26)
+digits = set(0...10)
+license = choose_replace_tuple(letters + digits, 3)
+license[0] in letters
+license[2] in digits
+license.dedup_count(letters + digits) == 2

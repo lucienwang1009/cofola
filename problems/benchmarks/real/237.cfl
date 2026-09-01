@@ -1,0 +1,5 @@
+math_books = set(math1, math2)
+books = math_books + set(other0...4)
+stack = tuple(books)
+stack[0] in math_books
+stack[5] in math_books

@@ -1,0 +1,14 @@
+red_shirts = set(red_shirt0...5)
+green_shirts = set(green_shirt0...5)
+pants = set(pant0...6)
+green_hats = set(green_hat0...8)
+red_hats = set(red_hat0...8)
+shirts = red_shirts + green_shirts
+hats = green_hats + red_hats
+red = red_shirts + red_hats
+green = green_shirts + green_hats
+outfit_shirt = choose(shirts, 1)
+outfit_pants = choose(pants, 1)
+outfit_hat = choose(hats - outfit_shirt, 1)
+outfit_shirt_hat = outfit_shirt + outfit_hat
+not (outfit_shirt_hat subset red or outfit_shirt_hat subset green)

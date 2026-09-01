@@ -1,0 +1,4 @@
+digits = set(0...10)
+number = choose_replace_tuple(digits, 5)
+number[1] != 0
+number.count(0) > 0

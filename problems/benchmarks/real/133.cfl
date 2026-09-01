@@ -1,0 +1,3 @@
+digits = set(1, 2)
+integer = choose_replace_sequence(digits, 10)
+integer.count((1, 1)) > 0

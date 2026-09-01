@@ -1,0 +1,4 @@
+letters = set(P, R, O, B, L, E, M)
+seq = choose_tuple(letters, 4)
+seq[0] == L
+seq[3] != P

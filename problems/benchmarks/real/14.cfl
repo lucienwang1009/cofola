@@ -1,0 +1,4 @@
+interested_girls = set(girl0...6)
+interested_boys = set(boy0...11)
+trip_girls = choose(interested_girls, 3)
+trip_boys = choose(interested_boys, 5)

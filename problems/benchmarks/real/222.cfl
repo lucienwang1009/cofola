@@ -1,0 +1,6 @@
+bread = set(white, bread1, bread2, bread3)
+meat = set(ham, chicken, meat1, meat2, meat3, meat4)
+cheese = set(cheddar, cheese1, cheese2, cheese3, cheese4)
+sandwich = choose(bread, 1) + choose(meat, 1) + choose(cheese, 1)
+|sandwich & set(ham, cheddar)| != 2
+|sandwich & set(white, chicken)| != 2

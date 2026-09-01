@@ -1,0 +1,5 @@
+math_books = set(math0...3)
+history_books = set(history0...5)
+arrangement = tuple(math_books + history_books)
+arrangement[0] in math_books
+arrangement[7] in math_books

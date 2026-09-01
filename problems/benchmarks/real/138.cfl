@@ -1,0 +1,4 @@
+teachers = set(teacher0...5)
+parents = set(parent0...7)
+students = set(student0...6)
+subcommittee = choose(teachers, 2) + choose(parents, 3) + choose(students, 3)

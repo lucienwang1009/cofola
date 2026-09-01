@@ -1,0 +1,4 @@
+upper = set(u0...5)
+lower = set(l0...10)
+upper_comb = choose(upper, 4)
+lower_comb = choose(lower, 8)

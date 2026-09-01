@@ -1,0 +1,2 @@
+trees = bag(apple: 2, pear: 5)
+row = tuple(trees)

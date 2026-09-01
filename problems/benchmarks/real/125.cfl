@@ -1,0 +1,2 @@
+friends = set(friend0...10)
+assignment = choose_replace_tuple(friends, 5)

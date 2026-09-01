@@ -1,0 +1,4 @@
+digits = set(0...10)
+number = choose_replace_tuple(digits, 3)
+number[0] != 0
+(7 in number) or (9 in number)

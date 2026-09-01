@@ -1,0 +1,4 @@
+people = set(p0...30)
+selected = choose(people, 4)
+groups = partition(selected, 2)
+|part| == 2 for part in groups

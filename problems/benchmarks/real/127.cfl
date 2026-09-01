@@ -1,0 +1,2 @@
+digits = bag(2, 3, 5:3, 6:2)
+number = choose_tuple(digits, 3)

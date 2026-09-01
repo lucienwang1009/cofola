@@ -1,0 +1,4 @@
+players = set(Ace, Zeppo, player0...10)
+all_stars = set(Ace, Zeppo)
+starters = choose(players, 5)
+all_stars subset starters

@@ -1,0 +1,2 @@
+letters = bag(B: 10, A: 30, N: 20)
+word = choose_tuple(letters, 60)

@@ -1,0 +1,5 @@
+items = set(e0...8)
+marked = set(e1, e2)
+row = choose_tuple(items, 6)
+row[0] == e0
+row.count(marked) == 1
