@@ -57,7 +57,12 @@ cofola_grammar = r"""
     subset_constraint: object SUBSET object
     disjoint_constraint: object DISJOINT object
     equivalence_constraint: object (NEQUALITY | EQUALITY) (object | entity)
-    seq_constraint: seq_pattern in_or_not object
+    seq_constraint: object "." seq_global_constraint
+        | seq_pattern in_or_not object
+        | seq_pattern IN object coverage
+    seq_global_constraint: TOGETHER left_parenthesis object right_parenthesis -> seq_together_method
+        | BEFORE left_parenthesis (object | entity) "," (object | entity) right_parenthesis -> seq_before_method
+    coverage: FOR EACH (object | entity)
     seq_pattern: left_parenthesis seq_pattern right_parenthesis -> parenthesis
         | together
         | less_than
@@ -89,9 +94,11 @@ cofola_grammar = r"""
     entity: INT | CNAME
     SUBSET: "subset"
     FOR: "for"
+    EACH: "each"
     in_or_not: IN | NOT IN
     IN: "in"
     TOGETHER: "together"
+    BEFORE: "before"
     DISJOINT: "disjoint"
     NEXT_TO: "next_to"
     COUNT: "count"

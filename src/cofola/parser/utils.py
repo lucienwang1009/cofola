@@ -28,12 +28,14 @@ RESERVED_KEYWORDS = [
     "choose_sequence",
     "choose_replace_sequence",
     "together",
+    "before",
     "next_to",
     "not",
     "and",
     "or",
     "dedup_count",
     "for",
+    "each",
 ]
 
 RESERVED_PREFIXES = [

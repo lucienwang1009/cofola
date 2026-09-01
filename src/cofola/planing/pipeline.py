@@ -3,7 +3,7 @@
 PlaningPipeline.process(problem) is the single entry point.  It performs all
 planning work — passes, Shannon decomposition, connected-component
 decomposition — and returns a SolveSchedule describing exactly which
-(Problem, Analysis) pairs to hand to the WFOMC backend and how to combine
+(Problem, Analysis) pairs to hand to the selected backend and how to combine
 their counts.
 
 The caller (solver.py) only needs to:
@@ -33,6 +33,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import replace as dc_replace
+from typing import Iterable, cast
 
 from loguru import logger
 from sympy import Symbol, satisfiable
@@ -54,7 +55,13 @@ from cofola.frontend.constraints import (
     TupleIndexEq,
     TupleIndexMembership,
 )
-from cofola.frontend.objects import BagInit, Ordered, SequenceDef, SetInit, TupleDef
+from cofola.frontend.objects import (
+    BagInit,
+    Ordered,
+    SequenceDef,
+    SetInit,
+    TupleDef,
+)
 from cofola.frontend.pretty import fmt_analysis, fmt_problem
 from cofola.frontend.problem import Problem
 from cofola.frontend.utils import constraint_refs
@@ -66,17 +73,27 @@ from cofola.planing.pass_manager import (
     AnalysisManager,
     FixedPointPass,
     PassResult,
+    TransformPass,
     UnsatisfiableConstraint,
 )
-from cofola.planing.passes.lowering import LoweringPass
-from cofola.planing.passes.merge_identical import MergeIdenticalObjects
-from cofola.planing.passes.optimize import ConstantFolder, FullChoiceOptimizer, SizeConstraintFolder
-from cofola.planing.passes.simplify import SimplifyPass
 
 
 # ---------------------------------------------------------------------------
 # Result types
 # ---------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class PlanningProfile(object):
+    """Backend-requested planning configuration."""
+
+    global_passes: tuple[type[TransformPass] | FixedPointPass, ...] = ()
+    local_passes: tuple[type[TransformPass] | FixedPointPass, ...] | None = None
+
+    def is_empty(self) -> bool:
+        """Return True when no planner transformations are requested."""
+
+        return not self.global_passes and not self.local_passes
+
 
 @dataclass
 class SolveBranch:
@@ -207,10 +224,6 @@ def _decompose_into_components(problem: Problem) -> list[Problem]:
     return sub_problems if sub_problems else [problem]
 
 
-# ---------------------------------------------------------------------------
-# Pipeline
-# ---------------------------------------------------------------------------
-
 def _size_eq(ref: ObjRef, size: int) -> SizeConstraint:
     return SizeConstraint(terms=((ref, 1),), comparator="==", rhs=size)
 
@@ -232,28 +245,22 @@ def _is_dynamic_size_source(problem: Problem, ref: ObjRef) -> bool:
     return source_defn is not None and not isinstance(source_defn, (SetInit, BagInit))
 
 
+# ---------------------------------------------------------------------------
+# Pipeline
+# ---------------------------------------------------------------------------
+
 class PlaningPipeline:
     """Planing pipeline — the sole planning-layer interface.
 
     Call process(problem) to get a SolveSchedule.  All pass execution,
     Shannon decomposition, and connected-component decomposition happen here.
-    The caller only needs to evaluate the schedule against a WFOMC backend.
+    The caller only needs to evaluate the schedule against a backend.
     """
 
-    GLOBAL_PASSES = [
-        FixedPointPass(ConstantFolder),
-        FixedPointPass(FullChoiceOptimizer),
-        # Aliasing a choice can expose constant expressions such as B & B.
-        FixedPointPass(ConstantFolder),
-        MergeIdenticalObjects,
-    ]
-
-    LOCAL_PASSES = [
-        SizeConstraintFolder,
-        FixedPointPass(LoweringPass),
-        MergeIdenticalObjects,
-        SimplifyPass,
-    ]
+    def __init__(self, profile: PlanningProfile | None = None) -> None:
+        self.profile = profile or PlanningProfile()
+        self.global_passes = list(self.profile.global_passes)
+        self.local_passes = list(self.profile.local_passes or ())
 
     # ------------------------------------------------------------------
     # Public API
@@ -263,9 +270,10 @@ class PlaningPipeline:
         """Transform and decompose a problem into a ready-to-solve schedule.
 
         Steps:
-        1. Run GLOBAL_PASSES once on the full problem.
-        2. Shannon-decompose compound constraints (recursively flattened).
-        3. For each Shannon branch: run LOCAL_PASSES + component decomposition.
+        1. If the profile is empty, return the intact problem as one component.
+        2. Run profile.global_passes once on the full problem.
+        3. Shannon-decompose compound constraints (recursively flattened).
+        4. For each Shannon branch: run profile.local_passes + component decomposition.
 
         Returns:
             SolveSchedule with one SolveBranch per satisfying Shannon
@@ -273,9 +281,12 @@ class PlaningPipeline:
         """
         logger.debug("\n{}", fmt_problem(problem, stage="[Input] Parsed Problem"))
 
+        if self.profile.is_empty():
+            return self._make_intact_schedule(problem)
+
         # Phase 1: global structural passes
         try:
-            am = self.run_passes(problem, self.GLOBAL_PASSES)
+            am = self.run_passes(problem, self.global_passes)
         except UnsatisfiableConstraint as exc:
             logger.info("PlaningPipeline: unsatisfiable after global passes → 0 ({})", exc)
             return SolveSchedule(branches=[])
@@ -286,6 +297,14 @@ class PlaningPipeline:
         branches = self._collect_branches(am.problem)
         return SolveSchedule(branches=branches)
 
+    def _make_intact_schedule(self, problem: Problem) -> SolveSchedule:
+        """Return the original problem as one backend component."""
+
+        analysis = AnalysisManager(problem).get(BagClassification)
+        if analysis.unsatisfiable:
+            return SolveSchedule(branches=[])
+        return SolveSchedule(branches=[SolveBranch(components=[(problem, analysis)])])
+
     # ------------------------------------------------------------------
     # Pass runner (reusable helper)
     # ------------------------------------------------------------------
@@ -294,7 +313,7 @@ class PlaningPipeline:
     def run_passes(
         cls,
         problem: Problem,
-        pass_classes: list,
+        pass_classes: Iterable[type[TransformPass] | FixedPointPass],
         *,
         check_compound_invariant: bool = False,
     ) -> AnalysisManager:
@@ -450,20 +469,24 @@ class PlaningPipeline:
         logger.info("Shannon: {} atoms, formula={}", len(atomic_constraints), formula)
 
         branches: list[SolveBranch] = []
-        for model in satisfiable(formula, all_models=True):
+        models = satisfiable(formula, all_models=True)
+        if models is False or models is None:
+            return branches
+        for model in cast(Iterable[dict[Symbol, bool] | bool], models):
             if model is False:
                 break
+            model_values = {} if model is True else model
             sub_constraints: list[Constraint] = []
             for idx, atomic in enumerate(atomic_constraints):
                 sym = idx_to_sym[idx]
-                if model.get(sym, True):
+                if model_values.get(sym, True):
                     sub_constraints.append(atomic)
                 else:
                     sub_constraints.append(_negate_constraint(atomic))
 
             logger.debug(
                 "  model={} → {} constraints",
-                {str(k): v for k, v in model.items()},
+                {str(k): v for k, v in model_values.items()},
                 len(sub_constraints),
             )
             sub_prob = dc_replace(problem, constraints=tuple(sub_constraints))
@@ -472,20 +495,8 @@ class PlaningPipeline:
 
         return branches
 
-    # ------------------------------------------------------------------
-    # Internal: size-range decomposition for variable-size ordered collections
-    # ------------------------------------------------------------------
-
     def _materialize_full_ordered_source_sizes(self, problem: Problem) -> tuple[Problem, bool]:
         """Persist inferred |source| == k facts for full ordered objects."""
-        dynamic_sources = [
-            (ref, source)
-            for ref, defn in problem.defs
-            if (source := _full_ordered_source(defn)) is not None
-            and _is_dynamic_size_source(problem, source)
-        ]
-        if not dynamic_sources:
-            return problem, False
 
         analysis = AnalysisManager(problem).get(MergedAnalysis)
         if analysis.unsatisfiable:
@@ -493,7 +504,11 @@ class PlaningPipeline:
 
         extra_constraints: list[SizeConstraint] = []
         seen = set(problem.constraints)
-        for ref, source in dynamic_sources:
+        for ref, defn in problem.defs:
+            source = _full_ordered_source(defn)
+            if source is None or not _is_dynamic_size_source(problem, source):
+                continue
+
             info = analysis.set_info.get(ref) or analysis.bag_info.get(ref)
             if info is None or info.exact_size is None:
                 continue
@@ -512,8 +527,13 @@ class PlaningPipeline:
             len(extra_constraints),
         )
         return dc_replace(
-            problem, constraints=problem.constraints + tuple(extra_constraints),
+            problem,
+            constraints=problem.constraints + tuple(extra_constraints),
         ), True
+
+    # ------------------------------------------------------------------
+    # Internal: size-range decomposition for variable-size ordered collections
+    # ------------------------------------------------------------------
 
     def _decompose_ordered_sizes(self, problem: Problem) -> list[SolveBranch] | None:
         """Enumerate valid sizes for the first variable-size TupleDef/SequenceDef.
@@ -565,7 +585,8 @@ class PlaningPipeline:
                     if not _has_size_eq(problem, source, k):
                         size_constraints.append(_size_eq(source, k))
                 sub_prob = dc_replace(
-                    problem, constraints=problem.constraints + tuple(size_constraints),
+                    problem,
+                    constraints=problem.constraints + tuple(size_constraints),
                 )
                 branches.extend(self._collect_branches(sub_prob))
             return branches
@@ -610,7 +631,7 @@ class PlaningPipeline:
             # accurate here, since all constraints are atomic), LoweringPass,
             # MergeIdenticalObjects, SimplifyPass.
             try:
-                comp_am = self.run_passes(comp, self.LOCAL_PASSES)
+                comp_am = self.run_passes(comp, self.local_passes)
             except UnsatisfiableConstraint as exc:
                 logger.info("PlaningPipeline: unsatisfiable after local passes → 0 ({})", exc)
                 return []
