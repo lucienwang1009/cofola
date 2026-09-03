@@ -278,6 +278,28 @@ next_to(A, b) in row
     ) == 2
 
 
+def test_next_to_pattern_count_deduplicates_symmetric_pairs() -> None:
+    """An undirected adjacency is one occurrence when its arguments overlap."""
+    assert parse_and_solve(
+        """
+A = set(a, b)
+row = sequence(A)
+row.count(next_to(A, A)) == 1
+"""
+    ) == 2
+
+
+def test_next_to_pattern_count_counts_repeated_entity_boundaries_once() -> None:
+    """Each adjacent boundary is one occurrence even when both values are equal."""
+    assert parse_and_solve(
+        """
+B = bag(a: 3)
+row = sequence(B)
+row.count(next_to(a, a)) == 2
+"""
+    ) == 1
+
+
 def test_negative_predecessor_pattern_forbids_all_occurrences() -> None:
     """(a, b) not in seq means no matching predecessor pair occurs."""
     assert parse_and_solve(
