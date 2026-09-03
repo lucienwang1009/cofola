@@ -619,15 +619,27 @@ def _encode_sequence_relation_count(
     relation_name: str,
     relation_pred: object,
     context: Context,
+    *,
+    symmetric_values: bool = False,
 ) -> object:
-    """Encode a binary sequence relation and return its counting variable."""
+    """Encode a binary sequence relation and return its counting variable.
+
+    For an undirected relation, ``relation_pred`` is its canonical orientation
+    and ``symmetric_values`` matches either assignment of the endpoint values.
+    This keeps one weighted atom per related pair when the arguments overlap.
+    """
     left_pred = _get_seq_entity_pred(left, seq_ref, context)
     right_pred = _get_seq_entity_pred(right, seq_ref, context)
     left_name = context.problem.get_name(left) if isinstance(left, ObjRef) else str(left)
     right_name = context.problem.get_name(right) if isinstance(right, ObjRef) else str(right)
     pair_pred = create_aux_pred(2, f"{left_name}_{relation_name}_{right_name}")
+    value_match = f"{left_pred}(X) & {right_pred}(Y)"
+    if symmetric_values:
+        value_match = (
+            f"({value_match}) | ({right_pred}(X) & {left_pred}(Y))"
+        )
     context.sentence = context.sentence & parse(
-        f"\\forall X: (\\forall Y: (({left_pred}(X) & {right_pred}(Y) & "
+        f"\\forall X: (\\forall Y: ((({value_match}) & "
         f"{relation_pred}(X,Y)) <-> {pair_pred}(X,Y)))"
     )
     pair_var = context.create_var(pair_pred.name)
@@ -674,8 +686,9 @@ def _get_seq_pattern_count_var(
                 pattern.first,
                 pattern.second,
                 "next_to",
-                context.get_next_to_pred(seq_ref),
+                context.get_predecessor_pred(seq_ref),
                 context,
+                symmetric_values=True,
             )
 
         case _:
