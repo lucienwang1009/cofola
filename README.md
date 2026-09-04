@@ -40,7 +40,7 @@ from cofola.solver import parse_and_solve
 answer = parse_and_solve("""
 B = bag(a: 2, b: 2)
 C = choose(B, 2)
-""", lifted_bags=True)
+""")
 ```
 
 ## Language At A Glance
@@ -132,4 +132,5 @@ Cofola currently uses the `devel` branch of
 The WFOMC-specific `--lifted-bags` option enables factorized encoding of
 exchangeable bag entities; it is disabled by default. This optimization uses
 Ganak to compile the local 1-types and their symbolic weights, so `ganak` must
-be installed even when the outer WFOMC algorithm is not `propositional`.
+be installed even when the outer WFOMC algorithm is not `propositional`. The
+equivalent Python API opt-in is `parse_and_solve(source, lifted_bags=True)`.

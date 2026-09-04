@@ -28,9 +28,9 @@ def encode(
     """Encode a planning Problem + AnalysisResult to a WFOMC problem and decoder."""
     logger.debug("encode: {} objects to encode", len(list(problem.iter_objects())))
 
-    # When not using lifted inference, all indistinguishable entities must be
-    # treated as distinguishable. Work on a copy so backend encoding does not
-    # mutate cached planning analyses.
+    # Build the encoding plan from a private analysis copy. The plan starts
+    # from the known-correct per-entity encoding and restores only safe lifted
+    # orbits, without mutating cached planning analyses.
     encoding_analysis = deepcopy(analysis)
     lift_plan = (
         BagLiftPlan.build(problem, encoding_analysis)
