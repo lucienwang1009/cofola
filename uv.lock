@@ -36,6 +36,11 @@ dependencies = [
     { name = "wfomc" },
 ]
 
+[package.optional-dependencies]
+unaryfomc = [
+    { name = "unaryfomc" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "pytest" },
@@ -45,8 +50,10 @@ dev = [
 requires-dist = [
     { name = "loguru", specifier = ">=0.7" },
     { name = "scipy", specifier = ">=1.13.1" },
+    { name = "unaryfomc", marker = "extra == 'unaryfomc'", git = "https://github.com/supertweety/UnaryFOMC.git" },
     { name = "wfomc", git = "https://github.com/yuanhong-wang/WFOMC.git?branch=for_cofola" },
 ]
+provides-extras = ["unaryfomc"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = ">=9.0.2" }]
@@ -664,6 +671,11 @@ sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/5e/a7/c202b344c5ca7d
 wheels = [
     { url = "https://pypi.tuna.tsinghua.edu.cn/packages/c7/b0/003792df09decd6849a5e39c28b513c06e84436a54440380862b5aeff25d/tzdata-2025.3-py2.py3-none-any.whl", hash = "sha256:06a47e5700f3081aab02b2e513160914ff0694bce9947d6b76ebd6bf57cfc5d1", size = 348521, upload-time = "2025-12-13T17:45:33.889Z" },
 ]
+
+[[package]]
+name = "unaryfomc"
+version = "0.1.0"
+source = { git = "https://github.com/supertweety/UnaryFOMC.git#368ac7ecca937234fe95058ec2d817d1868ee649" }
 
 [[package]]
 name = "wcwidth"

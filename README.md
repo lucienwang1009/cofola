@@ -6,6 +6,7 @@ Cofola (COmbinatorial counting with First-Order logic LAnguage) is a declarative
 
 - **Declarative Modeling**: Define your problem using high-level concepts like sets, bags, and mappings.
 - **First-Order Logic Backend**: Leverages the power of Weighted First-Order Model Counting (WFOMC) to solve complex counting problems efficiently.
+- **Unary-Function Backend**: An experimental UnaryFOMC adapter solves the shared monadic set fragment and exposes its generated logical sentence.
 - **Constraint Support**: Easily specify cardinality constraints, functional dependencies, and more.
 
 ## Installation
@@ -20,6 +21,12 @@ This project uses `uv` for dependency management.
 uv sync
 ```
 
+To enable the experimental UnaryFOMC backend as well:
+
+```bash
+uv sync --extra unaryfomc
+```
+
 ## Usage
 
 To solve a problem defined in a `.cfl` file, use the `cofola` command via `uv run`:
@@ -28,10 +35,54 @@ To solve a problem defined in a `.cfl` file, use the `cofola` command via `uv ru
 uv run cofola -i <path_to_problem_file>
 ```
 
+The same program can be sent to UnaryFOMC when it belongs to the supported
+set fragment:
+
+```bash
+uv run cofola -i <path_to_problem_file> --backend unaryfomc
+```
+
 ### Options
 
 - `-i`, `--input_file`: Path to the input `.cfl` file (required).
 - `-d`, `--debug`: Enable debug logging.
+- `--backend`: Select `wfomc` (the default) or `unaryfomc`.
+
+The backend is also selectable through the Python API:
+
+```python
+from cofola import parse_and_solve
+
+program = """
+people = set(person0...8)
+committee = choose(people, 3)
+"""
+
+answer = parse_and_solve(program, backend="unaryfomc")
+assert answer == 56
+```
+
+### UnaryFOMC Backend
+
+The first UnaryFOMC integration deliberately targets the normalized,
+unweighted monadic set fragment. It currently supports:
+
+- explicit sets and subset choice, with or without a fixed size;
+- union, intersection, and difference;
+- linear constraints over set cardinalities;
+- membership, subset, disjointness, and set equality constraints; and
+- Boolean combinations of supported constraints, through Cofola's existing
+  IR decomposition.
+
+Bags, functions, tuples, sequences, circles, and partitions still use the
+default WFOMC backend. Asking UnaryFOMC to solve one of those constructs raises
+an error naming the first unsupported IR construct rather than silently
+changing its meaning.
+
+This basic adapter uses Cofola's finite list of explicit entities as the model
+domain. Symbolic domain-size parameters and direct asymptotic analysis of
+families of Cofola programs are planned extensions; they are not inferred by
+the current API.
 
 ## Language Examples
 
@@ -185,4 +236,8 @@ s = set(a, b) # Inline comment
 
 ## References
 
-This project relies on WFOMC algorithms and techniques. The implementation used is [here](https://github.com/yuanhong-wang/WFOMC). Please find the relevant literature on WFOMC in that repository.
+The default backend uses the WFOMC implementation available
+[here](https://github.com/yuanhong-wang/WFOMC). The experimental monadic set
+backend uses [UnaryFOMC](https://github.com/supertweety/UnaryFOMC), implementing
+the unary-function counting methods developed in
+[Unary Functions and Unlabeled Counting](https://arxiv.org/abs/2608.30580).
