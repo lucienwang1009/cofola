@@ -42,11 +42,11 @@ def test_constant_size_does_not_change_dynamic_choice() -> None:
     assert parse_and_solve("B = bag(a: 2, b: 1)\nC = choose(B)\n|B| == 3\n|C| == 2") == 2
 
 
-@pytest.mark.parametrize("lifted", [False, True])
-def test_constant_size_does_not_create_weight_variables(lifted: bool) -> None:
+@pytest.mark.parametrize("lifted_bags", [False, True])
+def test_constant_size_does_not_create_weight_variables(lifted_bags: bool) -> None:
     problem = parse("B = bag(a: 2, b: 1)\n|B| == 3")
     schedule = PlaningPipeline().process(problem)
     component, analysis = schedule.branches[0].components[0]
-    _, decoder = encode(component, analysis, lifted=lifted)
+    _, decoder = encode(component, analysis, lifted_bags=lifted_bags)
     assert decoder.gens == []
     assert all(bool(validator) for validator in decoder.validator)

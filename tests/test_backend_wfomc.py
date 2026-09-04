@@ -360,7 +360,7 @@ def test_encode_does_not_mutate_analysis_for_unlifted_mode() -> None:
         singletons=set(),
     )
 
-    encode(problem, analysis, lifted=False)
+    encode(problem, analysis, lifted_bags=False)
 
     assert analysis.bag_info[ref].dis_entities == set()
     assert analysis.bag_info[ref].indis_entities == {2: {a, b}}
@@ -513,7 +513,7 @@ def test_backend_does_not_convert_unexpected_solver_errors_to_zero(monkeypatch) 
         def decode_result(self, result: object) -> int:
             return 1
 
-    def fake_encode(problem: object, analysis: object, lifted: bool):
+    def fake_encode(problem: object, analysis: object, lifted_bags: bool):
         return FakeProblem(), FakeDecoder()
 
     def fake_solve_wfomc(

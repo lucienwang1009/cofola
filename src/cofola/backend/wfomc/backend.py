@@ -30,12 +30,12 @@ class WFOMCBackend(Backend):
         self,
         algo: Algo = Algo.FASTv2,
         unary_evidence_strategy: UnaryEvidenceStrategy = UnaryEvidenceStrategy.AUTO,
-        lifted: bool = False,
+        lifted_bags: bool = False,
         linear_order_encoding: LinearOrderEncoding | str | None = None,
     ) -> None:
         self.algo = algo
         self.unary_evidence_strategy = unary_evidence_strategy
-        self.lifted = lifted
+        self.lifted_bags = lifted_bags
         # Only consulted when algo == Algo.PROPOSITIONAL; ignored otherwise.
         # None lets the wfomc library use its default (PIN).
         self.linear_order_encoding = linear_order_encoding
@@ -59,7 +59,11 @@ class WFOMCBackend(Backend):
         logger.info("WFOMCBackend.solve: encoding planning problem ({} objects, {} constraints)",
                     len(list(problem.iter_objects())), len(problem.constraints))
 
-        wfomc_problem, decoder = encode(problem, analysis, self.lifted)
+        wfomc_problem, decoder = encode(
+            problem,
+            analysis,
+            lifted_bags=self.lifted_bags,
+        )
 
         algo = self.algo
         unary_evidence_strategy = self.unary_evidence_strategy

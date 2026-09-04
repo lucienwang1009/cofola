@@ -7,12 +7,13 @@ support older, incompatible WFOMC releases.
 """
 from __future__ import annotations
 
+from collections.abc import Iterable
 from enum import Enum
 from fractions import Fraction
-from typing import Mapping, TypeAlias
+from typing import Any, Mapping, TypeAlias, TypeVar, cast
 
-from flint import fmpq, fmpq_mpoly_ctx
-from sympy import Expr, Poly, sympify
+from flint import fmpq, fmpq_mpoly, fmpq_mpoly_ctx
+from sympy import Expr, Integer, Poly, Rational as SympyRational, sympify
 from wfomc import (
     AlgoName as _NativeAlgoName,
     AlgoOptions as _NativeAlgoOptions,
@@ -42,6 +43,7 @@ EncodedProblem: TypeAlias = _NativeProblemInstance
 EvidenceFormula: TypeAlias = _NativeAtom | _NativeNot
 Rational = Fraction
 top = true()
+_WeightKey = TypeVar("_WeightKey")
 
 
 class Algo(Enum):
@@ -100,8 +102,8 @@ def _coefficient(value: object) -> fmpq:
 
 
 def _native_weights(
-    weights: Mapping[Pred, tuple[object, object]],
-) -> dict[Pred, tuple[object, object]]:
+    weights: Mapping[_WeightKey, tuple[object, object]],
+) -> dict[_WeightKey, tuple[object, object]]:
     expressions = [sympify(value) for pair in weights.values() for value in pair]
     symbols = sorted(
         {symbol for expression in expressions for symbol in expression.free_symbols},
@@ -131,6 +133,55 @@ def _native_weights(
         predicate: (convert(positive), convert(negative))
         for predicate, (positive, negative) in weights.items()
     }
+
+
+def symbolic_ganak_count(
+    n_vars: int,
+    clauses: Iterable[Iterable[int]],
+    weights: Mapping[int, tuple[object, object]],
+) -> object:
+    """Return the exact symbolic WMC of a local propositional encoding.
+
+    Lifted bag compilation uses this adapter instead of depending on WFOMC's
+    FLINT and Ganak integration directly. The caller can describe literal
+    weights with the same SymPy expressions used by the outer Cofola encoding
+    and receives a SymPy polynomial back.
+    """
+    from wfomc.ganak import ganak_count
+
+    expressions = [sympify(value) for pair in weights.values() for value in pair]
+    symbols = sorted(
+        {symbol for expression in expressions for symbol in expression.free_symbols},
+        key=str,
+    )
+    native_weights = _native_weights(weights)
+    native_result = ganak_count(
+        n_vars,
+        clauses,
+        cast(Any, native_weights),
+        symbolic=bool(symbols),
+        npolyvars=len(symbols),
+        poly_ctx=(
+            fmpq_mpoly_ctx.get(tuple(map(str, symbols)), "lex")
+            if symbols
+            else None
+        ),
+    )
+    if isinstance(native_result, fmpq):
+        return SympyRational(int(native_result.p), int(native_result.q))
+    if not isinstance(native_result, fmpq_mpoly):
+        raise TypeError(
+            "Ganak returned an unsupported symbolic value: "
+            f"{type(native_result).__name__}"
+        )
+
+    result = Integer(0)
+    for monomial, coefficient in native_result.to_dict().items():
+        term = SympyRational(int(coefficient.p), int(coefficient.q))
+        for symbol, exponent in zip(symbols, monomial):
+            term *= cast(Any, symbol) ** exponent
+        result += term
+    return result
 
 
 def build_problem(
@@ -209,5 +260,6 @@ __all__ = [
     "normalize_sentence",
     "parse",
     "solve_problem",
+    "symbolic_ganak_count",
     "top",
 ]
