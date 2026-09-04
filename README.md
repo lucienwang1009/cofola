@@ -29,6 +29,7 @@ Run it:
 ```bash
 uv run cofola -i problems/others/bag.cfl
 uv run cofola -i problems/others/bag.cfl -d
+uv run cofola -i problems/others/bag.cfl --lifted-bags
 ```
 
 You can also solve source text or hand-built problems from Python:
@@ -37,9 +38,8 @@ You can also solve source text or hand-built problems from Python:
 from cofola.solver import parse_and_solve
 
 answer = parse_and_solve("""
-S = set(a, b, c)
-T = choose(S, 2)
-a in T
+B = bag(a: 2, b: 2)
+C = choose(B, 2)
 """)
 ```
 
@@ -128,3 +128,9 @@ notes.
 
 Cofola currently uses the `devel` branch of
 [yuanhong-wang/WFOMC](https://github.com/yuanhong-wang/WFOMC).
+
+The WFOMC-specific `--lifted-bags` option enables factorized encoding of
+exchangeable bag entities; it is disabled by default. This optimization uses
+Ganak to compile the local 1-types and their symbolic weights, so `ganak` must
+be installed even when the outer WFOMC algorithm is not `propositional`. The
+equivalent Python API opt-in is `parse_and_solve(source, lifted_bags=True)`.

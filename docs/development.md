@@ -54,6 +54,9 @@ rules:
 - bag union `+` is max multiplicity per entity
 - additive bag union `++` is sum multiplicity per entity
 - bag count atoms should resolve through the shared bag multiplicity helper
+- exchangeable bag factorization is opt-in through `lifted_bags=True` or the
+  `--lifted-bags` CLI option; the default remains the per-entity encoding; the
+  optimization uses Ganak for local symbolic 1-type counting
 - tuple index constraints should never reach the backend
 - sequence relation count predicates should be generated through the shared
   relation-count helper

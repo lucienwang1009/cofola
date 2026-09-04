@@ -62,7 +62,7 @@ def _get_bag_size_expr(
     no multiplicity variables. For other bags, the total size is:
       - Sum of entity vars for non-singleton distinguishable entities
       - A singleton contribution counted via bag_singletons_pred (if singletons exist)
-      - Sum of indistinguishable entity vars (usually empty for lifted=False)
+      - Sum of indistinguishable entity vars (usually empty when lifted bags are disabled)
 
     This must be called AFTER the bag object has been encoded so that entity
     vars for dis_entities already exist in context.ref_entity2var.
@@ -106,7 +106,7 @@ def _get_bag_size_expr(
             singleton_var = context.get_obj_var(ref, set_weight=False)
         term = term + singleton_var
 
-    # Indistinguishable entity vars (always empty when lifted=False).
+    # Indistinguishable entity vars (always empty when lifted bags are disabled).
     indis_vars = context.get_indis_entity_var(ref)  # dict[int, Expr]
     if indis_vars:
         term = term + sum(indis_vars.values())

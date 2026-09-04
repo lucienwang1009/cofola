@@ -8,6 +8,7 @@ from cofola.backend.wfomc.constraint_encoders import _encode_constraint
 from cofola.backend.wfomc.context import Context
 from cofola.backend.wfomc.decoder import Decoder
 from cofola.backend.wfomc.encoding_helpers import _encode_singleton
+from cofola.backend.wfomc.lifted_bags import BagLiftPlan
 from cofola.backend.wfomc.object_encoders import _encode_object
 from cofola.frontend.problem import Problem
 from cofola.planing.analysis.entities import AnalysisResult
@@ -22,22 +23,23 @@ from loguru import logger
 def encode(
     problem: Problem,
     analysis: AnalysisResult,
-    lifted: bool = False,
+    lifted_bags: bool = False,
 ) -> tuple[EncodedProblem, Decoder]:
     """Encode a planning Problem + AnalysisResult to a WFOMC problem and decoder."""
     logger.debug("encode: {} objects to encode", len(list(problem.iter_objects())))
 
-    # When not using lifted inference, all indistinguishable entities must be
-    # treated as distinguishable. Work on a copy so backend encoding does not
-    # mutate cached planning analyses.
+    # Build the encoding plan from a private analysis copy. The plan starts
+    # from the known-correct per-entity encoding and restores only safe lifted
+    # orbits, without mutating cached planning analyses.
     encoding_analysis = deepcopy(analysis)
-    if not lifted:
-        for info in encoding_analysis.bag_info.values():
-            for entities in info.indis_entities.values():
-                info.dis_entities.update(entities)
-            info.indis_entities = {}
+    lift_plan = (
+        BagLiftPlan.build(problem, encoding_analysis)
+        if lifted_bags
+        else BagLiftPlan.empty(problem, encoding_analysis)
+    )
 
     context = Context(problem, encoding_analysis)
+    lift_plan.prepare(context)
     logger.debug("WFOMC encode: singletons={}", context.singletons)
 
     if context.singletons:
@@ -63,6 +65,8 @@ def encode(
     logger.debug("encode: encoding {} constraints", len(problem.constraints))
     for c in problem.constraints:
         _encode_constraint(c, problem, encoding_analysis, context)
+
+    lift_plan.finalize(context)
 
     logger.debug(
         "encode: constraints encoded — validator={}, gen_vars={}, overcount={}",

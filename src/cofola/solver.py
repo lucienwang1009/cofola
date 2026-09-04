@@ -13,12 +13,19 @@ from cofola.backend.wfomc.backend import WFOMCBackend
 from cofola.parser.parser import parse
 
 
-def solve(problem: Problem, debug: bool = False, validate: bool = True) -> int:
+def solve(
+    problem: Problem,
+    debug: bool = False,
+    validate: bool = True,
+    lifted_bags: bool = False,
+) -> int:
     """Solve a combinatorics problem.
 
     :param problem: A cofola.frontend.Problem instance.
     :param debug: Enable debug logging.
     :param validate: Run frontend type validation before solving.
+    :param lifted_bags: Enable factorized encoding of exchangeable bag entities
+        in the WFOMC backend. Defaults to False.
     :return: the answer
     """
     setup_logging(debug)
@@ -27,23 +34,33 @@ def solve(problem: Problem, debug: bool = False, validate: bool = True) -> int:
     logger.info("Solving problem with {} objects, {} constraints",
                 len(problem.defs), len(problem.constraints))
     schedule = PlaningPipeline().process(problem)
-    backend = WFOMCBackend(lifted=False)
+    backend = WFOMCBackend(lifted_bags=lifted_bags)
     return sum(
         math.prod(backend.solve(p, a) for p, a in branch.components)
         for branch in schedule.branches
     )
 
 
-def parse_and_solve(text: str, debug: bool = False) -> int:
+def parse_and_solve(
+    text: str,
+    debug: bool = False,
+    lifted_bags: bool = False,
+) -> int:
     """Parse .cfl source text and solve the combinatorics problem.
 
     :param text: the .cofola source text
     :param debug: Enable debug logging.
+    :param lifted_bags: see :func:`solve`.
     :return: the answer
     """
     setup_logging(debug)
     logger.debug("Parsing input text ({} chars)", len(text))
-    return solve(parse(text, debug=debug), debug=debug, validate=False)
+    return solve(
+        parse(text, debug=debug),
+        debug=debug,
+        validate=False,
+        lifted_bags=lifted_bags,
+    )
 
 
 def parse_args():
@@ -52,6 +69,12 @@ def parse_args():
     )
     parser.add_argument('--input_file', '-i', required=True, type=str, help='input file')
     parser.add_argument('--debug', '-d', action='store_true', help='debug mode')
+    parser.add_argument(
+        '--lifted-bags',
+        action='store_true',
+        help='Factorize exchangeable bag entities in the WFOMC encoding. '
+             'Disabled by default and requires Ganak.',
+    )
     return parser.parse_args()
 
 
@@ -62,5 +85,9 @@ def main():
     logger.info('Input file: {}', input_file)
     with open(input_file, 'r') as f:
         text = f.read()
-    res: int = parse_and_solve(text, debug=args.debug)
+    res: int = parse_and_solve(
+        text,
+        debug=args.debug,
+        lifted_bags=args.lifted_bags,
+    )
     logger.info('Answer: {}', res)
