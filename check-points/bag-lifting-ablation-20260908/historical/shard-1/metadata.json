@@ -1,0 +1,236 @@
+{
+  "args": {
+    "manifest": "problems/benchmarks/manifest.json",
+    "output_dir": "check-points/historical/shard-1",
+    "timeout": 100.0,
+    "shard": 1,
+    "shards": 2,
+    "cpu": 20,
+    "memory_gib": null,
+    "ids": [
+      "banana_090",
+      "100",
+      "104",
+      "108",
+      "112",
+      "118",
+      "124",
+      "128",
+      "132",
+      "136",
+      "14",
+      "20",
+      "24",
+      "28",
+      "3",
+      "32",
+      "38",
+      "43",
+      "48",
+      "56",
+      "60",
+      "65",
+      "7",
+      "70",
+      "74",
+      "80",
+      "85",
+      "92",
+      "96"
+    ],
+    "repeat_only": true
+  },
+  "hostname": "server29",
+  "platform": "Linux-5.15.0-176-generic-x86_64-with-glibc2.35",
+  "python": "3.11.14",
+  "versions": {
+    "wfomc": "0.1.0",
+    "sympy": "1.14.0",
+    "python-flint": "0.8.0",
+    "numpy": "2.4.3",
+    "scipy": "1.17.1"
+  },
+  "source_sha256": "4c5e6a4f05d60fa8051cf5d316ade649e8bac712320fc0e1dcda189b01cf14f3",
+  "manifest_sha256": "b877cba417709385d3056f43f4f839c481013c547e0ec428d76e0c915dc28c8b",
+  "cpu_affinity": [
+    20
+  ],
+  "environment": {
+    "GANAK": "/home/sunshixin/lucien/cofola-lifted-bags-test-20260903/.venv/bin/ganak",
+    "PYTHONHASHSEED": "0",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "protocol": "Three additional alternating pairs for externally identified candidates. No timeout propagation. No encoding-size instrumentation.",
+  "cases": [
+    {
+      "suite": "real",
+      "case_id": "7",
+      "program": "math_books = set(math0...3)\nenglish_books = set(english0...5)\nshelf = sequence(math_books + english_books)\nshelf.together(math_books)\nshelf.together(english_books)",
+      "expected": 1440,
+      "tags": [
+        "set",
+        "sequence",
+        "together",
+        "benchmark"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "20",
+      "program": "friends = set(friend0...5)\ngroup = choose(friends, 3)",
+      "expected": 10,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "28",
+      "program": "S = set(0...5)\nC = compose(S, 3)",
+      "expected": 243,
+      "tags": [
+        "set",
+        "composition"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "38",
+      "program": "B = bag(ball: 4)\nP = partition(B, 2)",
+      "expected": 3,
+      "tags": [
+        "bag",
+        "partition"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "48",
+      "program": "copies = bag(Geometry: 3, Number_Theory: 4)\narrangement = tuple(copies)",
+      "expected": 35,
+      "tags": [
+        "bag",
+        "tuple"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "60",
+      "program": "toppings = set(topping0...9)\npizzas = choose(toppings, 2)",
+      "expected": 36,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "70",
+      "program": "cookies = set(chip, oatmeal, peanut_butter)\nassortments = choose_replace(cookies, 6)",
+      "expected": 28,
+      "tags": [
+        "set",
+        "choose_replace"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "80",
+      "program": "green = set(g0...2)\nred = set(r0...3)\nblue = set(b0)\nfrogs = green + red + blue\nrow = sequence(frogs)\nnot (next_to(green,red) in row)",
+      "expected": 24,
+      "tags": [
+        "set",
+        "sequence",
+        "next_to",
+        "not constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "92",
+      "program": "members = set(member0...25)\npresident_secretary_treasurer = choose_replace_tuple(members, 3)\npresident_secretary_treasurer.dedup_count(members) > 1",
+      "expected": 15600,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing",
+        "union",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "100",
+      "program": "red = set(r0...26)\nblack = set(b0...26)\ncards = red + black\nchosen = choose(cards, 2)\nchosen subset red\norder = tuple(chosen)",
+      "expected": 650,
+      "tags": [
+        "set",
+        "choose",
+        "tuple"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "108",
+      "program": "team = set(0...10)\ngroups = partition(team, 2)\n|part| == 5 for part in groups",
+      "expected": 126,
+      "tags": [
+        "partition",
+        "benchmark"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "118",
+      "program": "students = set(0...10)\nlunch = compose(students, 2)",
+      "expected": 1024,
+      "tags": [
+        "set",
+        "composition"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "128",
+      "program": "digits = set(0...10)\ngreater_than_4 = set(5...10)\ncode = choose_replace_tuple(digits, 5)\ncode[0] in greater_than_4\ncode[1] in greater_than_4\ncode[2] in greater_than_4",
+      "expected": 12500,
+      "tags": [
+        "set",
+        "choose_permute",
+        "tuple",
+        "index",
+        "in"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "136",
+      "program": "puppies = set(puppy0...15)\nkittens = set(kitten0...6)\nhamsters = set(hamster0...8)\nbought = choose(puppies + kittens + hamsters, 3)\nS = tuple(bought)\n|bought & puppies| <= 1\n|bought & kittens| <= 1\n|bought & hamsters| <= 1",
+      "expected": 4320,
+      "tags": [
+        "set",
+        "choose",
+        "tuple",
+        "intersection",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    }
+  ]
+}

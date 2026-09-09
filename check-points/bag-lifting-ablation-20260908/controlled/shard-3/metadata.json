@@ -1,0 +1,167 @@
+{
+  "args": {
+    "manifest": "problems/benchmarks/bag-lifting/manifest.json",
+    "output_dir": "check-points/controlled/shard-3",
+    "timeout": 100.0,
+    "shard": 3,
+    "shards": 4,
+    "cpu": 29,
+    "memory_gib": 16,
+    "ids": null
+  },
+  "hostname": "server29",
+  "platform": "Linux-5.15.0-176-generic-x86_64-with-glibc2.35",
+  "python": "3.11.14",
+  "versions": {
+    "wfomc": "0.1.0",
+    "sympy": "1.14.0",
+    "python-flint": "0.8.0",
+    "numpy": "2.4.3",
+    "scipy": "1.17.1"
+  },
+  "source_sha256": "7b2a3e259c1db90eb412d575f052ff59652f29799e4c48654787b5719862611e",
+  "manifest_sha256": "a7b2814d7f2d0f643a45537dba74423b4dd6e434dddb925e881e0fe718c7d126",
+  "cpu_affinity": [
+    29
+  ],
+  "environment": {
+    "GANAK": "/home/sunshixin/lucien/cofola-lifted-bags-test-20260903/.venv/bin/ganak",
+    "PYTHONHASHSEED": "0",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "protocol": "Alternating paired off/on; one initial run; three additional pairs for >=20% AND >=0.1s slowdown, lost solution, wrong answer, mismatch, or error. No timeout propagation. No encoding-size instrumentation.",
+  "cases": [
+    {
+      "suite": "bag_lifting",
+      "case_id": "choose_n16_m02",
+      "program": "B = bag(e0: 2, e1: 2, e2: 2, e3: 2, e4: 2, e5: 2, e6: 2, e7: 2, e8: 2, e9: 2, e10: 2, e11: 2, e12: 2, e13: 2, e14: 2, e15: 2)\nX = choose(B, 16)",
+      "expected": 5196627,
+      "tags": [
+        "shape=choose",
+        "entities=16",
+        "multiplicity=2",
+        "size=16"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "choose_n04_m16",
+      "program": "B = bag(e0: 16, e1: 16, e2: 16, e3: 16)\nX = choose(B, 32)",
+      "expected": 3281,
+      "tags": [
+        "shape=choose",
+        "entities=4",
+        "multiplicity=16",
+        "size=32"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "chain_n16_m02",
+      "program": "B = bag(e0: 2, e1: 2, e2: 2, e3: 2, e4: 2, e5: 2, e6: 2, e7: 2, e8: 2, e9: 2, e10: 2, e11: 2, e12: 2, e13: 2, e14: 2, e15: 2)\nX = choose(B, 16)\nY = choose(X, 8)",
+      "expected": 13892650200,
+      "tags": [
+        "shape=chain",
+        "entities=16",
+        "multiplicity=2",
+        "size=16"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "chain_n04_m16",
+      "program": "B = bag(e0: 16, e1: 16, e2: 16, e3: 16)\nX = choose(B, 32)\nY = choose(X, 16)",
+      "expected": 721905,
+      "tags": [
+        "shape=chain",
+        "entities=4",
+        "multiplicity=16",
+        "size=32"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "hidden_n16_m02",
+      "program": "B = bag(e0: 2, e1: 2, e2: 2, e3: 2, e4: 2, e5: 2, e6: 2, e7: 2, e8: 2, e9: 2, e10: 2, e11: 2, e12: 2, e13: 2, e14: 2, e15: 2)\nX = choose(B)\nY = choose(X, 16)",
+      "expected": 78210099718,
+      "tags": [
+        "shape=hidden",
+        "entities=16",
+        "multiplicity=2",
+        "size=16"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "hidden_n04_m16",
+      "program": "B = bag(e0: 16, e1: 16, e2: 16, e3: 16)\nX = choose(B)\nY = choose(X, 32)",
+      "expected": 11008809,
+      "tags": [
+        "shape=hidden",
+        "entities=4",
+        "multiplicity=16",
+        "size=32"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "intersection_n16_m02",
+      "program": "B = bag(e0: 2, e1: 2, e2: 2, e3: 2, e4: 2, e5: 2, e6: 2, e7: 2, e8: 2, e9: 2, e10: 2, e11: 2, e12: 2, e13: 2, e14: 2, e15: 2)\nX = choose(B, 16)\nY = choose(B, 16)\nZ = X & Y\n|Z| == 8",
+      "expected": 5795143445520,
+      "tags": [
+        "shape=intersection",
+        "entities=16",
+        "multiplicity=2",
+        "size=16"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "intersection_n04_m16",
+      "program": "B = bag(e0: 16, e1: 16, e2: 16, e3: 16)\nX = choose(B, 32)\nY = choose(B, 32)\nZ = X & Y\n|Z| == 16",
+      "expected": 449106,
+      "tags": [
+        "shape=intersection",
+        "entities=4",
+        "multiplicity=16",
+        "size=32"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "named_n16_m02",
+      "program": "B = bag(e0: 2, e1: 2, e2: 2, e3: 2, e4: 2, e5: 2, e6: 2, e7: 2, e8: 2, e9: 2, e10: 2, e11: 2, e12: 2, e13: 2, e14: 2, e15: 2)\nX = choose(B, 16)\nX.count(e0) == 1",
+      "expected": 1787607,
+      "tags": [
+        "shape=named",
+        "entities=16",
+        "multiplicity=2",
+        "size=16"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "fallback_n16_m02",
+      "program": "B = bag(e0: 2, e1: 2, e2: 2, e3: 2, e4: 2, e5: 2, e6: 2, e7: 2, e8: 2, e9: 2, e10: 2, e11: 2, e12: 2, e13: 2, e14: 2, e15: 2)\nX = choose(B)\nY = choose(B)\nZ = X + Y\n|Z| == 16",
+      "expected": 12047551338771,
+      "tags": [
+        "shape=fallback",
+        "entities=16",
+        "multiplicity=2",
+        "size=16"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    }
+  ]
+}

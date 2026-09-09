@@ -1,0 +1,27 @@
+2026-09-08 07:26:53.738 | INFO     | __main__:main:103 - 2/40 bag_lifting:choose_n04_m02 lifting=True rep=0 solved 0.405s
+2026-09-08 07:26:54.283 | INFO     | __main__:main:103 - 2/40 bag_lifting:choose_n04_m02 lifting=False rep=0 solved 0.544s
+2026-09-08 07:26:54.699 | INFO     | __main__:main:103 - 6/40 bag_lifting:choose_n04_m04 lifting=True rep=0 solved 0.415s
+2026-09-08 07:26:55.245 | INFO     | __main__:main:103 - 6/40 bag_lifting:choose_n04_m04 lifting=False rep=0 solved 0.544s
+2026-09-08 07:26:55.711 | INFO     | __main__:main:103 - 10/40 bag_lifting:chain_n04_m02 lifting=True rep=0 solved 0.465s
+2026-09-08 07:26:56.466 | INFO     | __main__:main:103 - 10/40 bag_lifting:chain_n04_m02 lifting=False rep=0 solved 0.754s
+2026-09-08 07:26:56.937 | INFO     | __main__:main:103 - 14/40 bag_lifting:chain_n04_m04 lifting=True rep=0 solved 0.469s
+2026-09-08 07:26:58.423 | INFO     | __main__:main:103 - 14/40 bag_lifting:chain_n04_m04 lifting=False rep=0 solved 1.485s
+2026-09-08 07:26:58.881 | INFO     | __main__:main:103 - 18/40 bag_lifting:hidden_n04_m02 lifting=True rep=0 solved 0.457s
+2026-09-08 07:26:59.629 | INFO     | __main__:main:103 - 18/40 bag_lifting:hidden_n04_m02 lifting=False rep=0 solved 0.747s
+2026-09-08 07:27:00.096 | INFO     | __main__:main:103 - 22/40 bag_lifting:hidden_n04_m04 lifting=True rep=0 solved 0.465s
+2026-09-08 07:27:01.581 | INFO     | __main__:main:103 - 22/40 bag_lifting:hidden_n04_m04 lifting=False rep=0 solved 1.484s
+2026-09-08 07:27:02.560 | INFO     | __main__:main:103 - 26/40 bag_lifting:intersection_n04_m02 lifting=True rep=0 solved 0.976s
+2026-09-08 07:27:04.369 | INFO     | __main__:main:103 - 26/40 bag_lifting:intersection_n04_m02 lifting=False rep=0 solved 1.807s
+2026-09-08 07:27:05.449 | INFO     | __main__:main:103 - 30/40 bag_lifting:intersection_n04_m04 lifting=True rep=0 solved 1.078s
+2026-09-08 07:27:39.054 | INFO     | __main__:main:103 - 30/40 bag_lifting:intersection_n04_m04 lifting=False rep=0 error 33.604s
+2026-09-08 07:28:12.463 | INFO     | __main__:main:103 - 30/40 bag_lifting:intersection_n04_m04 lifting=False rep=1 error 33.407s
+2026-09-08 07:28:13.391 | INFO     | __main__:main:103 - 30/40 bag_lifting:intersection_n04_m04 lifting=True rep=1 solved 0.927s
+2026-09-08 07:28:14.315 | INFO     | __main__:main:103 - 30/40 bag_lifting:intersection_n04_m04 lifting=True rep=2 solved 0.922s
+2026-09-08 07:28:47.678 | INFO     | __main__:main:103 - 30/40 bag_lifting:intersection_n04_m04 lifting=False rep=2 error 33.362s
+2026-09-08 07:29:21.128 | INFO     | __main__:main:103 - 30/40 bag_lifting:intersection_n04_m04 lifting=False rep=3 error 33.449s
+2026-09-08 07:29:22.053 | INFO     | __main__:main:103 - 30/40 bag_lifting:intersection_n04_m04 lifting=True rep=3 solved 0.924s
+2026-09-08 07:29:22.512 | INFO     | __main__:main:103 - 34/40 bag_lifting:named_n04_m02 lifting=True rep=0 solved 0.458s
+2026-09-08 07:29:23.065 | INFO     | __main__:main:103 - 34/40 bag_lifting:named_n04_m02 lifting=False rep=0 solved 0.551s
+2026-09-08 07:29:24.862 | INFO     | __main__:main:103 - 38/40 bag_lifting:fallback_n04_m02 lifting=True rep=0 solved 1.796s
+2026-09-08 07:29:26.665 | INFO     | __main__:main:103 - 38/40 bag_lifting:fallback_n04_m02 lifting=False rep=0 solved 1.801s
+2026-09-08 07:29:26.665 | INFO     | __main__:main:108 - Complete: {'solved': 22, 'error': 4}

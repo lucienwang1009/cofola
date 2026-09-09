@@ -1,0 +1,3 @@
+B = bag(e0: 16, e1: 16, e2: 16, e3: 16)
+X = choose(B, 32)
+Y = choose(X, 16)

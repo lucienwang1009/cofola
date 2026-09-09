@@ -1,0 +1,5 @@
+B = bag(e0: 8, e1: 8, e2: 8, e3: 8)
+X = choose(B, 16)
+Y = choose(B, 16)
+Z = X & Y
+|Z| == 8

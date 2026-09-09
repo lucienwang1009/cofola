@@ -1,0 +1,167 @@
+{
+  "args": {
+    "manifest": "problems/benchmarks/bag-lifting/manifest.json",
+    "output_dir": "check-points/controlled/shard-1",
+    "timeout": 100.0,
+    "shard": 1,
+    "shards": 4,
+    "cpu": 21,
+    "memory_gib": 16,
+    "ids": null
+  },
+  "hostname": "server29",
+  "platform": "Linux-5.15.0-176-generic-x86_64-with-glibc2.35",
+  "python": "3.11.14",
+  "versions": {
+    "wfomc": "0.1.0",
+    "sympy": "1.14.0",
+    "python-flint": "0.8.0",
+    "numpy": "2.4.3",
+    "scipy": "1.17.1"
+  },
+  "source_sha256": "7b2a3e259c1db90eb412d575f052ff59652f29799e4c48654787b5719862611e",
+  "manifest_sha256": "a7b2814d7f2d0f643a45537dba74423b4dd6e434dddb925e881e0fe718c7d126",
+  "cpu_affinity": [
+    21
+  ],
+  "environment": {
+    "GANAK": "/home/sunshixin/lucien/cofola-lifted-bags-test-20260903/.venv/bin/ganak",
+    "PYTHONHASHSEED": "0",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "protocol": "Alternating paired off/on; one initial run; three additional pairs for >=20% AND >=0.1s slowdown, lost solution, wrong answer, mismatch, or error. No timeout propagation. No encoding-size instrumentation.",
+  "cases": [
+    {
+      "suite": "bag_lifting",
+      "case_id": "choose_n04_m02",
+      "program": "B = bag(e0: 2, e1: 2, e2: 2, e3: 2)\nX = choose(B, 4)",
+      "expected": 19,
+      "tags": [
+        "shape=choose",
+        "entities=4",
+        "multiplicity=2",
+        "size=4"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "choose_n04_m04",
+      "program": "B = bag(e0: 4, e1: 4, e2: 4, e3: 4)\nX = choose(B, 8)",
+      "expected": 85,
+      "tags": [
+        "shape=choose",
+        "entities=4",
+        "multiplicity=4",
+        "size=8"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "chain_n04_m02",
+      "program": "B = bag(e0: 2, e1: 2, e2: 2, e3: 2)\nX = choose(B, 4)\nY = choose(X, 2)",
+      "expected": 72,
+      "tags": [
+        "shape=chain",
+        "entities=4",
+        "multiplicity=2",
+        "size=4"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "chain_n04_m04",
+      "program": "B = bag(e0: 4, e1: 4, e2: 4, e3: 4)\nX = choose(B, 8)\nY = choose(X, 4)",
+      "expected": 889,
+      "tags": [
+        "shape=chain",
+        "entities=4",
+        "multiplicity=4",
+        "size=8"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "hidden_n04_m02",
+      "program": "B = bag(e0: 2, e1: 2, e2: 2, e3: 2)\nX = choose(B)\nY = choose(X, 4)",
+      "expected": 214,
+      "tags": [
+        "shape=hidden",
+        "entities=4",
+        "multiplicity=2",
+        "size=4"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "hidden_n04_m04",
+      "program": "B = bag(e0: 4, e1: 4, e2: 4, e3: 4)\nX = choose(B)\nY = choose(X, 8)",
+      "expected": 4275,
+      "tags": [
+        "shape=hidden",
+        "entities=4",
+        "multiplicity=4",
+        "size=8"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "intersection_n04_m02",
+      "program": "B = bag(e0: 2, e1: 2, e2: 2, e3: 2)\nX = choose(B, 4)\nY = choose(B, 4)\nZ = X & Y\n|Z| == 2",
+      "expected": 168,
+      "tags": [
+        "shape=intersection",
+        "entities=4",
+        "multiplicity=2",
+        "size=4"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "intersection_n04_m04",
+      "program": "B = bag(e0: 4, e1: 4, e2: 4, e3: 4)\nX = choose(B, 8)\nY = choose(B, 8)\nZ = X & Y\n|Z| == 4",
+      "expected": 1734,
+      "tags": [
+        "shape=intersection",
+        "entities=4",
+        "multiplicity=4",
+        "size=8"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "named_n04_m02",
+      "program": "B = bag(e0: 2, e1: 2, e2: 2, e3: 2)\nX = choose(B, 4)\nX.count(e0) == 1",
+      "expected": 7,
+      "tags": [
+        "shape=named",
+        "entities=4",
+        "multiplicity=2",
+        "size=4"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    },
+    {
+      "suite": "bag_lifting",
+      "case_id": "fallback_n04_m02",
+      "program": "B = bag(e0: 2, e1: 2, e2: 2, e3: 2)\nX = choose(B)\nY = choose(B)\nZ = X + Y\n|Z| == 4",
+      "expected": 771,
+      "tags": [
+        "shape=fallback",
+        "entities=4",
+        "multiplicity=2",
+        "size=4"
+      ],
+      "source": "Deterministic integer DP over entity multiplicity vectors; independent of solver encodings"
+    }
+  ]
+}

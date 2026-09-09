@@ -12,6 +12,7 @@ import csv
 import json
 import multiprocessing as mp
 import os
+import signal
 import time
 import traceback
 from dataclasses import asdict
@@ -185,6 +186,11 @@ def parse_args() -> argparse.Namespace:
         help="WFOMC algorithm (only used by the wfomc backend). Default: fastv2.",
     )
     parser.add_argument(
+        "--lifted-bags",
+        action="store_true",
+        help="Opt into lifted bag factorization for WFOMC (requires Ganak).",
+    )
+    parser.add_argument(
         "--linear-order-encoding",
         choices=("pin", "axioms"),
         default=None,
@@ -268,6 +274,7 @@ def main() -> None:
                 not args.no_skip_larger_growing_after_timeout
             ),
             "algo": args.algo,
+            "lifted_bags": args.lifted_bags,
             "linear_order_encoding": args.linear_order_encoding,
             "conjure_dir": str(args.conjure_dir) if args.conjure_dir is not None else None,
             "java_bin": str(args.java_bin) if args.java_bin is not None else None,
@@ -309,6 +316,7 @@ def main() -> None:
                     timeout=args.timeout,
                     debug=args.debug,
                     algo=args.algo,
+                    lifted_bags=args.lifted_bags,
                     linear_order_encoding=args.linear_order_encoding,
                     conjure_dir=args.conjure_dir,
                     java_bin=args.java_bin,
@@ -348,6 +356,7 @@ def run_case(
     timeout: float,
     debug: bool,
     algo: str = "fastv2",
+    lifted_bags: bool = False,
     linear_order_encoding: str | None = None,
     conjure_dir: Path | None = DEFAULT_CONJURE_DIR,
     java_bin: Path | None = DEFAULT_JAVA_BIN,
@@ -376,6 +385,7 @@ def run_case(
             conjure_dir,
             java_bin,
             worker_timeout,
+            lifted_bags,
         ),
     )
     started = time.perf_counter()
@@ -384,8 +394,18 @@ def run_case(
     elapsed = time.perf_counter() - started
 
     if process.is_alive():
-        process.terminate()
+        # Include local Ganak subprocesses in the timeout boundary on POSIX.
+        if os.name == "posix":
+            try:
+                os.killpg(process.pid, signal.SIGTERM)
+            except ProcessLookupError:
+                process.terminate()
+        else:
+            process.terminate()
         process.join(2)
+        if process.is_alive():
+            process.kill()
+            process.join()
         return _row_from_payload(
             case,
             backend=backend,
@@ -535,8 +555,13 @@ def _solve_worker(
     conjure_dir: Path | None = DEFAULT_CONJURE_DIR,
     java_bin: Path | None = DEFAULT_JAVA_BIN,
     timeout: float = 300.0,
+    lifted_bags: bool = False,
 ) -> None:
+    if os.name == "posix" and mp.parent_process() is not None:
+        os.setsid()
     kwargs = dict(backend=backend, algo=algo, linear_order_encoding=linear_order_encoding)
+    if backend == "wfomc":
+        kwargs["lifted_bags"] = lifted_bags
     try:
         if backend == "essence":
             from cofola.backend.essence.backend import EssenceBackend
