@@ -1,0 +1,5 @@
+B = bag(e0: 2, e1: 2)
+X = choose(B, 2)
+Y = choose(B, 2)
+Z = X & Y
+|Z| == 1

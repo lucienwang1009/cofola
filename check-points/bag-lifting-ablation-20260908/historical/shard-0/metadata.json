@@ -1,0 +1,262 @@
+{
+  "args": {
+    "manifest": "problems/benchmarks/manifest.json",
+    "output_dir": "check-points/historical/shard-0",
+    "timeout": 100.0,
+    "shard": 0,
+    "shards": 2,
+    "cpu": 16,
+    "memory_gib": null,
+    "ids": [
+      "banana_090",
+      "100",
+      "104",
+      "108",
+      "112",
+      "118",
+      "124",
+      "128",
+      "132",
+      "136",
+      "14",
+      "20",
+      "24",
+      "28",
+      "3",
+      "32",
+      "38",
+      "43",
+      "48",
+      "56",
+      "60",
+      "65",
+      "7",
+      "70",
+      "74",
+      "80",
+      "85",
+      "92",
+      "96"
+    ],
+    "repeat_only": true
+  },
+  "hostname": "server29",
+  "platform": "Linux-5.15.0-176-generic-x86_64-with-glibc2.35",
+  "python": "3.11.14",
+  "versions": {
+    "wfomc": "0.1.0",
+    "sympy": "1.14.0",
+    "python-flint": "0.8.0",
+    "numpy": "2.4.3",
+    "scipy": "1.17.1"
+  },
+  "source_sha256": "4c5e6a4f05d60fa8051cf5d316ade649e8bac712320fc0e1dcda189b01cf14f3",
+  "manifest_sha256": "b877cba417709385d3056f43f4f839c481013c547e0ec428d76e0c915dc28c8b",
+  "cpu_affinity": [
+    16
+  ],
+  "environment": {
+    "GANAK": "/home/sunshixin/lucien/cofola-lifted-bags-test-20260903/.venv/bin/ganak",
+    "PYTHONHASHSEED": "0",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "protocol": "Three additional alternating pairs for externally identified candidates. No timeout propagation. No encoding-size instrumentation.",
+  "cases": [
+    {
+      "suite": "real",
+      "case_id": "3",
+      "program": "people = set(0...11)\ncaptains = choose(people, 3)",
+      "expected": 165,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "14",
+      "program": "interested_girls = set(girl0...6)\ninterested_boys = set(boy0...11)\ntrip_girls = choose(interested_girls, 3)\ntrip_boys = choose(interested_boys, 5)",
+      "expected": 9240,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "24",
+      "program": "teams = set(t0...4)\nteam1 = set(member0...7)\nteam2 = set(member7...14)\nteam3 = set(member14...21)\nteam4 = set(member21...28)\nhost = choose(teams, 1)\nhost_members = choose(team1, 3)\nnon_host_members = choose(team2, 2) + choose(team3, 2) + choose(team4, 2)",
+      "expected": 1296540,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing",
+        "second order logic"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "32",
+      "program": "trees = bag(apple: 2, pear: 5)\nrow = tuple(trees)",
+      "expected": 21,
+      "tags": [
+        "bag",
+        "tuple"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "43",
+      "program": "marbles = set(red, blue, green, yellow)\nS = choose(marbles)\n|S| > 0",
+      "expected": 15,
+      "tags": [
+        "set",
+        "choose",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "56",
+      "program": "team = set(0...15)\nstarting = choose(team, 7)\ngoalie = choose(starting, 1)",
+      "expected": 45045,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "65",
+      "program": "digits = set(0...10)\nnumber = choose_replace_tuple(digits, 5)\nnumber[0] != 0\nnumber.count(set(2, 3)) > 0",
+      "expected": 61328,
+      "tags": [
+        "set",
+        "choose_replace_permute",
+        "tuple",
+        "index",
+        "compare element",
+        "count element",
+        "not constraint",
+        "or constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "74",
+      "program": "digits = set(0...10)\nnumber = choose_replace_tuple(digits, 5)\nnumber[1] != 0\nnumber.count(0) > 0",
+      "expected": 30951,
+      "tags": [
+        "set",
+        "choose_replace_permute",
+        "index",
+        "compare element",
+        "multiplicity constraint",
+        "not constraint",
+        "benchmark"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "85",
+      "program": "upper = set(u0...5)\nlower = set(l0...10)\nupper_comb = choose(upper, 4)\nlower_comb = choose(lower, 8)",
+      "expected": 225,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "96",
+      "program": "books = set(math1, math2, other0...4)\nshelf = sequence(books)\nnot (next_to(math1, math2) in shelf)",
+      "expected": 480,
+      "tags": [
+        "set",
+        "sequence",
+        "next_to",
+        "not constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "104",
+      "program": "Republicans = set(Republican0...8)\nDemocrats = set(Democrat0...6)\nsubcommittee = choose(Republicans + Democrats)\n|subcommittee & Republicans| == 3\n|subcommittee & Democrats| == 2",
+      "expected": 840,
+      "tags": [
+        "set",
+        "choose",
+        "intersection",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "112",
+      "program": "Republicans = set(Republican0...8)\nDemocrats = set(Democrat0...6)\nsubcommittee = choose(Republicans + Democrats, 5)\n|subcommittee & Republicans| > 0\n|subcommittee & Democrats| > 0",
+      "expected": 1940,
+      "tags": [
+        "set",
+        "choose",
+        "intersection",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "124",
+      "program": "balls = set(0...5)\nboxes = compose(balls, 2)",
+      "expected": 32,
+      "tags": [
+        "set",
+        "composition"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "132",
+      "program": "vowels = bag(A, E, I, A)\nconsonants = bag(M, T, H, M, T, C, S)\nchosen_vowels = choose(vowels, 2)\nchosen_consonants = choose(consonants, 4)",
+      "expected": 72,
+      "tags": [
+        "bag",
+        "choose",
+        "multiple choosing",
+        "benchmark"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_090",
+      "program": "letters = bag(B: 15, A: 45, N: 30)\nword = choose_tuple(letters, 90)",
+      "expected": 35806695484463943560955394491153934080,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=90"
+      ],
+      "source": "BANANA bag tuple"
+    }
+  ]
+}

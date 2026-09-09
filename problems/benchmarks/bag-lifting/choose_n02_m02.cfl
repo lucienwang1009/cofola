@@ -1,0 +1,2 @@
+B = bag(e0: 2, e1: 2)
+X = choose(B, 2)

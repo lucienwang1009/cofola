@@ -1,0 +1,3857 @@
+{
+  "args": {
+    "manifest": "problems/benchmarks/manifest.json",
+    "output_dir": "check-points/paper/shard-3",
+    "timeout": 100.0,
+    "shard": 3,
+    "shards": 4,
+    "cpu": 28,
+    "ids": null
+  },
+  "hostname": "server29",
+  "platform": "Linux-5.15.0-176-generic-x86_64-with-glibc2.35",
+  "python": "3.11.14",
+  "versions": {
+    "wfomc": "0.1.0",
+    "sympy": "1.14.0",
+    "python-flint": "0.8.0",
+    "numpy": "2.4.3",
+    "scipy": "1.17.1"
+  },
+  "source_sha256": "05c936cef57a953308e82f51a6c231cf557053b3b17c8e2f4d2dbf2003d1c41f",
+  "manifest_sha256": "b877cba417709385d3056f43f4f839c481013c547e0ec428d76e0c915dc28c8b",
+  "cpu_affinity": [
+    28
+  ],
+  "environment": {
+    "GANAK": "/home/sunshixin/lucien/cofola-lifted-bags-test-20260903/.venv/bin/ganak",
+    "PYTHONHASHSEED": "0",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "protocol": "Alternating paired off/on; one initial run; three additional pairs for >=20% AND >=0.1s slowdown, lost solution, wrong answer, mismatch, or error. No timeout propagation. No encoding-size instrumentation.",
+  "cases": [
+    {
+      "suite": "real",
+      "case_id": "3",
+      "program": "people = set(0...11)\ncaptains = choose(people, 3)",
+      "expected": 165,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "7",
+      "program": "math_books = set(math0...3)\nenglish_books = set(english0...5)\nshelf = sequence(math_books + english_books)\nshelf.together(math_books)\nshelf.together(english_books)",
+      "expected": 1440,
+      "tags": [
+        "set",
+        "sequence",
+        "together",
+        "benchmark"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "14",
+      "program": "interested_girls = set(girl0...6)\ninterested_boys = set(boy0...11)\ntrip_girls = choose(interested_girls, 3)\ntrip_boys = choose(interested_boys, 5)",
+      "expected": 9240,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "20",
+      "program": "friends = set(friend0...5)\ngroup = choose(friends, 3)",
+      "expected": 10,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "24",
+      "program": "teams = set(t0...4)\nteam1 = set(member0...7)\nteam2 = set(member7...14)\nteam3 = set(member14...21)\nteam4 = set(member21...28)\nhost = choose(teams, 1)\nhost_members = choose(team1, 3)\nnon_host_members = choose(team2, 2) + choose(team3, 2) + choose(team4, 2)",
+      "expected": 1296540,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing",
+        "second order logic"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "28",
+      "program": "S = set(0...5)\nC = compose(S, 3)",
+      "expected": 243,
+      "tags": [
+        "set",
+        "composition"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "32",
+      "program": "trees = bag(apple: 2, pear: 5)\nrow = tuple(trees)",
+      "expected": 21,
+      "tags": [
+        "bag",
+        "tuple"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "38",
+      "program": "B = bag(ball: 4)\nP = partition(B, 2)",
+      "expected": 3,
+      "tags": [
+        "bag",
+        "partition"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "43",
+      "program": "marbles = set(red, blue, green, yellow)\nS = choose(marbles)\n|S| > 0",
+      "expected": 15,
+      "tags": [
+        "set",
+        "choose",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "48",
+      "program": "copies = bag(Geometry: 3, Number_Theory: 4)\narrangement = tuple(copies)",
+      "expected": 35,
+      "tags": [
+        "bag",
+        "tuple"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "56",
+      "program": "team = set(0...15)\nstarting = choose(team, 7)\ngoalie = choose(starting, 1)",
+      "expected": 45045,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "60",
+      "program": "toppings = set(topping0...9)\npizzas = choose(toppings, 2)",
+      "expected": 36,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "65",
+      "program": "digits = set(0...10)\nnumber = choose_replace_tuple(digits, 5)\nnumber[0] != 0\nnumber.count(set(2, 3)) > 0",
+      "expected": 61328,
+      "tags": [
+        "set",
+        "choose_replace_permute",
+        "tuple",
+        "index",
+        "compare element",
+        "count element",
+        "not constraint",
+        "or constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "70",
+      "program": "cookies = set(chip, oatmeal, peanut_butter)\nassortments = choose_replace(cookies, 6)",
+      "expected": 28,
+      "tags": [
+        "set",
+        "choose_replace"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "74",
+      "program": "digits = set(0...10)\nnumber = choose_replace_tuple(digits, 5)\nnumber[1] != 0\nnumber.count(0) > 0",
+      "expected": 30951,
+      "tags": [
+        "set",
+        "choose_replace_permute",
+        "index",
+        "compare element",
+        "multiplicity constraint",
+        "not constraint",
+        "benchmark"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "80",
+      "program": "green = set(g0...2)\nred = set(r0...3)\nblue = set(b0)\nfrogs = green + red + blue\nrow = sequence(frogs)\nnot (next_to(green,red) in row)",
+      "expected": 24,
+      "tags": [
+        "set",
+        "sequence",
+        "next_to",
+        "not constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "85",
+      "program": "upper = set(u0...5)\nlower = set(l0...10)\nupper_comb = choose(upper, 4)\nlower_comb = choose(lower, 8)",
+      "expected": 225,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "92",
+      "program": "members = set(member0...25)\npresident_secretary_treasurer = choose_replace_tuple(members, 3)\npresident_secretary_treasurer.dedup_count(members) > 1",
+      "expected": 15600,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing",
+        "union",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "96",
+      "program": "books = set(math1, math2, other0...4)\nshelf = sequence(books)\nnot (next_to(math1, math2) in shelf)",
+      "expected": 480,
+      "tags": [
+        "set",
+        "sequence",
+        "next_to",
+        "not constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "100",
+      "program": "red = set(r0...26)\nblack = set(b0...26)\ncards = red + black\nchosen = choose(cards, 2)\nchosen subset red\norder = tuple(chosen)",
+      "expected": 650,
+      "tags": [
+        "set",
+        "choose",
+        "tuple"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "104",
+      "program": "Republicans = set(Republican0...8)\nDemocrats = set(Democrat0...6)\nsubcommittee = choose(Republicans + Democrats)\n|subcommittee & Republicans| == 3\n|subcommittee & Democrats| == 2",
+      "expected": 840,
+      "tags": [
+        "set",
+        "choose",
+        "intersection",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "108",
+      "program": "team = set(0...10)\ngroups = partition(team, 2)\n|part| == 5 for part in groups",
+      "expected": 126,
+      "tags": [
+        "partition",
+        "benchmark"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "112",
+      "program": "Republicans = set(Republican0...8)\nDemocrats = set(Democrat0...6)\nsubcommittee = choose(Republicans + Democrats, 5)\n|subcommittee & Republicans| > 0\n|subcommittee & Democrats| > 0",
+      "expected": 1940,
+      "tags": [
+        "set",
+        "choose",
+        "intersection",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "118",
+      "program": "students = set(0...10)\nlunch = compose(students, 2)",
+      "expected": 1024,
+      "tags": [
+        "set",
+        "composition"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "124",
+      "program": "balls = set(0...5)\nboxes = compose(balls, 2)",
+      "expected": 32,
+      "tags": [
+        "set",
+        "composition"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "128",
+      "program": "digits = set(0...10)\ngreater_than_4 = set(5...10)\ncode = choose_replace_tuple(digits, 5)\ncode[0] in greater_than_4\ncode[1] in greater_than_4\ncode[2] in greater_than_4",
+      "expected": 12500,
+      "tags": [
+        "set",
+        "choose_permute",
+        "tuple",
+        "index",
+        "in"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "132",
+      "program": "vowels = bag(A, E, I, A)\nconsonants = bag(M, T, H, M, T, C, S)\nchosen_vowels = choose(vowels, 2)\nchosen_consonants = choose(consonants, 4)",
+      "expected": 72,
+      "tags": [
+        "bag",
+        "choose",
+        "multiple choosing",
+        "benchmark"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "136",
+      "program": "puppies = set(puppy0...15)\nkittens = set(kitten0...6)\nhamsters = set(hamster0...8)\nbought = choose(puppies + kittens + hamsters, 3)\nS = tuple(bought)\n|bought & puppies| <= 1\n|bought & kittens| <= 1\n|bought & hamsters| <= 1",
+      "expected": 4320,
+      "tags": [
+        "set",
+        "choose",
+        "tuple",
+        "intersection",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "142",
+      "program": "members = set(member0...10)\nchief = choose(members, 1)\nsupporting_chief_A = choose(members - chief, 1)\nsupporting_chief_B = choose(members - chief - supporting_chief_A, 1)\ninferior_officers_A = choose(members - chief - supporting_chief_A - supporting_chief_B, 2)\ninferior_officers_B = choose(members - chief - supporting_chief_A - supporting_chief_B - inferior_officers_A, 2)",
+      "expected": 151200,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "146",
+      "program": "men = set(man0...30)\nwomen = set(woman0...40)\ncommittee = choose(men + women, 7)\n|committee & men| == 3\n|committee & women| == 4",
+      "expected": 371043400,
+      "tags": [
+        "set",
+        "choose",
+        "intersection",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "152",
+      "program": "lights = set(light0...8)\non = choose(lights)\n|on| <= 2\n|on| >= 1",
+      "expected": 36,
+      "tags": [
+        "set",
+        "choose",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "158",
+      "program": "odd_digits = set(1, 3, 5, 7, 9)\nnumber = choose_replace_tuple(odd_digits, 3)",
+      "expected": 125,
+      "tags": [
+        "set",
+        "choose_replace_permute",
+        "tuple"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "163",
+      "program": "players = set(Alicia, Amanda, Anna, player0...11)\ntriplets = set(Alicia, Amanda, Anna)\nstarters = choose(players, 6)",
+      "expected": 3003,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "167",
+      "program": "players = set(player0...16)\ngoalie = choose(players, 1)\nregulars = choose(players - goalie, 10)",
+      "expected": 48048,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "171",
+      "program": "flavors = set(flavor0...4)\ntoppings = set(topping0...6)\nchosen_flavor = choose(flavors, 1)\nchosen_toppings = choose(toppings, 2)",
+      "expected": 60,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "176",
+      "program": "code = set(dash, dot)\nsymbol = choose_replace_tuple(code)\n|symbol| <= 4\n|symbol| >= 1",
+      "expected": 30,
+      "tags": [
+        "tuple",
+        "unknown length"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "181",
+      "program": "digits = set(0...10)\ninteger = choose_replace_tuple(digits, 4)\ninteger.count(0) < 4\ninteger.count(set(2, 3, 4, 5)) == 0",
+      "expected": 1295,
+      "tags": [
+        "set",
+        "choose_replace_permute",
+        "tuple",
+        "count element",
+        "disjoint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "185",
+      "program": "people = set(0...8)\ncommittee = choose(people, 3)",
+      "expected": 56,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "189",
+      "program": "balls = set(0...4)\nboxes = compose(balls,3)",
+      "expected": 81,
+      "tags": [
+        "set",
+        "composition"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "193",
+      "program": "odds = set(1, 3, 5, 7, 9)\nevens = set(2, 4, 6, 8)\nnumber = sequence(odds + evens)\nnot ((odds, odds) in number)\nnot ((evens, evens) in number)",
+      "expected": 2880,
+      "tags": [
+        "set",
+        "sequence",
+        "pred",
+        "succ"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "200",
+      "program": "prime = set(2, 3, 5, 7, 11)\nchosen = choose(prime)\n|chosen| > 0",
+      "expected": 31,
+      "tags": [
+        "set",
+        "choose",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "204",
+      "program": "friends = set(friend0...8)\nparty = choose(friends, 3)",
+      "expected": 56,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "211",
+      "program": "students = set(student0...6)\ncommittee = choose(students, 4)",
+      "expected": 15,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "219",
+      "program": "stickers = bag(sticker: 8)\nsheets = compose(stickers, 4)",
+      "expected": 165,
+      "tags": [
+        "bag",
+        "composition"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "225",
+      "program": "toppings = set(0...8)\npizza = choose(toppings, 2)",
+      "expected": 28,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "231",
+      "program": "people = set(John, Wilma, Paul, other0...5)\nnot_consecutive = set(John, Wilma, Paul)\nrow = sequence(people)\n# (not (next_to(John, Wilma) in row)) or (not (next_to(John, Paul) in row)) or (not (next_to(Wilma, Paul) in row))\nnot row.together(not_consecutive)",
+      "expected": 36000,
+      "tags": [
+        "set",
+        "sequence",
+        "not constraint",
+        "pred"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "237",
+      "program": "math_books = set(math1, math2)\nbooks = math_books + set(other0...4)\nstack = tuple(books)\nstack[0] in math_books\nstack[5] in math_books",
+      "expected": 48,
+      "tags": [
+        "set",
+        "tuple",
+        "index",
+        "in"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "242",
+      "program": "friends = set(Manoj, friend0...5)\nchemistry = choose(friends)\nbiology = friends - chemistry\n(Manoj not in chemistry) or |chemistry| > 1\n(Manoj not in biology) or |biology| > 1",
+      "expected": 62,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing",
+        "set equality",
+        "or constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "246",
+      "program": "marbles = set(0...7)\nchosen = choose(marbles, 3)",
+      "expected": 35,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "252",
+      "program": "digits = bag(4, 5, 5, 2, 0)\nnumber = tuple(digits)\nnumber[0] != 0",
+      "expected": 48,
+      "tags": [
+        "bag",
+        "tuple",
+        "index",
+        "not constraint",
+        "compare element"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "256",
+      "program": "people = set(0...8)\nshake = choose(people, 2)",
+      "expected": 28,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "262",
+      "program": "people = set(0...11) + set(Henry)\ngroups = compose(people, 3)\n|groups[0]| == 3\n|groups[1]| == 4\n|groups[2]| == 5\nHenry in groups[1]",
+      "expected": 9240,
+      "tags": [
+        "set",
+        "composition",
+        "size constraint",
+        "index",
+        "in"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "268",
+      "program": "balls = bag(ball: 4)\nboxes = partition(balls, 3)",
+      "expected": 4,
+      "tags": [
+        "bag",
+        "partition"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "274",
+      "program": "deck = set(card0...52)\nhand = choose(deck, 5)",
+      "expected": 2598960,
+      "tags": [
+        "set",
+        "choose"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "279",
+      "program": "colors = set(color0...6)\noutfit = choose_replace_tuple(colors, 3)\noutfit.dedup_count(colors) != 1",
+      "expected": 210,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing",
+        "subset",
+        "not constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "286",
+      "program": "candidates = set(candidate0...16)\npast_officers = set(candidate0...7)\nofficers = choose(candidates, 5)\n|officers & past_officers| > 0",
+      "expected": 4242,
+      "tags": [
+        "set",
+        "choose",
+        "intersection",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "291",
+      "program": "digits = set(1...6)\ncombination = choose_replace_sequence(digits, 5)\nnot (next_to(2, 4) in combination)\nnot (next_to(1, 3) in combination)\nnot (next_to(3, 5) in combination)\nnot (next_to(1, 5) in combination)\nnot ((1, 1) in combination)\nnot ((2, 2) in combination)\nnot ((3, 3) in combination)\nnot ((4, 4) in combination)\nnot ((5, 5) in combination)",
+      "expected": 180,
+      "tags": [
+        "set",
+        "sequence",
+        "choose_replace_permute",
+        "pred",
+        "succ"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "296",
+      "program": "seven_graders = set(seven0...4)\neight_graders = set(eight0...6)\ncommittee = choose(seven_graders, 1) + choose(eight_graders, 3)",
+      "expected": 80,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "300",
+      "program": "members = set(member0...20)\npresident = choose(members, 1)\nvice_president = choose(members - president, 1)",
+      "expected": 380,
+      "tags": [
+        "set",
+        "choose",
+        "multiple choosing"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "305",
+      "program": "alphabet = set(A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z)\nvowels = set(A, E, I, O, U)\nconsonants = alphabet - vowels\nchoices = choose(alphabet, 3)\n|choices & vowels| == 1 and |choices & consonants| == 2",
+      "expected": 1050,
+      "tags": [
+        "set",
+        "choose",
+        "intersection",
+        "size constraint"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "real",
+      "case_id": "325",
+      "program": "digits = set(0...10)\nnumber = choose_replace_tuple(digits, 3)\nnumber[0] != 0\n(7 in number) or (9 in number)",
+      "expected": 452,
+      "tags": [
+        "set",
+        "choose_replace_permute",
+        "tuple",
+        "in",
+        "not constraint",
+        "compare element"
+      ],
+      "source": "problems/real/corpus.json"
+    },
+    {
+      "suite": "growing",
+      "case_id": "mathcounts_005",
+      "program": "vowels = bag(v0...1)\nconsonants = bag(t: 2, c0...2)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 4,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=5"
+      ],
+      "source": "MATHCOUNTS bag choose"
+    },
+    {
+      "suite": "growing",
+      "case_id": "mathcounts_025",
+      "program": "vowels = bag(v0...8)\nconsonants = bag(t: 2, c0...15)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 6525,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=25"
+      ],
+      "source": "MATHCOUNTS bag choose"
+    },
+    {
+      "suite": "growing",
+      "case_id": "mathcounts_045",
+      "program": "vowels = bag(v0...15)\nconsonants = bag(t: 2, c0...28)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 79359,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=45"
+      ],
+      "source": "MATHCOUNTS bag choose"
+    },
+    {
+      "suite": "growing",
+      "case_id": "mathcounts_065",
+      "program": "vowels = bag(v0...21)\nconsonants = bag(t: 2, c0...42)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 384314,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=65"
+      ],
+      "source": "MATHCOUNTS bag choose"
+    },
+    {
+      "suite": "growing",
+      "case_id": "mathcounts_085",
+      "program": "vowels = bag(v0...28)\nconsonants = bag(t: 2, c0...55)\nmagnets = vowels ++ consonants\nchosen = choose(magnets, 4)\n|chosen & vowels| <= 1",
+      "expected": 1146475,
+      "tags": [
+        "mathcounts",
+        "bag",
+        "choose",
+        "count",
+        "growing",
+        "family=mathcounts",
+        "domain=85"
+      ],
+      "source": "MATHCOUNTS bag choose"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_005",
+      "program": "letters = set(a0...5)\narr = choose_tuple(letters, 4)\narr[0] == a0\na1 in arr",
+      "expected": 18,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=5"
+      ],
+      "source": "four-letter arrangements"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_025",
+      "program": "letters = set(a0...25)\narr = choose_tuple(letters, 4)\narr[0] == a0\na1 in arr",
+      "expected": 1518,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=25"
+      ],
+      "source": "four-letter arrangements"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_045",
+      "program": "letters = set(a0...45)\narr = choose_tuple(letters, 4)\narr[0] == a0\na1 in arr",
+      "expected": 5418,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=45"
+      ],
+      "source": "four-letter arrangements"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_065",
+      "program": "letters = set(a0...65)\narr = choose_tuple(letters, 4)\narr[0] == a0\na1 in arr",
+      "expected": 11718,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=65"
+      ],
+      "source": "four-letter arrangements"
+    },
+    {
+      "suite": "growing",
+      "case_id": "fourletter_085",
+      "program": "letters = set(a0...85)\narr = choose_tuple(letters, 4)\narr[0] == a0\na1 in arr",
+      "expected": 20418,
+      "tags": [
+        "fourletter",
+        "set",
+        "tuple",
+        "position",
+        "count",
+        "growing",
+        "family=fourletter",
+        "domain=85"
+      ],
+      "source": "four-letter arrangements"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_005",
+      "program": "defective = set(d0...2)\nworking = set(w0...3)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 1,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=5"
+      ],
+      "source": "defective TVs purchase"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_025",
+      "program": "defective = set(d0...6)\nworking = set(w0...19)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 18246,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=25"
+      ],
+      "source": "defective TVs purchase"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_045",
+      "program": "defective = set(d0...11)\nworking = set(w0...34)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 433367,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=45"
+      ],
+      "source": "defective TVs purchase"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_065",
+      "program": "defective = set(d0...16)\nworking = set(w0...49)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 2962988,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=65"
+      ],
+      "source": "defective TVs purchase"
+    },
+    {
+      "suite": "growing",
+      "case_id": "tvs_085",
+      "program": "defective = set(d0...21)\nworking = set(w0...64)\npurchase = choose(defective + working, 5)\n|purchase & defective| >= 2",
+      "expected": 11834109,
+      "tags": [
+        "tvs",
+        "set",
+        "choose",
+        "count",
+        "growing",
+        "family=tvs",
+        "domain=85"
+      ],
+      "source": "defective TVs purchase"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_005",
+      "program": "workers = set(w0...5)\ngroups = compose(workers, 3)\n|groups[0]| == 2\n|groups[1]| == 1\n|groups[2]| == 2",
+      "expected": 30,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=5"
+      ],
+      "source": "workers composition"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_025",
+      "program": "workers = set(w0...25)\ngroups = compose(workers, 3)\n|groups[0]| == 12\n|groups[1]| == 8\n|groups[2]| == 5",
+      "expected": 6692786100,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=25"
+      ],
+      "source": "workers composition"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_045",
+      "program": "workers = set(w0...45)\ngroups = compose(workers, 3)\n|groups[0]| == 22\n|groups[1]| == 15\n|groups[2]| == 8",
+      "expected": 2018483176886233200,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=45"
+      ],
+      "source": "workers composition"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_065",
+      "program": "workers = set(w0...65)\ngroups = compose(workers, 3)\n|groups[0]| == 32\n|groups[1]| == 21\n|groups[2]| == 12",
+      "expected": 1280789124444724123137308400,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=65"
+      ],
+      "source": "workers composition"
+    },
+    {
+      "suite": "growing",
+      "case_id": "workers_085",
+      "program": "workers = set(w0...85)\ngroups = compose(workers, 3)\n|groups[0]| == 42\n|groups[1]| == 28\n|groups[2]| == 15",
+      "expected": 502903026467190218552744304651038400,
+      "tags": [
+        "workers",
+        "set",
+        "composition",
+        "index",
+        "size",
+        "growing",
+        "family=workers",
+        "domain=85"
+      ],
+      "source": "workers composition"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_005",
+      "program": "letters = bag(B: 1, A: 2, N: 2)\nword = choose_tuple(letters, 5)",
+      "expected": 30,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=5"
+      ],
+      "source": "BANANA bag tuple"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_025",
+      "program": "letters = bag(B: 4, A: 12, N: 9)\nword = choose_tuple(letters, 25)",
+      "expected": 3718214500,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=25"
+      ],
+      "source": "BANANA bag tuple"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_045",
+      "program": "letters = bag(B: 7, A: 22, N: 16)\nword = choose_tuple(letters, 45)",
+      "expected": 1009241588443116600,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=45"
+      ],
+      "source": "BANANA bag tuple"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_065",
+      "program": "letters = bag(B: 10, A: 32, N: 23)\nword = choose_tuple(letters, 65)",
+      "expected": 334118902029058466905384800,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=65"
+      ],
+      "source": "BANANA bag tuple"
+    },
+    {
+      "suite": "growing",
+      "case_id": "banana_085",
+      "program": "letters = bag(B: 14, A: 42, N: 29)\nword = choose_tuple(letters, 85)",
+      "expected": 260122255069236319941074640336744000,
+      "tags": [
+        "banana",
+        "bag",
+        "tuple",
+        "growing",
+        "family=banana",
+        "domain=85"
+      ],
+      "source": "BANANA bag tuple"
+    },
+    {
+      "suite": "growing",
+      "case_id": "nested_choice_005",
+      "program": "people = set(p0...5)\nteam = choose(people, 4)\ncaptain = choose(team, 1)",
+      "expected": 20,
+      "tags": [
+        "nested_choice",
+        "set",
+        "choose",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=nested_choice",
+        "domain=5"
+      ],
+      "source": "choose a team and then its captain"
+    },
+    {
+      "suite": "growing",
+      "case_id": "nested_choice_025",
+      "program": "people = set(p0...25)\nteam = choose(people, 4)\ncaptain = choose(team, 1)",
+      "expected": 50600,
+      "tags": [
+        "nested_choice",
+        "set",
+        "choose",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=nested_choice",
+        "domain=25"
+      ],
+      "source": "choose a team and then its captain"
+    },
+    {
+      "suite": "growing",
+      "case_id": "nested_choice_045",
+      "program": "people = set(p0...45)\nteam = choose(people, 4)\ncaptain = choose(team, 1)",
+      "expected": 595980,
+      "tags": [
+        "nested_choice",
+        "set",
+        "choose",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=nested_choice",
+        "domain=45"
+      ],
+      "source": "choose a team and then its captain"
+    },
+    {
+      "suite": "growing",
+      "case_id": "nested_choice_065",
+      "program": "people = set(p0...65)\nteam = choose(people, 4)\ncaptain = choose(team, 1)",
+      "expected": 2708160,
+      "tags": [
+        "nested_choice",
+        "set",
+        "choose",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=nested_choice",
+        "domain=65"
+      ],
+      "source": "choose a team and then its captain"
+    },
+    {
+      "suite": "growing",
+      "case_id": "nested_choice_085",
+      "program": "people = set(p0...85)\nteam = choose(people, 4)\ncaptain = choose(team, 1)",
+      "expected": 8099140,
+      "tags": [
+        "nested_choice",
+        "set",
+        "choose",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=nested_choice",
+        "domain=85"
+      ],
+      "source": "choose a team and then its captain"
+    },
+    {
+      "suite": "growing",
+      "case_id": "selected_pairs_005",
+      "program": "people = set(p0...5)\nselected = choose(people, 4)\ngroups = partition(selected, 2)\n|part| == 2 for part in groups",
+      "expected": 15,
+      "tags": [
+        "selected_pairs",
+        "set",
+        "choose",
+        "partition",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=selected_pairs",
+        "domain=5"
+      ],
+      "source": "choose four people and partition them into pairs"
+    },
+    {
+      "suite": "growing",
+      "case_id": "selected_pairs_025",
+      "program": "people = set(p0...25)\nselected = choose(people, 4)\ngroups = partition(selected, 2)\n|part| == 2 for part in groups",
+      "expected": 37950,
+      "tags": [
+        "selected_pairs",
+        "set",
+        "choose",
+        "partition",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=selected_pairs",
+        "domain=25"
+      ],
+      "source": "choose four people and partition them into pairs"
+    },
+    {
+      "suite": "growing",
+      "case_id": "selected_pairs_045",
+      "program": "people = set(p0...45)\nselected = choose(people, 4)\ngroups = partition(selected, 2)\n|part| == 2 for part in groups",
+      "expected": 446985,
+      "tags": [
+        "selected_pairs",
+        "set",
+        "choose",
+        "partition",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=selected_pairs",
+        "domain=45"
+      ],
+      "source": "choose four people and partition them into pairs"
+    },
+    {
+      "suite": "growing",
+      "case_id": "selected_pairs_065",
+      "program": "people = set(p0...65)\nselected = choose(people, 4)\ngroups = partition(selected, 2)\n|part| == 2 for part in groups",
+      "expected": 2031120,
+      "tags": [
+        "selected_pairs",
+        "set",
+        "choose",
+        "partition",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=selected_pairs",
+        "domain=65"
+      ],
+      "source": "choose four people and partition them into pairs"
+    },
+    {
+      "suite": "growing",
+      "case_id": "selected_pairs_085",
+      "program": "people = set(p0...85)\nselected = choose(people, 4)\ngroups = partition(selected, 2)\n|part| == 2 for part in groups",
+      "expected": 6074355,
+      "tags": [
+        "selected_pairs",
+        "set",
+        "choose",
+        "partition",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=selected_pairs",
+        "domain=85"
+      ],
+      "source": "choose four people and partition them into pairs"
+    },
+    {
+      "suite": "growing",
+      "case_id": "selected_sequence_005",
+      "program": "items = set(a0...5)\npicked = choose(items, 5)\nrow = sequence(picked)\nnext_to(a0, a1) in row",
+      "expected": 48,
+      "tags": [
+        "selected_sequence",
+        "set",
+        "choose",
+        "sequence",
+        "adjacency",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=selected_sequence",
+        "domain=5"
+      ],
+      "source": "choose five items, order them, and keep two adjacent"
+    },
+    {
+      "suite": "growing",
+      "case_id": "selected_sequence_025",
+      "program": "items = set(a0...25)\npicked = choose(items, 5)\nrow = sequence(picked)\nnext_to(a0, a1) in row",
+      "expected": 85008,
+      "tags": [
+        "selected_sequence",
+        "set",
+        "choose",
+        "sequence",
+        "adjacency",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=selected_sequence",
+        "domain=25"
+      ],
+      "source": "choose five items, order them, and keep two adjacent"
+    },
+    {
+      "suite": "growing",
+      "case_id": "selected_sequence_045",
+      "program": "items = set(a0...45)\npicked = choose(items, 5)\nrow = sequence(picked)\nnext_to(a0, a1) in row",
+      "expected": 592368,
+      "tags": [
+        "selected_sequence",
+        "set",
+        "choose",
+        "sequence",
+        "adjacency",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=selected_sequence",
+        "domain=45"
+      ],
+      "source": "choose five items, order them, and keep two adjacent"
+    },
+    {
+      "suite": "growing",
+      "case_id": "selected_sequence_065",
+      "program": "items = set(a0...65)\npicked = choose(items, 5)\nrow = sequence(picked)\nnext_to(a0, a1) in row",
+      "expected": 1906128,
+      "tags": [
+        "selected_sequence",
+        "set",
+        "choose",
+        "sequence",
+        "adjacency",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=selected_sequence",
+        "domain=65"
+      ],
+      "source": "choose five items, order them, and keep two adjacent"
+    },
+    {
+      "suite": "growing",
+      "case_id": "selected_sequence_085",
+      "program": "items = set(a0...85)\npicked = choose(items, 5)\nrow = sequence(picked)\nnext_to(a0, a1) in row",
+      "expected": 4410288,
+      "tags": [
+        "selected_sequence",
+        "set",
+        "choose",
+        "sequence",
+        "adjacency",
+        "dependent_configuration",
+        "outside_cola_fragment",
+        "growing",
+        "family=selected_sequence",
+        "domain=85"
+      ],
+      "source": "choose five items, order them, and keep two adjacent"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_choice_intersection-small-00",
+      "program": "left = set(a0...3)\nright = set(b0...5)\npicked = choose(left + right, 3)\n|picked & left| == 1",
+      "expected": 30,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_choice_intersection",
+        "family=set_choice_intersection",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "set",
+        "choose",
+        "intersection",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_choice_intersection-small-04",
+      "program": "left = set(a0...5)\nright = set(b0...3)\npicked = choose(left + right, 5)\n|picked & left| == 2",
+      "expected": 10,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_choice_intersection",
+        "family=set_choice_intersection",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "set",
+        "choose",
+        "intersection",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_choice_multiplicity-small-00",
+      "program": "stock = bag(e0: 5, e1, e2, e3)\npicked = choose(stock, 5)\npicked.count(e0) == 4",
+      "expected": 3,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_choice_multiplicity",
+        "family=bag_choice_multiplicity",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "choose",
+        "count"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_choice_multiplicity-small-04",
+      "program": "stock = bag(e0: 2, e1, e2, e3, e4, e5, e6)\npicked = choose(stock, 7)\npicked.count(e0) == 2",
+      "expected": 6,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_choice_multiplicity",
+        "family=bag_choice_multiplicity",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "choose",
+        "count"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_tuple_position_count-small-00",
+      "program": "items = set(e0...8)\nmarked = set(e1, e2, e3, e4)\nrow = choose_tuple(items, 7)\nrow[0] == e0\nrow.count(marked) == 3",
+      "expected": 2880,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_tuple_position_count",
+        "family=set_tuple_position_count",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1",
+        "set",
+        "tuple",
+        "position",
+        "count"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_tuple_position_count-small-04",
+      "program": "items = set(e0...8)\nmarked = set(e1, e2)\nrow = choose_tuple(items, 4)\nrow[0] == e0\nrow.count(marked) == 1",
+      "expected": 120,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_tuple_position_count",
+        "family=set_tuple_position_count",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1",
+        "set",
+        "tuple",
+        "position",
+        "count"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_tuple_multiplicity-small-00",
+      "program": "stock = bag(e0: 5, e1: 2, e2)\nrow = tuple(stock)\nmarkers = set(m0...4)\nwitness = choose(markers, 3)\nm0 in witness",
+      "expected": 504,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_tuple_multiplicity",
+        "family=bag_tuple_multiplicity",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "tuple",
+        "set",
+        "choose",
+        "membership",
+        "decomposition"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_tuple_multiplicity-small-04",
+      "program": "stock = bag(e0: 3, e1: 3, e2: 2)\nrow = tuple(stock)\nmarkers = set(m0...4)\nwitness = choose(markers, 2)\nm0 in witness",
+      "expected": 1680,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_tuple_multiplicity",
+        "family=bag_tuple_multiplicity",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "tuple",
+        "set",
+        "choose",
+        "membership",
+        "decomposition"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_sequence_patterns-small-00",
+      "program": "items = set(e0...8)\nrow = sequence(items)\nnext_to(e0, e1) in row\nrow.before(e2, e6)\nrow.before(e5, e4)",
+      "expected": 2520,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_sequence_patterns",
+        "family=set_sequence_patterns",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=3",
+        "depth=1",
+        "set",
+        "sequence",
+        "adjacency",
+        "order"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_sequence_patterns-small-04",
+      "program": "items = set(e0...8)\nrow = sequence(items)\nnext_to(e0, e1) in row\nrow.before(e2, e4)",
+      "expected": 5040,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_sequence_patterns",
+        "family=set_sequence_patterns",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1",
+        "set",
+        "sequence",
+        "adjacency",
+        "order"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_sequence_adjacency-small-00",
+      "program": "stock = bag(e0, e1, e2, e3: 4, e4)\nrow = sequence(stock)\nnext_to(e0, e1) in row",
+      "expected": 420,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_sequence_adjacency",
+        "family=bag_sequence_adjacency",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "sequence",
+        "adjacency"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_sequence_adjacency-small-04",
+      "program": "stock = bag(e0, e1, e2, e3: 3, e4: 2)\nrow = sequence(stock)\nnext_to(e0, e1) in row",
+      "expected": 840,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_sequence_adjacency",
+        "family=bag_sequence_adjacency",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "sequence",
+        "adjacency"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_partition_min_size-small-00",
+      "program": "items = set(e0...8)\ngroups = partition(items, 3)\n|part| >= 1 for part in groups",
+      "expected": 966,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_partition_min_size",
+        "family=set_partition_min_size",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "set",
+        "partition",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_partition_min_size-small-04",
+      "program": "items = set(e0...8)\ngroups = partition(items, 2)\n|part| >= 2 for part in groups",
+      "expected": 119,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_partition_min_size",
+        "family=set_partition_min_size",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "set",
+        "partition",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_composition_sizes-small-00",
+      "program": "items = set(e0...8)\ngroups = compose(items, 4)\n|groups[0]| == 5\n|groups[1]| == 1\n|groups[2]| == 1\n|groups[3]| == 1",
+      "expected": 336,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_composition_sizes",
+        "family=set_composition_sizes",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=4",
+        "depth=1",
+        "set",
+        "composition",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_composition_sizes-small-04",
+      "program": "items = set(e0...8)\ngroups = compose(items, 2)\n|groups[0]| == 3\n|groups[1]| == 5",
+      "expected": 56,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_composition_sizes",
+        "family=set_composition_sizes",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1",
+        "set",
+        "composition",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_choice_disjoint-small-00",
+      "program": "people = set(e0...8)\nteam = choose(people, 7)\ncaptain = choose(team, 1)\ncommittee = choose(team, 2)\ncaptain disjoint committee",
+      "expected": 840,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_choice_disjoint",
+        "family=dependent_choice_disjoint",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "disjoint",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_choice_disjoint-small-04",
+      "program": "people = set(e0...8)\nteam = choose(people, 7)\ncaptain = choose(team, 1)\ncommittee = choose(team, 5)\ncaptain disjoint committee",
+      "expected": 336,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_choice_disjoint",
+        "family=dependent_choice_disjoint",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "disjoint",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_tuple_position_count-small-00",
+      "program": "items = set(e0...8)\nmarked = set(e1, e2, e3, e4, e5)\nselected = choose(items, 7)\nrow = choose_tuple(selected, 7)\nrow[0] == e0\nrow.count(marked) == 4",
+      "expected": 3600,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_tuple_position_count",
+        "family=dependent_tuple_position_count",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=2",
+        "set",
+        "choose",
+        "tuple",
+        "position",
+        "count",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_tuple_position_count-small-04",
+      "program": "items = set(e0...8)\nmarked = set(e1, e2)\nselected = choose(items, 7)\nrow = choose_tuple(selected, 7)\nrow[0] == e0\nrow.count(marked) == 2",
+      "expected": 3600,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_tuple_position_count",
+        "family=dependent_tuple_position_count",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=2",
+        "set",
+        "choose",
+        "tuple",
+        "position",
+        "count",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_sequence_patterns-small-00",
+      "program": "items = set(e0...8)\nselected = choose(items, 7)\nrow = sequence(selected)\ne0 in selected\ne1 in selected\ne7 in selected\ne5 in selected\ne4 in selected\ne2 in selected\nnext_to(e0, e1) in row\nrow.before(e7, e5)\nrow.before(e4, e2)",
+      "expected": 720,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_sequence_patterns",
+        "family=dependent_sequence_patterns",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=9",
+        "depth=2",
+        "set",
+        "choose",
+        "sequence",
+        "adjacency",
+        "order",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_sequence_patterns-small-04",
+      "program": "items = set(e0...8)\nselected = choose(items, 7)\nrow = sequence(selected)\ne0 in selected\ne1 in selected\ne3 in selected\ne4 in selected\ne7 in selected\ne5 in selected\nnext_to(e0, e1) in row\nrow.before(e3, e4)\nrow.before(e7, e5)",
+      "expected": 720,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_sequence_patterns",
+        "family=dependent_sequence_patterns",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=9",
+        "depth=2",
+        "set",
+        "choose",
+        "sequence",
+        "adjacency",
+        "order",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_partition_min_size-small-00",
+      "program": "items = set(e0...8)\nselected = choose(items, 7)\ngroups = partition(selected, 3)\n|part| >= 2 for part in groups",
+      "expected": 840,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_partition_min_size",
+        "family=dependent_partition_min_size",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "partition",
+        "size",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_partition_min_size-small-04",
+      "program": "items = set(e0...8)\nselected = choose(items, 7)\ngroups = partition(selected, 2)\n|part| >= 1 for part in groups",
+      "expected": 504,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_partition_min_size",
+        "family=dependent_partition_min_size",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "partition",
+        "size",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_composition_sizes-small-00",
+      "program": "items = set(e0...8)\nselected = choose(items, 6)\ngroups = compose(selected, 5)\n|groups[0]| == 1\n|groups[1]| == 2\n|groups[2]| == 1\n|groups[3]| == 1\n|groups[4]| == 1",
+      "expected": 10080,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_composition_sizes",
+        "family=dependent_composition_sizes",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=5",
+        "depth=2",
+        "set",
+        "choose",
+        "composition",
+        "size",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_composition_sizes-small-04",
+      "program": "items = set(e0...8)\nselected = choose(items, 6)\ngroups = compose(selected, 3)\n|groups[0]| == 1\n|groups[1]| == 4\n|groups[2]| == 1",
+      "expected": 840,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_composition_sizes",
+        "family=dependent_composition_sizes",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=3",
+        "depth=2",
+        "set",
+        "choose",
+        "composition",
+        "size",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_bag_tuple-small-00",
+      "program": "stock = bag(e0: 6, e1, e2)\npicked = choose(stock, 8)\nrow = tuple(picked)\nmarkers = set(m0...8)\nwitness = choose(markers, 7)\nm0 in witness",
+      "expected": 392,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_bag_tuple",
+        "family=dependent_bag_tuple",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "bag",
+        "choose",
+        "tuple",
+        "set",
+        "membership",
+        "decomposition",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_bag_tuple-small-04",
+      "program": "stock = bag(e0: 4, e1: 3, e2)\npicked = choose(stock, 8)\nrow = tuple(picked)\nmarkers = set(m0...4)\nwitness = choose(markers, 3)\nm0 in witness",
+      "expected": 840,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_bag_tuple",
+        "family=dependent_bag_tuple",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "bag",
+        "choose",
+        "tuple",
+        "set",
+        "membership",
+        "decomposition",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-nested_choice_chain-small-00",
+      "program": "people = set(e0...8)\nteam = choose(people, 5)\ne0 in team\nshortlist = choose(team, 3)\ncaptain = choose(shortlist, 1)",
+      "expected": 1050,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=nested_choice_chain",
+        "family=nested_choice_chain",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=3",
+        "set",
+        "choose",
+        "membership",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-nested_choice_chain-small-04",
+      "program": "people = set(e0...8)\nteam = choose(people, 6)\ne0 in team\nshortlist = choose(team, 2)\ncaptain = choose(shortlist, 1)",
+      "expected": 630,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=nested_choice_chain",
+        "family=nested_choice_chain",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=3",
+        "set",
+        "choose",
+        "membership",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_selected_subsets-small-00",
+      "program": "items = set(e0...8)\nselected = choose(items, 7)\nleft = choose(selected, 5)\nright = choose(selected, 1)\nleft disjoint right",
+      "expected": 336,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_selected_subsets",
+        "family=dependent_selected_subsets",
+        "difficulty=small",
+        "domain=8",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "disjoint",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_selected_subsets-small-04",
+      "program": "items = set(e0...8)\nselected = choose(items, 6)\nleft = choose(selected, 3)\nright = choose(selected, 2)\nleft disjoint right",
+      "expected": 1680,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_selected_subsets",
+        "family=dependent_selected_subsets",
+        "difficulty=small",
+        "domain=8",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "disjoint",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_choice_intersection-medium-00",
+      "program": "left = set(a0...5)\nright = set(b0...7)\npicked = choose(left + right, 6)\n|picked & left| == 2",
+      "expected": 350,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_choice_intersection",
+        "family=set_choice_intersection",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "set",
+        "choose",
+        "intersection",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_choice_intersection-medium-04",
+      "program": "left = set(a0...6)\nright = set(b0...6)\npicked = choose(left + right, 4)\n|picked & left| == 2",
+      "expected": 225,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_choice_intersection",
+        "family=set_choice_intersection",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "set",
+        "choose",
+        "intersection",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_choice_multiplicity-medium-00",
+      "program": "stock = bag(e0: 4, e1, e2, e3, e4, e5, e6, e7, e8)\npicked = choose(stock, 5)\npicked.count(e0) == 2",
+      "expected": 56,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_choice_multiplicity",
+        "family=bag_choice_multiplicity",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "choose",
+        "count"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_choice_multiplicity-medium-04",
+      "program": "stock = bag(e0: 5, e1, e2, e3, e4, e5, e6, e7)\npicked = choose(stock, 4)\npicked.count(e0) == 2",
+      "expected": 21,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_choice_multiplicity",
+        "family=bag_choice_multiplicity",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "choose",
+        "count"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_tuple_position_count-medium-00",
+      "program": "items = set(e0...12)\nmarked = set(e1, e2, e3, e4, e5, e6, e7, e8, e9)\nrow = choose_tuple(items, 4)\nrow[0] == e0\nrow.count(marked) == 1",
+      "expected": 54,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_tuple_position_count",
+        "family=set_tuple_position_count",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1",
+        "set",
+        "tuple",
+        "position",
+        "count"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_tuple_position_count-medium-04",
+      "program": "items = set(e0...12)\nmarked = set(e1, e2, e3, e4, e5, e6, e7, e8, e9)\nrow = choose_tuple(items, 5)\nrow[0] == e0\nrow.count(marked) == 2",
+      "expected": 864,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_tuple_position_count",
+        "family=set_tuple_position_count",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1",
+        "set",
+        "tuple",
+        "position",
+        "count"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_tuple_multiplicity-medium-00",
+      "program": "stock = bag(e0: 5, e1: 4, e2: 3)\nrow = tuple(stock)\nmarkers = set(m0...4)\nwitness = choose(markers, 3)\nm0 in witness",
+      "expected": 83160,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_tuple_multiplicity",
+        "family=bag_tuple_multiplicity",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "tuple",
+        "set",
+        "choose",
+        "membership",
+        "decomposition"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_tuple_multiplicity-medium-04",
+      "program": "stock = bag(e0: 7, e1: 4, e2)\nrow = tuple(stock)\nmarkers = set(m0...4)\nwitness = choose(markers, 2)\nm0 in witness",
+      "expected": 11880,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_tuple_multiplicity",
+        "family=bag_tuple_multiplicity",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "tuple",
+        "set",
+        "choose",
+        "membership",
+        "decomposition"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_sequence_patterns-medium-00",
+      "program": "items = set(e0...12)\nrow = sequence(items)\nnext_to(e0, e1) in row\nrow.before(e5, e3)\nrow.before(e6, e9)\nrow.before(e8, e10)",
+      "expected": 9979200,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_sequence_patterns",
+        "family=set_sequence_patterns",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=4",
+        "depth=1",
+        "set",
+        "sequence",
+        "adjacency",
+        "order"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_sequence_patterns-medium-04",
+      "program": "items = set(e0...12)\nrow = sequence(items)\nnext_to(e0, e1) in row\nrow.before(e2, e3)",
+      "expected": 39916800,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_sequence_patterns",
+        "family=set_sequence_patterns",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1",
+        "set",
+        "sequence",
+        "adjacency",
+        "order"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_sequence_adjacency-medium-00",
+      "program": "stock = bag(e0, e1, e2: 6, e3, e4: 3)\nrow = sequence(stock)\nnext_to(e0, e1) in row",
+      "expected": 18480,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_sequence_adjacency",
+        "family=bag_sequence_adjacency",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "sequence",
+        "adjacency"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_sequence_adjacency-medium-04",
+      "program": "stock = bag(e0, e1, e2: 7, e3: 2, e4)\nrow = sequence(stock)\nnext_to(e0, e1) in row",
+      "expected": 7920,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_sequence_adjacency",
+        "family=bag_sequence_adjacency",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "sequence",
+        "adjacency"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_partition_min_size-medium-00",
+      "program": "items = set(e0...12)\ngroups = partition(items, 2)\n|part| >= 6 for part in groups",
+      "expected": 462,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_partition_min_size",
+        "family=set_partition_min_size",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "set",
+        "partition",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_partition_min_size-medium-04",
+      "program": "items = set(e0...12)\ngroups = partition(items, 4)\n|part| >= 1 for part in groups",
+      "expected": 611501,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_partition_min_size",
+        "family=set_partition_min_size",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "set",
+        "partition",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_composition_sizes-medium-00",
+      "program": "items = set(e0...12)\ngroups = compose(items, 2)\n|groups[0]| == 4\n|groups[1]| == 8",
+      "expected": 495,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_composition_sizes",
+        "family=set_composition_sizes",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1",
+        "set",
+        "composition",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_composition_sizes-medium-04",
+      "program": "items = set(e0...12)\ngroups = compose(items, 3)\n|groups[0]| == 2\n|groups[1]| == 9\n|groups[2]| == 1",
+      "expected": 660,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_composition_sizes",
+        "family=set_composition_sizes",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=3",
+        "depth=1",
+        "set",
+        "composition",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_choice_disjoint-medium-00",
+      "program": "people = set(e0...12)\nteam = choose(people, 5)\ncaptain = choose(team, 1)\ncommittee = choose(team, 1)\ncaptain disjoint committee",
+      "expected": 15840,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_choice_disjoint",
+        "family=dependent_choice_disjoint",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "disjoint",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_choice_disjoint-medium-04",
+      "program": "people = set(e0...12)\nteam = choose(people, 7)\ncaptain = choose(team, 1)\ncommittee = choose(team, 1)\ncaptain disjoint committee",
+      "expected": 33264,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_choice_disjoint",
+        "family=dependent_choice_disjoint",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "disjoint",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_tuple_position_count-medium-00",
+      "program": "items = set(e0...12)\nmarked = set(e1, e2, e3, e4, e5, e6, e7, e8, e9)\nselected = choose(items, 4)\nrow = choose_tuple(selected, 4)\nrow[0] == e0\nrow.count(marked) == 2",
+      "expected": 432,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_tuple_position_count",
+        "family=dependent_tuple_position_count",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=2",
+        "set",
+        "choose",
+        "tuple",
+        "position",
+        "count",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_tuple_position_count-medium-04",
+      "program": "items = set(e0...12)\nmarked = set(e1, e2, e3, e4, e5)\nselected = choose(items, 4)\nrow = choose_tuple(selected, 4)\nrow[0] == e0\nrow.count(marked) == 1",
+      "expected": 450,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_tuple_position_count",
+        "family=dependent_tuple_position_count",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=2",
+        "set",
+        "choose",
+        "tuple",
+        "position",
+        "count",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_sequence_patterns-medium-00",
+      "program": "items = set(e0...12)\nselected = choose(items, 8)\nrow = sequence(selected)\ne0 in selected\ne1 in selected\ne2 in selected\ne6 in selected\ne8 in selected\ne5 in selected\nnext_to(e0, e1) in row\nrow.before(e2, e6)\nrow.before(e5, e8)",
+      "expected": 37800,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_sequence_patterns",
+        "family=dependent_sequence_patterns",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=9",
+        "depth=2",
+        "set",
+        "choose",
+        "sequence",
+        "adjacency",
+        "order",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_sequence_patterns-medium-04",
+      "program": "items = set(e0...12)\nselected = choose(items, 10)\nrow = sequence(selected)\ne0 in selected\ne1 in selected\ne10 in selected\ne2 in selected\nnext_to(e0, e1) in row\nrow.before(e10, e2)",
+      "expected": 10160640,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_sequence_patterns",
+        "family=dependent_sequence_patterns",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=6",
+        "depth=2",
+        "set",
+        "choose",
+        "sequence",
+        "adjacency",
+        "order",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_partition_min_size-medium-00",
+      "program": "items = set(e0...12)\nselected = choose(items, 8)\ngroups = partition(selected, 3)\n|part| >= 1 for part in groups",
+      "expected": 478170,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_partition_min_size",
+        "family=dependent_partition_min_size",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "partition",
+        "size",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_partition_min_size-medium-04",
+      "program": "items = set(e0...12)\nselected = choose(items, 7)\ngroups = partition(selected, 3)\n|part| >= 1 for part in groups",
+      "expected": 238392,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_partition_min_size",
+        "family=dependent_partition_min_size",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "partition",
+        "size",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_composition_sizes-medium-00",
+      "program": "items = set(e0...12)\nselected = choose(items, 11)\ngroups = compose(selected, 4)\n|groups[0]| == 5\n|groups[1]| == 2\n|groups[2]| == 1\n|groups[3]| == 3",
+      "expected": 332640,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_composition_sizes",
+        "family=dependent_composition_sizes",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=4",
+        "depth=2",
+        "set",
+        "choose",
+        "composition",
+        "size",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_composition_sizes-medium-04",
+      "program": "items = set(e0...12)\nselected = choose(items, 11)\ngroups = compose(selected, 2)\n|groups[0]| == 2\n|groups[1]| == 9",
+      "expected": 660,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_composition_sizes",
+        "family=dependent_composition_sizes",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=2",
+        "set",
+        "choose",
+        "composition",
+        "size",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_bag_tuple-medium-00",
+      "program": "stock = bag(e0: 8, e1: 2, e2: 2)\npicked = choose(stock, 12)\nrow = tuple(picked)\nmarkers = set(m0...6)\nwitness = choose(markers, 4)\nm0 in witness",
+      "expected": 29700,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_bag_tuple",
+        "family=dependent_bag_tuple",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "bag",
+        "choose",
+        "tuple",
+        "set",
+        "membership",
+        "decomposition",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_bag_tuple-medium-04",
+      "program": "stock = bag(e0: 10, e1, e2)\npicked = choose(stock, 12)\nrow = tuple(picked)\nmarkers = set(m0...8)\nwitness = choose(markers, 6)\nm0 in witness",
+      "expected": 2772,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_bag_tuple",
+        "family=dependent_bag_tuple",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "bag",
+        "choose",
+        "tuple",
+        "set",
+        "membership",
+        "decomposition",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-nested_choice_chain-medium-00",
+      "program": "people = set(e0...12)\nteam = choose(people, 9)\ne0 in team\nshortlist = choose(team, 8)\ncaptain = choose(shortlist, 1)",
+      "expected": 11880,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=nested_choice_chain",
+        "family=nested_choice_chain",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=3",
+        "set",
+        "choose",
+        "membership",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-nested_choice_chain-medium-04",
+      "program": "people = set(e0...12)\nteam = choose(people, 4)\ne0 in team\nshortlist = choose(team, 2)\ncaptain = choose(shortlist, 1)",
+      "expected": 1980,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=nested_choice_chain",
+        "family=nested_choice_chain",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=3",
+        "set",
+        "choose",
+        "membership",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_selected_subsets-medium-00",
+      "program": "items = set(e0...12)\nselected = choose(items, 7)\nleft = choose(selected, 1)\nright = choose(selected, 1)\nleft disjoint right",
+      "expected": 33264,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_selected_subsets",
+        "family=dependent_selected_subsets",
+        "difficulty=medium",
+        "domain=12",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "disjoint",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_selected_subsets-medium-04",
+      "program": "items = set(e0...12)\nselected = choose(items, 5)\nleft = choose(selected, 1)\nright = choose(selected, 2)\nleft disjoint right",
+      "expected": 23760,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_selected_subsets",
+        "family=dependent_selected_subsets",
+        "difficulty=medium",
+        "domain=12",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "disjoint",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_choice_intersection-large-00",
+      "program": "left = set(a0...7)\nright = set(b0...9)\npicked = choose(left + right, 7)\n|picked & left| == 5",
+      "expected": 756,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_choice_intersection",
+        "family=set_choice_intersection",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "set",
+        "choose",
+        "intersection",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_choice_intersection-large-04",
+      "program": "left = set(a0...8)\nright = set(b0...8)\npicked = choose(left + right, 3)\n|picked & left| == 2",
+      "expected": 224,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_choice_intersection",
+        "family=set_choice_intersection",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "set",
+        "choose",
+        "intersection",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_choice_multiplicity-large-00",
+      "program": "stock = bag(e0: 2, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14)\npicked = choose(stock, 8)\npicked.count(e0) == 1",
+      "expected": 3432,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_choice_multiplicity",
+        "family=bag_choice_multiplicity",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "choose",
+        "count"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_choice_multiplicity-large-04",
+      "program": "stock = bag(e0: 4, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12)\npicked = choose(stock, 5)\npicked.count(e0) == 4",
+      "expected": 12,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_choice_multiplicity",
+        "family=bag_choice_multiplicity",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "choose",
+        "count"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_tuple_position_count-large-00",
+      "program": "items = set(e0...16)\nmarked = set(e1, e2, e3, e4, e5)\nrow = choose_tuple(items, 8)\nrow[0] == e0\nrow.count(marked) == 2",
+      "expected": 12700800,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_tuple_position_count",
+        "family=set_tuple_position_count",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1",
+        "set",
+        "tuple",
+        "position",
+        "count"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_tuple_position_count-large-04",
+      "program": "items = set(e0...16)\nmarked = set(e1, e2, e3, e4, e5)\nrow = choose_tuple(items, 6)\nrow[0] == e0\nrow.count(marked) == 2",
+      "expected": 144000,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_tuple_position_count",
+        "family=set_tuple_position_count",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1",
+        "set",
+        "tuple",
+        "position",
+        "count"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_tuple_multiplicity-large-00",
+      "program": "stock = bag(e0: 14, e1, e2)\nrow = tuple(stock)\nmarkers = set(m0...7)\nwitness = choose(markers, 5)\nm0 in witness",
+      "expected": 3600,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_tuple_multiplicity",
+        "family=bag_tuple_multiplicity",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "tuple",
+        "set",
+        "choose",
+        "membership",
+        "decomposition"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_tuple_multiplicity-large-04",
+      "program": "stock = bag(e0: 6, e1: 6, e2: 4)\nrow = tuple(stock)\nmarkers = set(m0...5)\nwitness = choose(markers, 3)\nm0 in witness",
+      "expected": 10090080,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_tuple_multiplicity",
+        "family=bag_tuple_multiplicity",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "tuple",
+        "set",
+        "choose",
+        "membership",
+        "decomposition"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_sequence_patterns-large-00",
+      "program": "items = set(e0...16)\nrow = sequence(items)\nnext_to(e0, e1) in row\nrow.before(e6, e15)\nrow.before(e13, e8)\nrow.before(e12, e7)",
+      "expected": 326918592000,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_sequence_patterns",
+        "family=set_sequence_patterns",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=4",
+        "depth=1",
+        "set",
+        "sequence",
+        "adjacency",
+        "order"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_sequence_patterns-large-04",
+      "program": "items = set(e0...16)\nrow = sequence(items)\nnext_to(e0, e1) in row\nrow.before(e11, e3)\nrow.before(e6, e10)",
+      "expected": 653837184000,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_sequence_patterns",
+        "family=set_sequence_patterns",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=3",
+        "depth=1",
+        "set",
+        "sequence",
+        "adjacency",
+        "order"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_sequence_adjacency-large-00",
+      "program": "stock = bag(e0, e1, e2: 2, e3: 2, e4: 10)\nrow = sequence(stock)\nnext_to(e0, e1) in row",
+      "expected": 180180,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_sequence_adjacency",
+        "family=bag_sequence_adjacency",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "sequence",
+        "adjacency"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-bag_sequence_adjacency-large-04",
+      "program": "stock = bag(e0, e1, e2: 8, e3: 5, e4)\nrow = sequence(stock)\nnext_to(e0, e1) in row",
+      "expected": 540540,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=bag_sequence_adjacency",
+        "family=bag_sequence_adjacency",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "bag",
+        "sequence",
+        "adjacency"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_partition_min_size-large-00",
+      "program": "items = set(e0...16)\ngroups = partition(items, 4)\n|part| >= 3 for part in groups",
+      "expected": 57962905,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_partition_min_size",
+        "family=set_partition_min_size",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "set",
+        "partition",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_partition_min_size-large-04",
+      "program": "items = set(e0...16)\ngroups = partition(items, 2)\n|part| >= 6 for part in groups",
+      "expected": 25883,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_partition_min_size",
+        "family=set_partition_min_size",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=1",
+        "depth=1",
+        "set",
+        "partition",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_composition_sizes-large-00",
+      "program": "items = set(e0...16)\ngroups = compose(items, 5)\n|groups[0]| == 7\n|groups[1]| == 2\n|groups[2]| == 1\n|groups[3]| == 4\n|groups[4]| == 2",
+      "expected": 43243200,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_composition_sizes",
+        "family=set_composition_sizes",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=5",
+        "depth=1",
+        "set",
+        "composition",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-set_composition_sizes-large-04",
+      "program": "items = set(e0...16)\ngroups = compose(items, 2)\n|groups[0]| == 9\n|groups[1]| == 7",
+      "expected": 11440,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=set_composition_sizes",
+        "family=set_composition_sizes",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=1",
+        "constraintcount=2",
+        "depth=1",
+        "set",
+        "composition",
+        "size"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_choice_disjoint-large-00",
+      "program": "people = set(e0...16)\nteam = choose(people, 9)\ncaptain = choose(team, 1)\ncommittee = choose(team, 6)\ncaptain disjoint committee",
+      "expected": 2882880,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_choice_disjoint",
+        "family=dependent_choice_disjoint",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "disjoint",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_choice_disjoint-large-04",
+      "program": "people = set(e0...16)\nteam = choose(people, 8)\ncaptain = choose(team, 1)\ncommittee = choose(team, 2)\ncaptain disjoint committee",
+      "expected": 2162160,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_choice_disjoint",
+        "family=dependent_choice_disjoint",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "disjoint",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_tuple_position_count-large-00",
+      "program": "items = set(e0...16)\nmarked = set(e1, e2, e3, e4, e5, e6, e7, e8, e9)\nselected = choose(items, 7)\nrow = choose_tuple(selected, 7)\nrow[0] == e0\nrow.count(marked) == 3",
+      "expected": 1209600,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_tuple_position_count",
+        "family=dependent_tuple_position_count",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=2",
+        "set",
+        "choose",
+        "tuple",
+        "position",
+        "count",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_tuple_position_count-large-04",
+      "program": "items = set(e0...16)\nmarked = set(e1, e2)\nselected = choose(items, 7)\nrow = choose_tuple(selected, 7)\nrow[0] == e0\nrow.count(marked) == 2",
+      "expected": 514800,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_tuple_position_count",
+        "family=dependent_tuple_position_count",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=2",
+        "depth=2",
+        "set",
+        "choose",
+        "tuple",
+        "position",
+        "count",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_sequence_patterns-large-00",
+      "program": "items = set(e0...16)\nselected = choose(items, 8)\nrow = sequence(selected)\ne0 in selected\ne1 in selected\ne2 in selected\ne14 in selected\ne7 in selected\ne12 in selected\nnext_to(e0, e1) in row\nrow.before(e14, e2)\nrow.before(e7, e12)",
+      "expected": 113400,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_sequence_patterns",
+        "family=dependent_sequence_patterns",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=9",
+        "depth=2",
+        "set",
+        "choose",
+        "sequence",
+        "adjacency",
+        "order",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_sequence_patterns-large-04",
+      "program": "items = set(e0...16)\nselected = choose(items, 8)\nrow = sequence(selected)\ne0 in selected\ne1 in selected\ne5 in selected\ne6 in selected\ne3 in selected\ne12 in selected\nnext_to(e0, e1) in row\nrow.before(e5, e6)\nrow.before(e3, e12)",
+      "expected": 113400,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_sequence_patterns",
+        "family=dependent_sequence_patterns",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=9",
+        "depth=2",
+        "set",
+        "choose",
+        "sequence",
+        "adjacency",
+        "order",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_partition_min_size-large-00",
+      "program": "items = set(e0...16)\nselected = choose(items, 9)\ngroups = partition(selected, 2)\n|part| >= 4 for part in groups",
+      "expected": 1441440,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_partition_min_size",
+        "family=dependent_partition_min_size",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "partition",
+        "size",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_partition_min_size-large-04",
+      "program": "items = set(e0...16)\nselected = choose(items, 7)\ngroups = partition(selected, 3)\n|part| >= 1 for part in groups",
+      "expected": 3443440,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_partition_min_size",
+        "family=dependent_partition_min_size",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "partition",
+        "size",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_composition_sizes-large-00",
+      "program": "items = set(e0...16)\nselected = choose(items, 9)\ngroups = compose(selected, 4)\n|groups[0]| == 1\n|groups[1]| == 2\n|groups[2]| == 5\n|groups[3]| == 1",
+      "expected": 17297280,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_composition_sizes",
+        "family=dependent_composition_sizes",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=4",
+        "depth=2",
+        "set",
+        "choose",
+        "composition",
+        "size",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_composition_sizes-large-04",
+      "program": "items = set(e0...16)\nselected = choose(items, 11)\ngroups = compose(selected, 3)\n|groups[0]| == 1\n|groups[1]| == 7\n|groups[2]| == 3",
+      "expected": 5765760,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_composition_sizes",
+        "family=dependent_composition_sizes",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=2",
+        "constraintcount=3",
+        "depth=2",
+        "set",
+        "choose",
+        "composition",
+        "size",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_bag_tuple-large-00",
+      "program": "stock = bag(e0: 11, e1: 3, e2: 2)\npicked = choose(stock, 16)\nrow = tuple(picked)\nmarkers = set(m0...7)\nwitness = choose(markers, 5)\nm0 in witness",
+      "expected": 655200,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_bag_tuple",
+        "family=dependent_bag_tuple",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "bag",
+        "choose",
+        "tuple",
+        "set",
+        "membership",
+        "decomposition",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_bag_tuple-large-04",
+      "program": "stock = bag(e0: 8, e1: 7, e2)\npicked = choose(stock, 16)\nrow = tuple(picked)\nmarkers = set(m0...6)\nwitness = choose(markers, 2)\nm0 in witness",
+      "expected": 514800,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_bag_tuple",
+        "family=dependent_bag_tuple",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "bag",
+        "choose",
+        "tuple",
+        "set",
+        "membership",
+        "decomposition",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-nested_choice_chain-large-00",
+      "program": "people = set(e0...16)\nteam = choose(people, 4)\ne0 in team\nshortlist = choose(team, 2)\ncaptain = choose(shortlist, 1)",
+      "expected": 5460,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=nested_choice_chain",
+        "family=nested_choice_chain",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=3",
+        "set",
+        "choose",
+        "membership",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-nested_choice_chain-large-04",
+      "program": "people = set(e0...16)\nteam = choose(people, 5)\ne0 in team\nshortlist = choose(team, 3)\ncaptain = choose(shortlist, 1)",
+      "expected": 40950,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=nested_choice_chain",
+        "family=nested_choice_chain",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=3",
+        "set",
+        "choose",
+        "membership",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_selected_subsets-large-00",
+      "program": "items = set(e0...16)\nselected = choose(items, 9)\nleft = choose(selected, 2)\nright = choose(selected, 6)\nleft disjoint right",
+      "expected": 2882880,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_selected_subsets",
+        "family=dependent_selected_subsets",
+        "difficulty=large",
+        "domain=16",
+        "variant=0",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "disjoint",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    },
+    {
+      "suite": "synthetic",
+      "case_id": "syn-dependent_selected_subsets-large-04",
+      "program": "items = set(e0...16)\nselected = choose(items, 7)\nleft = choose(selected, 3)\nright = choose(selected, 3)\nleft disjoint right",
+      "expected": 1601600,
+      "tags": [
+        "synthetic",
+        "stratified",
+        "stratum=dependent_selected_subsets",
+        "family=dependent_selected_subsets",
+        "difficulty=large",
+        "domain=16",
+        "variant=4",
+        "seed=20260811",
+        "operatorcount=3",
+        "constraintcount=1",
+        "depth=2",
+        "set",
+        "choose",
+        "disjoint",
+        "dependent_configuration",
+        "outside_cola_fragment"
+      ],
+      "source": "problems/benchmarks/synthetic/manifest.json"
+    }
+  ]
+}

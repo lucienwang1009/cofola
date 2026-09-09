@@ -1,0 +1,85 @@
+suite,case_id,backend,status,result,expected,elapsed_sec,error_type,error_message,tags,source,lifted_bags,repetition,order,recheck_reason
+real,7,wfomc,solved,1440,1440,0.448121,,,set;sequence;together;benchmark,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,7,wfomc,solved,1440,1440,0.445023,,,set;sequence;together;benchmark,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,7,wfomc,solved,1440,1440,0.450566,,,set;sequence;together;benchmark,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,7,wfomc,solved,1440,1440,0.446033,,,set;sequence;together;benchmark,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,7,wfomc,solved,1440,1440,0.445025,,,set;sequence;together;benchmark,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,7,wfomc,solved,1440,1440,0.445849,,,set;sequence;together;benchmark,problems/real/corpus.json,True,3,1,external-regression-candidate
+real,20,wfomc,solved,10,10,0.327618,,,set;choose,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,20,wfomc,solved,10,10,0.328804,,,set;choose,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,20,wfomc,solved,10,10,0.325322,,,set;choose,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,20,wfomc,solved,10,10,0.327024,,,set;choose,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,20,wfomc,solved,10,10,0.325952,,,set;choose,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,20,wfomc,solved,10,10,0.325820,,,set;choose,problems/real/corpus.json,True,3,1,external-regression-candidate
+real,28,wfomc,solved,243,243,0.375141,,,set;composition,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,28,wfomc,solved,243,243,0.375940,,,set;composition,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,28,wfomc,solved,243,243,0.373629,,,set;composition,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,28,wfomc,solved,243,243,0.374083,,,set;composition,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,28,wfomc,solved,243,243,0.375193,,,set;composition,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,28,wfomc,solved,243,243,0.373209,,,set;composition,problems/real/corpus.json,True,3,1,external-regression-candidate
+real,38,wfomc,solved,3,3,0.393136,,,bag;partition,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,38,wfomc,solved,3,3,0.386712,,,bag;partition,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,38,wfomc,solved,3,3,0.387512,,,bag;partition,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,38,wfomc,solved,3,3,0.381652,,,bag;partition,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,38,wfomc,solved,3,3,0.387654,,,bag;partition,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,38,wfomc,solved,3,3,0.383469,,,bag;partition,problems/real/corpus.json,True,3,1,external-regression-candidate
+real,48,wfomc,solved,35,35,0.825787,,,bag;tuple,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,48,wfomc,solved,35,35,0.824530,,,bag;tuple,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,48,wfomc,solved,35,35,0.828635,,,bag;tuple,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,48,wfomc,solved,35,35,0.823877,,,bag;tuple,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,48,wfomc,solved,35,35,0.818364,,,bag;tuple,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,48,wfomc,solved,35,35,0.823968,,,bag;tuple,problems/real/corpus.json,True,3,1,external-regression-candidate
+real,60,wfomc,solved,36,36,0.321177,,,set;choose,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,60,wfomc,solved,36,36,0.317214,,,set;choose,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,60,wfomc,solved,36,36,0.320570,,,set;choose,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,60,wfomc,solved,36,36,0.315748,,,set;choose,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,60,wfomc,solved,36,36,0.319525,,,set;choose,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,60,wfomc,solved,36,36,0.316673,,,set;choose,problems/real/corpus.json,True,3,1,external-regression-candidate
+real,70,wfomc,solved,28,28,0.406313,,,set;choose_replace,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,70,wfomc,solved,28,28,0.407234,,,set;choose_replace,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,70,wfomc,solved,28,28,0.410634,,,set;choose_replace,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,70,wfomc,solved,28,28,0.422781,,,set;choose_replace,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,70,wfomc,solved,28,28,0.422572,,,set;choose_replace,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,70,wfomc,solved,28,28,0.408063,,,set;choose_replace,problems/real/corpus.json,True,3,1,external-regression-candidate
+real,80,wfomc,solved,24,24,0.387004,,,set;sequence;next_to;not constraint,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,80,wfomc,solved,24,24,0.389074,,,set;sequence;next_to;not constraint,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,80,wfomc,solved,24,24,0.385434,,,set;sequence;next_to;not constraint,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,80,wfomc,solved,24,24,0.386643,,,set;sequence;next_to;not constraint,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,80,wfomc,solved,24,24,0.385512,,,set;sequence;next_to;not constraint,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,80,wfomc,solved,24,24,0.386557,,,set;sequence;next_to;not constraint,problems/real/corpus.json,True,3,1,external-regression-candidate
+real,92,wfomc,solved,15600,15600,0.747109,,,set;choose;multiple choosing;union;size constraint,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,92,wfomc,solved,15600,15600,0.753644,,,set;choose;multiple choosing;union;size constraint,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,92,wfomc,solved,15600,15600,0.758949,,,set;choose;multiple choosing;union;size constraint,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,92,wfomc,solved,15600,15600,0.760041,,,set;choose;multiple choosing;union;size constraint,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,92,wfomc,solved,15600,15600,0.756989,,,set;choose;multiple choosing;union;size constraint,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,92,wfomc,solved,15600,15600,0.757829,,,set;choose;multiple choosing;union;size constraint,problems/real/corpus.json,True,3,1,external-regression-candidate
+real,100,wfomc,solved,650,650,0.799471,,,set;choose;tuple,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,100,wfomc,solved,650,650,0.799263,,,set;choose;tuple,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,100,wfomc,solved,650,650,0.795297,,,set;choose;tuple,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,100,wfomc,solved,650,650,0.797822,,,set;choose;tuple,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,100,wfomc,solved,650,650,0.800361,,,set;choose;tuple,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,100,wfomc,solved,650,650,0.803615,,,set;choose;tuple,problems/real/corpus.json,True,3,1,external-regression-candidate
+real,108,wfomc,solved,126,126,0.695787,,,partition;benchmark,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,108,wfomc,solved,126,126,0.695032,,,partition;benchmark,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,108,wfomc,solved,126,126,0.694511,,,partition;benchmark,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,108,wfomc,solved,126,126,0.696711,,,partition;benchmark,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,108,wfomc,solved,126,126,0.688659,,,partition;benchmark,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,108,wfomc,solved,126,126,0.684479,,,partition;benchmark,problems/real/corpus.json,True,3,1,external-regression-candidate
+real,118,wfomc,solved,1024,1024,0.324021,,,set;composition,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,118,wfomc,solved,1024,1024,0.321832,,,set;composition,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,118,wfomc,solved,1024,1024,0.319465,,,set;composition,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,118,wfomc,solved,1024,1024,0.322565,,,set;composition,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,118,wfomc,solved,1024,1024,0.318932,,,set;composition,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,118,wfomc,solved,1024,1024,0.325128,,,set;composition,problems/real/corpus.json,True,3,1,external-regression-candidate
+real,128,wfomc,solved,12500,12500,0.475966,,,set;choose_permute;tuple;index;in,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,128,wfomc,solved,12500,12500,0.479442,,,set;choose_permute;tuple;index;in,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,128,wfomc,solved,12500,12500,0.478245,,,set;choose_permute;tuple;index;in,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,128,wfomc,solved,12500,12500,0.478244,,,set;choose_permute;tuple;index;in,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,128,wfomc,solved,12500,12500,0.480708,,,set;choose_permute;tuple;index;in,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,128,wfomc,solved,12500,12500,0.477155,,,set;choose_permute;tuple;index;in,problems/real/corpus.json,True,3,1,external-regression-candidate
+real,136,wfomc,solved,4320,4320,1.229589,,,set;choose;tuple;intersection;size constraint,problems/real/corpus.json,False,1,0,external-regression-candidate
+real,136,wfomc,solved,4320,4320,1.233245,,,set;choose;tuple;intersection;size constraint,problems/real/corpus.json,True,1,1,external-regression-candidate
+real,136,wfomc,solved,4320,4320,1.231227,,,set;choose;tuple;intersection;size constraint,problems/real/corpus.json,True,2,0,external-regression-candidate
+real,136,wfomc,solved,4320,4320,1.226616,,,set;choose;tuple;intersection;size constraint,problems/real/corpus.json,False,2,1,external-regression-candidate
+real,136,wfomc,solved,4320,4320,1.237066,,,set;choose;tuple;intersection;size constraint,problems/real/corpus.json,False,3,0,external-regression-candidate
+real,136,wfomc,solved,4320,4320,1.244408,,,set;choose;tuple;intersection;size constraint,problems/real/corpus.json,True,3,1,external-regression-candidate

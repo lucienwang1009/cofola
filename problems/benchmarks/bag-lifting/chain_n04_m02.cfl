@@ -1,0 +1,3 @@
+B = bag(e0: 2, e1: 2, e2: 2, e3: 2)
+X = choose(B, 4)
+Y = choose(X, 2)

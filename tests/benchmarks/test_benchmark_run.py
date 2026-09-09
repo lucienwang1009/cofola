@@ -1,6 +1,11 @@
 from __future__ import annotations
 
 import argparse
+from queue import Queue
+
+import pytest
+
+from scripts.benchmarks import run
 
 from scripts.benchmarks.cases import BenchmarkCase
 from scripts.benchmarks.run import (
@@ -44,6 +49,22 @@ def test_misspelled_propostionalwfomc_alias_is_accepted() -> None:
 
     assert backend == "wfomc"
     assert algo == "propositional"
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_worker_forwards_lifted_bags_option(monkeypatch, enabled) -> None:
+    received = {}
+
+    def solve(program, **kwargs):
+        received.update(kwargs)
+        return 3
+
+    monkeypatch.setattr(run, "parse_and_solve", solve)
+    queue = Queue()
+    run._solve_worker(queue, _case().program, "wfomc", False, lifted_bags=enabled)
+
+    assert received["lifted_bags"] is enabled
+    assert queue.get_nowait() == {"ok": True, "result": 3}
 
 
 def test_asp_wrong_answer_is_wrong() -> None:

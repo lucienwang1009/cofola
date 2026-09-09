@@ -1,0 +1,51 @@
+{
+  "args": {
+    "manifest": "problems/benchmarks/manifest.json",
+    "output_dir": "check-points/smoke",
+    "timeout": 100.0,
+    "shard": 0,
+    "shards": 1,
+    "cpu": 24,
+    "ids": [
+      "132"
+    ]
+  },
+  "hostname": "server29",
+  "platform": "Linux-5.15.0-176-generic-x86_64-with-glibc2.35",
+  "python": "3.11.14",
+  "versions": {
+    "wfomc": "0.1.0",
+    "sympy": "1.14.0",
+    "python-flint": "0.8.0",
+    "numpy": "2.4.3",
+    "scipy": "1.17.1"
+  },
+  "source_sha256": "05c936cef57a953308e82f51a6c231cf557053b3b17c8e2f4d2dbf2003d1c41f",
+  "manifest_sha256": "b877cba417709385d3056f43f4f839c481013c547e0ec428d76e0c915dc28c8b",
+  "cpu_affinity": [
+    24
+  ],
+  "environment": {
+    "GANAK": "/home/sunshixin/lucien/cofola-lifted-bags-test-20260903/.venv/bin/ganak",
+    "PYTHONHASHSEED": "0",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "protocol": "Alternating paired off/on; one initial run; three additional pairs for >=20% AND >=0.1s slowdown, lost solution, wrong answer, mismatch, or error. No timeout propagation. No encoding-size instrumentation.",
+  "cases": [
+    {
+      "suite": "real",
+      "case_id": "132",
+      "program": "vowels = bag(A, E, I, A)\nconsonants = bag(M, T, H, M, T, C, S)\nchosen_vowels = choose(vowels, 2)\nchosen_consonants = choose(consonants, 4)",
+      "expected": 72,
+      "tags": [
+        "bag",
+        "choose",
+        "multiple choosing",
+        "benchmark"
+      ],
+      "source": "problems/real/corpus.json"
+    }
+  ]
+}

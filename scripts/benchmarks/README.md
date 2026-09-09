@@ -166,6 +166,10 @@ uv run python -m scripts.benchmarks.run \
 first-class Essence/Conjure backend. Both are held to the same correctness
 standard: wrong answers are reported as `wrong`, not `unsolved`. SharpSAT is not
 part of this runner.
+Add `--lifted-bags` to enable exchangeable-bag factorization for WFOMC runs.
+It is disabled by default and requires Ganak for the local symbolic count,
+regardless of the outer WFOMC algorithm. Other backends ignore this option.
+
 Essence needs Conjure/Savile Row and Java; their locations are
 environment-specific, so point the runner at them with `--conjure-dir` when
 Conjure is not on `PATH` and `--java-bin` when Java is not on `PATH`.
@@ -275,3 +279,53 @@ The plotting script writes:
 
 All figures are vector PDFs with embedded TrueType fonts (`pdf.fonttype = 42`)
 for inclusion in LaTeX manuscripts.
+
+## Paired bag-lifting ablation
+
+`bag_ablation.py` runs the ordinary end-to-end benchmark worker with the option
+off and on. It alternates their order, never propagates timeouts, saves each
+result immediately, and refuses to overwrite an existing result file. It runs
+each case once initially; a >=20% **and** >=0.1 s slowdown, lost solution,
+answer mismatch, or error triggers three additional paired repetitions.
+There is no encoding-size instrumentation. On POSIX, worker timeouts also
+terminate their Ganak subprocess group.
+
+```bash
+uv run --extra coso --group dev python -m scripts.benchmarks.bag_lifting_cases
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONHASHSEED=0 \
+  uv run --extra coso --group dev python -m scripts.benchmarks.bag_ablation \
+    --manifest problems/benchmarks/manifest.json \
+    --shard 0 --shards 4 --cpu 16 --output-dir check-points/ablation/paper/shard-0
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONHASHSEED=0 \
+  uv run --extra coso --group dev python -m scripts.benchmarks.bag_ablation \
+    --manifest problems/benchmarks/bag-lifting/manifest.json --memory-gib 16 \
+    --shard 0 --shards 4 --cpu 17 --output-dir check-points/ablation/controlled/shard-0
+```
+
+Run all four shard indices, choosing distinct idle physical cores on the same
+server (the `--cpu` and memory-limit options require Linux). Both modes of an
+instance always use the same core. Ganak must be on PATH or selected by `GANAK`.
+The controlled manifest contains 40 cases; answers are computed independently
+by integer DP, with small hand-counted examples covered by tests. The main
+791-case manifest is not modified by this additional suite.
+
+After all shards finish:
+
+```bash
+uv run --extra coso --group dev python -m scripts.benchmarks.analyze_bag_ablation \
+  --input-dir check-points/ablation --figure-dir check-points/ablation/figures
+```
+
+The analysis keeps every raw run, reports medians of the three additional runs
+for rechecked cases, rejects incomplete pairs, and records mixed outcomes as
+unstable failures. Speedups include only jointly solved cases; failure crosses
+in the plots are placed at the time limit and are **not** measured runtimes.
+The raw CSVs and per-shard metadata (case programs, dependency versions, source
+and manifest hashes, affinity, and environment) are the reproducibility record.
+
+For a separate historical regression audit, use `--repeat-only --ids ...` to
+run three additional pairs for previously identified candidates. Save these
+under `historical/shard-*` in the same output root, and pass the previous
+full results CSV as `--historical-baseline` to the analysis command. It checks
+that every >=20% and >=0.1 s historical slowdown was rechecked, and keeps this
+audit separate from the original on/off aggregates.

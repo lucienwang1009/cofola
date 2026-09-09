@@ -1,0 +1,139 @@
+2026-09-08 07:26:53.687 | INFO     | __main__:main:103 - 4/40 bag_lifting:choose_n16_m02 lifting=True rep=0 solved 0.419s
+2026-09-08 07:27:43.447 | INFO     | __main__:main:103 - 4/40 bag_lifting:choose_n16_m02 lifting=False rep=0 error 49.759s
+2026-09-08 07:28:32.732 | INFO     | __main__:main:103 - 4/40 bag_lifting:choose_n16_m02 lifting=False rep=1 error 49.284s
+2026-09-08 07:28:33.166 | INFO     | __main__:main:103 - 4/40 bag_lifting:choose_n16_m02 lifting=True rep=1 solved 0.433s
+2026-09-08 07:28:33.595 | INFO     | __main__:main:103 - 4/40 bag_lifting:choose_n16_m02 lifting=True rep=2 solved 0.427s
+2026-09-08 07:29:23.006 | INFO     | __main__:main:103 - 4/40 bag_lifting:choose_n16_m02 lifting=False rep=2 error 49.410s
+2026-09-08 07:30:07.378 | INFO     | __main__:main:103 - 4/40 bag_lifting:choose_n16_m02 lifting=False rep=3 error 44.370s
+2026-09-08 07:30:07.761 | INFO     | __main__:main:103 - 4/40 bag_lifting:choose_n16_m02 lifting=True rep=3 solved 0.382s
+2026-09-08 07:30:08.140 | INFO     | __main__:main:103 - 8/40 bag_lifting:choose_n04_m16 lifting=True rep=0 solved 0.377s
+2026-09-08 07:30:08.858 | INFO     | __main__:main:103 - 8/40 bag_lifting:choose_n04_m16 lifting=False rep=0 solved 0.717s
+2026-09-08 07:30:09.291 | INFO     | __main__:main:103 - 12/40 bag_lifting:chain_n16_m02 lifting=True rep=0 solved 0.432s
+Flint exception (General error):
+    Unable to allocate memory (9039208192).
+2026-09-08 07:30:35.286 | INFO     | __main__:main:103 - 12/40 bag_lifting:chain_n16_m02 lifting=False rep=0 error 25.994s
+Flint exception (General error):
+    Unable to allocate memory (9039208192).
+2026-09-08 07:31:01.487 | INFO     | __main__:main:103 - 12/40 bag_lifting:chain_n16_m02 lifting=False rep=1 error 26.200s
+2026-09-08 07:31:01.924 | INFO     | __main__:main:103 - 12/40 bag_lifting:chain_n16_m02 lifting=True rep=1 solved 0.435s
+2026-09-08 07:31:02.356 | INFO     | __main__:main:103 - 12/40 bag_lifting:chain_n16_m02 lifting=True rep=2 solved 0.431s
+Flint exception (General error):
+    Unable to allocate memory (9039208192).
+2026-09-08 07:31:28.020 | INFO     | __main__:main:103 - 12/40 bag_lifting:chain_n16_m02 lifting=False rep=2 error 25.662s
+Flint exception (General error):
+    Unable to allocate memory (9039208192).
+2026-09-08 07:31:53.758 | INFO     | __main__:main:103 - 12/40 bag_lifting:chain_n16_m02 lifting=False rep=3 error 25.737s
+2026-09-08 07:31:54.184 | INFO     | __main__:main:103 - 12/40 bag_lifting:chain_n16_m02 lifting=True rep=3 solved 0.424s
+2026-09-08 07:31:54.743 | INFO     | __main__:main:103 - 16/40 bag_lifting:chain_n04_m16 lifting=True rep=0 solved 0.558s
+Flint exception (General error):
+    Unable to allocate memory (10417505280).
+2026-09-08 07:32:21.707 | INFO     | __main__:main:103 - 16/40 bag_lifting:chain_n04_m16 lifting=False rep=0 error 26.962s
+Flint exception (General error):
+    Unable to allocate memory (10417505280).
+2026-09-08 07:32:48.530 | INFO     | __main__:main:103 - 16/40 bag_lifting:chain_n04_m16 lifting=False rep=1 error 26.822s
+2026-09-08 07:32:49.080 | INFO     | __main__:main:103 - 16/40 bag_lifting:chain_n04_m16 lifting=True rep=1 solved 0.549s
+2026-09-08 07:32:49.639 | INFO     | __main__:main:103 - 16/40 bag_lifting:chain_n04_m16 lifting=True rep=2 solved 0.557s
+Flint exception (General error):
+    Unable to allocate memory (10417505280).
+2026-09-08 07:33:16.424 | INFO     | __main__:main:103 - 16/40 bag_lifting:chain_n04_m16 lifting=False rep=2 error 26.783s
+Flint exception (General error):
+    Unable to allocate memory (10417505280).
+2026-09-08 07:33:43.231 | INFO     | __main__:main:103 - 16/40 bag_lifting:chain_n04_m16 lifting=False rep=3 error 26.806s
+2026-09-08 07:33:43.789 | INFO     | __main__:main:103 - 16/40 bag_lifting:chain_n04_m16 lifting=True rep=3 solved 0.557s
+2026-09-08 07:33:44.210 | INFO     | __main__:main:103 - 20/40 bag_lifting:hidden_n16_m02 lifting=True rep=0 solved 0.420s
+Flint exception (General error):
+    Unable to allocate memory (9039208192).
+2026-09-08 07:34:10.110 | INFO     | __main__:main:103 - 20/40 bag_lifting:hidden_n16_m02 lifting=False rep=0 error 25.899s
+Flint exception (General error):
+    Unable to allocate memory (9039208192).
+2026-09-08 07:34:35.450 | INFO     | __main__:main:103 - 20/40 bag_lifting:hidden_n16_m02 lifting=False rep=1 error 25.339s
+2026-09-08 07:34:35.864 | INFO     | __main__:main:103 - 20/40 bag_lifting:hidden_n16_m02 lifting=True rep=1 solved 0.413s
+2026-09-08 07:34:36.273 | INFO     | __main__:main:103 - 20/40 bag_lifting:hidden_n16_m02 lifting=True rep=2 solved 0.407s
+Flint exception (General error):
+    Unable to allocate memory (9039208192).
+2026-09-08 07:35:01.285 | INFO     | __main__:main:103 - 20/40 bag_lifting:hidden_n16_m02 lifting=False rep=2 error 25.011s
+Flint exception (General error):
+    Unable to allocate memory (9039208192).
+2026-09-08 07:35:26.505 | INFO     | __main__:main:103 - 20/40 bag_lifting:hidden_n16_m02 lifting=False rep=3 error 25.219s
+2026-09-08 07:35:26.921 | INFO     | __main__:main:103 - 20/40 bag_lifting:hidden_n16_m02 lifting=True rep=3 solved 0.414s
+2026-09-08 07:35:27.347 | INFO     | __main__:main:103 - 24/40 bag_lifting:hidden_n04_m16 lifting=True rep=0 solved 0.425s
+Flint exception (General error):
+    Unable to allocate memory (10417505280).
+2026-09-08 07:35:54.038 | INFO     | __main__:main:103 - 24/40 bag_lifting:hidden_n04_m16 lifting=False rep=0 error 26.689s
+Flint exception (General error):
+    Unable to allocate memory (10417505280).
+2026-09-08 07:36:20.698 | INFO     | __main__:main:103 - 24/40 bag_lifting:hidden_n04_m16 lifting=False rep=1 error 26.659s
+2026-09-08 07:36:21.113 | INFO     | __main__:main:103 - 24/40 bag_lifting:hidden_n04_m16 lifting=True rep=1 solved 0.414s
+2026-09-08 07:36:21.528 | INFO     | __main__:main:103 - 24/40 bag_lifting:hidden_n04_m16 lifting=True rep=2 solved 0.413s
+Flint exception (General error):
+    Unable to allocate memory (10417505280).
+2026-09-08 07:36:47.799 | INFO     | __main__:main:103 - 24/40 bag_lifting:hidden_n04_m16 lifting=False rep=2 error 26.269s
+Flint exception (General error):
+    Unable to allocate memory (10417505280).
+2026-09-08 07:37:14.312 | INFO     | __main__:main:103 - 24/40 bag_lifting:hidden_n04_m16 lifting=False rep=3 error 26.512s
+2026-09-08 07:37:14.742 | INFO     | __main__:main:103 - 24/40 bag_lifting:hidden_n04_m16 lifting=True rep=3 solved 0.428s
+2026-09-08 07:37:15.534 | INFO     | __main__:main:103 - 28/40 bag_lifting:intersection_n16_m02 lifting=True rep=0 solved 0.791s
+Flint exception (General error):
+    Unable to allocate memory (2007952960).
+2026-09-08 07:37:37.675 | INFO     | __main__:main:103 - 28/40 bag_lifting:intersection_n16_m02 lifting=False rep=0 error 22.139s
+Flint exception (General error):
+    Unable to allocate memory (2007952960).
+2026-09-08 07:38:01.081 | INFO     | __main__:main:103 - 28/40 bag_lifting:intersection_n16_m02 lifting=False rep=1 error 23.405s
+2026-09-08 07:38:02.045 | INFO     | __main__:main:103 - 28/40 bag_lifting:intersection_n16_m02 lifting=True rep=1 solved 0.963s
+2026-09-08 07:38:02.859 | INFO     | __main__:main:103 - 28/40 bag_lifting:intersection_n16_m02 lifting=True rep=2 solved 0.812s
+Flint exception (General error):
+    Unable to allocate memory (2007952960).
+2026-09-08 07:38:26.983 | INFO     | __main__:main:103 - 28/40 bag_lifting:intersection_n16_m02 lifting=False rep=2 error 24.122s
+Flint exception (General error):
+    Unable to allocate memory (2007952960).
+2026-09-08 07:38:51.192 | INFO     | __main__:main:103 - 28/40 bag_lifting:intersection_n16_m02 lifting=False rep=3 error 24.207s
+2026-09-08 07:38:52.104 | INFO     | __main__:main:103 - 28/40 bag_lifting:intersection_n16_m02 lifting=True rep=3 solved 0.911s
+2026-09-08 07:38:53.579 | INFO     | __main__:main:103 - 32/40 bag_lifting:intersection_n04_m16 lifting=True rep=0 solved 1.474s
+Flint exception (General error):
+    Unable to allocate memory (8731018240).
+2026-09-08 07:39:13.255 | INFO     | __main__:main:103 - 32/40 bag_lifting:intersection_n04_m16 lifting=False rep=0 error 19.674s
+Flint exception (General error):
+    Unable to allocate memory (8731018240).
+2026-09-08 07:39:31.489 | INFO     | __main__:main:103 - 32/40 bag_lifting:intersection_n04_m16 lifting=False rep=1 error 18.232s
+2026-09-08 07:39:32.816 | INFO     | __main__:main:103 - 32/40 bag_lifting:intersection_n04_m16 lifting=True rep=1 solved 1.326s
+2026-09-08 07:39:34.121 | INFO     | __main__:main:103 - 32/40 bag_lifting:intersection_n04_m16 lifting=True rep=2 solved 1.303s
+Flint exception (General error):
+    Unable to allocate memory (8731018240).
+2026-09-08 07:39:50.835 | INFO     | __main__:main:103 - 32/40 bag_lifting:intersection_n04_m16 lifting=False rep=2 error 16.712s
+Flint exception (General error):
+    Unable to allocate memory (8731018240).
+2026-09-08 07:40:07.690 | INFO     | __main__:main:103 - 32/40 bag_lifting:intersection_n04_m16 lifting=False rep=3 error 16.853s
+2026-09-08 07:40:08.994 | INFO     | __main__:main:103 - 32/40 bag_lifting:intersection_n04_m16 lifting=True rep=3 solved 1.303s
+2026-09-08 07:40:09.397 | INFO     | __main__:main:103 - 36/40 bag_lifting:named_n16_m02 lifting=True rep=0 solved 0.401s
+2026-09-08 07:40:51.732 | INFO     | __main__:main:103 - 36/40 bag_lifting:named_n16_m02 lifting=False rep=0 error 42.334s
+2026-09-08 07:41:34.607 | INFO     | __main__:main:103 - 36/40 bag_lifting:named_n16_m02 lifting=False rep=1 error 42.874s
+2026-09-08 07:41:35.011 | INFO     | __main__:main:103 - 36/40 bag_lifting:named_n16_m02 lifting=True rep=1 solved 0.402s
+2026-09-08 07:41:35.415 | INFO     | __main__:main:103 - 36/40 bag_lifting:named_n16_m02 lifting=True rep=2 solved 0.402s
+2026-09-08 07:42:18.657 | INFO     | __main__:main:103 - 36/40 bag_lifting:named_n16_m02 lifting=False rep=2 error 43.241s
+2026-09-08 07:43:01.765 | INFO     | __main__:main:103 - 36/40 bag_lifting:named_n16_m02 lifting=False rep=3 error 43.106s
+2026-09-08 07:43:02.170 | INFO     | __main__:main:103 - 36/40 bag_lifting:named_n16_m02 lifting=True rep=3 solved 0.404s
+Flint exception (General error):
+    Unable to allocate memory (9268833024).
+2026-09-08 07:43:17.442 | INFO     | __main__:main:103 - 40/40 bag_lifting:fallback_n16_m02 lifting=True rep=0 error 15.270s
+Flint exception (General error):
+    Unable to allocate memory (9268833024).
+2026-09-08 07:43:32.643 | INFO     | __main__:main:103 - 40/40 bag_lifting:fallback_n16_m02 lifting=False rep=0 error 15.199s
+Flint exception (General error):
+    Unable to allocate memory (9268833024).
+2026-09-08 07:43:47.796 | INFO     | __main__:main:103 - 40/40 bag_lifting:fallback_n16_m02 lifting=False rep=1 error 15.152s
+Flint exception (General error):
+    Unable to allocate memory (9268833024).
+2026-09-08 07:44:02.932 | INFO     | __main__:main:103 - 40/40 bag_lifting:fallback_n16_m02 lifting=True rep=1 error 15.134s
+Flint exception (General error):
+    Unable to allocate memory (9268833024).
+2026-09-08 07:44:18.047 | INFO     | __main__:main:103 - 40/40 bag_lifting:fallback_n16_m02 lifting=True rep=2 error 15.113s
+Flint exception (General error):
+    Unable to allocate memory (9268833024).
+2026-09-08 07:44:33.171 | INFO     | __main__:main:103 - 40/40 bag_lifting:fallback_n16_m02 lifting=False rep=2 error 15.122s
+Flint exception (General error):
+    Unable to allocate memory (9268833024).
+2026-09-08 07:44:48.351 | INFO     | __main__:main:103 - 40/40 bag_lifting:fallback_n16_m02 lifting=False rep=3 error 15.178s
+Flint exception (General error):
+    Unable to allocate memory (9268833024).
+2026-09-08 07:45:03.517 | INFO     | __main__:main:103 - 40/40 bag_lifting:fallback_n16_m02 lifting=True rep=3 error 15.165s
+2026-09-08 07:45:03.518 | INFO     | __main__:main:108 - Complete: {'solved': 34, 'error': 40}
