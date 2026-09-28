@@ -101,6 +101,32 @@ def test_small_choice_from_high_multiplicity_bag() -> None:
 
 
 @pytest.mark.parametrize(
+    ("source", "case_index"), [("set(a, b)", 0), ("bag(a: 2, b: 1)", 1)],
+)
+@pytest.mark.parametrize(
+    ("constraint", "expected_counts"),
+    [
+        ("|C| - |C| == 0", (4, 6)),
+        ("|C| - |Alias| == 0", (4, 6)),
+        ("|C| + |C| == 2", (2, 2)),
+        ("2|C| - |C| == 1", (2, 2)),
+        ("|C| + |C| <= 2", (3, 3)),
+        ("|C| + |C| < 3", (3, 3)),
+        ("|C| + |C| >= 3", (1, 3)),
+        ("2|C| + |C| > 4", (1, 3)),
+        ("|C| - |C| == 1", (0, 0)),
+    ],
+)
+def test_repeated_cardinality_terms_preserve_count(
+    source: str, case_index: int, constraint: str, expected_counts: tuple[int, int],
+) -> None:
+    """LP preprocessing must preserve sums and cancellations of one object's size."""
+    assert parse_and_solve(
+        f"S = {source}\nC = choose(S)\nAlias = C\n{constraint}\n"
+    ) == expected_counts[case_index]
+
+
+@pytest.mark.parametrize(
     ("source", "constraint", "expected"),
     [
         ("bag(a: 1)", "sub subset sup", 3),
