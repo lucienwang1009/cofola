@@ -127,6 +127,36 @@ def test_repeated_cardinality_terms_preserve_count(
 
 
 @pytest.mark.parametrize(
+    "definitions",
+    [
+        "S = set(a)\nB = choose(S)",
+        "S = bag(a: 2, b: 1)\nB = choose(S)",
+        "S = set(a)\nB = choose_tuple(S)",
+        "S = set(a)\nB = choose_sequence(S)",
+        "S = set(a)\nX = choose(S)\nB = X & S",
+        "S = set(a)\nP = compose(S, 2)\nB = P[0]",
+    ],
+)
+def test_partial_size_folding_preserves_count(definitions: str) -> None:
+    """B must stay empty while A independently has two possible values."""
+    assert parse_and_solve(
+        f"{definitions}\nU = set(u)\nA = choose(U)\n|A| + 2|B| <= 1\n"
+    ) == 2
+
+
+@pytest.mark.parametrize("reverse_constraints", [False, True])
+def test_cross_constraint_size_folding_preserves_count(reverse_constraints: bool) -> None:
+    """A has size one; (B, C) have sizes (1, 0) or (2, 1)."""
+    constraints = ["|A| + |B| - |C| == 2", "|B| - |C| == 1"]
+    if reverse_constraints:
+        constraints.reverse()
+    assert parse_and_solve(
+        "S = set(a, b)\nA = choose(S)\nB = choose(S)\nC = choose(S)\n"
+        + "\n".join(constraints)
+    ) == 8
+
+
+@pytest.mark.parametrize(
     ("source", "constraint", "expected"),
     [
         ("bag(a: 1)", "sub subset sup", 3),

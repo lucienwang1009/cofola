@@ -1,6 +1,8 @@
 """Tests for planning-layer utilities and analysis policies."""
 from __future__ import annotations
 
+from dataclasses import replace
+
 import pytest
 
 from cofola.frontend import (
@@ -379,6 +381,77 @@ T = choose(S)
 
     assert result.constraints == ()
     assert result.get_object(chosen) == SetChoose(source=source, size=2)
+
+
+@pytest.mark.parametrize(
+    ("source", "choice"),
+    [
+        ("set(a)", "choose(S)"),
+        ("bag(a: 2, b: 1)", "choose(S)"),
+        ("set(a)", "choose_replace(S)"),
+        ("set(a)", "choose_tuple(S)"),
+        ("set(a)", "choose_sequence(S)"),
+    ],
+)
+def test_partial_size_folding_embeds_inferred_size(source: str, choice: str) -> None:
+    """A partially folded comparison must still enforce the removed size term."""
+    problem = parse(
+        f"S = {source}\nU = set(u)\nA = choose(U)\nB = {choice}\n"
+        "|A| + 2|B| <= 1\n"
+    )
+    chosen = _ref_named(problem, "B")
+    variable = _ref_named(problem, "A")
+
+    result = SizeConstraintFolder().run(problem)
+
+    assert result.get_object(chosen) == replace(problem.get_object(chosen), size=0)
+    assert result.constraints == (
+        SizeConstraint(terms=((variable, 1),), comparator="<=", rhs=1),
+    )
+    assert SizeConstraintFolder().run(result) is result
+
+
+@pytest.mark.parametrize(
+    ("definitions", "constraint"),
+    [
+        ("X = choose(S)\nB = X & S", "|A| + 2|B| <= 1"),
+        ("P = compose(S, 2)\nB = P[0]", "|A| + 2|B| <= 1"),
+        ("P = compose(S, 2)\nB = P[0]", "|B| == 0"),
+        (
+            "B = choose(S)\nP = compose(S, 2)\nD = P[0]",
+            "|A| + 2|B| + 2|D| <= 1",
+        ),
+    ],
+)
+def test_size_folding_retains_unembeddable_restrictions(
+    definitions: str, constraint: str,
+) -> None:
+    """Derived and part sizes require the original constraint to remain intact."""
+    problem = parse(f"S = set(a)\nA = choose(S)\n{definitions}\n{constraint}\n")
+
+    result = SizeConstraintFolder().run(problem)
+
+    assert result is problem
+
+
+@pytest.mark.parametrize("reverse_constraints", [False, True])
+def test_partial_size_folding_preserves_cross_constraint_inference(
+    reverse_constraints: bool,
+) -> None:
+    """Retaining inferred facts must not depend on the constraint order."""
+    constraints = ["|A| + |B| - |C| == 2", "|B| - |C| == 1"]
+    if reverse_constraints:
+        constraints.reverse()
+    problem = parse(
+        "S = set(a, b)\nA = choose(S)\nB = choose(S)\nC = choose(S)\n"
+        + "\n".join(constraints)
+    )
+    chosen = _ref_named(problem, "A")
+
+    result = SizeConstraintFolder().run(problem)
+
+    assert result.get_object(chosen) == replace(problem.get_object(chosen), size=1)
+    assert SizeConstraintFolder().run(result) is result
 
 
 def test_size_constraint_folder_raises_when_analysis_is_unsat() -> None:

@@ -329,9 +329,9 @@ class SizeConstraintFolder(TransformPass):
 
         |A| + |B| == 5,  exact_size(A) == 3  →  |B| == 2
 
-    After this pass, A no longer appears in any SizeConstraint, so the
-    encoder never calls get_obj_var(A) and never registers a WFOMC weight
-    for it.
+    A substituted size must remain enforced by an initialized value or a
+    size-bearing definition. Otherwise the original constraint is retained,
+    even when only some of its terms could be substituted.
     """
 
     required_analyses = [MergedAnalysis]
@@ -339,14 +339,12 @@ class SizeConstraintFolder(TransformPass):
     def run(self, problem: Problem, am=None) -> Problem:
         """Substitute known exact sizes into SizeConstraints.
 
-        When all terms in a SizeConstraint are substituted:
-        - If the resulting numerical comparison is True (e.g. 0 == 0): drop the
-          constraint and embed the exact size directly into any SetChoose /
-          BagChoose / SetChooseReplace defs whose size was None. This preserves
-          the size information the encoder needs without keeping a redundant
-          SizeConstraint.
-        - If the resulting comparison is False (e.g. 0 == 3): raise
-          UnsatisfiableConstraint, which the pipeline catches to return 0.
+        Both partial and complete substitution preserve every removed size
+        fact. Initialized objects already enforce their size; choice and
+        ordered-object definitions can retain it in their size field. If any
+        substituted fact cannot be retained this way, keep the original
+        constraint. A fully substituted false comparison still raises
+        UnsatisfiableConstraint, which the pipeline catches to return 0.
 
         Args:
             problem: The Problem to fold.
@@ -369,7 +367,7 @@ class SizeConstraintFolder(TransformPass):
             )
 
         new_constraints = []
-        # Track def updates: ref → new ObjDef (only for choose objects)
+        # Track size-bearing definition updates committed by safe rewrites.
         updated_defs: dict[ObjRef, ObjDef] = {}
         changed = False
 
@@ -405,40 +403,32 @@ class SizeConstraintFolder(TransformPass):
                 new_constraints.append(c)
                 continue
 
-            if not remaining_terms:
-                # All terms substituted: evaluate the purely numerical result.
-                if _eval_comparator(c.comparator, 0, rhs):
-                    # Trivially true: try to drop the constraint.
-                    # Each term must have a size-bearing definition that already
-                    # enforces this size, or can retain it by embedding it now.
-                    # Other inferred facts (e.g. PartDef sizes) still require the
-                    # original constraint in the backend.
-                    embeddings = self._size_embeddings(problem, folded_obj_refs)
-                    if embeddings is not None:
-                        updated_defs.update(embeddings)
-                        logger.debug(
-                            "SizeConstraintFolder: dropped trivially-true constraint {}",
-                            c,
-                        )
-                        changed = True
-                        # Don't append c — it is dropped
-                    else:
-                        # Some terms are not embeddable (e.g. PartDef); keep
-                        # original constraint to preserve encoder correctness.
-                        new_constraints.append(c)
-                        # Do not set changed=True: this constraint is unchanged.
-                else:
-                    # Trivially false: problem is unsatisfiable
-                    raise UnsatisfiableConstraint(
-                        f"SizeConstraint folded to 0 {c.comparator} {rhs}: unsatisfiable"
-                    )
-            else:
+            if not remaining_terms and not _eval_comparator(c.comparator, 0, rhs):
+                raise UnsatisfiableConstraint(
+                    f"SizeConstraint folded to 0 {c.comparator} {rhs}: unsatisfiable"
+                )
+
+            # Partial substitution needs the same retention guarantee as
+            # dropping a fully evaluated constraint. Commit all updates only
+            # when every substituted size can remain enforced.
+            embeddings = self._size_embeddings(problem, folded_obj_refs)
+            if embeddings is None:
+                new_constraints.append(c)
+                continue
+
+            updated_defs.update(embeddings)
+            if remaining_terms:
                 new_constraints.append(SizeConstraint(
                     terms=tuple(remaining_terms),
                     comparator=c.comparator,
                     rhs=rhs,
                 ))
-                changed = True
+            else:
+                logger.debug(
+                    "SizeConstraintFolder: dropped trivially-true constraint {}",
+                    c,
+                )
+            changed = True
 
         if not changed:
             return problem
@@ -459,11 +449,19 @@ class SizeConstraintFolder(TransformPass):
         problem: Problem,
         folded_obj_refs: list[tuple[ObjRef, int]],
     ) -> dict[ObjRef, ObjDef] | None:
-        """Return size-bearing def updates if every folded ref is embeddable."""
+        """Return def updates when every substituted size stays enforced."""
 
         embeddings: dict[ObjRef, ObjDef] = {}
         for ref, exact_size in folded_obj_refs:
             defn = problem.get_object(ref)
+            if isinstance(defn, SetInit):
+                if len(defn.entities) != exact_size:
+                    return None
+                continue
+            if isinstance(defn, BagInit):
+                if sum(dict(defn.entity_multiplicity).values()) != exact_size:
+                    return None
+                continue
             if not isinstance(defn, _SIZE_EMBEDDABLE_DEFS):
                 return None
             if defn.size is not None:
