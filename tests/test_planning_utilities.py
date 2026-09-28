@@ -141,6 +141,37 @@ def test_max_size_inference_keeps_raw_ref_constraints() -> None:
     assert result.exact_sizes[chosen] == 2
 
 
+@pytest.mark.parametrize(
+    ("constraint", "upper", "exact", "unsatisfiable"),
+    [
+        ("|C| - |C| == 0", 3, None, False),
+        ("|C| - |Alias| == 0", 3, None, False),
+        ("|C| + |C| == 2", 1, 1, False),
+        ("2|C| - |C| == 1", 1, 1, False),
+        ("|C| + |C| <= 2", 1, None, False),
+        ("|C| + |C| < 3", 1, None, False),
+        ("|C| + |C| >= 6", 3, 3, False),
+        ("|C| - |C| == 1", None, None, True),
+    ],
+)
+def test_max_size_inference_accumulates_repeated_cardinality_terms(
+    constraint: str, upper: int | None, exact: int | None, unsatisfiable: bool,
+) -> None:
+    """Repeated terms and aliases contribute to the same LP coefficient."""
+    problem = parse(
+        "S = set(a, b, c)\nC = choose(S)\nAlias = C\n" + constraint
+    )
+    chosen = _first_def_ref(problem, SetChoose)
+    assert _ref_named(problem, "Alias") == chosen
+
+    analysis = AnalysisManager(problem).get(MergedAnalysis)
+
+    assert analysis.unsatisfiable == unsatisfiable
+    if not unsatisfiable:
+        assert analysis.set_info[chosen].max_size == upper
+        assert analysis.set_info[chosen].exact_size == exact
+
+
 def test_max_size_inference_uses_entity_capacity_bounds() -> None:
     """LP inference should reject constraints exceeding known object capacity."""
     problem = parse("""

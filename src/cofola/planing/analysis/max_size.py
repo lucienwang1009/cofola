@@ -180,7 +180,8 @@ class MaxSizeInference(AnalysisPass[SizeInferenceResult]):
             comp = c.comparator
             row = [0.0] * n_vars
             for ref, coef in c.terms:
-                row[ref_index[ref]] = float(coef)
+                # Repeated terms (including aliases) share one LP variable.
+                row[ref_index[ref]] += float(coef)
 
             if comp == "==":
                 equal_rows.append(row)
