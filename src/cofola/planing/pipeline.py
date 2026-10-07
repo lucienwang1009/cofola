@@ -125,7 +125,7 @@ def _negate_constraint(c: Constraint) -> Constraint:
     if isinstance(c, _HAS_POSITIVE):
         return dc_replace(c, positive=not c.positive)
     if isinstance(c, SizeConstraint):
-        flip = {"<": ">=", "<=": ">", ">": "<=", ">=": "<"}
+        flip = {"<": ">=", "<=": ">", ">": "<=", ">=": "<", "!=": "=="}
         if c.comparator in flip:
             return dc_replace(c, comparator=flip[c.comparator])
         return OrConstraint(

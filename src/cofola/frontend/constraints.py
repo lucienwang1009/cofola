@@ -27,7 +27,7 @@ class SizeConstraint:
     # Terms are object cardinalities or derived count atoms, paired with a
     # coefficient.
     terms: tuple[tuple[ObjRef | SizeAtom, int], ...]
-    comparator: str  # "==", "<", "<=", ">", ">="
+    comparator: str  # "==", "!=", "<", "<=", ">", ">="
     rhs: int
 
 
