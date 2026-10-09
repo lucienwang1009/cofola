@@ -16,6 +16,7 @@ from cofola.frontend import (
     FuncInverseImage,
     MembershipConstraint,
     ObjRef,
+    OrConstraint,
     PartPlaceholderDef,
     PartitionDef,
     Problem,
@@ -39,7 +40,7 @@ from cofola.planing.pass_manager import FixedPointPass
 from cofola.planing.pass_manager import AnalysisManager
 from cofola.planing.pass_manager import RefAllocator
 from cofola.planing.pass_manager import UnsatisfiableConstraint
-from cofola.planing.pipeline import PlaningPipeline
+from cofola.planing.pipeline import PlaningPipeline, _negate_constraint
 from cofola.planing.passes.lowering import LoweringPass
 from cofola.planing.passes.merge_identical import MergeIdenticalObjects
 from cofola.planing.passes.optimize import ConstantFolder, SizeConstraintFolder
@@ -75,6 +76,30 @@ def _size_constraint_for_ref(problem: Problem, target: ObjRef) -> SizeConstraint
         if any(term == target for term, _coef in constraint.terms):
             return constraint
     raise AssertionError(f"missing SizeConstraint for ref {target.id}")
+
+
+@pytest.mark.parametrize(
+    ("comparator", "complement"),
+    [("<", ">="), ("<=", ">"), (">", "<="), (">=", "<"), ("!=", "==")],
+)
+def test_size_constraint_negation_preserves_linear_terms(
+    comparator: str, complement: str,
+) -> None:
+    constraint = SizeConstraint(
+        terms=((ObjRef(1), 2), (ObjRef(2), -1)), comparator=comparator, rhs=3,
+    )
+
+    assert _negate_constraint(constraint) == replace(constraint, comparator=complement)
+    assert constraint.comparator == comparator
+
+
+def test_size_constraint_negation_splits_equality_into_disjoint_ranges() -> None:
+    constraint = SizeConstraint(terms=((ObjRef(1), 1),), comparator="==", rhs=1)
+
+    assert _negate_constraint(constraint) == OrConstraint(
+        left=replace(constraint, comparator="<=", rhs=0),
+        right=replace(constraint, comparator=">=", rhs=2),
+    )
 
 
 def test_ref_allocator_starts_after_existing_refs() -> None:
