@@ -656,6 +656,13 @@ class ASPEncoder(object):
                 f"ASP backend cannot count {type(atom.pattern).__name__} patterns."
             )
         match = self._emit_local_match_pred(atom.seq, atom.pattern)
+        if isinstance(atom.pattern, NextToPattern):
+            # Count an undirected edge once even if both orientations match.
+            # Keep the directional relation intact for occurrence coverage.
+            edge = f"next_to_edge_{self._new_aux_id()}"
+            self.lines.append(f"{edge}(P,Q) :- {match}(P,Q), P < Q.")
+            self.lines.append(f"{edge}(P,Q) :- {match}(Q,P), P < Q.")
+            match = edge
         aux = f"seq_count_{self._new_aux_id()}"
         self.lines.append(
             f"{aux}({var}) :- num({var}), "
