@@ -490,7 +490,21 @@ class EssenceEncoder(object):
             raise EssenceEncodingError(
                 f"Essence backend cannot count {type(atom.pattern).__name__} patterns."
             )
-        return self._sum(f"toInt({expr})" for expr in self._local_match_exprs(atom.seq, atom.pattern))
+        pattern = atom.pattern
+        if isinstance(pattern, NextToPattern):
+            # Disjoin the two orientations before converting an edge to 0/1.
+            # Existence and coverage still use the directional match helpers.
+            matches = [
+                self._or(
+                    f"({self._arg_at(atom.seq, left, pattern.first)} /\\ "
+                    f"{self._arg_at(atom.seq, right, pattern.second)})"
+                    for left, right in ((pos, successor), (successor, pos))
+                )
+                for pos, successor in self._successor_pairs(atom.seq)
+            ]
+        else:
+            matches = self._local_match_exprs(atom.seq, pattern)
+        return self._sum(f"toInt({expr})" for expr in matches)
 
     def _local_match_exprs(
         self,
