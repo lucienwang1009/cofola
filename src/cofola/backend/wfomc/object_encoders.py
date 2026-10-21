@@ -847,15 +847,16 @@ def _encode_partition(
     context.sentence = context.sentence & parse(
         f"\\forall X: ({source_pred}(X) <-> ({or_formula}))"
     )
-    if defn.num_parts <= 1:
-        return
-
     # Check if source is a set or bag
     set_info = analysis.set_info.get(defn.source)
     bag_info = analysis.bag_info.get(defn.source)
 
     logger.debug("_encode_partition: {} parts, source is {}", len(parts), "Set" if set_info is not None else "Bag")
     if set_info is not None:
+        # Coverage determines a single set part; bags still need multiplicity encoding.
+        if defn.num_parts == 1:
+            return
+
         # Set partition - parts must be disjoint
         for i, pred1 in enumerate(part_preds):
             for j, pred2 in enumerate(part_preds):
